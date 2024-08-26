@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-
 export async function middleware(request) {
   const token = await getToken({
     req: request,
@@ -11,6 +10,7 @@ export async function middleware(request) {
   if (
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico" ||
+    pathname.startsWith("/signin") ||
     pathname.startsWith("/signup") ||
     pathname.startsWith("/assests") ||
     pathname.startsWith("/admin")
@@ -21,7 +21,7 @@ export async function middleware(request) {
   const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "ad/ad-optimised-table"];
   const userRoutes = ["/"];
 
-  if (!request.cookies.get("next-auth.session-token") && pathname !== "/signin") {
+  if (!request.cookies.get("__Secure-next-auth.session-token")) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);
