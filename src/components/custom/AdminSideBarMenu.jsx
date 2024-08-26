@@ -98,14 +98,9 @@ export function AdminSidebarMenu() {
           </div>
         </Link>
         <button className="flex cursor-pointer items-center hover:bg-secondary-foreground hover:rounded-full px-4 py-2 font-semibold ease-in-out duration-300 w-full"
-        onClick={async() => {
-          await signOut({ callbackUrl: "/signin" })
-          toast({
-            title: "Success",
-            description: "You have been logged out",
-            
-          })
-        }}>
+        onClick={() => 
+           signOut({ callbackUrl: "/signin" })
+        }>
           <LogOut className="w-4 h-4 mr-2" />
           <span>Sign Out</span>
         </button>

@@ -116,7 +116,7 @@ export function Signin() {
       const valid = await handleVerifyOtp();
       if (valid) {
         const res = await signIn("credentials", {
-          redirect: true,
+          redirect: false,
           username: formValues.username,
           password: formValues.password,
           callbackUrl,
