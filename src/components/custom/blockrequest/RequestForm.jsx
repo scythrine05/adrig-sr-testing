@@ -2,7 +2,8 @@
 import { ChangeEvent, useState } from "react";
 import { postFormData } from "../../../app/actions/formdata";
 import { getUserId } from "../../../app/actions/user";
-import { sectionData, machine, work } from "../../../lib/store";
+import { sectionData, machine, work, data } from "../../../lib/store";
+import MultipleSelect from "./MultipleSelect";
 
 export default function RequestForm(props) {
   const [formData, setFormData] = useState({
@@ -29,48 +30,28 @@ export default function RequestForm(props) {
     otherLinesAffected: "",
   });
 
-  const [sectionValue, setSectionValue] = useState([]);
-
-  const handleChangemissionBlock = (event) => {
-    const { name, value } = event.target;
-
-    if (formData.selectedSection != "") {
-      if (formData.stationID == "section") {
-        const val = formData.selectedSection;
-        if (val == "AJJ-RU") setSectionValue(sectionData["AJJ-RU"].section);
-        else if (val == "MAS-AJJ")
-          setSectionValue(sectionData["MAS-AJJ"].section);
-        else if (val == "MSB-VM")
-          setSectionValue(sectionData["MSB-VM"].section);
-        else if (val == "AJJ-KPD")
-          setSectionValue(sectionData["AJJ-KPD"].section);
-        else if (val == "KPD-JTJ")
-          setSectionValue(sectionData["KPD-JTJ"].section);
-        else if (val == "AJJ-CGL")
-          setSectionValue(sectionData["AJJ-CGL"].section);
-        else if (val == "MAS-GDR")
-          setSectionValue(sectionData["MAS-GDR"].section);
-      } else if (formData.stationID == "station") {
-        const val = formData.selectedSection;
-
-        if (val == "AJJ-RU") {
-          setSectionValue(sectionData["AJJ-RU"].station);
-        } else if (val == "MAS-AJJ") {
-          setSectionValue(sectionData["MAS-AJJ"].station);
-        } else if (val == "MSB-VM") {
-          setSectionValue(sectionData["MSB-VM"].station);
-        } else if (val == "AJJ-KPD") {
-          setSectionValue(sectionData["AJJ-KPD"].station);
-        } else if (val == "KPD-JTJ") {
-          setSectionValue(sectionData["KPD-JTJ"].station);
-        } else if (val == "MAS-GDR") {
-          setSectionValue(sectionData["MAS-GDR"].station);
+  const blockGenerator = () => {
+    if (formData.stationID != "" && formData.selectedSection != "") {
+      console.log(2);
+      for (const section of data.sections) {
+        console.log(section.name);
+        if (formData.selectedSection === section.name) {
+          console.log(4);
+          if (formData.stationID === "section") {
+            console.log(5);
+            return section.section_blocks;
+          } else if (formData.stationID === "station") {
+            console.log(6);
+            return section.station_blocks;
+          } else {
+            console.log(7);
+            return [];
+          }
         }
       }
     } else {
-      setSectionValue([]);
+      return [];
     }
-    setFormData({ ...formData, [name]: value });
   };
 
   const handleChange = (event) => {
@@ -169,7 +150,7 @@ export default function RequestForm(props) {
           name="stationID"
           value={formData.stationID}
           className="mt-1 p-2 rounded-md"
-          onChange={handleChangemissionBlock}
+          onChange={handleChange}
         >
           <option className="block text-sm font-medium " value={""}>
             Select Block Section
@@ -188,10 +169,10 @@ export default function RequestForm(props) {
           onChange={handleChange}
         >
           <option>Select The Block</option>
-          {sectionValue.map((element, ind) => {
+          {blockGenerator().map((element, ind) => {
             return (
-              <option value={element} key={ind}>
-                {element}
+              <option value={element.block} key={ind}>
+                {element.block}
               </option>
             );
           })}
@@ -248,17 +229,18 @@ export default function RequestForm(props) {
             className="mt-1 w-full p-2 border rounded"
             onChange={handleChange}
           >
-            <option>Select line</option>
-            <option value="Up">Up</option>
-            <option value="Up Fast">Up Fast</option>
-            <option value="Up Slow">Up Slow</option>
-            <option value="Up Suburban">Up Suburban</option>
-            <option value="down">Down</option>
-            <option value="down Fast">Down Fast</option>
-            <option value="down Slow">Down Slow</option>
-            <option value="down Suburban">Down Suburban</option>
-            <option value="A Line">A Line</option>
-            <option value="B Line">B Line</option>
+            <option value={""}>Select Line</option>
+            {blockGenerator().map((element, ind) => {
+              return element.lines.map((e) => {
+                if (element.block === formData.missionBlock) {
+                  return (
+                    <option value={e} key={ind}>
+                      {e}
+                    </option>
+                  );
+                }
+              });
+            })}
           </select>
         </div>
         <div>
@@ -400,33 +382,33 @@ export default function RequestForm(props) {
             </label>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium">
-              Elementary section
-            </label>
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={formData.elementarySectionFrom}
-                name="elementarySectionFrom"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="from"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                value={formData.elementarySectionTo}
-                name="elementarySectionTo"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="to"
-                onChange={handleChange}
-              />
+        {formData.ohDisconnection === "yes" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium">
+                Elementary section
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={formData.elementarySectionFrom}
+                  name="elementarySectionFrom"
+                  className="mt-1 w-1/2 p-2 border rounded"
+                  placeholder="from"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  value={formData.elementarySectionTo}
+                  name="elementarySectionTo"
+                  className="mt-1 w-1/2 p-2 border rounded"
+                  placeholder="to"
+                  onChange={handleChange}
+                />
+              </div>
             </div>
           </div>
-        </div>
-
+        )}
         <div className="mb-4">
           <label className="block text-sm font-medium">SIG Disconnection</label>
           <div className="flex space-x-4">
@@ -445,7 +427,7 @@ export default function RequestForm(props) {
                 type="radio"
                 name="sigDisconnection"
                 value="no"
-                checked={formData.ohDisconnection === "no"}
+                checked={formData.sigDisconnection === "no"}
                 onChange={handleChange}
               />{" "}
               No
@@ -465,14 +447,31 @@ export default function RequestForm(props) {
           className="mt-1 w-full p-2 border rounded"
           onChange={handleChange}
         >
-          <option>Line 1</option>
-          <option>Line 2</option>
-          <option>Line 3</option>
+          <option value="">Select The Line</option>
+          {blockGenerator().map((element, ind) => {
+            return element.lines.map((e) => {
+              if (element.block === formData.missionBlock) {
+                if (formData.selectedLine != "" && e != formData.selectedLine)
+                  return (
+                    <option value={e} key={ind}>
+                      {e}
+                    </option>
+                  );
+              }
+            });
+          })}
         </select>
         <p className="text-sm text-center text-gray-500 mt-1">
           This is a multiple select drop down
         </p>
       </div>
+      <MultipleSelect
+        names={blockGenerator().map((element) => {
+          if (element.block == formData.missionBlock) {
+            return element.lines;
+          }
+        })}
+      ></MultipleSelect>
 
       {/* Submit Button */}
       <div className="text-center">

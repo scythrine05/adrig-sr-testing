@@ -23,7 +23,7 @@ export default function AdminLogin() {
           redirect: true,
           username: username,
           password: password,
-          callbackUrl: "/admin-home",
+          callbackUrl: "/ad-home",
         });
       } else {
         setError("Secret code Does Not Match ");

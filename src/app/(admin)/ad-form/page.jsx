@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -16,7 +16,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { CSVLink } from "react-csv";
-import { getAdminFormData } from "../../actions/formdata";
+import { getAdminFormData, getFormDataAll } from "../../actions/formdata";
 
 const SearchForm = () => {
   const [searchType, setSearchType] = useState("");
@@ -24,9 +24,21 @@ const SearchForm = () => {
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [filteredRequests, setFilteredRequests] = useState([]);
 
+  useEffect(() => {
+    async function fxn() {
+      try {
+        const res = await getFormDataAll();
+        setFilteredRequests(res.requestData);
+      } catch (e) {
+        console.log(err);
+      }
+    }
+    fxn();
+  }, []);
+
   const handleSearch = async () => {
     const requests = await getAdminFormData(searchType, searchLine, dateRange);
-    setFilteredRequests(requests.requestData);
+    setFilteredRequests(requests.res);
   };
 
   return (
@@ -171,7 +183,7 @@ const SearchForm = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredRequests != undefined && filteredRequests.length > 0 ? (
+            {filteredRequests.length > 0 ? (
               filteredRequests.map((request) => (
                 <TableRow key={request.requestId}>
                   <TableCell>{request.requestId}</TableCell>
@@ -209,7 +221,7 @@ const SearchForm = () => {
         </Table>
       </TableContainer>
 
-      {filteredRequests != undefined && filteredRequests.length > 0 && (
+      {filteredRequests.length > 0 && (
         <Button
           variant="contained"
           color="secondary"

@@ -1,12 +1,10 @@
 import { Inter } from "next/font/google";
-import { SidebarMenu } from "../../components/custom/SidebarMenu";
+import { AdminSidebarMenu } from "../../components/custom/AdminSideBarMenu";
 import NavBar from "../../components/custom/NavBar";
 const inter = Inter({ subsets: ["latin"] });
 import { getUser } from "../../lib/auth";
 
 export default async function RootLayout({ children }) {
-  const session = await getUser();
-
   return (
     <main
       className={`${inter.className} w-full h-screen grid grid-cols-10 gap-6 mt-4 px-6 overflow-hidden`}
@@ -17,7 +15,7 @@ export default async function RootLayout({ children }) {
         </SignedIn> */}
       </div>
 
-      <SidebarMenu />
+      <AdminSidebarMenu />
 
       {/* <div className="w-[20%]"></div> */}
       <main className="col-span-8 h-full overflow-y-scroll hide-scrollbar">
