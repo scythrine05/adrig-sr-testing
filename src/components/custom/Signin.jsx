@@ -111,19 +111,19 @@ export function Signin() {
   const clickHandler = async () => {
     try {
       setLoading(true);
-      console.log(formValues);
+      console.log("formValues", formValues);
 
       const valid = await handleVerifyOtp();
       if (valid) {
         const res = await signIn("credentials", {
-          redirect: false,
+          redirect: true,
           username: formValues.username,
           password: formValues.password,
           callbackUrl,
         });
 
         setLoading(false);
-        console.log(res);
+        console.log("res", res);
         if (!res?.error) {
           router.push(callbackUrl);
         } else {
