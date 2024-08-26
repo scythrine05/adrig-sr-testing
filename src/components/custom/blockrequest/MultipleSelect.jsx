@@ -19,6 +19,19 @@ const MenuProps = {
   },
 };
 
+const names = [
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
+];
+
 function getStyles(name, personName, theme) {
   return {
     fontWeight:
@@ -36,10 +49,7 @@ export default function MultipleSelect(props) {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setPersonName(typeof value === "string" ? value.split(",") : value);
   };
 
   return (

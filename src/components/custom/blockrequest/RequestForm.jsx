@@ -468,12 +468,7 @@ export default function RequestForm(props) {
       <MultipleSelect
         names={blockGenerator().map((element) => {
           if (element.block == formData.missionBlock) {
-            let res = [];
-            element.lines.map((e) => {
-              if (formData.selectedLine != "" && e != formData.selectedLine) {
-                res.push(e);
-              }
-            });
+            return element.lines;
           }
         })}
       ></MultipleSelect>
