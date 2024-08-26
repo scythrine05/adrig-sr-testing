@@ -4,7 +4,7 @@ import { getUser } from "../../../lib/auth";
 export default async function Login() {
   const session = await getUser();
   if (session != null) {
-    redirect("/form");
+    redirect("/");
   }
   return <Signin></Signin>;
 }
