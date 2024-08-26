@@ -24,7 +24,7 @@ export function Signin() {
   const [error, setError] = useState("");
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl = "/";
 
   useEffect(() => {
     localStorage.removeItem("timer_tag");
