@@ -462,11 +462,11 @@ export default function RequestForm(props) {
         ></select> */}
       </div>
       <MultipleSelect
-        items={getTheList()}
-        value={formData.otherLinesAffected}
-        setFormData={formData}
-        name="otherLinesAffected"
-      />
+  items={getTheList()}
+  value={formData.otherLinesAffected} 
+  setFormData={setFormData}  
+  name="otherLinesAffected"  
+/>
 
       {/* Submit Button */}
       <div className="text-center">
