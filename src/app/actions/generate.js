@@ -50,12 +50,6 @@ export default async function getGeneratedOtp(email) {
       return { message: "Email or phone number is required" };
     }
 
-    const user = await prisma.user.findUnique({ where: { username: email } });
-
-    if (!user) {
-      return { message: "No User Exist" };
-    }
-
     const history = await prisma.otp.findMany({
       where: {
         email,
