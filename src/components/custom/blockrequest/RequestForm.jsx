@@ -54,6 +54,19 @@ export default function RequestForm(props) {
     }
   };
 
+  const getTheList = () => {
+    const result = [];
+    blockGenerator().map((element, ind) => {
+      return element.lines.map((e) => {
+        if (element.block === formData.missionBlock) {
+          if (formData.selectedLine != "" && e != formData.selectedLine)
+            result.push(e);
+        }
+      });
+    });
+    return result;
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -441,37 +454,19 @@ export default function RequestForm(props) {
         <label className="block text-sm font-medium">
           Other affected lines
         </label>
-        <select
+        {/* <select
           value={formData.otherLinesAffected}
           name="otherLinesAffected"
           className="mt-1 w-full p-2 border rounded"
           onChange={handleChange}
-        >
-          <option value="">Select The Line</option>
-          {blockGenerator().map((element, ind) => {
-            return element.lines.map((e) => {
-              if (element.block === formData.missionBlock) {
-                if (formData.selectedLine != "" && e != formData.selectedLine)
-                  return (
-                    <option value={e} key={ind}>
-                      {e}
-                    </option>
-                  );
-              }
-            });
-          })}
-        </select>
-        <p className="text-sm text-center text-gray-500 mt-1">
-          This is a multiple select drop down
-        </p>
+        ></select> */}
       </div>
       <MultipleSelect
-        names={blockGenerator().map((element) => {
-          if (element.block == formData.missionBlock) {
-            return element.lines;
-          }
-        })}
-      ></MultipleSelect>
+        items={getTheList()}
+        value={formData.otherLinesAffected}
+        setFormData={formData}
+        name="otherLinesAffected"
+      />
 
       {/* Submit Button */}
       <div className="text-center">

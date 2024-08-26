@@ -1,88 +1,114 @@
-import * as React from "react";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
+import React, { useEffect, useState } from "react";
+import Dropdown from "./Dropdown";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+const MultipleSelect = (props) => {
+  // state showing if dropdown is open or closed
+  const [dropdown, setDropdown] = useState(false);
+  const [selectedItems, setSelected] = useState([]);
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+  const toogleDropdown = () => {
+    setDropdown(!dropdown);
   };
-}
 
-export default function MultipleSelect(props) {
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
+  const addTag = (item) => {
+    setSelected(selectedItems.concat(item));
+    props.setFormData.otherLinesAffected.concat(", " + item);
+    setDropdown(false);
+  };
+  const removeTag = (item) => {
+    const filtered = selectedItems.filter((e) => e !== item);
+    const stringArray = props.setFormData.otherLinesAffected.split(",");
+    if (item in stringArray) {
+      stringArray.remove(item);
+    }
+    let currString = "";
+    stringArray.forEach((e) => {
+      currString += ",";
+      currString += e;
+    });
+    props.setFormData.otherLinesAffected = currString;
+    setSelected(filtered);
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
-        <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {props.names.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    <div className="autcomplete-wrapper">
+      <div className="autcomplete">
+        <div className="w-full flex flex-col items-center mx-auto">
+          <div className="w-full">
+            <div className="flex flex-col items-center relative">
+              <div className="w-full ">
+                <div className="my-2 p-1 flex border border-gray-200 bg-white rounded ">
+                  <div className="flex flex-auto flex-wrap">
+                    {selectedItems.map((tag, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 "
+                        >
+                          <div className="text-xs font-normal leading-none max-w-full flex-initial">
+                            {tag}
+                          </div>
+                          <div className="flex flex-auto flex-row-reverse">
+                            <div onClick={() => removeTag(tag)}>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="100%"
+                                height="100%"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="feather feather-x cursor-pointer hover:text-teal-400 rounded-full w-4 h-4 ml-2"
+                              >
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div className="flex-1">
+                      <input
+                        placeholder=""
+                        className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200"
+                    onClick={toogleDropdown}
+                  >
+                    <button className="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="100%"
+                        height="100%"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-chevron-up w-4 h-4"
+                      >
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {dropdown ? (
+              <Dropdown list={props.items} addItem={addTag}></Dropdown>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default MultipleSelect;
