@@ -4,8 +4,13 @@ import { postFormData } from "../../../app/actions/formdata";
 import { getUserId } from "../../../app/actions/user";
 import { sectionData, machine, work, data } from "../../../lib/store";
 import MultipleSelect from "./MultipleSelect";
+import { useToast } from "../../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function RequestForm(props) {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const [formData, setFormData] = useState({
     date: "",
     selectedDepartment: "",
@@ -81,32 +86,38 @@ export default function RequestForm(props) {
       if (UserData == null || UserData == undefined || UserData.id == null) {
         return;
       } else {
+
         const res = await postFormData(formData, UserData?.id);
+        setFormData({
+          date: "",
+          selectedDepartment: "",
+          selectedSection: "",
+          stationID: "",
+          missionBlock: "",
+          workType: "",
+          workDescription: "",
+          selectedLine: "",
+          cautionRequired: "",
+          cautionSpeed: "",
+          cautionLocationFrom: "",
+          cautionLocationTo: "",
+          workLocationFrom: "",
+          workLocationTo: "",
+          demandTimeFrom: "",
+          demandTimeTo: "",
+          sigDisconnection: "",
+          ohDisconnection: "",
+          elementarySectionFrom: "",
+          elementarySectionTo: "",
+          otherLinesAffected: "",
+        });
+        toast({
+          title: "Success",
+          description: "Request Submitted",
+        });
+        router.push("/schedule-manager");
       }
     }
-    setFormData({
-      date: "",
-      selectedDepartment: "",
-      selectedSection: "",
-      stationID: "",
-      missionBlock: "",
-      workType: "",
-      workDescription: "",
-      selectedLine: "",
-      cautionRequired: "",
-      cautionSpeed: "",
-      cautionLocationFrom: "",
-      cautionLocationTo: "",
-      workLocationFrom: "",
-      workLocationTo: "",
-      demandTimeFrom: "",
-      demandTimeTo: "",
-      sigDisconnection: "",
-      ohDisconnection: "",
-      elementarySectionFrom: "",
-      elementarySectionTo: "",
-      otherLinesAffected: "",
-    });
   };
 
   return (
