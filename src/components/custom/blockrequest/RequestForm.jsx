@@ -1,0 +1,488 @@
+"use client";
+import { ChangeEvent, useState } from "react";
+import { postFormData } from "../../../app/actions/formdata";
+import { getUserId } from "../../../app/actions/user";
+import { sectionData, machine, work } from "../../../lib/store";
+
+export default function RequestForm(props) {
+  const [formData, setFormData] = useState({
+    date: "",
+    selectedDepartment: "",
+    selectedSection: "",
+    stationID: "",
+    workType: "",
+    workDescription: "",
+    selectedLine: "",
+    missionBlock: "",
+    cautionRequired: "",
+    cautionSpeed: "",
+    cautionLocationFrom: "",
+    cautionLocationTo: "",
+    workLocationFrom: "",
+    workLocationTo: "",
+    demandTimeFrom: "",
+    demandTimeTo: "",
+    sigDisconnection: "",
+    ohDisconnection: "",
+    elementarySectionFrom: "",
+    elementarySectionTo: "",
+    otherLinesAffected: "",
+  });
+
+  const [sectionValue, setSectionValue] = useState([]);
+
+  const handleChangemissionBlock = (event) => {
+    const { name, value } = event.target;
+
+    if (formData.selectedSection != "") {
+      if (formData.stationID == "section") {
+        const val = formData.selectedSection;
+        if (val == "AJJ-RU") setSectionValue(sectionData["AJJ-RU"].section);
+        else if (val == "MAS-AJJ")
+          setSectionValue(sectionData["MAS-AJJ"].section);
+        else if (val == "MSB-VM")
+          setSectionValue(sectionData["MSB-VM"].section);
+        else if (val == "AJJ-KPD")
+          setSectionValue(sectionData["AJJ-KPD"].section);
+        else if (val == "KPD-JTJ")
+          setSectionValue(sectionData["KPD-JTJ"].section);
+        else if (val == "AJJ-CGL")
+          setSectionValue(sectionData["AJJ-CGL"].section);
+        else if (val == "MAS-GDR")
+          setSectionValue(sectionData["MAS-GDR"].section);
+      } else if (formData.stationID == "station") {
+        const val = formData.selectedSection;
+
+        if (val == "AJJ-RU") {
+          setSectionValue(sectionData["AJJ-RU"].station);
+        } else if (val == "MAS-AJJ") {
+          setSectionValue(sectionData["MAS-AJJ"].station);
+        } else if (val == "MSB-VM") {
+          setSectionValue(sectionData["MSB-VM"].station);
+        } else if (val == "AJJ-KPD") {
+          setSectionValue(sectionData["AJJ-KPD"].station);
+        } else if (val == "KPD-JTJ") {
+          setSectionValue(sectionData["KPD-JTJ"].station);
+        } else if (val == "MAS-GDR") {
+          setSectionValue(sectionData["MAS-GDR"].station);
+        }
+      }
+    } else {
+      setSectionValue([]);
+    }
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const formSubmitHandler = async () => {
+    console.log(formData);
+    if (props.user == undefined || props.user?.user == undefined) {
+      return;
+    } else {
+      const UserData = await getUserId(props.user?.user);
+      if (UserData == null || UserData == undefined || UserData.id == null) {
+        return;
+      } else {
+        const res = await postFormData(formData, UserData?.id);
+      }
+    }
+    setFormData({
+      date: "",
+      selectedDepartment: "",
+      selectedSection: "",
+      stationID: "",
+      missionBlock: "",
+      workType: "",
+      workDescription: "",
+      selectedLine: "",
+      cautionRequired: "",
+      cautionSpeed: "",
+      cautionLocationFrom: "",
+      cautionLocationTo: "",
+      workLocationFrom: "",
+      workLocationTo: "",
+      demandTimeFrom: "",
+      demandTimeTo: "",
+      sigDisconnection: "",
+      ohDisconnection: "",
+      elementarySectionFrom: "",
+      elementarySectionTo: "",
+      otherLinesAffected: "",
+    });
+  };
+
+  return (
+    <div className="custom-main-w mx-auto p-4 mt-10 bg-blue-100 rounded-lg shadow-lg">
+      <h1 className="text-center text-xl font-bold mb-4">Request Form</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium">Date</label>
+          <input
+            value={formData.date}
+            type="date"
+            name="date"
+            className="mt-1 w-full p-2 border rounded"
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Department</label>
+          <select
+            value={formData.selectedDepartment}
+            name="selectedDepartment"
+            className="mt-1 w-full p-2.5 border rounded"
+            onChange={handleChange}
+          >
+            <option>Select department</option>
+            <option>ENGG</option>
+            <option>SIG</option>
+            <option>TRD</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Section</label>
+          <select
+            value={formData.selectedSection}
+            name="selectedSection"
+            className="mt-1 w-full p-2.5 border rounded"
+            onChange={handleChange}
+          >
+            <option>Select section</option>
+            <option value={"AJJ-RU"}>AJJ-RU</option>
+            <option value={"MAS-AJJ"}>MAS-AJJ</option>
+            <option value={"MSB-VM"}>MSB-VM</option>
+            <option value={"AJJ-KPD"}>AJJ-KPD</option>
+            <option value={"KPD-JTJ"}>KPD-JTJ</option>
+            <option value={"AJJ-CGL"}>AJJ-CGL</option>
+            <option value={"MAS-GDR"}>MAS-GDR</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <select
+          name="stationID"
+          value={formData.stationID}
+          className="mt-1 p-2 rounded-md"
+          onChange={handleChangemissionBlock}
+        >
+          <option className="block text-sm font-medium " value={""}>
+            Select Block Section
+          </option>
+          <option className="block text-sm font-medium " value={"station"}>
+            Station
+          </option>
+          <option className="block text-sm font-medium " value={"section"}>
+            Section
+          </option>
+        </select>
+        <select
+          name="missionBlock"
+          value={formData.missionBlock}
+          className="mt-1 w-full p-2.5 border rounded"
+          onChange={handleChange}
+        >
+          <option>Select The Block</option>
+          {sectionValue.map((element, ind) => {
+            return (
+              <option value={element} key={ind}>
+                {element}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <select
+          value={formData.workType}
+          name="workType"
+          className="mt-1 p-2 rounded-md"
+          onChange={handleChange}
+        >
+          <option className="block text-sm font-medium ">
+            Select The Work Description
+          </option>
+          <option className="block text-sm font-medium " value="machine">
+            Machine
+          </option>
+          <option className="block text-sm font-medium " value="work">
+            Work
+          </option>
+        </select>
+        <select
+          name="workDescription"
+          className="mt-1 w-full p-2.5 border rounded"
+          onChange={handleChange}
+        >
+          <option>Select work description</option>
+          {formData.workType != "" && formData.workType === "machine"
+            ? machine.map((e, i) => {
+                return (
+                  <option key={i} value={e}>
+                    {e}
+                  </option>
+                );
+              })
+            : work.map((e, i) => {
+                return (
+                  <option key={i} value={e}>
+                    {e}
+                  </option>
+                );
+              })}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium">Line</label>
+          <select
+            name="selectedLine"
+            value={formData.selectedLine}
+            className="mt-1 w-full p-2 border rounded"
+            onChange={handleChange}
+          >
+            <option>Select line</option>
+            <option value="Up">Up</option>
+            <option value="Up Fast">Up Fast</option>
+            <option value="Up Slow">Up Slow</option>
+            <option value="Up Suburban">Up Suburban</option>
+            <option value="down">Down</option>
+            <option value="down Fast">Down Fast</option>
+            <option value="down Slow">Down Slow</option>
+            <option value="down Suburban">Down Suburban</option>
+            <option value="A Line">A Line</option>
+            <option value="B Line">B Line</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Work location</label>
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              value={formData.workLocationFrom}
+              name="workLocationFrom"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="from"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              value={formData.workLocationTo}
+              name="workLocationTo"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="to"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium">
+            Demanded time (Click On the Clock To Select)
+          </label>
+          <div className="flex space-x-2">
+            <input
+              type="time"
+              value={formData.demandTimeFrom}
+              name="demandTimeFrom"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="from"
+              onChange={handleChange}
+            />
+            <input
+              type="time"
+              value={formData.demandTimeTo}
+              name="demandTimeTo"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="to"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-blue-200 p-4 rounded-lg mb-4">
+        <div className="mb-4">
+          <label className="block text-sm font-medium">Caution required</label>
+          <div className="flex space-x-4">
+            <label>
+              <input
+                type="radio"
+                name="cautionRequired"
+                value="yes"
+                checked={formData.cautionRequired === "yes"}
+                onChange={handleChange}
+              />
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="cautionRequired"
+                checked={formData.cautionRequired === "no"}
+                value="no"
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
+          </div>
+        </div>
+        {formData.cautionRequired === "yes" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium">
+                Caution location
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={formData.cautionLocationFrom}
+                  name="cautionLocationFrom"
+                  className="mt-1 w-1/2 p-2 border rounded"
+                  placeholder="from"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  value={formData.cautionLocationTo}
+                  name="cautionLocationTo"
+                  className="mt-1 w-1/2 p-2 border rounded"
+                  placeholder="to"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium">Caution speed</label>
+              <input
+                type="text"
+                value={formData.cautionSpeed}
+                name="cautionSpeed"
+                className="mt-1 w-full p-2 border rounded"
+                placeholder="In format km/h"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium">OHE Disconnection</label>
+          <div className="flex space-x-4">
+            <label>
+              <input
+                type="radio"
+                name="ohDisconnection"
+                value="yes"
+                checked={formData.ohDisconnection === "yes"}
+                onChange={handleChange}
+              />{" "}
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="ohDisconnection"
+                checked={formData.ohDisconnection === "no"}
+                value="no"
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium">
+              Elementary section
+            </label>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={formData.elementarySectionFrom}
+                name="elementarySectionFrom"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="from"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                value={formData.elementarySectionTo}
+                name="elementarySectionTo"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="to"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium">SIG Disconnection</label>
+          <div className="flex space-x-4">
+            <label>
+              <input
+                type="radio"
+                name="sigDisconnection"
+                value="yes"
+                checked={formData.sigDisconnection === "yes"}
+                onChange={handleChange}
+              />{" "}
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="sigDisconnection"
+                value="no"
+                checked={formData.ohDisconnection === "no"}
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Other Affected Lines */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">
+          Other affected lines
+        </label>
+        <select
+          value={formData.otherLinesAffected}
+          name="otherLinesAffected"
+          className="mt-1 w-full p-2 border rounded"
+          onChange={handleChange}
+        >
+          <option>Line 1</option>
+          <option>Line 2</option>
+          <option>Line 3</option>
+        </select>
+        <p className="text-sm text-center text-gray-500 mt-1">
+          This is a multiple select drop down
+        </p>
+      </div>
+
+      {/* Submit Button */}
+      <div className="text-center">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={formSubmitHandler}
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  );
+}
