@@ -14,26 +14,15 @@ import {
   User,
 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
+import ViewSelector  from "../../ui/viewselector";
+import RequestTable from "./RequestTable";
 
-function CompactView({ setIsGanttView }) {
+function CompactView({ viewState, setViewState }) {
   return (
     <div className="w-full max-w-6xl mx-auto py-8 px-6 bg-secondary rounded-xl">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">1st July - 7th July</h1>
-        <div>
-          <div className="flex rounded-full border border-gray-300 bg-[#f5effc] font-semibold">
-            <button className="flex items-center px-4 py-2 rounded-l-full bg-[#e4d6f7] text-black">
-              <Check className="mr-2" />
-              Compact View
-            </button>
-            <button
-              className="flex items-center px-4 py-2 rounded-r-full text-black"
-              onClick={() => setIsGanttView(true)}
-            >
-              Gantt View
-            </button>
-          </div>
-        </div>
+          <ViewSelector viewState={viewState} setViewState={setViewState} />
       </div>
       <p className="text-gray-500 mb-6">
         These are the request that came for this week, review the details of the
@@ -208,11 +197,14 @@ function CompactView({ setIsGanttView }) {
   );
 }
 
+
+
 const ScheduleManager = () => {
   const { isStationFetching, stationData } = useFetchByStation();
-  const [isGanttView, setIsGanttView] = useState(true);
+  // const [isGanttView, setIsGanttView] = useState(true);
   const [scheduleDataByStation, setScheduleDataByStation] = useState(null);
   const [isLoading, setIsLoading] = useState(isStationFetching);
+  const [viewState, setViewState] = useState(1);
 
   useEffect(() => {
     setScheduleDataByStation(stationData);
@@ -225,14 +217,22 @@ const ScheduleManager = () => {
   return (
     <div className="w-full h-[95vh] flex flex-col items-center space-y-6">
       <ToolBar setScheduleDataByStation={setScheduleDataByStation} />
-      {isGanttView ? (
+      {viewState === 0 && 
+      <RequestTable viewState={viewState} setViewState={setViewState} />
+      }
+      {viewState === 1 && (
         <WeekSchedule
           isStationFetching={isStationFetching}
           scheduleDataByStation={scheduleDataByStation}
-          setIsGanttView={setIsGanttView}
+          viewState={viewState}
+          setViewState={setViewState}
         />
-      ) : (
-        <CompactView setIsGanttView={setIsGanttView} />
+      )}
+      {viewState === 2 && (
+        <CompactView 
+          viewState={viewState}
+          setViewState={setViewState}
+        />
       )}
     </div>
   );

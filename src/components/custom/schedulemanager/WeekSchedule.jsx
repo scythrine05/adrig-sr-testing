@@ -12,8 +12,9 @@ import {
 } from "../../ui/carousel";
 import moment from "moment";
 import useFetchRequests from "../../../lib/hooks/useFetchRequests";
+import ViewSelector from "../../ui/viewselector";
 
-const WeekSchedule = ({ isStationFetching, setIsGanttView }) => {
+const WeekSchedule = ({ isStationFetching, viewState, setViewState }) => {
   const { data, isLoading, error } = useFetchRequests();
   const [api, setApi] = useState(null);
   const [current, setCurrent] = useState(0);
@@ -136,20 +137,8 @@ const WeekSchedule = ({ isStationFetching, setIsGanttView }) => {
     <div className="w-full max-w-6xl mx-auto py-8 px-6 bg-secondary rounded-xl">
       <div className="flex justify-between items-center mb-4 w-full">
         <h1 className="text-2xl font-semibold">Gantt View</h1>
-        <div>
-          <div className="flex rounded-full border border-gray-300 bg-[#f5effc] font-semibold">
-            <button
-              className="flex items-center px-4 py-2 rounded-l-full bg-[#e4d6f7] text-black"
-              onClick={() => setIsGanttView(false)}
-            >
-              Compact View
-            </button>
-            <button className="flex items-center px-4 py-2 rounded-r-full text-black">
-              <Check className="mr-2" />
-              Gantt View
-            </button>
-          </div>
-        </div>
+
+        <ViewSelector viewState={viewState} setViewState={setViewState} />
       </div>
       <section className="w-full">
         <Carousel
