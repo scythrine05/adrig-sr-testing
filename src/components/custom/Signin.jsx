@@ -270,7 +270,7 @@ export function Signin() {
               <p className="text-sm text-gray-600">
                 Already a member?{" "}
                 <a href="/signup" className="text-blue-600 hover:underline">
-                  Sign in
+                  Sign Up
                 </a>{" "}
                 | Are You An Admin?{" "}
                 <a href="/admin" className="text-blue-600 hover:underline">

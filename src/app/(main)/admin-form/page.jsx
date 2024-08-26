@@ -25,7 +25,6 @@ const SearchForm = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
 
   const handleSearch = async () => {
-    console.log({ searchType, searchLine, dateRange });
     const requests = await getAdminFormData(searchType, searchLine, dateRange);
     setFilteredRequests(requests.requestData);
   };
@@ -172,7 +171,7 @@ const SearchForm = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredRequests.length > 0 ? (
+            {filteredRequests != undefined && filteredRequests.length > 0 ? (
               filteredRequests.map((request) => (
                 <TableRow key={request.requestId}>
                   <TableCell>{request.requestId}</TableCell>
@@ -210,21 +209,21 @@ const SearchForm = () => {
         </Table>
       </TableContainer>
 
-      {/* {filteredRequests.length > 0 && ( */}
-      <Button
-        variant="contained"
-        color="secondary"
-        sx={{ marginTop: 2, marginBottom: 4 }}
-      >
-        <CSVLink
-          data={filteredRequests}
-          filename={"requests.csv"}
-          style={{ textDecoration: "none", color: "white" }}
+      {filteredRequests != undefined && filteredRequests.length > 0 && (
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{ marginTop: 2, marginBottom: 4 }}
         >
-          Download CSV
-        </CSVLink>
-      </Button>
-      {/* )} */}
+          <CSVLink
+            data={filteredRequests}
+            filename={"requests.csv"}
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            Download CSV
+          </CSVLink>
+        </Button>
+      )}
     </div>
   );
 };

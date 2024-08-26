@@ -61,17 +61,17 @@ export async function getAdminFormData(
     }
     if (dateRange?.from && dateRange?.to) {
       filters.date = {
-        gte: new Date(dateRange.from),
-        lte: new Date(dateRange.to),
+        gte: dateRange.from,
+        lte: dateRange.to,
       };
     }
     const requestData = await prisma.requests.findMany({
       where: filters,
     });
-    console.log(requestData);
-    console.log("ediuwiudhwiuhn");
+
     return { res: requestData };
   } catch (e) {
+    console.log(e);
     return { error: "failed" };
   }
 }

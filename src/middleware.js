@@ -7,6 +7,7 @@ export function middleware(request) {
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico" ||
     pathname.startsWith("/signin") ||
+    pathname.startsWith("/signup") ||
     pathname.startsWith("/assests") ||
     pathname.startsWith("/admin")
   ) {
