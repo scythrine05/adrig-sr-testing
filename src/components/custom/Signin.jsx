@@ -5,9 +5,8 @@ import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import getGeneratedOtp from "../../app/actions/generate";
 import verifyHandler from "../../app/actions/verify";
-import { useToast } from "../ui/use-toast";
+
 export function Signin() {
-  const { toast } = useToast();
   const router = useRouter();
   const [otp, setOtp] = useState("");
   const [code, setCode] = useState("");
@@ -24,7 +23,7 @@ export function Signin() {
   const [error, setError] = useState("");
 
   const searchParams = useSearchParams();
-  const callbackUrl = "/";
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   useEffect(() => {
     localStorage.removeItem("timer_tag");
@@ -56,15 +55,6 @@ export function Signin() {
       } else {
         console.log("after first click");
         const result = await getGeneratedOtp(formValues.username);
-        if (result.message == "No User Exist") {
-          toast({
-            title: "Failed",
-            description: "No User Exist",
-            variant: "destructive",
-          });
-
-          return;
-        }
         console.log(result);
         setView(true);
         startTimer(10);
@@ -111,7 +101,7 @@ export function Signin() {
   const clickHandler = async () => {
     try {
       setLoading(true);
-      console.log("formValues", formValues);
+      console.log(formValues);
 
       const valid = await handleVerifyOtp();
       if (valid) {
@@ -123,7 +113,7 @@ export function Signin() {
         });
 
         setLoading(false);
-        console.log("res", res);
+        console.log(res);
         if (!res?.error) {
           router.push(callbackUrl);
         } else {
@@ -132,10 +122,6 @@ export function Signin() {
       } else {
         setOtpcheck(true);
       }
-      // toast({
-      //   title: "Success",
-      //   description: "You have been logged in",
-      // });
     } catch (error) {
       setLoading(false);
       setError("An error occurred");
@@ -267,11 +253,11 @@ export function Signin() {
                     required
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    I am a Authorized Railway Employee
+                    I agree to the terms of service
                   </span>
                 </label>
               </div>
-              {error && <p className="text-red-500 m-4 text-center">{error}</p>}
+              {error && <p className="text-red-500">{error}</p>}
               <button
                 type="submit"
                 onClick={initialButtonClickHandler}
