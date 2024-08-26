@@ -21,7 +21,7 @@ export default async function RootLayout({ children }) {
 
       {/* <div className="w-[20%]"></div> */}
       <main className="col-span-8 h-full overflow-y-scroll hide-scrollbar">
-        <NavBar></NavBar>
+        {/* <NavBar></NavBar> */}
         {children}
       </main>
     </main>

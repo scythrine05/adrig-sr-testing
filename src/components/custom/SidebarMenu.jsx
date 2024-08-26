@@ -14,8 +14,11 @@ import {
 import { usePathname } from "next/navigation";
 import useOptimizedCheck from "../../lib/hooks/useOptimizedCheck";
 import useIsAdmin from "../../lib/hooks/useIsAdmin";
+import { signOut } from "next-auth/react";
+import { useToast } from "../ui/use-toast";
 
 export function SidebarMenu() {
+  const { toast } = useToast();
   const { optimizedCheck, isFetching, error } = useOptimizedCheck();
 
   const [blockDetailsOpen, setBlockDetailsOpen] = useState(false);
@@ -160,12 +163,20 @@ export function SidebarMenu() {
             <span>Setting</span>
           </div>
         </Link>
-        {/* <SignOutButton >
-        <div className="flex cursor-pointer items-center hover:bg-secondary-foreground hover:rounded-full px-4 py-2 font-semibold ease-in-out duration-300 w-full">
+        {/* <SignOutButton /> */}
+        <button className="flex cursor-pointer items-center hover:bg-secondary-foreground hover:rounded-full px-4 py-2 font-semibold ease-in-out duration-300 w-full"
+        onClick={() => {
+          signOut({ callbackUrl: "/signin" })
+          toast({
+            title: "Success",
+            description: "You have been logged out",
+            
+          })
+        }}>
           <LogOut className="w-4 h-4 mr-2" />
           <span>Sign Out</span>
-        </div>
-        </SignOutButton> */}
+        </button>
+        {/* </SignOutButton> */}
       </div>
     </div>
   );
