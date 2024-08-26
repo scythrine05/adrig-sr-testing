@@ -7,7 +7,7 @@
 .yarn/install-state.gz
 /backend/instance
 /backend/uploads
-
+.env
 
 # testing
 /coverage

@@ -14,7 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
-import ViewSelector  from "../../ui/viewselector";
+import ViewSelector from "../../ui/viewselector";
 import RequestTable from "./RequestTable";
 
 function CompactView({ viewState, setViewState }) {
@@ -22,7 +22,7 @@ function CompactView({ viewState, setViewState }) {
     <div className="w-full max-w-6xl mx-auto py-8 px-6 bg-secondary rounded-xl">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">1st July - 7th July</h1>
-          <ViewSelector viewState={viewState} setViewState={setViewState} />
+        <ViewSelector viewState={viewState} setViewState={setViewState} />
       </div>
       <p className="text-gray-500 mb-6">
         These are the request that came for this week, review the details of the
@@ -197,8 +197,6 @@ function CompactView({ viewState, setViewState }) {
   );
 }
 
-
-
 const ScheduleManager = () => {
   const { isStationFetching, stationData } = useFetchByStation();
   // const [isGanttView, setIsGanttView] = useState(true);
@@ -216,10 +214,11 @@ const ScheduleManager = () => {
 
   return (
     <div className="w-full h-[95vh] flex flex-col items-center space-y-6">
-      <ToolBar setScheduleDataByStation={setScheduleDataByStation} />
-      {viewState === 0 && 
-      <RequestTable viewState={viewState} setViewState={setViewState} />
-      }
+      {/* <ToolBar setScheduleDataByStation={setScheduleDataByStation} /> */}
+      <h1 className="mt-3 text-4xl font-bold ">User Created Request</h1>
+      {viewState === 0 && (
+        <RequestTable viewState={viewState} setViewState={setViewState} />
+      )}
       {viewState === 1 && (
         <WeekSchedule
           isStationFetching={isStationFetching}
@@ -229,10 +228,7 @@ const ScheduleManager = () => {
         />
       )}
       {viewState === 2 && (
-        <CompactView 
-          viewState={viewState}
-          setViewState={setViewState}
-        />
+        <CompactView viewState={viewState} setViewState={setViewState} />
       )}
     </div>
   );

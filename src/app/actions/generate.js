@@ -2,6 +2,7 @@
 import bcrypt from "bcrypt";
 import prisma from "../../lib/prisma";
 import nodemailer from "nodemailer";
+import { error } from "console";
 
 const generateOtp = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -49,7 +50,13 @@ export default async function getGeneratedOtp(email) {
       return { message: "Email or phone number is required" };
     }
 
-    const history = prisma.otp.findMany({
+    const user = await prisma.user.findUnique({ where: { username: email } });
+
+    if (!user) {
+      return { message: "No User Exist" };
+    }
+
+    const history = await prisma.otp.findMany({
       where: {
         email,
       },

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Lottie from "lottie-react";
 // import { NoActivity } from "@/assets";
 import { Chart } from "react-google-charts";
+import { useSession } from "next-auth/react";
 import {
   Mic,
   CircleCheck,
@@ -96,6 +97,7 @@ const generateDummyData = () => {
 const WelcomeScreenContainer = () => {
   const data = generateDummyData();
 
+  const session = useSession();
   const options = {
     title: "Requests Over Time",
     hAxis: { title: "Requests" },
@@ -112,7 +114,7 @@ const WelcomeScreenContainer = () => {
               {getFormattedDate()}
             </span>
             <h1 className="text-3xl font-bold mb-4 text-slate-950">
-              Welcome, User 🎉
+              Welcome🎉
             </h1>
             <p className="text-md text-textcolor mb-4">
               Manage your block requests efficiently and effectively.
