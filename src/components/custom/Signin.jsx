@@ -5,8 +5,9 @@ import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import getGeneratedOtp from "../../app/actions/generate";
 import verifyHandler from "../../app/actions/verify";
-
+import { useToast } from "../ui/use-toast";
 export function Signin() {
+  const { toast } = useToast()
   const router = useRouter();
   const [otp, setOtp] = useState("");
   const [code, setCode] = useState("");
@@ -122,6 +123,10 @@ export function Signin() {
       } else {
         setOtpcheck(true);
       }
+      toast({
+        title: "Success",
+        description: "You have been logged in",
+      });
     } catch (error) {
       setLoading(false);
       setError("An error occurred");
