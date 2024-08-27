@@ -139,7 +139,7 @@ const WelcomeScreenContainer = () => {
               <span className="flex-1 text-center">Create Block Request</span>
             </Link>
             <Link
-              href="/view-requests"
+              href="/schedule-manager"
               className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full w-1/2"
             >
               <MoveRight />{" "}

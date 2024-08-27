@@ -202,7 +202,7 @@ const ScheduleManager = () => {
   // const [isGanttView, setIsGanttView] = useState(true);
   const [scheduleDataByStation, setScheduleDataByStation] = useState(null);
   const [isLoading, setIsLoading] = useState(isStationFetching);
-  const [viewState, setViewState] = useState(1);
+  const [viewState, setViewState] = useState(0);
 
   useEffect(() => {
     setScheduleDataByStation(stationData);

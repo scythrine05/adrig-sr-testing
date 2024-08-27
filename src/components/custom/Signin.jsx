@@ -122,6 +122,10 @@ export function Signin() {
       } else {
         setOtpcheck(true);
       }
+      toast({
+        title: "Signed in successfully",
+        description: "You have been signed in successfully",
+      })
     } catch (error) {
       setLoading(false);
       setError("An error occurred");
