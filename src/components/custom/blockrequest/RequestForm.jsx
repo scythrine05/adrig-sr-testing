@@ -53,8 +53,7 @@ export default function RequestForm(props) {
       res.demandTimeFrom ||
       res.demandTimeTo ||
       res.sigDisconnection ||
-      res.ohDisconnection ||
-      res.otherLinesAffected
+      res.ohDisconnection
     ) {
       return false;
     } else {
