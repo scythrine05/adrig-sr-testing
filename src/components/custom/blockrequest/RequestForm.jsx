@@ -6,6 +6,7 @@ import { sectionData, machine, work, data } from "../../../lib/store";
 import MultipleSelect from "./MultipleSelect";
 import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
+import validateForm from "./formValidation";
 
 export default function RequestForm(props) {
   const router = useRouter();
@@ -34,6 +35,32 @@ export default function RequestForm(props) {
     elementarySectionTo: "",
     otherLinesAffected: "",
   });
+
+  const formValidation = (value) => {
+    let res = validateForm(value);
+    console.log(res);
+    if (
+      res.date ||
+      res.selectedDepartment ||
+      res.stationID ||
+      res.workType ||
+      res.workDescription ||
+      res.selectedLine ||
+      res.missionBlock ||
+      res.cautionRequired ||
+      res.workLocationFrom ||
+      res.workLocationTo ||
+      res.demandTimeFrom ||
+      res.demandTimeTo ||
+      res.sigDisconnection ||
+      res.ohDisconnection ||
+      res.otherLinesAffected
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
@@ -86,36 +113,43 @@ export default function RequestForm(props) {
       if (UserData == null || UserData == undefined || UserData.id == null) {
         return;
       } else {
-
-        const res = await postFormData(formData, UserData?.id);
-        setFormData({
-          date: "",
-          selectedDepartment: "",
-          selectedSection: "",
-          stationID: "",
-          missionBlock: "",
-          workType: "",
-          workDescription: "",
-          selectedLine: "",
-          cautionRequired: "",
-          cautionSpeed: "",
-          cautionLocationFrom: "",
-          cautionLocationTo: "",
-          workLocationFrom: "",
-          workLocationTo: "",
-          demandTimeFrom: "",
-          demandTimeTo: "",
-          sigDisconnection: "",
-          ohDisconnection: "",
-          elementarySectionFrom: "",
-          elementarySectionTo: "",
-          otherLinesAffected: "",
-        });
-        toast({
-          title: "Success",
-          description: "Request Submitted",
-        });
-        router.push("/schedule-manager");
+        if (formValidation(formData) == true) {
+          const res = await postFormData(formData, UserData?.id);
+          setFormData({
+            date: "",
+            selectedDepartment: "",
+            selectedSection: "",
+            stationID: "",
+            missionBlock: "",
+            workType: "",
+            workDescription: "",
+            selectedLine: "",
+            cautionRequired: "",
+            cautionSpeed: "",
+            cautionLocationFrom: "",
+            cautionLocationTo: "",
+            workLocationFrom: "",
+            workLocationTo: "",
+            demandTimeFrom: "",
+            demandTimeTo: "",
+            sigDisconnection: "",
+            ohDisconnection: "",
+            elementarySectionFrom: "",
+            elementarySectionTo: "",
+            otherLinesAffected: "",
+          });
+          toast({
+            title: "Success",
+            description: "Request Submitted",
+          });
+          router.push("/schedule-manager");
+        } else {
+          toast({
+            title: "Submission Failed",
+            description: "Fill All The Details",
+            variant: "destructive",
+          });
+        }
       }
     }
   };
@@ -473,11 +507,11 @@ export default function RequestForm(props) {
         ></select> */}
       </div>
       <MultipleSelect
-  items={getTheList()}
-  value={formData.otherLinesAffected} 
-  setFormData={setFormData}  
-  name="otherLinesAffected"  
-/>
+        items={getTheList()}
+        value={formData.otherLinesAffected}
+        setFormData={setFormData}
+        name="otherLinesAffected"
+      />
 
       {/* Submit Button */}
       <div className="text-center">

@@ -40,28 +40,18 @@ export function AdminSidebarMenu() {
       <div className="flex-1 flex flex-col space-y-4 px-4">
         <nav className="space-y-1 text-sm border-b-2 border-secondary-foreground">
           <Link
-            href="/ad-home"
+            href="/ad/ad-home"
             className={`flex items-center hover:bg-secondary-foreground rounded-full p-4 font-semibold ease-in-out duration-300 w-full 
-              ${pathname === "/admin-home" && "bg-primary"} `}
+              ${pathname === "/ad/ad-home" && "bg-primary"} `}
           >
             <House className="w-4 h-4 mr-2" />
             <span>Home</span>
           </Link>
 
           <Link
-            href="/ad-form"
-            className={`hidden flex  items-center hover:bg-secondary-foreground rounded-full p-4 font-semibold ease-in-out duration-300 w-full
-              ${pathname === "/block-request" && "bg-primary"}
-            `}
-          >
-            <CirclePlus className="w-4 h-4 mr-2" />
-            <span>See Block Requests</span>
-          </Link>
-
-          <Link
-            href="/ad-form"
+            href="/ad/ad-form"
             className={`flex items-center hover:bg-secondary-foreground rounded-full p-4 font-semibold ease-in-out duration-300 w-full ${
-              pathname === "/ad-form" && "bg-primary"
+              pathname === "/ad/ad-form" && "bg-primary"
             }`}
           >
             <CalendarCog className="w-4 h-4 mr-2" />

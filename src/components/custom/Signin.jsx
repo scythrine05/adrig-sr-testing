@@ -6,8 +6,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import getGeneratedOtp from "../../app/actions/generate";
 import verifyHandler from "../../app/actions/verify";
 
+import { useToast } from "../ui/use-toast";
+import { getUserId } from "../../app/actions/user";
 export function Signin() {
   const router = useRouter();
+  const { toast } = useToast();
   const [otp, setOtp] = useState("");
   const [code, setCode] = useState("");
   const [timer, setTimer] = useState(10);
@@ -54,7 +57,17 @@ export function Signin() {
         return;
       } else {
         console.log("after first click");
+        const res = await getUserId(formValues.username);
+        if (res == null) {
+          toast({
+            title: "Failed",
+            description: "No User Exist",
+            variant: "destructive",
+          });
+          return;
+        }
         const result = await getGeneratedOtp(formValues.username);
+
         console.log(result);
         setView(true);
         startTimer(10);
@@ -125,7 +138,7 @@ export function Signin() {
       toast({
         title: "Signed in successfully",
         description: "You have been signed in successfully",
-      })
+      });
     } catch (error) {
       setLoading(false);
       setError("An error occurred");
