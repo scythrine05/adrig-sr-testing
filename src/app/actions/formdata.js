@@ -36,6 +36,43 @@ export async function postFormData(formData, userId) {
   return res;
 }
 
+export async function updateFormData(formData, requestId) {
+  const res = await prisma.requests.update({
+    where: {
+      requestId: requestId,
+    },
+    data: {
+      date: formData.date,
+      selectedDepartment: formData.selectedDepartment,
+      selectedSection: formData.selectedSection,
+      stationID: formData.stationID,
+      missionBlock: formData.missionBlock,
+      workType: formData.workType,
+      workDescription: formData.workDescription,
+      selectedLine: formData.selectedLine,
+      cautionRequired: formData.cautionRequired,
+      cautionSpeed: formData.cautionSpeed,
+      cautionLocationFrom: formData.cautionLocationFrom,
+      cautionLocationTo: formData.cautionLocationTo,
+      workLocationFrom: formData.workLocationFrom,
+      workLocationTo: formData.workLocationTo,
+      demandTimeFrom: formData.demandTimeFrom,
+      demandTimeTo: formData.demandTimeTo,
+      sigDisconnection: formData.sigDisconnection,
+      ohDisconnection: formData.ohDisconnection,
+      elementarySectionFrom: formData.elementarySectionFrom,
+      elementarySectionTo: formData.elementarySectionTo,
+      otherLinesAffected: formData.otherLinesAffected,
+    },
+    select: {
+      requestId: true,
+      userId: true,
+    },
+  });
+
+  return res;
+}
+
 export async function getFormData(id) {
   const res = await prisma.requests.findMany({ where: { userId: id } });
   return { requestData: res };

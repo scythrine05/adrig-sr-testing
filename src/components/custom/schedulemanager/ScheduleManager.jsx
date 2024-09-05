@@ -213,7 +213,7 @@ const ScheduleManager = () => {
   }, [isStationFetching]);
 
   return (
-    <div className="w-full h-[95vh] flex flex-col items-center space-y-6">
+    <div className="w-full  flex flex-col items-center space-y-6">
       {/* <ToolBar setScheduleDataByStation={setScheduleDataByStation} /> */}
       <h1 className="mt-3 text-4xl font-bold ">User Created Request</h1>
       {viewState === 0 && (

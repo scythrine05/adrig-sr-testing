@@ -15,6 +15,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} `}>
         <Toaster />
         <Providers>{children}</Providers>
+        {/* <h1>duiwd</h1> */}
       </body>
     </html>
   );

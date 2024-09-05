@@ -3,6 +3,7 @@ import { AdminSidebarMenu } from "../../components/custom/AdminSideBarMenu";
 import NavBar from "../../components/custom/NavBar";
 const inter = Inter({ subsets: ["latin"] });
 import { getUser } from "../../lib/auth";
+import Footer from "../../components/ui/footer";
 
 export default async function RootLayout({ children }) {
   return (
@@ -19,8 +20,9 @@ export default async function RootLayout({ children }) {
 
       {/* <div className="w-[20%]"></div> */}
       <main className="col-span-8 h-full overflow-y-scroll hide-scrollbar">
-        <NavBar></NavBar>
+        {/* <NavBar></NavBar> */}
         {children}
+        <Footer />
       </main>
     </main>
   );

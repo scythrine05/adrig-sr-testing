@@ -14,11 +14,12 @@ datasource db {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  name     String
-  username String     @unique
-  password String
-  requests Requests[]
+  id        Int        @id @default(autoincrement())
+  name      String
+  username  String     @unique
+  password  String
+  optimised String     @default("notset")
+  requests  Requests[]
 }
 
 model Otp {
@@ -30,7 +31,7 @@ model Otp {
 }
 
 model Requests {
-  requestId             String @id @default(dbgenerated("(concat('Request_', gen_random_uuid()))::TEXT"))
+  requestId             String @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 3, '0'))::TEXT"))
   date                  String
   selectedDepartment    String
   selectedSection       String
@@ -54,4 +55,33 @@ model Requests {
   otherLinesAffected    String
   userId                Int
   User                  User   @relation(fields: [userId], references: [id])
+}
+
+model Sanctiontable {
+  id                    String  @id @default(cuid())
+  requestId             String  @unique
+  date                  String
+  selectedDepartment    String
+  selectedSection       String
+  stationID             String
+  missionBlock          String
+  workType              String
+  workDescription       String
+  selectedLine          String
+  cautionRequired       String
+  cautionSpeed          String
+  cautionLocationFrom   String
+  cautionLocationTo     String
+  workLocationFrom      String
+  workLocationTo        String
+  demandTimeFrom        String
+  demandTimeTo          String
+  sigDisconnection      String
+  ohDisconnection       String
+  elementarySectionFrom String
+  elementarySectionTo   String
+  otherLinesAffected    String
+  userId                Int
+  action                String  @default("none")
+  remarks               String?
 }

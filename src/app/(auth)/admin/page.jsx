@@ -35,11 +35,12 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen ">
-      <div className="w-full custom-w p-8 space-y-4 bg-white rounded-lg shadow-lg">
+    <div className="ml-24 flex items-center justify-center min-h-screen ">
+      <div className="custom-w p-10 space-y-4 rounded-lg border border-gray-200 hover:bg-gray-100 bg-white">
         <h1 className="text-2xl font-bold text-center text-gray-800">
           Admin Login
         </h1>
+        <p className="text-center text-gray-600 mb-6">Welcome to The App</p>
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label
@@ -97,6 +98,14 @@ export default function AdminLogin() {
             Login
           </button>
         </form>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Not An Admin ?{" "}
+            <a href="/signin" className="text-blue-600 hover:underline">
+              Log In
+            </a>{" "}
+          </p>
+        </div>
       </div>
     </div>
   );

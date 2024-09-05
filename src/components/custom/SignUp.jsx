@@ -5,15 +5,23 @@ import { useRouter } from "next/navigation";
 import { sendUserData } from "../../app/actions/signup";
 import verifyHandler from "../../app/actions/verify";
 import getGeneratedOtp from "../../app/actions/generate";
+import { useToast } from "../ui/use-toast";
+import { getUserId } from "../../app/actions/user";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export function SignUp() {
   const router = useRouter();
   const [otp, setOtp] = useState("");
   const [code, setCode] = useState("");
   const [timer, setTimer] = useState(10);
+  const [checkEmail, setCheckEmail] = useState(false);
+  const [checkPassword, setCheckPassword] = useState(false);
   const [canResend, setCanResend] = useState(false);
   const [otpcheck, setOtpcheck] = useState(false);
-
+  const { toast } = useToast();
   const [view, setView] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -38,6 +46,20 @@ export function SignUp() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    if (name == "username") {
+      if (value != "" && !emailRegex.test(value)) {
+        setCheckEmail(true);
+      } else {
+        setCheckEmail(false);
+      }
+    }
+    if (name == "password") {
+      if (value != "" && !passwordRegex.test(value)) {
+        setCheckPassword(true);
+      } else {
+        setCheckPassword(false);
+      }
+    }
     setFormValues({
       ...formValues,
       [name]: value,
@@ -72,19 +94,68 @@ export function SignUp() {
 
   const initialButtonClickHandler = async () => {
     if (formValues.password !== formValues.confirmPassword) {
-      setError("Passwords do not match");
+      toast({
+        title: "Failed",
+        description: "Password Did Not Match",
+        variant: "destructive",
+      });
       return;
     }
     const currentTimer = localStorage.getItem("timer_tag");
     if (currentTimer != null) {
       setTimer(+currentTimer);
     } else {
-      if (formValues.username == null || formValues.username == undefined) {
+      if (
+        formValues.name == "" ||
+        formValues.username == "" ||
+        formValues.password == ""
+      ) {
+        toast({
+          title: "Failed",
+          description: "Fill All The Details",
+          variant: "destructive",
+        });
+        return;
+      } else if (formValues.username === process.env.ADMIN_USER) {
+        toast({
+          title: "Invalid Username",
+          description: "Cannot Use This Email",
+          variant: "destructive",
+        });
+      } else if (!emailRegex.test(formValues.username)) {
+        toast({
+          title: "Invalid Username",
+          description: "Enter the Username as xxx@email.com",
+          variant: "destructive",
+        });
+        return;
+      } else if (!passwordRegex.test(formValues.password)) {
+        toast({
+          title: "Invalid Password",
+          description:
+            "Password should have Min 8 Length and contains at least one number and one special character",
+          variant: "destructive",
+        });
+      } else if (formValues.agreeTerms == false) {
+        toast({
+          title: "Accept The Terms And Conditions",
+          variant: "destructive",
+        });
         return;
       } else {
+        const res = await getUserId(formValues.username);
+        if (res != null) {
+          toast({
+            title: "User Already Exist",
+            variant: "destructive",
+          });
+          return;
+        }
+        setLoading(true);
         const result = await getGeneratedOtp(formValues.username);
         console.log(result);
         setView(true);
+        setLoading(false);
         startTimer(10);
         localStorage.setItem("timer_tag", "10");
       }
@@ -124,12 +195,20 @@ export function SignUp() {
         setLoading(false);
         console.log(res);
         if (!res?.error) {
+          toast({
+            title: "User Created",
+          });
           router.push("/signin");
         } else {
           setError("Invalid email or password");
         }
       } else {
         setOtpcheck(true);
+        toast({
+          title: "Error",
+          description: "You have Entered Wrong Otp or Secret Code ",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       setLoading(false);
@@ -137,17 +216,49 @@ export function SignUp() {
     }
   };
 
-  if (!view) {
+  if (loading) {
+    return (
+      <div class="relative items-center block w-96 p-6 h-60 bg-white border border-gray-100 rounded-lg  dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700">
+        <h5 class="mb-2 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white opacity-20">
+          Adrig AI
+        </h5>
+        <div
+          role="status"
+          class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+        </div>
+      </div>
+    );
+  } else if (!view && !loading) {
     return (
       <div>
-        <div className=" h-screen flex justify-center flex-col">
+        <div className="flex justify-center flex-col">
           <div className="flex justify-center">
-            <div className="block custom-w p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+            <div className="block custom-w p-6  bg-white border border-gray-200 rounded-lg  hover:bg-gray-100">
               <div>
                 <div className="px-10">
                   <div className="text-3xl font-extrabold flex justify-center">
                     Sign Up
                   </div>
+                  <p className="text-center text-gray-600 mt-2 mb-6">
+                    Welcome to The App
+                  </p>
                 </div>
                 <div className="pt-2">
                   <div className="mb-4">
@@ -164,9 +275,9 @@ export function SignUp() {
                       required
                     />
                   </div>
-                  <div className="mb-4">
+                  <div className="mb-2">
                     <label className="block mb-2 text-sm text-black font-semibold">
-                      Username
+                      Email
                     </label>
                     <input
                       name="username"
@@ -177,8 +288,13 @@ export function SignUp() {
                       onChange={handleChange}
                       required
                     />
+                    {checkEmail && (
+                      <span className="text-xs text-red-600">
+                        Should Be in the format of xxx@gmail.com
+                      </span>
+                    )}
                   </div>
-                  <div className="mb-4">
+                  <div className="mb-2">
                     <label className="block mb-2 text-sm text-black font-semibold">
                       Password
                     </label>
@@ -191,6 +307,12 @@ export function SignUp() {
                       onChange={handleChange}
                       required
                     />
+                    {checkPassword && (
+                      <span className="text-xs text-red-600">
+                        Password should have Min 8 Length and contains at least
+                        one number and one special character
+                      </span>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label className="block mb-2 text-sm text-black font-semibold">
@@ -241,17 +363,20 @@ export function SignUp() {
                   <button
                     type="submit"
                     onClick={initialButtonClickHandler}
-                    className="mt-8 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                    className="mt-4 w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                     disabled={loading}
                   >
                     {loading ? "Signing up..." : "Sign Up"}
                   </button>
-                  <div className="text-md text-center mt-2">
-                    <p>
-                      Go To Login Page{" "}
-                      <Link href="/login" className=" text-cyan-500 underline">
+                  <div className="mt-2 text-center">
+                    <p className="text-sm text-gray-600">
+                      Already have an account ? go to{" "}
+                      <a
+                        href="/login"
+                        className=" text-blue-600 hover:underline"
+                      >
                         Login
-                      </Link>
+                      </a>
                     </p>
                   </div>
                 </div>
@@ -265,11 +390,6 @@ export function SignUp() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          {otpcheck && (
-            <div className="text-center text-red-600 mb-3 border-2 border-red-600">
-              There is Error in Otp or Secret Code
-            </div>
-          )}
           <h1 className="text-2xl font-semibold mb-6 text-center">
             OTP Authentication
           </h1>

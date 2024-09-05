@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { currentOptimizedValue } from "../../app/actions/user";
+import { getUser } from "../../app/actions/user";
 
 const useOptimizedCheck = () => {
   const [optimizedCheck, setOptimizedCheck] = useState(null);
@@ -9,21 +11,16 @@ const useOptimizedCheck = () => {
     const fetchOptimizedCheck = async () => {
       try {
         setIsFetching(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/check_optimized_table`);
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-
-        const result = await response.json();
-        setOptimizedCheck(result.has_rows);
+        const user = getUser();
+        const response = await currentOptimizedValue(user);
+        console.log(response);
+        setOptimizedCheck(response);
       } catch (err) {
         setError(err.message);
       } finally {
         setIsFetching(false);
       }
     };
-
     fetchOptimizedCheck();
   }, []);
 

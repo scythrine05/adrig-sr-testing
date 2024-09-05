@@ -1,68 +1,37 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
+import { setOptimised } from "../../actions/user";
+import { getDataOptimised } from "../../actions/optimisetable";
 
-import * as React from "react";
-import { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { getFormData } from "../../app/actions/formdata";
-import EditRequest from "../custom/EditRequest";
-import currentUser, {
-  getUserId,
-  currentOptimizedValue,
-  setOptimised,
-} from "../../app/actions/user";
-import zIndex from "@mui/material/styles/zIndex";
-import { red } from "@mui/material/colors";
+const SearchForm = () => {
+  const [filteredRequests, setFilteredRequests] = useState([]);
 
-export default function UserRequests() {
-  const [requests, setRequests] = useState([]);
-  const [user, setUser] = useState(null);
-  const [currentoptvalue, setCurrentOptValue] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const [currentReq, setCurrentReq] = useState([]);
   useEffect(() => {
-    async function fetchData() {
+    async function fxn() {
       try {
-        const currentUserResult = await currentUser();
-        if (!currentUserResult || !currentUserResult.user) {
-          return;
-        }
-        const optimisedValue = await currentOptimizedValue(
-          currentUserResult.user
-        );
-        setUser(currentUserResult.user);
-        setCurrentOptValue(optimisedValue);
-
-        const userIdResponse = await getUserId(currentUserResult.user);
-        if (!userIdResponse) {
-          return;
-        }
-        const formDataResponse = await getFormData(userIdResponse.id);
-        setRequests(formDataResponse.requestData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        const res = await getDataOptimised();
+        setFilteredRequests(res.result);
+      } catch (e) {
+        console.log(e);
       }
     }
+    fxn();
+  }, []);
 
-    fetchData();
-  }, [currentoptvalue, showPopup]);
-
-  const editRequestHandler = (request) => {
-    setCurrentReq(request);
-    setShowPopup(true);
-  };
-
-  if (showPopup) {
-    return <EditRequest request={currentReq} setShowPopup={setShowPopup} />;
-  } else {
-    return (
-      <TableContainer sx={{ position: "relative" }} component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="request table">
+  return (
+    <div>
+      <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+        <Table sx={{ minWidth: 800 }} aria-label="request table">
           <TableHead>
             <TableRow>
               <TableCell>
@@ -131,21 +100,17 @@ export default function UserRequests() {
               <TableCell>
                 <strong>Other Lines Affected</strong>
               </TableCell>
-              <TableCell
-                sx={{
-                  backgroundColor: "#E8DEF8",
-                  position: "sticky",
-                  right: 0,
-                  zIndex: 1,
-                }}
-              >
-                <strong>Edit The Request</strong>
+              <TableCell>
+                <strong>Action</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Remarks</strong>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {requests.length > 0 ? (
-              requests.map((request) => (
+            {filteredRequests.length > 0 ? (
+              filteredRequests.map((request) => (
                 <TableRow key={request.requestId}>
                   <TableCell>{request.requestId}</TableCell>
                   <TableCell>{request.date}</TableCell>
@@ -153,8 +118,8 @@ export default function UserRequests() {
                   <TableCell>{request.selectedSection}</TableCell>
                   <TableCell>{request.stationID}</TableCell>
                   <TableCell>{request.missionBlock}</TableCell>
-                  <TableCell>{request.workType}</TableCell>
                   <TableCell>{request.workDescription}</TableCell>
+                  <TableCell>{request.workType}</TableCell>
                   <TableCell>{request.selectedLine}</TableCell>
                   <TableCell>{request.cautionRequired}</TableCell>
                   <TableCell>{request.cautionSpeed}</TableCell>
@@ -169,26 +134,13 @@ export default function UserRequests() {
                   <TableCell>{request.elementarySectionFrom}</TableCell>
                   <TableCell>{request.elementarySectionTo}</TableCell>
                   <TableCell>{request.otherLinesAffected}</TableCell>
-                  <TableCell
-                    sx={{
-                      backgroundColor: "#FFEFF4",
-                      position: "sticky",
-                      right: 0,
-                      zIndex: 1,
-                    }}
-                  >
-                    <button
-                      className="bg-blue-500 text-white p-2 rounded-lg"
-                      onClick={() => editRequestHandler(request)}
-                    >
-                      Edit
-                    </button>
-                  </TableCell>
+                  <TableCell>{request.action}</TableCell>
+                  <TableCell>{request.remarks}</TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={18} align="center">
+                <TableCell colSpan={21} align="center">
                   No requests found
                 </TableCell>
               </TableRow>
@@ -196,6 +148,8 @@ export default function UserRequests() {
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default SearchForm;

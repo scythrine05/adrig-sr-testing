@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getFormData } from "../../../app/actions/formdata";
 import Link from "next/link";
 import Lottie from "lottie-react";
 // import { NoActivity } from "@/assets";
@@ -15,6 +16,7 @@ import {
   CircleUserRound,
   MoveRight,
 } from "lucide-react";
+import currentUser, { getUserName } from "../../../app/actions/user";
 
 const getFormattedDate = () => {
   const date = new Date();
@@ -96,8 +98,25 @@ const generateDummyData = () => {
 
 const WelcomeScreenContainer = () => {
   const data = generateDummyData();
-
-  const session = useSession();
+  const [user, setUser] = useState("");
+  const [userRequest, setUserRequest] = useState(0);
+  useEffect(() => {
+    async function fxxn() {
+      try {
+        const email = await currentUser();
+        if (email) {
+          const res = await getUserName(email.user);
+          console.log(res);
+          setUser(res.name);
+          const formData = await getFormData(res.id);
+          setUserRequest(formData.requestData.length);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fxxn();
+  }, []);
   const options = {
     title: "Requests Over Time",
     hAxis: { title: "Requests" },
@@ -114,7 +133,7 @@ const WelcomeScreenContainer = () => {
               {getFormattedDate()}
             </span>
             <h1 className="text-3xl font-bold mb-4 text-slate-950">
-              Welcome🎉
+              Welcome {user}🎉
             </h1>
             <p className="text-md text-textcolor mb-4">
               Manage your block requests efficiently and effectively.
@@ -151,8 +170,8 @@ const WelcomeScreenContainer = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full bg-secondary p-6 rounded-xl">
         <div className="p-6 bg-primary border-t rounded-xl shadow-md col-span-2">
-          <h2 className="text-xl text-textcolor mb-4">Total Request Made</h2>
-          <span className="text-5xl font-bold">4,650</span>
+          <h2 className="text-xl text-textcolor mb-4">User Made Requests</h2>
+          <span className="text-5xl font-bold">{userRequest}</span>
           <div className="py-6">
             <Chart
               chartType="ScatterChart"

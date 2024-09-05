@@ -7,7 +7,8 @@ import getGeneratedOtp from "../../app/actions/generate";
 import verifyHandler from "../../app/actions/verify";
 
 import { useToast } from "../ui/use-toast";
-import { getUserId } from "../../app/actions/user";
+import { getUserId, userCheck } from "../../app/actions/user";
+
 export function Signin() {
   const router = useRouter();
   const { toast } = useToast();
@@ -22,6 +23,7 @@ export function Signin() {
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
+    agreeTerms: false,
   });
   const [error, setError] = useState("");
 
@@ -47,29 +49,60 @@ export function Signin() {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const checkBoxChange = (e) => {
+    setFormValues({
+      ...formValues,
+      agreeTerms: e.target.checked,
+    });
+  };
+
   const initialButtonClickHandler = async () => {
-    console.log("hehe");
     const currentTimer = localStorage.getItem("timer_tag");
     if (currentTimer != null) {
       setTimer(+currentTimer);
     } else {
-      if (formValues.username == null || formValues.username == undefined) {
+      if (
+        formValues.username == null ||
+        formValues.username == undefined ||
+        formValues.password == "" ||
+        formValues.username == ""
+      ) {
+        toast({
+          title: "Fill All The Form Details",
+          variant: "destructive",
+        });
+        return;
+      } else if (formValues.agreeTerms == false) {
+        toast({
+          title: "Accept The Terms And Conditions",
+          variant: "destructive",
+        });
         return;
       } else {
-        console.log("after first click");
-        const res = await getUserId(formValues.username);
-        if (res == null) {
-          toast({
-            title: "Failed",
-            description: "No User Exist",
-            variant: "destructive",
-          });
+        const res = await userCheck(formValues.username, formValues.password);
+        console.log(res);
+        if (res.success == false) {
+          if (res.error === "No User Exist") {
+            toast({
+              title: "No User Exist",
+              description: "Please Enter The Correct Email",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Failed",
+              description: "Incorrect Password",
+              variant: "destructive",
+            });
+          }
           return;
         }
+        setLoading(true);
         const result = await getGeneratedOtp(formValues.username);
 
         console.log(result);
         setView(true);
+        setLoading(false);
         startTimer(10);
         localStorage.setItem("timer_tag", "10");
       }
@@ -128,24 +161,63 @@ export function Signin() {
         setLoading(false);
         console.log(res);
         if (!res?.error) {
+          toast({
+            title: "Signed in successfully",
+            description: "You have been signed in successfully",
+          });
           router.push(callbackUrl);
         } else {
           setError("Invalid email or password");
         }
       } else {
         setOtpcheck(true);
+        toast({
+          title: "Error",
+          description: "You have Entered Wrong Otp or Secret Code ",
+          variant: "destructive",
+        });
       }
-      toast({
-        title: "Signed in successfully",
-        description: "You have been signed in successfully",
-      });
     } catch (error) {
       setLoading(false);
+      toast({
+        title: "Error",
+        description: "Some error Occured",
+        variant: "destructive",
+      });
       setError("An error occurred");
     }
   };
 
-  if (!view) {
+  if (loading) {
+    return (
+      <div class="relative items-center block w-96 p-6 h-60 bg-white border border-gray-100 rounded-lg  dark:bg-gray-800 dark:border-gray-800 dark:hover:bg-gray-700">
+        <h5 class="mb-2 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-white opacity-20">
+          Adrig AI
+        </h5>
+        <div
+          role="status"
+          class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+        </div>
+      </div>
+    );
+  } else if (!view && !loading) {
     // return (
     //   <div>
     //     <div className="m-4 absolute top-4 right-4">
@@ -218,16 +290,8 @@ export function Signin() {
     //   </div>
     // );
     return (
-      <div className="h-screen flex">
-        {/* <div className="hidden lg:flex lg:w-1/2 bg-gray-100">
-          <img
-            src=""
-            alt="Irctc Image"
-            className="object-cover w-full h-full"
-          />
-        </div> */}
-
-        <div className="flex flex-col justify-center items-center w-full  bg-white p-8">
+      <div className="h-screen flex ml-16">
+        <div className="flex flex-col justify-center mt-28    items-center w-full border h-2/3 rounded-lg border-gray-200 hover:bg-gray-100 bg-white p-8">
           <div className="max-w-md w-full">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-6 text-center">
               Log In
@@ -267,10 +331,12 @@ export function Signin() {
                   <input
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    checked={formValues.agreeTerms}
+                    onChange={checkBoxChange}
                     required
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    I agree to the terms of service
+                    I agree to the terms and conditions
                   </span>
                 </label>
               </div>
@@ -303,11 +369,6 @@ export function Signin() {
     return (
       <div className="flex items-center justify-center min-h-scree">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          {otpcheck && (
-            <div className="text-center text-red-600 mb-3 border-2 border-red-600">
-              There is Error in Otp or Secret Code
-            </div>
-          )}
           <h1 className="text-2xl font-semibold mb-6 text-center">
             OTP Authentication
           </h1>

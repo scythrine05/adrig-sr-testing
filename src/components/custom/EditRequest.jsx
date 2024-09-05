@@ -1,39 +1,39 @@
 "use client";
-import { ChangeEvent, useState } from "react";
-import { postFormData } from "../../../app/actions/formdata";
-import { getUserId } from "../../../app/actions/user";
-import { sectionData, machine, work, data } from "../../../lib/store";
-import MultipleSelect from "./MultipleSelect";
-import { useToast } from "../../ui/use-toast";
+import { useState } from "react";
+import { updateFormData } from "../../app/actions/formdata";
+import { getUserId } from "../../app/actions/user";
+import { machine, work, data } from "../../lib/store";
+import MultipleSelect from "../custom/blockrequest/MultipleSelect";
+import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
-import validateForm from "./formValidation";
+import validateForm from "../custom/blockrequest/formValidation";
 
-export default function RequestForm(props) {
+export default function EditRequest(props) {
   const router = useRouter();
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    date: "",
-    selectedDepartment: "",
-    selectedSection: "",
-    stationID: "",
-    workType: "",
-    workDescription: "",
-    selectedLine: "",
-    missionBlock: "",
-    cautionRequired: "",
-    cautionSpeed: "",
-    cautionLocationFrom: "",
-    cautionLocationTo: "",
-    workLocationFrom: "",
-    workLocationTo: "",
-    demandTimeFrom: "",
-    demandTimeTo: "",
-    sigDisconnection: "",
-    ohDisconnection: "",
-    elementarySectionFrom: "",
-    elementarySectionTo: "",
-    otherLinesAffected: "",
+    date: props.request.date,
+    selectedDepartment: props.request.selectedDepartment,
+    selectedSection: props.request.selectedSection,
+    stationID: props.request.stationID,
+    workType: props.request.workType,
+    workDescription: props.request.workDescription,
+    selectedLine: props.request.selectedLine,
+    missionBlock: props.request.missionBlock,
+    cautionRequired: props.request.cautionRequired,
+    cautionSpeed: props.request.cautionSpeed,
+    cautionLocationFrom: props.request.cautionLocationFrom,
+    cautionLocationTo: props.request.cautionLocationTo,
+    workLocationFrom: props.request.workLocationFrom,
+    workLocationTo: props.request.workLocationTo,
+    demandTimeFrom: props.request.demandTimeFrom,
+    demandTimeTo: props.request.demandTimeTo,
+    sigDisconnection: props.request.sigDisconnection,
+    ohDisconnection: props.request.ohDisconnection,
+    elementarySectionFrom: props.request.elementarySectionFrom,
+    elementarySectionTo: props.request.elementarySectionTo,
+    otherLinesAffected: props.request.otherLinesAffected,
   });
 
   const formValidation = (value) => {
@@ -63,19 +63,14 @@ export default function RequestForm(props) {
 
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
-      console.log(2);
       for (const section of data.sections) {
         console.log(section.name);
         if (formData.selectedSection === section.name) {
-          console.log(4);
-          if (formData.stationID === "Section") {
-            console.log(5);
+          if (formData.stationID === "section") {
             return section.section_blocks;
-          } else if (formData.stationID === "Station") {
-            console.log(6);
+          } else if (formData.stationID === "station") {
             return section.station_blocks;
           } else {
-            console.log(7);
             return [];
           }
         }
@@ -105,57 +100,53 @@ export default function RequestForm(props) {
 
   const formSubmitHandler = async () => {
     console.log(formData);
-    if (props.user == undefined || props.user?.user == undefined) {
-      return;
+
+    if (formValidation(formData) == true) {
+      const res = await updateFormData(formData, props.request.requestId);
+      console.log(res);
+      setFormData({
+        date: "",
+        selectedDepartment: "",
+        selectedSection: "",
+        stationID: "",
+        missionBlock: "",
+        workType: "",
+        workDescription: "",
+        selectedLine: "",
+        cautionRequired: "",
+        cautionSpeed: "",
+        cautionLocationFrom: "",
+        cautionLocationTo: "",
+        workLocationFrom: "",
+        workLocationTo: "",
+        demandTimeFrom: "",
+        demandTimeTo: "",
+        sigDisconnection: "",
+        ohDisconnection: "",
+        elementarySectionFrom: "",
+        elementarySectionTo: "",
+        otherLinesAffected: "",
+      });
+      toast({
+        title: "Success",
+        description: "Request Submitted",
+      });
+      props.setShowPopup(false);
+      router.push("/schedule-manager");
     } else {
-      const UserData = await getUserId(props.user?.user);
-      if (UserData == null || UserData == undefined || UserData.id == null) {
-        return;
-      } else {
-        if (formValidation(formData) == true) {
-          const res = await postFormData(formData, UserData?.id);
-          setFormData({
-            date: "",
-            selectedDepartment: "",
-            selectedSection: "",
-            stationID: "",
-            missionBlock: "",
-            workType: "",
-            workDescription: "",
-            selectedLine: "",
-            cautionRequired: "",
-            cautionSpeed: "",
-            cautionLocationFrom: "",
-            cautionLocationTo: "",
-            workLocationFrom: "",
-            workLocationTo: "",
-            demandTimeFrom: "",
-            demandTimeTo: "",
-            sigDisconnection: "",
-            ohDisconnection: "",
-            elementarySectionFrom: "",
-            elementarySectionTo: "",
-            otherLinesAffected: "",
-          });
-          toast({
-            title: "Success",
-            description: "Request Submitted",
-          });
-          router.push("/schedule-manager");
-        } else {
-          toast({
-            title: "Submission Failed",
-            description: "Fill All The Details",
-            variant: "destructive",
-          });
-        }
-      }
+      toast({
+        title: "Submission Failed",
+        description: "Fill All The Details",
+        variant: "destructive",
+      });
     }
   };
 
   return (
     <div className="custom-main-w mx-auto p-4 mt-10 bg-blue-100 rounded-lg shadow-lg">
-      <h1 className="text-center text-xl font-bold mb-4">Request Form</h1>
+      <h1 className="text-center text-xl font-bold mb-4">
+        Update Request Form
+      </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
@@ -212,10 +203,10 @@ export default function RequestForm(props) {
           <option className="block text-sm font-medium " value={""}>
             Select Block Section
           </option>
-          <option className="block text-sm font-medium " value={"Station"}>
+          <option className="block text-sm font-medium " value={"station"}>
             Station
           </option>
-          <option className="block text-sm font-medium " value={"Section"}>
+          <option className="block text-sm font-medium " value={"section"}>
             Section
           </option>
         </select>
@@ -246,14 +237,11 @@ export default function RequestForm(props) {
           <option className="block text-sm font-medium ">
             Select The Work Description
           </option>
-          <option className="block text-sm font-medium " value="Machine">
+          <option className="block text-sm font-medium " value="machine">
             Machine
           </option>
-          <option
-            className="block text-sm font-medium "
-            value="Non_Machine_Work"
-          >
-            Non-Machine Work
+          <option className="block text-sm font-medium " value="work">
+            Work
           </option>
         </select>
         <select
@@ -263,7 +251,7 @@ export default function RequestForm(props) {
           value={formData.workDescription}
         >
           <option>Select work description</option>
-          {formData.workType != "" && formData.workType === "Machine"
+          {formData.workType != "" && formData.workType === "machine"
             ? machine.map((e, i) => {
                 return (
                   <option key={i} value={e}>
@@ -522,7 +510,7 @@ export default function RequestForm(props) {
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={formSubmitHandler}
         >
-          Submit
+          Update
         </button>
       </div>
     </div>
