@@ -66,9 +66,9 @@ export default function EditRequest(props) {
       for (const section of data.sections) {
         console.log(section.name);
         if (formData.selectedSection === section.name) {
-          if (formData.stationID === "section") {
+          if (formData.stationID === "Section") {
             return section.section_blocks;
-          } else if (formData.stationID === "station") {
+          } else if (formData.stationID === "Station") {
             return section.station_blocks;
           } else {
             return [];
@@ -203,10 +203,10 @@ export default function EditRequest(props) {
           <option className="block text-sm font-medium " value={""}>
             Select Block Section
           </option>
-          <option className="block text-sm font-medium " value={"station"}>
+          <option className="block text-sm font-medium " value={"Station"}>
             Station
           </option>
-          <option className="block text-sm font-medium " value={"section"}>
+          <option className="block text-sm font-medium " value={"Section"}>
             Section
           </option>
         </select>
@@ -237,11 +237,14 @@ export default function EditRequest(props) {
           <option className="block text-sm font-medium ">
             Select The Work Description
           </option>
-          <option className="block text-sm font-medium " value="machine">
+          <option className="block text-sm font-medium " value="Machine">
             Machine
           </option>
-          <option className="block text-sm font-medium " value="work">
-            Work
+          <option
+            className="block text-sm font-medium "
+            value="Non Machine Work"
+          >
+            Non Machine Work
           </option>
         </select>
         <select
@@ -251,7 +254,7 @@ export default function EditRequest(props) {
           value={formData.workDescription}
         >
           <option>Select work description</option>
-          {formData.workType != "" && formData.workType === "machine"
+          {formData.workType != "" && formData.workType === "Machine"
             ? machine.map((e, i) => {
                 return (
                   <option key={i} value={e}>
@@ -349,8 +352,8 @@ export default function EditRequest(props) {
               <input
                 type="radio"
                 name="cautionRequired"
-                value="yes"
-                checked={formData.cautionRequired === "yes"}
+                value="Yes"
+                checked={formData.cautionRequired === "Yes"}
                 onChange={handleChange}
               />
               Yes
@@ -359,8 +362,8 @@ export default function EditRequest(props) {
               <input
                 type="radio"
                 name="cautionRequired"
-                checked={formData.cautionRequired === "no"}
-                value="no"
+                checked={formData.cautionRequired === "No"}
+                value="No"
                 onChange={handleChange}
               />{" "}
               No
@@ -413,8 +416,8 @@ export default function EditRequest(props) {
               <input
                 type="radio"
                 name="ohDisconnection"
-                value="yes"
-                checked={formData.ohDisconnection === "yes"}
+                value="Yes"
+                checked={formData.ohDisconnection === "Yes"}
                 onChange={handleChange}
               />{" "}
               Yes
@@ -423,8 +426,8 @@ export default function EditRequest(props) {
               <input
                 type="radio"
                 name="ohDisconnection"
-                checked={formData.ohDisconnection === "no"}
-                value="no"
+                checked={formData.ohDisconnection === "No"}
+                value="No"
                 onChange={handleChange}
               />{" "}
               No
@@ -465,8 +468,8 @@ export default function EditRequest(props) {
               <input
                 type="radio"
                 name="sigDisconnection"
-                value="yes"
-                checked={formData.sigDisconnection === "yes"}
+                value="Yes"
+                checked={formData.sigDisconnection === "Yes"}
                 onChange={handleChange}
               />{" "}
               Yes
@@ -475,8 +478,8 @@ export default function EditRequest(props) {
               <input
                 type="radio"
                 name="sigDisconnection"
-                value="no"
-                checked={formData.sigDisconnection === "no"}
+                value="No"
+                checked={formData.sigDisconnection === "No"}
                 onChange={handleChange}
               />{" "}
               No

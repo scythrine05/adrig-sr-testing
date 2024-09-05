@@ -251,9 +251,9 @@ export default function RequestForm(props) {
           </option>
           <option
             className="block text-sm font-medium "
-            value="Non_Machine_Work"
+            value="Non Machine Work"
           >
-            Non-Machine Work
+            Non Machine Work
           </option>
         </select>
         <select
@@ -361,8 +361,8 @@ export default function RequestForm(props) {
               <input
                 type="radio"
                 name="cautionRequired"
-                value="yes"
-                checked={formData.cautionRequired === "yes"}
+                value="Yes"
+                checked={formData.cautionRequired === "Yes"}
                 onChange={handleChange}
               />
               Yes
@@ -371,8 +371,8 @@ export default function RequestForm(props) {
               <input
                 type="radio"
                 name="cautionRequired"
-                checked={formData.cautionRequired === "no"}
-                value="no"
+                checked={formData.cautionRequired === "No"}
+                value="No"
                 onChange={handleChange}
               />{" "}
               No
@@ -425,8 +425,8 @@ export default function RequestForm(props) {
               <input
                 type="radio"
                 name="ohDisconnection"
-                value="yes"
-                checked={formData.ohDisconnection === "yes"}
+                value="Yes"
+                checked={formData.ohDisconnection === "Yes"}
                 onChange={handleChange}
               />{" "}
               Yes
@@ -435,8 +435,8 @@ export default function RequestForm(props) {
               <input
                 type="radio"
                 name="ohDisconnection"
-                checked={formData.ohDisconnection === "no"}
-                value="no"
+                checked={formData.ohDisconnection === "No"}
+                value="No"
                 onChange={handleChange}
               />{" "}
               No
@@ -477,8 +477,8 @@ export default function RequestForm(props) {
               <input
                 type="radio"
                 name="sigDisconnection"
-                value="yes"
-                checked={formData.sigDisconnection === "yes"}
+                value="Yes"
+                checked={formData.sigDisconnection === "Yes"}
                 onChange={handleChange}
               />{" "}
               Yes
@@ -487,8 +487,8 @@ export default function RequestForm(props) {
               <input
                 type="radio"
                 name="sigDisconnection"
-                value="no"
-                checked={formData.sigDisconnection === "no"}
+                value="No"
+                checked={formData.sigDisconnection === "No"}
                 onChange={handleChange}
               />{" "}
               No

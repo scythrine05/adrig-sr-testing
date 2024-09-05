@@ -31,7 +31,7 @@ model Otp {
 }
 
 model Requests {
-  requestId             String @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 3, '0'))::TEXT"))
+  requestId             String @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 6, '0'))::TEXT"))
   date                  String
   selectedDepartment    String
   selectedSection       String
