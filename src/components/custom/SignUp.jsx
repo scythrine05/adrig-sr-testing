@@ -9,8 +9,7 @@ import { useToast } from "../ui/use-toast";
 import { getUserId } from "../../app/actions/user";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 
 export function SignUp() {
   const router = useRouter();
