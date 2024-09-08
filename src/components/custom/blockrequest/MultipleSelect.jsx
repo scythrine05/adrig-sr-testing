@@ -108,7 +108,7 @@ const MultipleSelect = (props) => {
                 </div>
               </div>
             </div>
-            {dropdown && <Dropdown list={props.items} addItem={addTag} />}
+            {dropdown && <Dropdown list={props.items} addItem={addTag} selectedItems={selectedItems}/>}
           </div>
         </div>
       </div>
