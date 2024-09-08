@@ -379,7 +379,7 @@ export default function RequestForm(props) {
             </label>
           </div>
         </div>
-        {formData.cautionRequired === "yes" && (
+        {formData.cautionRequired === "Yes" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium">
@@ -443,7 +443,7 @@ export default function RequestForm(props) {
             </label>
           </div>
         </div>
-        {formData.ohDisconnection === "yes" && (
+        {formData.ohDisconnection === "Yes" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium">
