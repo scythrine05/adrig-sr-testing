@@ -214,6 +214,7 @@ export let data = {
         { block: "PUDI-YD", lines: ["UP", "DN"] },
         { block: "RU-YD", lines: ["UP", "DN"] },
       ],
+      lines: ["UP", "DN"],
     },
     {
       name: "MAS-AJJ",
@@ -321,6 +322,7 @@ export let data = {
           lines: ["Up slow", "Down slow", "Up fast", "Down fast"],
         },
       ],
+      lines: ["Up slow", "Down slow", "Up fast", "Down fast"],
     },
     {
       name: "MSB-VM",
@@ -417,6 +419,14 @@ export let data = {
         { block: "MYP-YD", lines: ["UP line", "Down line"] },
         { block: "VM-YD", lines: ["UP line", "Down line"] },
       ],
+      lines: [
+        "UP line",
+        "Down line",
+        "A line",
+        "B line",
+        "Down Sub urban",
+        "Up sub urban",
+      ],
     },
     {
       name: "AJJ-KPD",
@@ -445,6 +455,7 @@ export let data = {
         { block: "SVUR-YD", lines: ["UP line", "Down line"] },
         { block: "KPD-YD", lines: ["UP line", "Down line"] },
       ],
+      lines: ["UP line", "Down line"],
     },
     {
       name: "KPD-JTJ",
@@ -475,6 +486,7 @@ export let data = {
         { block: "KDY-YD", lines: ["UP line", "Down line"] },
         { block: "JTJ-YD", lines: ["UP line", "Down line"] },
       ],
+      lines: ["UP line", "Down line"],
     },
     {
       name: "AJJ-CGL",
@@ -502,6 +514,7 @@ export let data = {
         { block: "MLPM-YD", lines: ["SINGLE LINE"] },
         { block: "AJJ-YD", lines: ["SINGLE LINE"] },
       ],
+      lines: ["UP line", "Down line"],
     },
     {
       name: "MAS-GDR",
@@ -597,6 +610,14 @@ export let data = {
         { block: "PYA-YD", lines: ["UP line", "Down line"] },
         { block: "ODR-YD", lines: ["UP line", "Down line"] },
         { block: "GDR-YD", lines: ["UP line", "Down line"] },
+      ],
+      lines: [
+        "UP line",
+        "Down line",
+        "UP slow",
+        "Down Slow",
+        "UP fast",
+        "Down Fast",
       ],
     },
   ],
