@@ -11,6 +11,8 @@ const Dropdown = ({ list, addItem, selectedItems, limit }) => {
       <div className="flex flex-col w-full">
         {list &&
           list.map((item, key) => {
+            console.log(selectedItems);
+            console.log(selectedItems.includes(item));
             if (selectedItems.includes(item)) {
               return <></>;
             } else {

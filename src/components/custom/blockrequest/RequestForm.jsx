@@ -11,7 +11,7 @@ import validateForm from "./formValidation";
 export default function RequestForm(props) {
   const router = useRouter();
   const { toast } = useToast();
-
+  const [otherData, setOtherData] = useState("");
   const [formData, setFormData] = useState({
     date: "",
     selectedDepartment: "",
@@ -51,13 +51,12 @@ export default function RequestForm(props) {
       res.workDescription ||
       res.selectedLine ||
       res.missionBlock ||
-      res.cautionRequired ||
       res.workLocationFrom ||
       res.workLocationTo ||
       res.demandTimeFrom ||
       res.demandTimeTo ||
-      res.sigDisconnection ||
-      res.ohDisconnection
+      (formData.selectedDepartment != "TRD" &&
+        (res.sigDisconnection || res.ohDisconnection || res.cautionRequired))
     ) {
       return false;
     } else {
@@ -104,15 +103,34 @@ export default function RequestForm(props) {
 
   const getTheList = () => {
     const result = [];
-    blockGenerator().map((element, ind) => {
-      return element.lines.map((e) => {
-        if (element.block === formData.missionBlock) {
-          if (formData.selectedLine != "" && e != formData.selectedLine)
-            result.push(e);
+    // blockGenerator().map((element, ind) => {
+    //   return element.lines.map((e) => {
+    //     if (element.block === formData.missionBlock) {
+    //       if (formData.selectedLine != "" && e != formData.selectedLine)
+    //         result.push(e);
+    //     }
+    //   });
+    // });
+    if (formData.stationID != "" && formData.selectedSection != "") {
+      for (let section of data.sections) {
+        if (formData.selectedSection == section.name) {
+          // console.log(formData.selectedSection);
+          // if (formData.stationID === "Section") {
+          //   return section.section_blocks;
+          // } else if (formData.stationID === "Station") {
+          //   return section.station_blocks;
+          // } else {
+          //   return [];
+          // }
+          let res = section.lines;
+          console.log(res);
+          return res;
         }
-      });
-    });
-    return result;
+      }
+      return [];
+    } else {
+      return [];
+    }
   };
 
   const handleChange = (event) => {
@@ -153,6 +171,11 @@ export default function RequestForm(props) {
       formData.workType = "";
       formData.workDescription = "";
       setFormData({ ...formData, [name]: value });
+    } else if (name === "selectedSection") {
+      formData.stationID = "";
+      formData.missionBlock = "";
+      formData.otherLinesAffected = "";
+      setFormData({ ...formData, [name]: value });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -168,6 +191,17 @@ export default function RequestForm(props) {
         return;
       } else {
         if (formValidation(formData) == true) {
+          if (formData.workDescription === "others") {
+            if (otherData === "") {
+              toast({
+                title: "Invalid Format",
+                description: "Fill the section in the format xxx/yy",
+                variant: "destructive",
+              });
+              return;
+            }
+            formData.workDescription = "Other Entry" + ":" + otherData;
+          }
           const res = await postFormData(formData, UserData?.id);
           console.log(res);
           setFormData({
@@ -339,9 +373,6 @@ export default function RequestForm(props) {
             value={formData.workDescription}
           >
             <option>Select work description</option>
-            <option className="block text-sm font-medium " value={"others"}>
-              Others
-            </option>
             {formData.workType != "" &&
               workData[`${formData.selectedDepartment}`][
                 `${revertCategoryFormat(formData.workType)}`
@@ -356,7 +387,24 @@ export default function RequestForm(props) {
                   </option>
                 );
               })}
+            <option className="block text-sm font-medium " value={"others"}>
+              Others
+            </option>
           </select>
+        )}
+        {formData.workDescription === "others" && (
+          <div className="ml-[555px] ">
+            <input
+              type="text"
+              name="otherData"
+              placeholder="Enter The Other Task Here"
+              className="border border-slate-900 rounded-lg p-2 w-[400px]"
+              value={otherData}
+              onChange={(e) => {
+                setOtherData(e.target.value);
+              }}
+            />
+          </div>
         )}
       </div>
 
@@ -370,7 +418,7 @@ export default function RequestForm(props) {
             onChange={handleChange}
           >
             <option value={""}>Select Line</option>
-            {blockGenerator().map((element, ind) => {
+            {/* {blockGenerator().map((element, ind) => {
               return element.lines.map((e) => {
                 if (element.block === formData.missionBlock) {
                   return (
@@ -380,6 +428,13 @@ export default function RequestForm(props) {
                   );
                 }
               });
+            })} */}
+            {getTheList().map((e) => {
+              return (
+                <option value={e} key={e}>
+                  {e}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -693,7 +748,7 @@ export default function RequestForm(props) {
         ></select> */}
       </div>
       <MultipleSelect
-        items={getTheList()}
+        items={getTheList().filter((item) => item !== formData.selectedLine)}
         value={formData.otherLinesAffected}
         setFormData={setFormData}
         name="otherLinesAffected"
