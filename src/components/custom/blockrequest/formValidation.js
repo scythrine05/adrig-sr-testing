@@ -81,6 +81,18 @@ export default function validateForm(values) {
     errors.elementarySectionTo = "Elementary Section To is required";
   }
 
+  if (!values.sigElementarySectionFrom) {
+    errors.sigElementarySectionFrom = "Elementary Section From is required";
+  }
+
+  if (!values.sigElementarySectionTo) {
+    errors.sigElementarySectionTo = "Elementary Section To is required";
+  }
+
+  if (!values.repercussions) {
+    errors.repercussions = "repercussions are required";
+  }
+
   if (!values.otherLinesAffected) {
     errors.otherLinesAffected = "Other Lines Affected is required";
   }

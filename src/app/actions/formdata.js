@@ -24,7 +24,11 @@ export async function postFormData(formData, userId) {
       ohDisconnection: formData.ohDisconnection,
       elementarySectionFrom: formData.elementarySectionFrom,
       elementarySectionTo: formData.elementarySectionTo,
+      sigElementarySectionFrom: formData.sigElementarySectionFrom,
+      sigElementarySectionTo: formData.sigElementarySectionTo,
+      repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
+      requestremarks: formData.requestremarks,
       userId: userId,
     },
     select: {
@@ -62,11 +66,11 @@ export async function updateFormData(formData, requestId) {
       ohDisconnection: formData.ohDisconnection,
       elementarySectionFrom: formData.elementarySectionFrom,
       elementarySectionTo: formData.elementarySectionTo,
+      sigElementarySectionFrom: formData.sigElementarySectionFrom,
+      sigElementarySectionTo: formData.sigElementarySectionTo,
+      repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
-    },
-    select: {
-      requestId: true,
-      userId: true,
+      requestremarks: formData.requestremarks,
     },
   });
 

@@ -132,3 +132,14 @@
   margin-top:15rem ;
   margin-left:5rem;
 }
+
+
+.customSetting{
+  top:6px;
+  left:295px;
+}
+
+#multipleSelect{
+  color: #ff0000;
+  opacity: 1;
+}

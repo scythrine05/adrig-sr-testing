@@ -89,7 +89,7 @@ export function SidebarMenu() {
         <Link href="/user-profile">
           <div className="flex items-center hover:bg-secondary-foreground hover:rounded-full px-4 py-2 font-semibold ease-in-out duration-300 w-full">
             <Settings className="w-4 h-4 mr-2" />
-            <span>Setting</span>
+            <span>Settings</span>
           </div>
         </Link>
         {/* <SignOutButton /> */}

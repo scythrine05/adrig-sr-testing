@@ -18,6 +18,7 @@ export function SignUp() {
   const [timer, setTimer] = useState(10);
   const [checkEmail, setCheckEmail] = useState(false);
   const [checkPassword, setCheckPassword] = useState(false);
+  const [passwordToggle, setPasswordToggle] = useState(false);
   const [canResend, setCanResend] = useState(false);
   const [otpcheck, setOtpcheck] = useState(false);
   const { toast } = useToast();
@@ -70,6 +71,10 @@ export function SignUp() {
       ...formValues,
       agreeTerms: e.target.checked,
     });
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordToggle(!passwordToggle);
   };
 
   const startTimer = (initialTime) => {
@@ -297,15 +302,26 @@ export function SignUp() {
                     <label className="block mb-2 text-sm text-black font-semibold">
                       Password
                     </label>
-                    <input
-                      name="password"
-                      type="password"
-                      placeholder="********"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      value={formValues.password}
-                      onChange={handleChange}
-                      required
-                    />
+                    <div className="relative">
+                      <input
+                        name="password"
+                        type={passwordToggle ? "text" : "password"}
+                        placeholder="********"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        value={formValues.password}
+                        onChange={handleChange}
+                        required
+                      />
+                      {formValues.password.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={togglePasswordVisibility}
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                        >
+                          {passwordToggle ? "Hide" : "Show"}
+                        </button>
+                      )}
+                    </div>
                     {checkPassword && (
                       <span className="text-xs text-red-600">
                         Password should have Min 8 Length and contains at least

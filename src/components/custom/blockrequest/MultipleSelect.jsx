@@ -22,20 +22,34 @@ const MultipleSelect = (props) => {
   const addTag = (item) => {
     const newSelectedItems = selectedItems.concat(item);
     setSelected(newSelectedItems);
-    props.setFormData((prevData) => ({
-      ...prevData,
-      otherLinesAffected: newSelectedItems.join(", "),
-    }));
+    if (props.limit) {
+      props.setFormData((prevData) => ({
+        ...prevData,
+        missionBlock: newSelectedItems.join(", "),
+      }));
+    } else {
+      props.setFormData((prevData) => ({
+        ...prevData,
+        otherLinesAffected: newSelectedItems.join(", "),
+      }));
+    }
     setDropdown(false);
   };
 
   const removeTag = (item) => {
     const filtered = selectedItems.filter((e) => e !== item);
     setSelected(filtered);
-    props.setFormData((prevData) => ({
-      ...prevData,
-      otherLinesAffected: filtered.join(", "),
-    }));
+    if (props.limit) {
+      props.setFormData((prevData) => ({
+        ...prevData,
+        missionBlock: filtered.join(", "),
+      }));
+    } else {
+      props.setFormData((prevData) => ({
+        ...prevData,
+        otherLinesAffected: filtered.join(", "),
+      }));
+    }
   };
 
   return (
@@ -50,7 +64,7 @@ const MultipleSelect = (props) => {
                     {selectedItems.map((tag, index) => (
                       <div
                         key={index}
-                        className="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300"
+                        className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-teal-700 bg-teal-100 border border-teal-300"
                       >
                         <div className="text-xs font-normal leading-none max-w-full flex-initial">
                           {tag}
@@ -78,8 +92,11 @@ const MultipleSelect = (props) => {
                     ))}
                     <div className="flex-1">
                       <input
-                        placeholder=""
-                        className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
+                        readOnly
+                        placeholder={
+                          props.placeholder ? "Select Your Value" : ""
+                        }
+                        className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-slate-900"
                         onClick={toggleDropdown}
                       />
                     </div>
@@ -108,7 +125,14 @@ const MultipleSelect = (props) => {
                 </div>
               </div>
             </div>
-            {dropdown && <Dropdown list={props.items} addItem={addTag} selectedItems={selectedItems}/>}
+            {props.items.length != 0 && dropdown && (
+              <Dropdown
+                list={props.items}
+                limit={props.limit}
+                addItem={addTag}
+                selectedItems={selectedItems}
+              />
+            )}
           </div>
         </div>
       </div>

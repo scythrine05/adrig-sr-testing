@@ -12,6 +12,15 @@ export default async function currentUser() {
   }
 }
 
+export async function currentUserDetails() {
+  const session = await getUser();
+  if (session) {
+    return { user: session.user };
+  } else {
+    return null;
+  }
+}
+
 export async function currentOptimizedValue(email) {
   const res = await prisma.user.findUnique({ where: { username: email } });
   return res.optimised;
@@ -58,4 +67,25 @@ export async function userCheck(username, password) {
   } else {
     return { success: true, msg: "Correct details" };
   }
+}
+
+export async function updateName(name, email) {
+  const res = await prisma.user.update({
+    where: {
+      username: email,
+    },
+    data: {
+      name: name,
+    },
+  });
+  return res;
+}
+
+export async function deleteUserData(email) {
+  const res = await prisma.user.delete({
+    where: {
+      username: email,
+    },
+  });
+  return res;
 }

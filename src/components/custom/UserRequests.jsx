@@ -111,6 +111,12 @@ export default function UserRequests() {
                 <strong>Work Location (To)</strong>
               </TableCell>
               <TableCell>
+                <strong>Route (From)</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Route (To)</strong>
+              </TableCell>
+              <TableCell>
                 <strong>Demand Time (From)</strong>
               </TableCell>
               <TableCell>
@@ -129,7 +135,19 @@ export default function UserRequests() {
                 <strong>Elementary Section (To)</strong>
               </TableCell>
               <TableCell>
+                <strong>SIG Elementary Section (From)</strong>
+              </TableCell>
+              <TableCell>
+                <strong>SIG Elementary Section (To)</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Coaching repercussions</strong>
+              </TableCell>
+              <TableCell>
                 <strong>Other Lines Affected</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Remarks</strong>
               </TableCell>
               <TableCell
                 sx={{
@@ -160,15 +178,57 @@ export default function UserRequests() {
                   <TableCell>{request.cautionSpeed}</TableCell>
                   <TableCell>{request.cautionLocationFrom}</TableCell>
                   <TableCell>{request.cautionLocationTo}</TableCell>
-                  <TableCell>{request.workLocationFrom}</TableCell>
-                  <TableCell>{request.workLocationTo}</TableCell>
+                  <TableCell>
+                    {request.selectedDepartment === "ENGG"
+                      ? request.workLocationFrom
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {Request.selectedDepartment === "ENGG"
+                      ? request.workLocationTo
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {request.selectedDepartment === "SIG"
+                      ? request.workLocationFrom
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {request.selectedDepartment === "SIG"
+                      ? request.workLocationTo
+                      : ""}
+                  </TableCell>
                   <TableCell>{request.demandTimeFrom}</TableCell>
                   <TableCell>{request.demandTimeTo}</TableCell>
-                  <TableCell>{request.sigDisconnection}</TableCell>
-                  <TableCell>{request.ohDisconnection}</TableCell>
+                  <TableCell>
+                    {Request.selectedDepartment !== "TRD"
+                      ? request.sigDisconnection
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {Request.selectedDepartment !== "TRD"
+                      ? request.ohDisconnection
+                      : ""}
+                  </TableCell>
                   <TableCell>{request.elementarySectionFrom}</TableCell>
                   <TableCell>{request.elementarySectionTo}</TableCell>
+                  <TableCell>
+                    {Request.selectedDepartment !== "TRD"
+                      ? request.sigElementarySectionFrom
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {Request.selectedDepartment !== "TRD"
+                      ? request.sigElementarySectionTo
+                      : ""}
+                  </TableCell>
+                  <TableCell>
+                    {Request.selectedDepartment === "TRD"
+                      ? request.repercussions
+                      : ""}
+                  </TableCell>
                   <TableCell>{request.otherLinesAffected}</TableCell>
+                  <TableCell>{request.requestremarks}</TableCell>
                   <TableCell
                     sx={{
                       backgroundColor: "#FFEFF4",

@@ -1,10 +1,12 @@
 import React from "react";
 
-const Dropdown = ({ list, addItem, selectedItems }) => {
+const Dropdown = ({ list, addItem, selectedItems, limit }) => {
   return (
     <div
       id="dropdown"
-      className=" bg-white z-40 w-full lef-0 rounded max-h-select overflow-y-auto "
+      className={` bg-white z-40 w-full lef-0 rounded ${
+        limit ? "h-[500px] overflow-y-scroll" : "max-h-select"
+      }  `}
     >
       <div className="flex flex-col w-full">
         {list &&

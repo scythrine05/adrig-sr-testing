@@ -161,6 +161,12 @@ export default function OptimisedTable() {
               <strong>Elementary Section (To)</strong>
             </TableCell>
             <TableCell>
+              <strong>SIG Elementary Section (From)</strong>
+            </TableCell>
+            <TableCell>
+              <strong>SIG Elementary Section (To)</strong>
+            </TableCell>
+            <TableCell>
               <strong>Other Lines Affected</strong>
             </TableCell>
             <TableCell>
@@ -193,6 +199,8 @@ export default function OptimisedTable() {
                 <TableCell>{request.ohDisconnection}</TableCell>
                 <TableCell>{request.elementarySectionFrom}</TableCell>
                 <TableCell>{request.elementarySectionTo}</TableCell>
+                <TableCell>{request.sigElementarySectionFrom}</TableCell>
+                <TableCell>{request.sigElementarySectionTo}</TableCell>
                 <TableCell>{request.otherLinesAffected}</TableCell>
                 <TableCell>
                   {!request.isSanctioned ? (
