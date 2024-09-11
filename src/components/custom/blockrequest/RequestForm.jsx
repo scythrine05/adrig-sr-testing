@@ -51,12 +51,12 @@ export default function RequestForm(props) {
       res.workDescription ||
       res.selectedLine ||
       res.missionBlock ||
-      res.workLocationFrom ||
-      res.workLocationTo ||
       res.demandTimeFrom ||
       res.demandTimeTo ||
       (formData.selectedDepartment != "TRD" &&
-        (res.sigDisconnection || res.ohDisconnection || res.cautionRequired))
+        (res.sigDisconnection || res.ohDisconnection || res.cautionRequired)) ||
+      (formData.selectedDepartment == "ENGG" &&
+        (res.workLocationFrom || res.workLocationTo))
     ) {
       return false;
     } else {
@@ -253,7 +253,9 @@ export default function RequestForm(props) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium">Date</label>
+          <label className="block text-sm font-medium">
+            Date <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             value={formData.date}
             type="date"
@@ -263,21 +265,25 @@ export default function RequestForm(props) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Department</label>
+          <label className="block text-sm font-medium">
+            Department <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             value={formData.selectedDepartment}
             name="selectedDepartment"
             className="mt-1 w-full p-2.5 border rounded"
             onChange={handleChange}
           >
-            <option value={""}>Select department</option>
+            <option value={""}>Select department </option>
             <option value={"ENGG"}>ENGG</option>
             <option value={"SIG"}>SIG</option>
             <option value={"TRD"}>TRD</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium">Section</label>
+          <label className="block text-sm font-medium">
+            Section <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             value={formData.selectedSection}
             name="selectedSection"
@@ -372,7 +378,7 @@ export default function RequestForm(props) {
             onChange={handleChange}
             value={formData.workDescription}
           >
-            <option>Select work description</option>
+            <option>Select work description </option>
             {formData.workType != "" &&
               workData[`${formData.selectedDepartment}`][
                 `${revertCategoryFormat(formData.workType)}`
@@ -410,7 +416,9 @@ export default function RequestForm(props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium">Line</label>
+          <label className="block text-sm font-medium">
+            Line <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             name="selectedLine"
             value={formData.selectedLine}
@@ -443,7 +451,7 @@ export default function RequestForm(props) {
             <label className="block text-sm font-medium">Work location</label>
           )}
           {formData.selectedDepartment === "SIG" && (
-            <label className="block text-sm font-medium">Route</label>
+            <label className="block text-sm font-medium">Route </label>
           )}
           {formData.selectedDepartment === "TRD" && (
             <label className="block text-sm font-medium">
@@ -517,7 +525,8 @@ export default function RequestForm(props) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium">
-            Demanded time (Click On the Clock To Select)
+            Demanded time (Click On the Clock To Select){" "}
+            <span style={{ color: "red" }}>*</span>
           </label>
           <div className="flex space-x-2">
             <input
@@ -544,7 +553,7 @@ export default function RequestForm(props) {
         <div className="bg-blue-200 p-4 rounded-lg mb-4">
           <div className="mb-4">
             <label className="block text-sm font-medium">
-              Coaching repercussions
+              Coaching repercussions <span style={{ color: "red" }}>*</span>
             </label>
             <textarea
               type="text"
@@ -559,7 +568,7 @@ export default function RequestForm(props) {
         <div className="bg-blue-200 p-4 rounded-lg mb-4">
           <div className="mb-4">
             <label className="block text-sm font-medium">
-              Caution required
+              Caution required <span style={{ color: "red" }}>*</span>
             </label>
             <div className="flex space-x-4">
               <label>
@@ -588,7 +597,7 @@ export default function RequestForm(props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium">
-                  Caution location
+                  Caution location <span style={{ color: "red" }}>*</span>
                 </label>
                 <div className="flex space-x-2">
                   <input
@@ -611,7 +620,7 @@ export default function RequestForm(props) {
               </div>
               <div>
                 <label className="block text-sm font-medium">
-                  Caution speed
+                  Caution speed <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -627,7 +636,7 @@ export default function RequestForm(props) {
 
           <div className="mb-4">
             <label className="block text-sm font-medium">
-              OHE Disconnection
+              OHE Disconnection <span style={{ color: "red" }}>*</span>
             </label>
             <div className="flex space-x-4">
               <label>
@@ -656,7 +665,7 @@ export default function RequestForm(props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium">
-                  Elementary section
+                  Elementary section <span style={{ color: "red" }}>*</span>
                 </label>
                 <div className="flex space-x-2">
                   <input
@@ -681,7 +690,7 @@ export default function RequestForm(props) {
           )}
           <div className="mb-4">
             <label className="block text-sm font-medium">
-              SIG Disconnection
+              SIG Disconnection <span style={{ color: "red" }}>*</span>
             </label>
             <div className="flex space-x-4">
               <label>
@@ -710,26 +719,39 @@ export default function RequestForm(props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium">
-                  Elementary section
+                  {formData.selectedDepartment === "SIG"
+                    ? "Gear"
+                    : "Elementary section"}{" "}
+                  <span style={{ color: "red" }}>*</span>
                 </label>
-                <div className="flex space-x-2">
+                {formData.selectedDepartment === "SIG" ? (
                   <input
                     type="text"
                     value={formData.sigElementarySectionFrom}
                     name="sigElementarySectionFrom"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="from"
+                    className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
                     onChange={handleChange}
                   />
-                  <input
-                    type="text"
-                    value={formData.sigElementarySectionTo}
-                    name="sigElementarySectionTo"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="to"
-                    onChange={handleChange}
-                  />
-                </div>
+                ) : (
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={formData.sigElementarySectionFrom}
+                      name="sigElementarySectionFrom"
+                      className="mt-1 w-1/2 p-2 border rounded"
+                      placeholder="from"
+                      onChange={handleChange}
+                    />
+                    <input
+                      type="text"
+                      value={formData.sigElementarySectionTo}
+                      name="sigElementarySectionTo"
+                      className="mt-1 w-1/2 p-2 border rounded"
+                      placeholder="to"
+                      onChange={handleChange}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}
