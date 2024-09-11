@@ -71,7 +71,7 @@ export function SidebarMenu() {
             <span>Request Table</span>
           </Link>
 
-          {optimizedCheck && (
+          {optimizedCheck !== "notset" && (
             <Link
               href="/optimised-table"
               className={`flex items-center hover:bg-secondary-foreground rounded-full p-4 font-semibold ease-in-out duration-300 w-full 
