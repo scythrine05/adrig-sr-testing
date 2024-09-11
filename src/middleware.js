@@ -31,13 +31,13 @@ export async function middleware(request) {
 
   if (adminRoutes.includes(pathname)) {
     if (userRole !== "admin") {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+      return NextResponse.redirect(new URL("/sigin", request.url));
     }
   }
 
   if (userRoutes.includes(pathname)) {
     if (userRole !== "user") {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+      return NextResponse.redirect(new URL("/signin", request.url));
     }
   }
 
