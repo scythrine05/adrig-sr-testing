@@ -31,7 +31,7 @@ export async function middleware(request) {
 
   if (adminRoutes.includes(pathname)) {
     if (userRole !== "admin") {
-      return NextResponse.redirect(new URL("/sigin", request.url));
+      return NextResponse.redirect(new URL("/signin", request.url));
     }
   }
 
