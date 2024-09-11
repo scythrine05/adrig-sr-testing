@@ -29,6 +29,7 @@ export async function middleware(request) {
 
   const userRole = token ? token.role : "";
 
+  console.log(userRole);
   if(userRole == undefined || userRole == ""){
     const response = NextResponse.redirect(new URL("/signin", request.url));
     response.cookies.delete("__Secure-next-auth.session-token");
