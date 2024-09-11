@@ -29,15 +29,14 @@ export async function middleware(request) {
 
   const userRole = token ? token.role : "";
 
-  console.log(userRole);
-  if(userRole == undefined || userRole == ""){
-    const response = NextResponse.redirect(new URL("/signin", request.url));
-    response.cookies.delete("__Secure-next-auth.session-token");
-  }
 
   if (adminRoutes.includes(pathname)) {
     if (userRole !== "admin") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }else if(userRole =="admin" && pathname =="/"){
+      const url = request.nextUrl.clone();
+      url.pathname = "/ad/ad-home";
+      return NextResponse.redirect(url);
     }
   }
 
