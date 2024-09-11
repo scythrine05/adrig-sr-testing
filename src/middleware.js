@@ -18,7 +18,7 @@ export async function middleware(request) {
     return NextResponse.next();
   }
 
-  const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "/ad/ad-optimised-table"];
+  const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "/ad/ad-optimised-table","/"];
   const userRoutes = ["/"];
 
   if (!request.cookies.get("__Secure-next-auth.session-token")) {
