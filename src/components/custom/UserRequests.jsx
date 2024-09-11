@@ -210,8 +210,16 @@ export default function UserRequests() {
                       ? request.ohDisconnection
                       : ""}
                   </TableCell>
-                  <TableCell>{request.elementarySectionFrom}</TableCell>
-                  <TableCell>{request.elementarySectionTo}</TableCell>
+                  <TableCell>
+                    {request.selectedDepartment !== "TRD"
+                      ? request.elementarySectionFrom
+                      : request.workLocationFrom}
+                  </TableCell>
+                  <TableCell>
+                    {request.selectedDepartment !== "TRD"
+                      ? request.elementarySectionTo
+                      : request.workLocationTo}
+                  </TableCell>
                   <TableCell>
                     {request.selectedDepartment !== "TRD"
                       ? request.sigElementarySectionFrom
