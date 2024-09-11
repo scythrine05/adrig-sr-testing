@@ -18,7 +18,7 @@ export async function middleware(request) {
     return NextResponse.next();
   }
 
-  const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "/ad/ad-optimised-table","/"];
+  const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "/ad/ad-optimised-table"];
   const userRoutes = ["/"];
 
   if (!request.cookies.get("__Secure-next-auth.session-token")) {
@@ -30,13 +30,13 @@ export async function middleware(request) {
   const userRole = token ? token.role : "";
 
 
-  if (adminRoutes.includes(pathname)) {
+  if (adminRoutes.includes(pathname) || pathname ==="/") {
     if (userRole !== "admin") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }else if(userRole =="admin" && pathname =="/"){
-      const url = request.nextUrl.clone();
-      url.pathname = "/ad/ad-home";
-      return NextResponse.redirect(url);
+    }else if(userRole === "user"){
+      return NextResponse.next();    
+    }else{
+      return NextResponse.redirect(new URL("/ad/ad-home", request.url));
     }
   }
 
