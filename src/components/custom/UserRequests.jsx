@@ -184,7 +184,7 @@ export default function UserRequests() {
                       : ""}
                   </TableCell>
                   <TableCell>
-                    {Request.selectedDepartment === "ENGG"
+                    {request.selectedDepartment === "ENGG"
                       ? request.workLocationTo
                       : ""}
                   </TableCell>
@@ -201,29 +201,29 @@ export default function UserRequests() {
                   <TableCell>{request.demandTimeFrom}</TableCell>
                   <TableCell>{request.demandTimeTo}</TableCell>
                   <TableCell>
-                    {Request.selectedDepartment !== "TRD"
+                    {request.selectedDepartment !== "TRD"
                       ? request.sigDisconnection
                       : ""}
                   </TableCell>
                   <TableCell>
-                    {Request.selectedDepartment !== "TRD"
+                    {request.selectedDepartment !== "TRD"
                       ? request.ohDisconnection
                       : ""}
                   </TableCell>
                   <TableCell>{request.elementarySectionFrom}</TableCell>
                   <TableCell>{request.elementarySectionTo}</TableCell>
                   <TableCell>
-                    {Request.selectedDepartment !== "TRD"
+                    {request.selectedDepartment !== "TRD"
                       ? request.sigElementarySectionFrom
                       : ""}
                   </TableCell>
                   <TableCell>
-                    {Request.selectedDepartment !== "TRD"
+                    {request.selectedDepartment !== "TRD"
                       ? request.sigElementarySectionTo
                       : ""}
                   </TableCell>
                   <TableCell>
-                    {Request.selectedDepartment === "TRD"
+                    {request.selectedDepartment === "TRD"
                       ? request.repercussions
                       : ""}
                   </TableCell>
