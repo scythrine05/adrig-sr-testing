@@ -29,6 +29,11 @@ export async function middleware(request) {
 
   const userRole = token ? token.role : "";
 
+  if(userRole == undefined || userRole == ""){
+    const response = NextResponse.redirect(new URL("/signin", request.url));
+    response.cookies.delete("__Secure-next-auth.session-token");
+  }
+
   if (adminRoutes.includes(pathname)) {
     if (userRole !== "admin") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
