@@ -71,7 +71,7 @@ export function SidebarMenu() {
             <span>Request Table</span>
           </Link>
 
-          {optimizedCheck !== "notset" && (
+          {/* {optimizedCheck !== "notset" && (
             <Link
               href="/optimised-table"
               className={`flex items-center hover:bg-secondary-foreground rounded-full p-4 font-semibold ease-in-out duration-300 w-full 
@@ -81,7 +81,7 @@ export function SidebarMenu() {
               <CalendarCheck className="w-4 h-4 mr-2" />
               <span>Optimised Table</span>
             </Link>
-          )}
+          )} */}
         </nav>
       </div>
       <div className="px-2 w-[90%] mx-auto py-4 border-t-2 border-secondary-foreground flex flex-col items-start space-y-2">

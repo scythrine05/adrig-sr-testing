@@ -54,9 +54,7 @@ export default function RequestForm(props) {
       res.demandTimeFrom ||
       res.demandTimeTo ||
       (formData.selectedDepartment != "TRD" &&
-        (res.sigDisconnection || res.ohDisconnection || res.cautionRequired)) ||
-      (formData.selectedDepartment == "ENGG" &&
-        (res.workLocationFrom || res.workLocationTo))
+        (res.sigDisconnection || res.ohDisconnection || res.cautionRequired))
     ) {
       return false;
     } else {
@@ -138,9 +136,7 @@ export default function RequestForm(props) {
 
     if (
       formData.selectedDepartment === "ENGG" &&
-      (name === "workLocationFrom" ||
-        name === "workLocationTo" ||
-        name === "cautionLocationFrom" ||
+      (name === "cautionLocationFrom" ||
         name === "cautionLocationTo" ||
         name === "elementarySectionFrom" ||
         name === "elementarySectionTo" ||
@@ -167,6 +163,26 @@ export default function RequestForm(props) {
           variant: "destructive",
         });
       }
+    } else if (
+      formData.selectedDepartment === "ENGG" &&
+      (name === "workLocationFrom" || name === "workLocationTo")
+    ) {
+      let rawValue = value;
+
+      rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+      const decimalIndex = rawValue.indexOf(".");
+
+      if (decimalIndex !== -1) {
+        const beforeDecimal = rawValue.slice(0, decimalIndex);
+        const afterDecimal = rawValue.slice(decimalIndex + 1, decimalIndex + 4);
+        rawValue = beforeDecimal + "." + afterDecimal;
+      }
+
+      setFormData({
+        ...formData,
+        [name]: rawValue,
+      });
     } else if (name === "selectedDepartment") {
       formData.workType = "";
       formData.workDescription = "";
