@@ -29,11 +29,22 @@ export async function middleware(request) {
 
   const userRole = token ? token.role : "";
 
+
+  if (pathname === "/") {
+    if (userRole === "user") {
+      return NextResponse.next();
+    } else if (userRole === "admin") {
+      return NextResponse.redirect(new URL("/ad/ad-home", request.url));
+    } else {
+      return NextResponse.redirect(new URL("/signin", request.url));
+    }
+  }
+
   if (adminRoutes.includes(pathname)) {
     if (userRole !== "admin") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
-  }
+  }""
 
   if (userRoutes.includes(pathname)) {
     if (userRole !== "user") {
