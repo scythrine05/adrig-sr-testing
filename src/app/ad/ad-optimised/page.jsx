@@ -160,9 +160,8 @@ const SearchForm = () => {
                 </TableCell>
                 {filteredRequests &&
                   filteredRequests[0] &&
-                  filteredRequests[0].final &&
-                  (filteredRequests[0].final !== "set" ||
-                    filteredRequests[0].final == null) && (
+                  (filteredRequests[0].final == null ||
+                    filteredRequests[0].final !== "set") && (
                     <TableCell
                       sx={{
                         backgroundColor: "#E8DEF8",
@@ -220,7 +219,7 @@ const SearchForm = () => {
                         : request.remarks}
                     </TableCell>
                     {request.final === "" ||
-                      (request.final === "notset" && (
+                      (request.final !== "set" && (
                         <TableCell
                           sx={{
                             backgroundColor: "#FFEFF4",
