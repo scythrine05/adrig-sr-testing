@@ -184,7 +184,7 @@ def adjust_requests_to_corridor(request_data, corridor_data, section_data):
 
     return optimized_requests
 
-@app.route('/optimize', methods=['POST'])
+@app.route('/backend/optimize', methods=['POST'])
 def optimize():
     try:
         data = request.json
