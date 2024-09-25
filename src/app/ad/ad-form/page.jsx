@@ -25,6 +25,7 @@ import {
   postDataOptimised,
   postDataOptimisedFirst,
 } from "../../actions/optimisetable";
+import { Oval } from "react-loader-spinner";
 
 import { useToast } from "../../../components/ui/use-toast";
 
@@ -35,6 +36,7 @@ const SearchForm = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [currentReq, setCurrentReq] = useState(null);
   const [clear, setClear] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const { toast } = useToast();
@@ -78,18 +80,16 @@ const SearchForm = () => {
   const handleOptimize = async () => {
     let timer;
     clearTimeout(timer);
+    setLoading(true);
     toast({
       title: "Optimization In progress",
       description: "Your Request Is Under Process! Please Wait",
     });
     try {
       if (currentReq != null) {
-        const res = await axios.post(
-          `https://sr.adrig.co.in/backend/optimize`,
-          {
-            requestData: currentReq,
-          }
-        );
+        const res = await axios.post(`http://localhost:5001/backend/optimize`, {
+          requestData: currentReq,
+        });
         const data = res.data.optimizedData;
         const res1 = await deleteOptimizedData();
 
@@ -120,6 +120,8 @@ const SearchForm = () => {
         variant: "destructive",
       });
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,7 +191,11 @@ const SearchForm = () => {
           border: "solid 1px #ddd",
         }}
       >
-        <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
+        <Table
+          sx={{ minWidth: 800 }}
+          aria-label="request table"
+          stickyHeader={!loading}
+        >
           <TableHead>
             <TableRow>
               <TableCell>
@@ -343,6 +349,19 @@ const SearchForm = () => {
           >
             Optimise
           </Button>
+        </div>
+      )}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
+          <Oval
+            visible={true}
+            height="80"
+            width="80"
+            color="#0000FF"
+            ariaLabel="oval-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
         </div>
       )}
     </div>
