@@ -198,37 +198,25 @@ function CompactView({ viewState, setViewState }) {
 }
 
 const ScheduleManager = () => {
-  const { isStationFetching, stationData } = useFetchByStation();
   // const [isGanttView, setIsGanttView] = useState(true);
-  const [scheduleDataByStation, setScheduleDataByStation] = useState(null);
-  const [isLoading, setIsLoading] = useState(isStationFetching);
+
   const [viewState, setViewState] = useState(0);
-
-  useEffect(() => {
-    setScheduleDataByStation(stationData);
-  }, [stationData]);
-
-  useEffect(() => {
-    setIsLoading(isStationFetching);
-  }, [isStationFetching]);
 
   return (
     <div className="w-full  flex flex-col items-center space-y-6">
-      {/* <ToolBar setScheduleDataByStation={setScheduleDataByStation} /> */}
       <h1 className="mt-3 text-4xl font-bold ">User Created Request</h1>
       {viewState === 0 && (
         <RequestTable viewState={viewState} setViewState={setViewState} />
       )}
+
       {viewState === 1 && (
-        <WeekSchedule
-          isStationFetching={isStationFetching}
-          scheduleDataByStation={scheduleDataByStation}
-          viewState={viewState}
-          setViewState={setViewState}
-        />
-      )}
-      {viewState === 2 && (
         <CompactView viewState={viewState} setViewState={setViewState} />
+      )}
+
+      {viewState === 2 && (
+        <>
+          <WeekSchedule viewState={viewState} setViewState={setViewState} />
+        </>
       )}
     </div>
   );

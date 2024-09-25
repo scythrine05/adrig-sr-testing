@@ -72,7 +72,6 @@ export default function UserProfile() {
         throw Error("Fill The Details Correctly");
       } else {
         const res = await updateName(userdata.name, userEmail);
-        console.log(res);
         setUserEdit(false);
       }
       toast({
@@ -262,7 +261,7 @@ export default function UserProfile() {
           <div className="bg-white rounded-lg shadow-lg p-6 w-96">
             <form>
               <div class="  pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
                   Profile
                 </h2>
                 <p class="mt-1 text-sm leading-6 text-gray-600">

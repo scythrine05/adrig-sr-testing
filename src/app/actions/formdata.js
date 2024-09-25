@@ -82,6 +82,13 @@ export async function getFormData(id) {
   return { requestData: res };
 }
 
+export async function getFormDataByDepartment(dept) {
+  const res = await prisma.requests.findMany({
+    where: { selectedDepartment: dept },
+  });
+  return res;
+}
+
 export async function getFormDataAll() {
   const res = await prisma.requests.findMany();
   return { requestData: res };
@@ -89,7 +96,7 @@ export async function getFormDataAll() {
 
 export async function getAdminFormData(
   selectedSection,
-  selectedLine,
+  searchDepartment,
   dateRange
 ) {
   try {
@@ -97,8 +104,8 @@ export async function getAdminFormData(
     if (selectedSection) {
       filters.stationID = selectedSection;
     }
-    if (selectedLine) {
-      filters.selectedLine = selectedLine;
+    if (searchDepartment) {
+      filters.selectedDepartment = searchDepartment;
     }
     if (dateRange?.from && dateRange?.to) {
       filters.date = {

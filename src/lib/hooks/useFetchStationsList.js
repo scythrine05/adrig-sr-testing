@@ -11,13 +11,13 @@ const useFetchStationsList = () => {
         const response = await new Promise((resolve) => {
           setTimeout(() => {
             const data = [
-              { "id": 1, "from": "AJJ", "to": "RU" },
-              { "id": 2, "from": "MAS", "to": "AJJ" },
-              { "id": 3, "from": "AJJ", "to": "KPD" },
-              { "id": 4, "from": "KPD", "to": "JTJ" },
-              { "id": 5, "from": "MAS", "to": "SPE" },
-              { "id": 6, "from": "SPE", "to": "GDR" }
-          ];
+              { id: 1, from: "AJJ", to: "RU" },
+              { id: 2, from: "MAS", to: "AJJ" },
+              { id: 3, from: "MSB", to: "VM" },
+              { id: 4, from: "AJJ", to: "KPD" },
+              { id: 5, from: "AJJ", to: "CGL" },
+              { id: 6, from: "MAS", to: "GDR" },
+            ];
             resolve({ ok: true, json: () => Promise.resolve(data) });
           }, 0);
         });

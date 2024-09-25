@@ -263,7 +263,11 @@ export default function EditRequest(props) {
         description: "Request Submitted",
       });
       props.setShowPopup(false);
-      router.push("/schedule-manager");
+      if (props.admin) {
+        router.push("/ad/ad-form");
+      } else {
+        router.push("/schedule-manager");
+      }
     } else {
       toast({
         title: "Submission Failed",

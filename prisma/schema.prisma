@@ -31,7 +31,7 @@ model Otp {
 }
 
 model Requests {
-  requestId                String @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 6, '0'))::TEXT"))
+  requestId                String   @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 6, '0'))::TEXT"))
   date                     String
   selectedDepartment       String
   selectedSection          String
@@ -57,8 +57,9 @@ model Requests {
   repercussions            String
   otherLinesAffected       String
   requestremarks           String
+  createdAt                DateTime @default(now())
   userId                   Int
-  User                     User   @relation(fields: [userId], references: [id])
+  User                     User     @relation(fields: [userId], references: [id])
 }
 
 model Sanctiontable {
@@ -89,7 +90,11 @@ model Sanctiontable {
   repercussions            String
   otherLinesAffected       String
   requestremarks           String
+  final                    String?
   userId                   Int
   action                   String  @default("none")
   remarks                  String?
+  Optimisedtimefrom        String?
+  Optimisedtimeto          String?
+  optimization_details     String?
 }

@@ -12,6 +12,8 @@ import {
   TooltipContent,
 } from "../../components/ui/tooltip";
 
+import GanttGraph from "./GanttGraph";
+
 const GanttChartBar = ({ startHour, endHour, color, tooltip, clashed }) => {
   const calculatePosition = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
@@ -63,32 +65,82 @@ const TimeLabels = () => (
     ))}
   </div>
 );
+
 const groupStations = (stations) => {
   const grouped = {};
   stations.forEach((station) => {
-    if (!grouped[station.stationName]) {
-      grouped[station.stationName] = {
-        stationName: station.stationName,
+    if (!grouped[station.selectedSection]) {
+      grouped[station.selectedSection] = {
+        stationName: station.selectedSection,
         requests: [],
       };
     }
-    grouped[station.stationName].requests.push(...station.requests);
+    grouped[station.selectedSection].requests.push(station);
   });
   return Object.values(grouped);
 };
 
-const StationGantt = ({ station }) => {
-  const nonClashingRequests = station.requests.filter((r) => !r.clashed);
-  const clashingRequests = station.requests.filter((r) => r.clashed);
+const groupDataByStations = (stations, data, section, date) => {
+  const grouped = {};
 
-  const handleClick = () => {
-    console.log("Non-Clashing Requests:", nonClashingRequests);
-    console.log("Clashing Requests:", clashingRequests);
-  };
+  // console.log(stations);
+  // console.log(data);
+  // console.log(section);
+
+  stations.forEach((e) => {
+    grouped[e.block] = {
+      stationName: e.block,
+      requests: [],
+    };
+  });
+
+  if (date != null || date != "") {
+    data.forEach((element) => {
+      if (element.selectedSection === section) {
+        console.log("lol");
+        let stationName = element.missionBlock
+          .split(",")
+          .map((name) => name.trim());
+
+        stationName.forEach((station) => {
+          if (date === element.date) {
+            grouped[station].requests.push(element);
+          }
+        });
+      }
+    });
+  } else {
+    data.forEach((element) => {
+      if (element.selectedSection === section) {
+        console.log("lol");
+        let stationName = element.missionBlock
+          .split(",")
+          .map((name) => name.trim());
+
+        stationName.forEach((station) => {
+          grouped[station].requests.push(element);
+        });
+      }
+    });
+  }
+
+  return Object.values(grouped);
+};
+
+const StationGantt = ({ station, stationData }) => {
+  // console.log(station);
+  const nonClashingRequests = station;
+  // const clashingRequests = station.filter((r) => r.clashed);
+  const clashingRequests = station;
+
+  // const handleClick = () => {
+  //   console.log("Non-Clashing Requests:", nonClashingRequests);
+  //   console.log("Clashing Requests:", clashingRequests);
+  // };
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-semibold mb-1">{station.stationName}</h3>
+      <h3 className="text-sm font-semibold mb-1">{station.selectedSection}</h3>
       {/* <button onClick={handleClick}>
         sad
       </button> */}
@@ -97,39 +149,40 @@ const StationGantt = ({ station }) => {
           {nonClashingRequests.map((request, index) => (
             <GanttChartBar
               key={index}
-              startHour={request.startHour}
-              endHour={request.endHour}
+              startHour={request.demandTimeFrom}
+              endHour={request.demandTimeTo}
               clashed={false}
-              tooltip={`${station.stationName} - Non-clashing Request ${
+              tooltip={`${station.selectedSection} - Non-clashing Request ${
                 index + 1
-              } - ${request.dept} - `}
+              } - ${request.selectedDepartment} - `}
             />
           ))}
           <GanttChartGrid />
         </div>
       )}
-      {clashingRequests.map((request, index) => (
-        <div key={index} className="relative h-8 bg-gray-200 rounded-lg">
-          <GanttChartBar
-            startHour={request.startHour}
-            endHour={request.endHour}
-            clashed={true}
-            tooltip={`${station.stationName} - Clashing Request ${
-              index + 1
-            } - ${request.dept} - `}
-          />
-          <GanttChartGrid />
-        </div>
-      ))}
+      {clashingRequests.length > 0 &&
+        clashingRequests.map((request, index) => (
+          <div key={index} className="relative h-8 bg-gray-200 rounded-lg">
+            <GanttChartBar
+              startHour={request.demandTimeFrom}
+              endHour={request.demandTimeTo}
+              clashed={true}
+              tooltip={`${station.selectedSection} - Clashing Request ${
+                index + 1
+              } - ${request.missionBlock} - `}
+            />
+            <GanttChartGrid />
+          </div>
+        ))}
 
       <TimeLabels />
     </div>
   );
 };
 
-export const GanttChartModern = ({ data }) => {
-  const groupedStations = groupStations(data.stations);
-
+export const GanttChartModern = ({ data, stationData, section, date }) => {
+  const groupedData = groupDataByStations(stationData, data, section, date);
+  console.log(groupedData);
   return (
     <Card className="rounded-lg">
       <CardHeader>
@@ -137,9 +190,10 @@ export const GanttChartModern = ({ data }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {groupedStations.map((station, index) => (
+          {/* {data.map((station, index) => (
             <StationGantt key={index} station={station} />
-          ))}
+          ))} */}
+          <GanttGraph data={groupedData}></GanttGraph>
         </div>
       </CardContent>
     </Card>

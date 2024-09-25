@@ -13,6 +13,7 @@ import { getFormData } from "../../../app/actions/formdata";
 import {
   postDataOptimised,
   checkOptimizedData,
+  currentOptimizedData,
 } from "../../../app/actions/optimisetable";
 import { useRouter } from "next/navigation";
 import currentUser, { getUserId } from "../../../app/actions/user";
@@ -40,37 +41,19 @@ export default function OptimisedTable() {
         if (!userIdResponse) {
           return;
         }
-
-        const formDataResponse = await getFormData(userIdResponse.id);
-        const requestDataWithCheck = await Promise.all(
-          formDataResponse.requestData.map(async (request) => {
-            const res = await checkOptimizedData(request.requestId);
-
-            if (res == null) {
-              return { ...request, isSanctioned: false };
-            } else {
-              return {
-                ...request,
-                isSanctioned: true,
-                action: res[0].action,
-                remarks: res[0].remarks,
-              };
-            }
-          })
-        );
-        console.log(requestDataWithCheck);
-        setRequests(requestDataWithCheck);
+        const formDataResponse = await currentOptimizedData(userIdResponse.id);
+        console.log(formDataResponse);
+        setRequests(formDataResponse);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-
     fetchData();
-  }, []);
+  }, [currentRequest]);
 
   const optimisedYesHandler = async (requestdata) => {
-    await postDataOptimised(requestdata, "Accepted", "");
-    router.push("/optimised-table");
+    const res = await postDataOptimised(requestdata, "Accepted", "");
+    setCurrentRequest(res);
   };
 
   const optimisedNoHandler = (requestdata) => {
@@ -84,16 +67,23 @@ export default function OptimisedTable() {
         setError("Remarks are required");
         return;
       }
-      await postDataOptimised(currentRequest, "Rejected", remarks);
+      const res = await postDataOptimised(currentRequest, "Rejected", remarks);
       setShowPopup(false);
-      router.push("/optimised-table");
+      setCurrentRequest(res);
     } catch (e) {
       console.log(e);
     }
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        marginTop: 4,
+        maxHeight: 560,
+        border: "solid 1px #ddd",
+      }}
+    >
       <Table sx={{ minWidth: 650 }} aria-label="request table">
         <TableHead>
           <TableRow>
@@ -149,6 +139,15 @@ export default function OptimisedTable() {
               <strong>Demand Time (To)</strong>
             </TableCell>
             <TableCell>
+              <strong>Optimised Time (From)</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Optimised Time (To)</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Optimization Details</strong>
+            </TableCell>
+            <TableCell>
               <strong>SIG Disconnection</strong>
             </TableCell>
             <TableCell>
@@ -195,6 +194,9 @@ export default function OptimisedTable() {
                 <TableCell>{request.workLocationTo}</TableCell>
                 <TableCell>{request.demandTimeFrom}</TableCell>
                 <TableCell>{request.demandTimeTo}</TableCell>
+                <TableCell>{request.Optimisedtimefrom}</TableCell>
+                <TableCell>{request.Optimisedtimeto}</TableCell>
+                <TableCell>{request.optimization_details}</TableCell>
                 <TableCell>{request.sigDisconnection}</TableCell>
                 <TableCell>{request.ohDisconnection}</TableCell>
                 <TableCell>{request.elementarySectionFrom}</TableCell>
@@ -203,7 +205,7 @@ export default function OptimisedTable() {
                 <TableCell>{request.sigElementarySectionTo}</TableCell>
                 <TableCell>{request.otherLinesAffected}</TableCell>
                 <TableCell>
-                  {!request.isSanctioned ? (
+                  {request.action === "none" ? (
                     <div className=" flex justify-around">
                       <button
                         className="bg-green-500 text-white p-1 rounded-lg mr-3"

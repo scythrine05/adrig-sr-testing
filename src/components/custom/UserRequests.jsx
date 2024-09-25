@@ -61,8 +61,11 @@ export default function UserRequests() {
     return <EditRequest request={currentReq} setShowPopup={setShowPopup} />;
   } else {
     return (
-      <TableContainer sx={{ position: "relative" }} component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="request table">
+      <TableContainer
+        sx={{ position: "relative", maxHeight: 500 }}
+        component={Paper}
+      >
+        <Table sx={{ minWidth: 650 }} aria-label="request table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -154,7 +157,7 @@ export default function UserRequests() {
                   backgroundColor: "#E8DEF8",
                   position: "sticky",
                   right: 0,
-                  zIndex: 1,
+                  zIndex: 100,
                 }}
               >
                 <strong>Edit The Request</strong>

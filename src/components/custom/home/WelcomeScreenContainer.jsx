@@ -17,6 +17,7 @@ import {
   MoveRight,
 } from "lucide-react";
 import currentUser, { getUserName } from "../../../app/actions/user";
+import { currentApprovedData } from "../../../app/actions/optimisetable";
 
 const getFormattedDate = () => {
   const date = new Date();
@@ -98,6 +99,7 @@ const generateDummyData = () => {
 
 const WelcomeScreenContainer = () => {
   const data = generateDummyData();
+  const [approved, setApproved] = useState(null);
   const [user, setUser] = useState("");
   const [userRequest, setUserRequest] = useState(0);
   useEffect(() => {
@@ -106,7 +108,9 @@ const WelcomeScreenContainer = () => {
         const email = await currentUser();
         if (email) {
           const res = await getUserName(email.user);
-          console.log(res);
+          const userSanctionData = await currentApprovedData(res.id);
+
+          setApproved(userSanctionData);
           setUser(res.name);
           const formData = await getFormData(res.id);
           setUserRequest(formData.requestData.length);
@@ -117,6 +121,7 @@ const WelcomeScreenContainer = () => {
     }
     fxxn();
   }, []);
+
   const options = {
     title: "Requests Over Time",
     hAxis: { title: "Requests" },
@@ -219,21 +224,25 @@ const WelcomeScreenContainer = () => {
               <div className="w-10 h-10 bg-white rounded-full shadow-md animate-pulse shadow-slate-900 text-blue-400 flex items-center justify-center">
                 <Send />
               </div>
-              <h3 className="text-2xl font-bold">10</h3>
+              <h3 className="text-2xl font-bold">{userRequest}</h3>
               <p className="text-sm">Block Requests Submitted</p>
             </div>
             <div className="bg-green-400 hover:bg-green-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
               <div className="w-10 h-10 bg-white rounded-full shadow-md animate-bounce shadow-slate-900 text-green-400 flex items-center justify-center">
                 <CircleCheck />
               </div>
-              <h3 className="text-2xl font-bold">5</h3>
+              <h3 className="text-2xl font-bold">
+                {approved != null ? approved : "0"}
+              </h3>
               <p className="text-sm">Approved Requests</p>
             </div>
             <div className="bg-orange-400 hover:bg-orange-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
               <div className="w-10 h-10 bg-white rounded-full text-orange-400 animate-spin flex items-center justify-center">
                 <CircleDashed />
               </div>
-              <h3 className="text-2xl font-bold">2</h3>
+              <h3 className="text-2xl font-bold">
+                {approved != null ? userRequest - approved : userRequest}
+              </h3>
               <p className="text-sm">Pending Requests</p>
             </div>
           </div>

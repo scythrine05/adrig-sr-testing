@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect } from "react";
+import { getFormDataAll } from "../../app/actions/formdata";
 const useFetchRequests = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -8,13 +8,12 @@ const useFetchRequests = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/read_requests`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const response = await getFormDataAll();
+        if (!response) {
+          throw new Error("Network response was not ok");
         }
-        const result = await response.json();
-        console.log(result);
-        setData(result);
+
+        setData(response.requestData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -23,7 +22,7 @@ const useFetchRequests = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   return { data, isLoading, error };
 };
