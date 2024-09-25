@@ -83,7 +83,7 @@ export async function updateFinalStatus(requestId) {
       requestId: requestId,
     },
     data: {
-      final: "notset",
+      final: "set",
     },
   });
   return res;
