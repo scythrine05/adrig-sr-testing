@@ -84,9 +84,12 @@ const SearchForm = () => {
     });
     try {
       if (currentReq != null) {
-        const res = await axios.post(`${process.env.OPTIMIZE_API}/optimize`, {
-          requestData: currentReq,
-        });
+        const res = await axios.post(
+          `https://sr.adrig.co.in/backend/optimize`,
+          {
+            requestData: currentReq,
+          }
+        );
         const data = res.data.optimizedData;
         const res1 = await deleteOptimizedData();
 
