@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from flask_cors import CORS 
 
 app = Flask(__name__)
-CORS(app, origin=["http://localhost:3000"])
+CORS(app, origin=["https://sr.adrig.co.in"])
 
 # Load corridor data from CSV with correct time parsing
 def load_corridor_data(corridor_csv_path):

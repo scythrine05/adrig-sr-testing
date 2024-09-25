@@ -84,7 +84,7 @@ const SearchForm = () => {
     });
     try {
       if (currentReq != null) {
-        const res = await axios.post(`http://127.0.0.1:5001/optimize`, {
+        const res = await axios.post(`${process.env.OPTIMIZE_API}/optimize`, {
           requestData: currentReq,
         });
         const data = res.data.optimizedData;
