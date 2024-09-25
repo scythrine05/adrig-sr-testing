@@ -161,7 +161,8 @@ const SearchForm = () => {
                 {filteredRequests &&
                   filteredRequests[0] &&
                   filteredRequests[0].final &&
-                  filteredRequests[0].final !== "set" && (
+                  (filteredRequests[0].final !== "set" ||
+                    filteredRequests[0].final == "") && (
                     <TableCell
                       sx={{
                         backgroundColor: "#E8DEF8",
