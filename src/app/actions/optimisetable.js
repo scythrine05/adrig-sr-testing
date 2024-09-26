@@ -42,6 +42,16 @@ export async function postDataOptimisedFirst(request) {
   return { result: res };
 }
 
+export async function postBulkOptimised(requestArray) {
+  const filteredData = requestArray.map(({ createdAt, ...rest }) => rest);
+
+  const res = await prisma.sanctiontable.createMany({
+    data: [...filteredData],
+  });
+
+  return res;
+}
+
 export async function postDataOptimised(request, action, remarks) {
   const res = await prisma.sanctiontable.update({
     where: {

@@ -22,6 +22,7 @@ import { getUsersAll, setOptimised } from "../../actions/user";
 import axios from "axios";
 import {
   deleteOptimizedData,
+  postBulkOptimised,
   postDataOptimised,
   postDataOptimisedFirst,
 } from "../../actions/optimisetable";
@@ -93,16 +94,11 @@ const SearchForm = () => {
             requestData: currentReq,
           }
         );
-        const data = res.data.optimizedData;
+        const data = await res.data.optimizedData;
         const res1 = await deleteOptimizedData();
+        const res2 = await postBulkOptimised(data);
 
-        data.forEach(async (e) => {
-          try {
-            const res1 = await postDataOptimisedFirst(e);
-          } catch (e) {
-            console.log(e);
-          }
-        });
+        console.log(res2);
       } else {
         throw Error("the admin data didnt came");
       }

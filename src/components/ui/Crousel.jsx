@@ -58,20 +58,20 @@ const Crousel = () => {
     <div className="relative w-full max-w-5xl mx-auto p-4">
       {/* Carousel */}
       {latestRequests.length == 0 ? (
-        <div class="bg-white flex flex-col justify-center items-center w-92  border rounded-lg ">
+        <div className="bg-white flex flex-col justify-center items-center w-92  border rounded-lg ">
           <div className="p-2 ">
-            <h2 class="text-xl text-center font-semibold text-gray-700 mb-2">
+            <h2 className="text-xl text-center font-semibold text-gray-700 mb-2">
               No Data Available
             </h2>
 
-            <p class="text-gray-500 text-center">
+            <p className="text-gray-500 text-center">
               We couldn't find any data to display at the moment. Please check
               back later or try refreshing the page.
             </p>
 
             <button
               onClick={tryAgainClickHandler}
-              class="ml-[20rem] mt-6 px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none"
+              className="ml-[20rem] mt-6 px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none"
             >
               Refresh
             </button>
