@@ -1,7 +1,6 @@
 import pandas as pd
 import json
 from datetime import datetime, timedelta
-from fpdf import FPDF
 from flask import Flask, request, jsonify
 from datetime import datetime, timedelta
 from flask_cors import CORS
