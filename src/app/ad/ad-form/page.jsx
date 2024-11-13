@@ -31,6 +31,7 @@ import { Oval } from "react-loader-spinner";
 import { useToast } from "../../../components/ui/use-toast";
 
 const SearchForm = () => {
+  let timerfirst;
   const [searchType, setSearchType] = useState("");
   const [searchDepartment, setSearchDepartment] = useState("");
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
@@ -53,7 +54,34 @@ const SearchForm = () => {
       }
     }
     fxn();
+    localStorage.setItem("optimizedbuttonnotclicked", "true");
   }, [clear]);
+
+  useEffect(() => {
+    const runFunction = () => {
+      timerfirst = setTimeout(() => {
+        if (localStorage.getItem("optimizedbuttonnotclicked") === "true") {
+          handleOptimize();
+        }
+        clearTimeout(timerfirst);
+      }, 2000);
+    };
+
+    const now = new Date();
+    const nextDay = new Date(now);
+    nextDay.setHours(24, 0, 0, 0);
+
+    const timeUntilNextDay = nextDay - now;
+
+    const timer = setTimeout(
+      runFunction,
+      timeUntilNextDay + 30 * 60 * 60 * 1000
+    );
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timerfirst);
+    };
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,7 +122,7 @@ const SearchForm = () => {
             requestData: currentReq,
           }
         );
-        const data = await res.data.optimizedData;
+        const data = filteredRequests;
         const res1 = await deleteOptimizedData();
         const res2 = await postBulkOptimised(data);
 
@@ -344,7 +372,11 @@ const SearchForm = () => {
             variant="contained"
             color="secondary"
             sx={{ marginTop: 2, marginBottom: 4 }}
-            onClick={handleOptimize}
+            onClick={() => {
+              localStorage.setItem("optimizedbuttonnotclicked", "false");
+              clearTimeout(timerfirst);
+              handleOptimize();
+            }}
           >
             Optimise
           </Button>
