@@ -119,12 +119,12 @@ const SearchForm = () => {
         const res = await axios.post(
           `https://sr.adrig.co.in/backend/optimize`,
           {
-            requestData: currentReq,
+            requestData: filteredRequests,
           }
         );
         const data = filteredRequests;
         const res1 = await deleteOptimizedData();
-        const res2 = await postBulkOptimised(data);
+        const res2 = await postBulkOptimised(res.data.optimizedData);
 
         console.log(res2);
       } else {

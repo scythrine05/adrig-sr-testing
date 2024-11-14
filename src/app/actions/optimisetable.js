@@ -43,12 +43,29 @@ export async function postDataOptimisedFirst(request) {
 }
 
 export async function postBulkOptimised(requestArray) {
-  const filteredData = requestArray.map(({ createdAt, ...rest }) => rest);
+  const filteredData = requestArray.map(
+    ({ createdAt, duration, pushed, ...rest }) => rest
+  );
 
-  const res = await prisma.sanctiontable.createMany({
-    data: [...filteredData],
+  const updatedData = filteredData.map((item) => {
+    const {
+      optimisation_details,
+      optimisedTimeFrom,
+      optimisedTimeTo,
+      ...rest
+    } = item;
+    return {
+      ...rest,
+      optimization_details: optimisation_details.join(" "),
+      Optimisedtimefrom: optimisedTimeFrom,
+      Optimisedtimeto: optimisedTimeTo,
+    };
   });
 
+  console.log(requestArray);
+  const res = await prisma.sanctiontable.createMany({
+    data: [...updatedData],
+  });
   return res;
 }
 
