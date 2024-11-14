@@ -56,6 +56,11 @@ export async function middleware(request) {
 }
 
 export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb",
+    },
+  },
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
