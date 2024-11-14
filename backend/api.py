@@ -1,9 +1,10 @@
 import pandas as pd
 import json
 from datetime import datetime, timedelta
+from dateutil import parser
 from flask import Flask, request, jsonify
-from datetime import datetime, timedelta
 from flask_cors import CORS
+from dateutil import parser
 
 app = Flask(__name__)
 CORS(app, origin=["https://sr.adrig.co.in"])
@@ -134,7 +135,7 @@ def engopt(grouped_enggReqs, corridor_df, enggReqs):
         while total_requests_duration > corridorTotalTime and sorted_group_engg_df.shape[0] >= 2:
             last_row = sorted_group_engg_df.iloc[-1]
             sorted_group_engg_df = sorted_group_engg_df.iloc[:-1]
-            last_row['date'] = (datetime.strptime(last_row['date'], "%d-%m-%Y") + timedelta(days=1)).strftime("%d-%m-%Y")
+            last_row['date'] = (parser.parse(last_row['date']) + timedelta(days=1)).strftime("%d-%m-%Y")
             last_row['pushed'] += 1
             last_row["optimisation_details"].append(f"Pushed row {last_row['requestId']} to next day due to corridor limit.")
             pushed_rows_list.append(last_row)
@@ -256,7 +257,7 @@ def nonEngopt(grouped_nonEnggReqs, corridor_df, nonEnggReqs, enggOpti, section_d
             sorted_group_nonengg_df = sorted_group_nonengg_df.iloc[:-1]
 
             # Update date for the next day's group
-            last_request['date'] = (datetime.strptime(last_request['date'], "%d-%m-%Y") + timedelta(days=1)).strftime("%d-%m-%Y")
+            last_request['date'] = (parser.parse(last_request['date']) + timedelta(days=1)).strftime("%d-%m-%Y")
             last_request['pushed'] += 1
             optimisation_steps.append(f"Pushed request {last_request['requestId']} to the next day due to corridor block limit.")
 
@@ -326,11 +327,11 @@ line_data = {
     "KPD-JTJ": {"UP line":0, "Down line": 1},
 }
 
-# Optimization function
-def optimize_request_data(request_data, corridor_df, section_data, line_data):
+def optii(request_data, corridor_csv_path):
     # Normalize request data into a DataFrame
     df = pd.json_normalize(request_data)
-    df["pushed"] = 0  # Initialize the "pushed" column
+    df["pushed"] = 0
+    corridor_df = pd.read_csv(corridor_csv_path)
 
     # Separate engineering and non-engineering requests
     enggReqs = df[df['selectedDepartment'] == 'ENGG']  # Engineering requests
@@ -344,25 +345,30 @@ def optimize_request_data(request_data, corridor_df, section_data, line_data):
     grouped_nonEnggReqs = nonEnggReqs.groupby(['date', 'missionBlock', 'selectedLine'])
     nonEnggOpti, grouped_nonEnggReqs = nonEngopt(grouped_nonEnggReqs, corridor_df, nonEnggReqs, enggOpti, section_data, line_data)
 
-    # Combine both DataFrames into one final DataFrame
-    final_combined_df = pd.concat([enggOpti, nonEnggOpti], ignore_index=True)
+    # Save optimized results for engineering and non-engineering requests
+    '''enggOpti.to_csv('OUTPUT_ENGG_OPTI.csv', index=False)
+    nonEnggOpti.to_csv('OUTPUT_NONENGG_OPTI.csv', index=False)
 
+    # Load the optimised engineering and non-engineering CSV files
+    enggOpti_df = pd.read_csv('OUTPUT_ENGG_OPTI.csv')
+    nonEnggOpti_df = pd.read_csv('OUTPUT_NONENGG_OPTI.csv')'''
+    #print(df.shape[0])
+    # Combine both DataFrames into one
+    final_combined_df = pd.concat([enggOpti, nonEnggOpti], ignore_index=True)
+    #print(final_combined_df.shape[0])
+    # Save the final combined DataFrame into a new CSV
     return final_combined_df
 
 @app.route('/backend/optimize', methods=['POST'])
-def optimize():
+def optiactual():
     try:
         # Parse JSON data from the request
         data = request.json
         request_data = data['requestData']
 
-        # Load corridor data from CSV
+        # Load corridor data f9rom CSV
         corridor_csv_path = './corridor.csv'
-        corridor_df = pd.read_csv(corridor_csv_path)
-
-        # Run the optimization
-        optimized_df = optimize_request_data(request_data, corridor_df, section_data, line_data)
-
+        optimized_df = optii(request_data, corridor_csv_path)
         # Convert the optimized DataFrame to JSON format for response
         optimized_data = optimized_df.to_dict(orient='records')
 
