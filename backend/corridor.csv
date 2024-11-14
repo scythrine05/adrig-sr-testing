@@ -1,446 +1,535 @@
 ,section,Section/ station,Line,From,To,Duration
-,AJJ - RU,AJJ-AJJN,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,AJJ - RU,MLPM-AJJN,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,AJJ - RU,AJJN-TRT,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,AJJ - RU,TRT-POI,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,POI-VKZ,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,VKZ-NG,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,NG-EKM,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,EKM-VGA,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,VGA-PUT,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,PUT-TDK,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,TDK-PUDI,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,PUDI-RU,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,AJJ-AJJN,UP,23.30 hrs,02.30 hrs,03.00 hrs
-,AJJ - RU,MLPM-AJJN,UP,23.30 hrs,02.30 hrs,03.00 hrs
-,AJJ - RU,AJJN-TRT,UP,23.30 hrs,02.30 hrs,03.00 hrs
-,AJJ - RU,TRT-POI,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,POI-VKZ,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,VKZ-NG,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,NG-EKM,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,EKM-VGA,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,VGA-PUT,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,PUT-TDK,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,TDK-PUDI,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,PUDI-RU,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,AJJ - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,AJJ - RU,MLPM -YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,AJJ - RU,AJJN - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,AJJ - RU,TRT - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,POI - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,NG - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,VAG - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,PUT - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,TDK - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,PUDI - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,RU - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - RU,AJJ - YD,UP,23.30 hrs,02.30 hrs,03.00 hrs
-,AJJ - RU,MLPM -YD,UP,23.30 hrs,02.30 hrs,03.00 hrs
-,AJJ - RU,AJJN - YD,UP,23.30 hrs,02.30 hrs,03.00 hrs
-,AJJ - RU,TRT - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,POI - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,NG - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,VAG - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,PUT - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,TDK - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,PUDI - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,AJJ - RU,RU - YD,UP,21.00 hrs,00.00 hrs,03.00 hrs
-,MAS - AJJ,MAS-BBQ,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,MMCC-BBQ,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,BBQ-VPY,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,VPY-VLK,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,VLK-ABU,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,ABU-AVD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,AVD-PAB,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,PAB-TI,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,TI-TRL,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,TRL-KBT,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,KBT-TO,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,TO-AJJ,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,MAS - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,BBQ - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,MMCC - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,VPY - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,VLK - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,ABU - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,AVD - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,PAB - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,TI - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,TRL - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,KBT - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,TO - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,AJJ - YD,Down Slow Line,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - AJJ,MAS-BBQ,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,MMCC-BBQ,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,BBQ-VPY,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,VPY-VLK,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,VLK-ABU,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,ABU-AVD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,AVD-PAB,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,PAB-TI,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,TI-TRL,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,TRL-KBT,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,KBT-TO,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,TO-AJJ,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,MAS - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,BBQ - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,MMCC - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,VPY - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,VLK - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,ABU - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,AVD - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,PAB - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,TI - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,TRL - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,KBT - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,TO - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,AJJ - YD,UP Fast Line,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - AJJ,MAS-BBQ,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,MMCC-BBQ,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,BBQ-VPY,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,VPY-VLK,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,VLK-ABU,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,ABU-AVD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,AVD-PAB,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,PAB-TI,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,TI-TRL,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,TRL-KBT,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,KBT-TO,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,TO-AJJ,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,MAS - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,BBQ - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,MMCC - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,VPY - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,VLK - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,ABU - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,AVD - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,PAB - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,TI - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,TRL - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,KBT - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,TO - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,AJJ - YD,Down Fast Line,00.05 hrs,03.05 hrs,03.00 hrs
-,MAS - AJJ,MAS-BBQ,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,MMCC-BBQ,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,BBQ-VPY,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,VPY-VLK,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,VLK-ABU,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,ABU-AVD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,AVD-PAB,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,PAB-TI,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,TI-TRL,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,TRL-KBT,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,KBT-TO,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,TO-AJJ,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,MAS - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,BBQ - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,MMCC - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,VPY - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,VLK - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,ABU - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,AVD - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,PAB - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,TI - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,TRL - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,KBT - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,TO - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,MAS - AJJ,AJJ - YD,UP Slow Line,23.00 hrs,02.00 hrs,03.00 hrs
-,AJJ - KPD,AJJ-MLPM,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,MLPM-CTRE,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,CTRE-MDVE,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,MDVE-SHU,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,SHU-TUG,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,TUG-WJR,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,WJR-MCN,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,MCN-THL,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,THL-SVUR,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,SVUR-KPD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,AJJ - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,MLPM - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,CTRE - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,MDVE - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,SHU - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,TUG - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,WJR - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,MCN - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,THL - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,SVUR - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - KPD,KPD - YD,Down,01.00 hrs,04.00 hrs,03.00 hrs
-,KPD - JTJ,KPD-LTI,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,LTI-KVN,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,KVN-GYM,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,GYM-VLT,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,VLT-MPI,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,MPI-PCKM,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,PCKM-AB,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,AB-VGM,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,VGM-VN,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,VN-KDY,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,KDY-JTJ,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,KPD - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,LTI - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,KVN - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,GYM - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,VLT - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,MPI - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,PCKM - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,AB - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,VGM - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,VN - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,KDY - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,KPD - JTJ,JTJ - YD,Down,11.40 hrs,14.40 hrs,03.00 hrs
-,AJJ - KPD,AJJ-MLPM,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,MLPM-CTRE,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,CTRE-MDVE,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,MDVE-SHU,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,SHU-TUG,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,TUG-WJR,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,WJR-MCN,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,MCN-THL,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,THL-SVUR,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,SVUR-KPD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,AJJ - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,MLPM - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,CTRE - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,MDVE - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,SHU - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,TUG - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,WJR - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,MCN - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,THL - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,SVUR - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,AJJ - KPD,KPD - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,KPD - JTJ,KPD-LTI,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,LTI-KVN,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,KVN-GYM,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,GYM-VLT,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,VLT-MPI,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,MPI-PCKM,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,PCKM-AB,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,AB-VGM,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,VGM-VN,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,VN-KDY,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,KDY-JTJ,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,KPD - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,LTI - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,KVN - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,GYM - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,VLT - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,MPI - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,PCKM - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,AB - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,VGM - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,VN - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,KDY - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,JTJ - YD,UP,20.55 hrs,23.55 hrs,03.00 hrs
-,KPD - JTJ,CGL - RDY,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,RDY -  VB,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,VB - PALR,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,PALR - PYV,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,PYV - WJ,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,WJ - NTT,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,NTT - CJ(O),Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,CJ(O) - CJ(E),Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,CJ(E) - TMLP,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,TMLP - TKO,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,TKO - MLPM,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,MLPM - AJJ,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,CGL - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,PALR - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,WJ - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,CJ(O) - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,CJ(E) - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,TMLP - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,MLPM - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,AJJ - CGL,AJJ - YD,Single Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MAS - GDR,MMC - BBQ,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,BBQ - KOK,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,KOK - TNP,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,TNP - TVT,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,TVT - ENR,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,ENR - AIP,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,AIP - AIPP,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,AIPP - MJR,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,MJR - PON,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,PON - KVP,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,KVP - GPD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,MMC - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,BBQ - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,KOK - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,TNP - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,TVT - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,ENR - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,AIP - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,AIPP - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,MJR - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,PON - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,KVP - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,GPD - YD,Down,00.30 hrs,03.30 hrs,03.00 hrs
-,MAS - GDR,GPD - ELR,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,ELR - AKM,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,AKM - TAD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,TAD - AKAT,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,AKAT - SPE,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,ELR - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,AKM - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,TAD - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,SPE - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MAS - GDR,SPE - PEL,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,PEL - DVR,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,DVR - NYP,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,NYP - PYA,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,PYA - ODR,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,ODR - GDR,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,PEL - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,DVR - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,NYP - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,PYA - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,ODR - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,GDR - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MAS - GDR,MAS-GPD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,MMC - BBQ,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,BBQ - KOK,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,KOK - TNP,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,TNP - TVT,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,TVT - ENR,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,ENR - AIP,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,AIP - AIPP,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,AIPP - MJR,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,MJR - PON,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,PON - KVP,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,KVP - GPD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,MMC - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,BBQ - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,KOK - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,TNP - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,TVT - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,ENR - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,AIP - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,AIPP - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,MJR - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,PON - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,KVP - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,GPD - YD,UP,22.30 hrs,01.30 hrs,03.00 hrs
-,MAS - GDR,GPD - ELR,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,ELR - AKM,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,AKM - TAD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,TAD - AKAT,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,AKAT - SPE,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,ELR - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,AKM - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,TAD - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,SPE - YD,UP,22.00 hrs,01.00 hrs,03.00 hrs
-,MAS - GDR,SPE - PEL,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,PEL - DVR,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,DVR - NYP,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,NYP - PYA,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,PYA - ODR,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,ODR - GDR,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,PEL - YD,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,DVR - YD,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,NYP - YD,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,PYA - YD,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,ODR - YD,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MAS - GDR,GDR - YD,UP,21.30 hrs,00.30 hrs,03.00 hrs
-,MSB - VM,MS - MKK, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,MKK - MBM, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,MBM - STM, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,STM -PV, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,PV -TBM, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,MS - YD, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,MKK - YD, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,MBM - YD, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,STM - YD, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,PV - YD, A Line,01.00 hrs,04.00 hrs,03.00 hrs
-,MSB - VM,TBM - PRGL,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,PRGL - VDR,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,VDR - UPM,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,UPM - GI,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,POTI - CTM,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,CTM - MMNK,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,MMNK - SKL,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,SKL - PWU,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,PWU - CGL,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,TBM - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,VDR - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,GI - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,CTM - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,SKL - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,CGL - YD,Down,01.30 hrs,04.30 hrs,03.00 hrs
-,MSB - VM,CGL - OV,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,OV - PTM,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,PTM - KGZ,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,KGZ - MMK,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MMK - MLMR,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MLMR - ACK,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,ACK - TZD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,TZD - OLA,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,OLA - TMV,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,TMV - MTL,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MTL - PEI,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,PEI - VVN,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,VVN - MYP,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MYP -VM,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,OV - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,KGZ - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MMK - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MLMR - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,TZD - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,OLA - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,TMV - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MTL - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,PEI - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,VVN - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MYP - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,VM - YD,Down,02.00 hrs,05.00 hrs,03.00 hrs
-,MSB - VM,MS - MKK, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,MKK - MBM, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,MBM - STM, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,STM -PV, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,PV -TBM, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,MS - YD, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,MKK - YD, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,MBM - YD, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,STM - YD, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,PV - YD, B Line,22.00 hrs,01.00 hrs,03.00 hrs
-,MSB - VM,TBM - PRGL,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,PRGL - VDR,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,VDR - UPM,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,UPM - GI,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,POTI - CTM,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,CTM - MMNK,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,MMNK - SKL,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,SKL - PWU,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,PWU - CGL,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,TBM - YD,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,VDR - YD,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,GI - YD,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,CTM - YD,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,SKL - YD,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,CGL - YD,UP,23.00 hrs,02.00 hrs,03.00 hrs
-,MSB - VM,CGL - OV,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,OV - PTM,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,PTM - KGZ,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,KGZ - MMK,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MMK - MLMR,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MLMR - ACK,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,ACK - TZD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,TZD - OLA,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,OLA - TMV,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,TMV - MTL,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MTL - PEI,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,PEI - VVN,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,VVN - MYP,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MYP -VM,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,OV - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,KGZ - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MMK - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MLMR - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,TZD - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,OLA - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,TMV - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MTL - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,PEI - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,VVN - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,MYP - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
-,MSB - VM,VM - YD,UP,21.10 hrs,00.10 hrs,03.00 hrs
+,AJJ-RU,AJJ-AJJN,DN,00:30,03:30,03:00
+,AJJ-RU,MLPM-AJJN,DN,00:30,03:30,03:00
+,AJJ-RU,AJJN-TRT,DN,00:30,03:30,03:00
+,AJJ-RU,TRT-POI,DN,01:00,04:00,03:00
+,AJJ-RU,POI-VKZ,DN,01:00,04:00,03:00
+,AJJ-RU,VKZ-NG,DN,01:00,04:00,03:00
+,AJJ-RU,NG-EKM,DN,01:00,04:00,03:00
+,AJJ-RU,EKM-VGA,DN,01:00,04:00,03:00
+,AJJ-RU,VGA-PUT,DN,01:00,04:00,03:00
+,AJJ-RU,PUT-TDK,DN,01:00,04:00,03:00
+,AJJ-RU,TDK-PUDI,DN,01:00,04:00,03:00
+,AJJ-RU,PUDI-RU,DN,01:00,04:00,03:00
+,AJJ-RU,AJJ-AJJN,UP,23:30,02:30,03:00
+,AJJ-RU,MLPM-AJJN,UP,23:30,02:30,03:00
+,AJJ-RU,AJJN-TRT,UP,23:30,02:30,03:00
+,AJJ-RU,TRT-POI,UP,21:00,00:00,03:00
+,AJJ-RU,POI-VKZ,UP,21:00,00:00,03:00
+,AJJ-RU,VKZ-NG,UP,21:00,00:00,03:00
+,AJJ-RU,NG-EKM,UP,21:00,00:00,03:00
+,AJJ-RU,EKM-VGA,UP,21:00,00:00,03:00
+,AJJ-RU,VGA-PUT,UP,21:00,00:00,03:00
+,AJJ-RU,PUT-TDK,UP,21:00,00:00,03:00
+,AJJ-RU,TDK-PUDI,UP,21:00,00:00,03:00
+,AJJ-RU,PUDI-RU,UP,21:00,00:00,03:00
+,AJJ-RU,AJJ-YD,DN,00:30,03:30,03:00
+,AJJ-RU,MLPM -YD,DN,00:30,03:30,03:00
+,AJJ-RU,AJJN-YD,DN,00:30,03:30,03:00
+,AJJ-RU,TRT-YD,DN,01:00,04:00,03:00
+,AJJ-RU,POI-YD,DN,01:00,04:00,03:00
+,AJJ-RU,NG-YD,DN,01:00,04:00,03:00
+,AJJ-RU,VAG-YD,DN,01:00,04:00,03:00
+,AJJ-RU,PUT-YD,DN,01:00,04:00,03:00
+,AJJ-RU,TDK-YD,DN,01:00,04:00,03:00
+,AJJ-RU,PUDI-YD,DN,01:00,04:00,03:00
+,AJJ-RU,RU-YD,DN,01:00,04:00,03:00
+,AJJ-RU,AJJ-YD,UP,23:30,02:30,03:00
+,AJJ-RU,MLPM -YD,UP,23:30,02:30,03:00
+,AJJ-RU,AJJN-YD,UP,23:30,02:30,03:00
+,AJJ-RU,TRT-YD,UP,21:00,00:00,03:00
+,AJJ-RU,POI-YD,UP,21:00,00:00,03:00
+,AJJ-RU,NG-YD,UP,21:00,00:00,03:00
+,AJJ-RU,VAG-YD,UP,21:00,00:00,03:00
+,AJJ-RU,PUT-YD,UP,21:00,00:00,03:00
+,AJJ-RU,TDK-YD,UP,21:00,00:00,03:00
+,AJJ-RU,PUDI-YD,UP,21:00,00:00,03:00
+,AJJ-RU,RU-YD,UP,21:00,00:00,03:00
+,MAS-AJJ,MAS-BBQ,Down slow,00:30,03:30,03:00
+,MAS-AJJ,MMCC-BBQ,Down slow,00:30,03:30,03:00
+,MAS-AJJ,BBQ-VPY,Down slow,00:30,03:30,03:00
+,MAS-AJJ,VPY-VLK,Down slow,00:30,03:30,03:00
+,MAS-AJJ,VLK-ABU,Down slow,00:30,03:30,03:00
+,MAS-AJJ,ABU-AVD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,AVD-PAB,Down slow,00:30,03:30,03:00
+,MAS-AJJ,PAB-TI,Down slow,00:30,03:30,03:00
+,MAS-AJJ,TI-TRL,Down slow,00:30,03:30,03:00
+,MAS-AJJ,TRL-KBT,Down slow,00:30,03:30,03:00
+,MAS-AJJ,KBT-TO,Down slow,00:30,03:30,03:00
+,MAS-AJJ,TO-AJJ,Down slow,00:30,03:30,03:00
+,MAS-AJJ,MAS-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,BBQ-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,MMCC-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,VPY-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,VLK-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,ABU-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,AVD-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,PAB-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,TI-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,TRL-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,KBT-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,TO-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,AJJ-YD,Down slow,00:30,03:30,03:00
+,MAS-AJJ,MAS-BBQ,Up fast,22:30,01:30,03:00
+,MAS-AJJ,MMCC-BBQ,Up fast,22:30,01:30,03:00
+,MAS-AJJ,BBQ-VPY,Up fast,22:30,01:30,03:00
+,MAS-AJJ,VPY-VLK,Up fast,22:30,01:30,03:00
+,MAS-AJJ,VLK-ABU,Up fast,22:30,01:30,03:00
+,MAS-AJJ,ABU-AVD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,AVD-PAB,Up fast,22:30,01:30,03:00
+,MAS-AJJ,PAB-TI,Up fast,22:30,01:30,03:00
+,MAS-AJJ,TI-TRL,Up fast,22:30,01:30,03:00
+,MAS-AJJ,TRL-KBT,Up fast,22:30,01:30,03:00
+,MAS-AJJ,KBT-TO,Up fast,22:30,01:30,03:00
+,MAS-AJJ,TO-AJJ,Up fast,22:30,01:30,03:00
+,MAS-AJJ,MAS-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,BBQ-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,MMCC-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,VPY-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,VLK-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,ABU-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,AVD-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,PAB-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,TI-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,TRL-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,KBT-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,TO-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,AJJ-YD,Up fast,22:30,01:30,03:00
+,MAS-AJJ,MAS-BBQ,Down fast,00:05,03:05,03:00
+,MAS-AJJ,MMCC-BBQ,Down fast,00:05,03:05,03:00
+,MAS-AJJ,BBQ-VPY,Down fast,00:05,03:05,03:00
+,MAS-AJJ,VPY-VLK,Down fast,00:05,03:05,03:00
+,MAS-AJJ,VLK-ABU,Down fast,00:05,03:05,03:00
+,MAS-AJJ,ABU-AVD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,AVD-PAB,Down fast,00:05,03:05,03:00
+,MAS-AJJ,PAB-TI,Down fast,00:05,03:05,03:00
+,MAS-AJJ,TI-TRL,Down fast,00:05,03:05,03:00
+,MAS-AJJ,TRL-KBT,Down fast,00:05,03:05,03:00
+,MAS-AJJ,KBT-TO,Down fast,00:05,03:05,03:00
+,MAS-AJJ,TO-AJJ,Down fast,00:05,03:05,03:00
+,MAS-AJJ,MAS-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,BBQ-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,MMCC-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,VPY-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,VLK-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,ABU-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,AVD-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,PAB-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,TI-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,TRL-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,KBT-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,TO-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,AJJ-YD,Down fast,00:05,03:05,03:00
+,MAS-AJJ,MAS-BBQ,Up slow,23:00,02:00,03:00
+,MAS-AJJ,MMCC-BBQ,Up slow,23:00,02:00,03:00
+,MAS-AJJ,BBQ-VPY,Up slow,23:00,02:00,03:00
+,MAS-AJJ,VPY-VLK,Up slow,23:00,02:00,03:00
+,MAS-AJJ,VLK-ABU,Up slow,23:00,02:00,03:00
+,MAS-AJJ,ABU-AVD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,AVD-PAB,Up slow,23:00,02:00,03:00
+,MAS-AJJ,PAB-TI,Up slow,23:00,02:00,03:00
+,MAS-AJJ,TI-TRL,Up slow,23:00,02:00,03:00
+,MAS-AJJ,TRL-KBT,Up slow,23:00,02:00,03:00
+,MAS-AJJ,KBT-TO,Up slow,23:00,02:00,03:00
+,MAS-AJJ,TO-AJJ,Up slow,23:00,02:00,03:00
+,MAS-AJJ,MAS-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,BBQ-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,MMCC-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,VPY-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,VLK-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,ABU-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,AVD-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,PAB-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,TI-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,TRL-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,KBT-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,TO-YD,Up slow,23:00,02:00,03:00
+,MAS-AJJ,AJJ-YD,Up slow,23:00,02:00,03:00
+,AJJ-KPD,AJJ-MLPM,Down line,01:00,04:00,03:00
+,AJJ-KPD,MLPM-CTRE,Down line,01:00,04:00,03:00
+,AJJ-KPD,CTRE-MDVE,Down line,01:00,04:00,03:00
+,AJJ-KPD,MDVE-SHU,Down line,01:00,04:00,03:00
+,AJJ-KPD,SHU-TUG,Down line,01:00,04:00,03:00
+,AJJ-KPD,TUG-WJR,Down line,01:00,04:00,03:00
+,AJJ-KPD,WJR-MCN,Down line,01:00,04:00,03:00
+,AJJ-KPD,MCN-THL,Down line,01:00,04:00,03:00
+,AJJ-KPD,THL-SVUR,Down line,01:00,04:00,03:00
+,AJJ-KPD,SVUR-KPD,Down line,01:00,04:00,03:00
+,AJJ-KPD,AJJ-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,MLPM-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,CTRE-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,MDVE-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,SHU-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,TUG-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,WJR-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,MCN-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,THL-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,SVUR-YD,Down line,01:00,04:00,03:00
+,AJJ-KPD,KPD-YD,Down line,01:00,04:00,03:00
+,KPD-JTJ,KPD-LTI,Down line,11:40,14:40,03:00
+,KPD-JTJ,LTI-KVN,Down line,11:40,14:40,03:00
+,KPD-JTJ,KVN-GYM,Down line,11:40,14:40,03:00
+,KPD-JTJ,GYM-VLT,Down line,11:40,14:40,03:00
+,KPD-JTJ,VLT-MPI,Down line,11:40,14:40,03:00
+,KPD-JTJ,MPI-PCKM,Down line,11:40,14:40,03:00
+,KPD-JTJ,PCKM-AB,Down line,11:40,14:40,03:00
+,KPD-JTJ,AB-VGM,Down line,11:40,14:40,03:00
+,KPD-JTJ,VGM-VN,Down line,11:40,14:40,03:00
+,KPD-JTJ,VN-KDY,Down line,11:40,14:40,03:00
+,KPD-JTJ,KDY-JTJ,Down line,11:40,14:40,03:00
+,KPD-JTJ,KPD-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,LTI-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,KVN-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,GYM-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,VLT-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,MPI-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,PCKM-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,AB-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,VGM-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,VN-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,KDY-YD,Down line,11:40,14:40,03:00
+,KPD-JTJ,JTJ-YD,Down line,11:40,14:40,03:00
+,AJJ-KPD,AJJ-MLPM,UP line,22:00,01:00,03:00
+,AJJ-KPD,MLPM-CTRE,UP line,22:00,01:00,03:00
+,AJJ-KPD,CTRE-MDVE,UP line,22:00,01:00,03:00
+,AJJ-KPD,MDVE-SHU,UP line,22:00,01:00,03:00
+,AJJ-KPD,SHU-TUG,UP line,22:00,01:00,03:00
+,AJJ-KPD,TUG-WJR,UP line,22:00,01:00,03:00
+,AJJ-KPD,WJR-MCN,UP line,22:00,01:00,03:00
+,AJJ-KPD,MCN-THL,UP line,22:00,01:00,03:00
+,AJJ-KPD,THL-SVUR,UP line,22:00,01:00,03:00
+,AJJ-KPD,SVUR-KPD,UP line,22:00,01:00,03:00
+,AJJ-KPD,AJJ-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,MLPM-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,CTRE-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,MDVE-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,SHU-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,TUG-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,WJR-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,MCN-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,THL-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,SVUR-YD,UP line,22:00,01:00,03:00
+,AJJ-KPD,KPD-YD,UP line,22:00,01:00,03:00
+,KPD-JTJ,KPD-LTI,UP line,20:55,23:55,03:00
+,KPD-JTJ,LTI-KVN,UP line,20:55,23:55,03:00
+,KPD-JTJ,KVN-GYM,UP line,20:55,23:55,03:00
+,KPD-JTJ,GYM-VLT,UP line,20:55,23:55,03:00
+,KPD-JTJ,VLT-MPI,UP line,20:55,23:55,03:00
+,KPD-JTJ,MPI-PCKM,UP line,20:55,23:55,03:00
+,KPD-JTJ,PCKM-AB,UP line,20:55,23:55,03:00
+,KPD-JTJ,AB-VGM,UP line,20:55,23:55,03:00
+,KPD-JTJ,VGM-VN,UP line,20:55,23:55,03:00
+,KPD-JTJ,VN-KDY,UP line,20:55,23:55,03:00
+,KPD-JTJ,KDY-JTJ,UP line,20:55,23:55,03:00
+,KPD-JTJ,KPD-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,LTI-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,KVN-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,GYM-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,VLT-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,MPI-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,PCKM-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,AB-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,VGM-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,VN-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,KDY-YD,UP line,20:55,23:55,03:00
+,KPD-JTJ,JTJ-YD,UP line,20:55,23:55,03:00
+,AJJ-CGL,CGL-RDY,UP line,01:00,04:00,03:00
+,AJJ-CGL,RDY- VB,UP line,01:00,04:00,03:00
+,AJJ-CGL,VB-PALR,UP line,01:00,04:00,03:00
+,AJJ-CGL,PALR-PYV,UP line,01:00,04:00,03:00
+,AJJ-CGL,PYV-WJ,UP line,01:00,04:00,03:00
+,AJJ-CGL,WJ-NTT,UP line,01:00,04:00,03:00
+,AJJ-CGL,NTT-CJ(O),UP line,01:00,04:00,03:00
+,AJJ-CGL,CJ(O)-CJ(E),UP line,01:00,04:00,03:00
+,AJJ-CGL,CJ(E)-TMLP,UP line,01:00,04:00,03:00
+,AJJ-CGL,TMLP-TKO,UP line,01:00,04:00,03:00
+,AJJ-CGL,TKO-MLPM,UP line,01:00,04:00,03:00
+,AJJ-CGL,MLPM-AJJ,UP line,01:00,04:00,03:00
+,AJJ-CGL,CGL-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,PALR-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,WJ-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,CJ(O)-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,CJ(E)-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,TMLP-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,MLPM-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,AJJ-YD,UP line,01:00,04:00,03:00
+,AJJ-CGL,CGL-RDY,Down line,01:00,04:00,03:00
+,AJJ-CGL,RDY- VB,Down line,01:00,04:00,03:00
+,AJJ-CGL,VB-PALR,Down line,01:00,04:00,03:00
+,AJJ-CGL,PALR-PYV,Down line,01:00,04:00,03:00
+,AJJ-CGL,PYV-WJ,Down line,01:00,04:00,03:00
+,AJJ-CGL,WJ-NTT,Down line,01:00,04:00,03:00
+,AJJ-CGL,NTT-CJ(O),Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(O)-CJ(E),Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(E)-TMLP,Down line,01:00,04:00,03:00
+,AJJ-CGL,TMLP-TKO,Down line,01:00,04:00,03:00
+,AJJ-CGL,TKO-MLPM,Down line,01:00,04:00,03:00
+,AJJ-CGL,MLPM-AJJ,Down line,01:00,04:00,03:00
+,AJJ-CGL,CGL-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,PALR-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,WJ-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(O)-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(E)-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,TMLP-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,MLPM-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,AJJ-YD,Down line,01:00,04:00,03:00
+,MAS-GDR,MMC-BBQ,Down Slow,00:30,03:30,03:00
+,MAS-GDR,BBQ-KOK,Down Slow,00:30,03:30,03:00
+,MAS-GDR,KOK-TNP,Down Slow,00:30,03:30,03:00
+,MAS-GDR,TNP-TVT,Down Slow,00:30,03:30,03:00
+,MAS-GDR,TVT-ENR,Down Slow,00:30,03:30,03:00
+,MAS-GDR,ENR-AIP,Down Slow,00:30,03:30,03:00
+,MAS-GDR,AIP-AIPP,Down Slow,00:30,03:30,03:00
+,MAS-GDR,AIPP-MJR,Down line,00:30,03:30,03:00
+,MAS-GDR,MJR-PON,Down line,00:30,03:30,03:00
+,MAS-GDR,PON-KVP,Down line,00:30,03:30,03:00
+,MAS-GDR,KVP-GPD,Down line,00:30,03:30,03:00
+,MAS-GDR,MMC-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,BBQ-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,KOK-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,TNP-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,TVT-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,ENR-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,AIP-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,AIPP-YD,Down Slow,00:30,03:30,03:00
+,MAS-GDR,MMC-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,BBQ-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,KOK-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,TNP-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,TVT-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,ENR-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,AIP-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,AIPP-YD,Down Fast,00:30,03:30,03:00
+,MAS-GDR,MMC-BBQ,Down Fast,00:30,03:30,03:00
+,MAS-GDR,BBQ-KOK,Down Fast,00:30,03:30,03:00
+,MAS-GDR,KOK-TNP,Down Fast,00:30,03:30,03:00
+,MAS-GDR,TNP-TVT,Down Fast,00:30,03:30,03:00
+,MAS-GDR,TVT-ENR,Down Fast,00:30,03:30,03:00
+,MAS-GDR,ENR-AIP,Down Fast,00:30,03:30,03:00
+,MAS-GDR,AIP-AIPP,Down Fast,00:30,03:30,03:00
+,MAS-GDR,MJR-YD,Down line,00:30,03:30,03:00
+,MAS-GDR,PON-YD,Down line,00:30,03:30,03:00
+,MAS-GDR,KVP-YD,Down line,00:30,03:30,03:00
+,MAS-GDR,GPD-YD,Down line,00:30,03:30,03:00
+,MAS-GDR,GPD-ELR,Down line,01:30,04:30,03:00
+,MAS-GDR,ELR-AKM,Down line,01:30,04:30,03:00
+,MAS-GDR,AKM-TAD,Down line,01:30,04:30,03:00
+,MAS-GDR,TAD-AKAT,Down line,01:30,04:30,03:00
+,MAS-GDR,AKAT-SPE,Down line,01:30,04:30,03:00
+,MAS-GDR,ELR-YD,Down line,01:30,04:30,03:00
+,MAS-GDR,AKM-YD,Down line,01:30,04:30,03:00
+,MAS-GDR,TAD-YD,Down line,01:30,04:30,03:00
+,MAS-GDR,SPE-YD,Down line,01:30,04:30,03:00
+,MAS-GDR,SPE-PEL,Down line,02:00,05:00,03:00
+,MAS-GDR,PEL-DVR,Down line,02:00,05:00,03:00
+,MAS-GDR,DVR-NYP,Down line,02:00,05:00,03:00
+,MAS-GDR,NYP-PYA,Down line,02:00,05:00,03:00
+,MAS-GDR,PYA-ODR,Down line,02:00,05:00,03:00
+,MAS-GDR,ODR-GDR,Down line,02:00,05:00,03:00
+,MAS-GDR,PEL-YD,Down line,02:00,05:00,03:00
+,MAS-GDR,DVR-YD,Down line,02:00,05:00,03:00
+,MAS-GDR,NYP-YD,Down line,02:00,05:00,03:00
+,MAS-GDR,PYA-YD,Down line,02:00,05:00,03:00
+,MAS-GDR,ODR-YD,Down line,02:00,05:00,03:00
+,MAS-GDR,GDR-YD,Down line,02:00,05:00,03:00
+,MAS-GDR,MMC-BBQ,UP slow,22:30,01:30,03:00
+,MAS-GDR,BBQ-KOK,UP slow,22:30,01:30,03:00
+,MAS-GDR,KOK-TNP,UP slow,22:30,01:30,03:00
+,MAS-GDR,TNP-TVT,UP slow,22:30,01:30,03:00
+,MAS-GDR,TVT-ENR,UP slow,22:30,01:30,03:00
+,MAS-GDR,ENR-AIP,UP slow,22:30,01:30,03:00
+,MAS-GDR,AIP-AIPP,UP slow,22:30,01:30,03:00
+,MAS-GDR,AIPP-MJR,UP line,22:30,01:30,03:00
+,MAS-GDR,MJR-PON,UP line,22:30,01:30,03:00
+,MAS-GDR,PON-KVP,UP line,22:30,01:30,03:00
+,MAS-GDR,KVP-GPD,UP line,22:30,01:30,03:00
+,MAS-GDR,MMC-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,BBQ-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,KOK-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,TNP-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,TVT-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,ENR-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,AIP-YD,UP slow,22:30,01:30,03:00
+,MAS-GDR,MMC-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,BBQ-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,KOK-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,TNP-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,TVT-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,ENR-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,AIP-YD,UP fast,22:30,01:30,03:00
+,MAS-GDR,MAS-GPD,UP fast,22:30,01:30,03:00
+,MAS-GDR,MMC-BBQ,UP fast,22:30,01:30,03:00
+,MAS-GDR,BBQ-KOK,UP fast,22:30,01:30,03:00
+,MAS-GDR,KOK-TNP,UP fast,22:30,01:30,03:00
+,MAS-GDR,TNP-TVT,UP fast,22:30,01:30,03:00
+,MAS-GDR,TVT-ENR,UP fast,22:30,01:30,03:00
+,MAS-GDR,ENR-AIP,UP fast,22:30,01:30,03:00
+,MAS-GDR,AIP-AIPP,UP fast,22:30,01:30,03:00
+,MAS-GDR,AIPP-YD,UP line,22:30,01:30,03:00
+,MAS-GDR,MJR-YD,UP line,22:30,01:30,03:00
+,MAS-GDR,PON-YD,UP line,22:30,01:30,03:00
+,MAS-GDR,KVP-YD,UP line,22:30,01:30,03:00
+,MAS-GDR,GPD-YD,UP line,22:30,01:30,03:00
+,MAS-GDR,GPD-ELR,UP line,22:00,01:00,03:00
+,MAS-GDR,ELR-AKM,UP line,22:00,01:00,03:00
+,MAS-GDR,AKM-TAD,UP line,22:00,01:00,03:00
+,MAS-GDR,TAD-AKAT,UP line,22:00,01:00,03:00
+,MAS-GDR,AKAT-SPE,UP line,22:00,01:00,03:00
+,MAS-GDR,ELR-YD,UP line,22:00,01:00,03:00
+,MAS-GDR,AKM-YD,UP line,22:00,01:00,03:00
+,MAS-GDR,TAD-YD,UP line,22:00,01:00,03:00
+,MAS-GDR,SPE-YD,UP line,22:00,01:00,03:00
+,MAS-GDR,SPE-PEL,UP line,21:30,00:30,03:00
+,MAS-GDR,PEL-DVR,UP line,21:30,00:30,03:00
+,MAS-GDR,DVR-NYP,UP line,21:30,00:30,03:00
+,MAS-GDR,NYP-PYA,UP line,21:30,00:30,03:00
+,MAS-GDR,PYA-ODR,UP line,21:30,00:30,03:00
+,MAS-GDR,ODR-GDR,UP line,21:30,00:30,03:00
+,MAS-GDR,PEL-YD,UP line,21:30,00:30,03:00
+,MAS-GDR,DVR-YD,UP line,21:30,00:30,03:00
+,MAS-GDR,NYP-YD,UP line,21:30,00:30,03:00
+,MAS-GDR,PYA-YD,UP line,21:30,00:30,03:00
+,MAS-GDR,ODR-YD,UP line,21:30,00:30,03:00
+,MAS-GDR,GDR-YD,UP line,21:30,00:30,03:00
+,MSB-VM,MS-MKK,A line,01:00,04:00,03:00
+,MSB-VM,MKK-MBM,A line,01:00,04:00,03:00
+,MSB-VM,MBM-STM,A line,01:00,04:00,03:00
+,MSB-VM,STM -PV,A line,01:00,04:00,03:00
+,MSB-VM,PV -TBM,A line,01:00,04:00,03:00
+,MSB-VM,MS-YD,A line,01:00,04:00,03:00
+,MSB-VM,MKK-YD,A line,01:00,04:00,03:00
+,MSB-VM,MBM-YD,A line,01:00,04:00,03:00
+,MSB-VM,STM-YD,A line,01:00,04:00,03:00
+,MSB-VM,PV-YD,A line,01:00,04:00,03:00
+,MSB-VM,MS-MKK,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,MKK-MBM,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,MBM-STM,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,STM -PV,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,PV -TBM,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,MS-YD,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,MKK-YD,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,MBM-YD,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,STM-YD,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,PV-YD,Down Sub urban,01:30,04:30,03:00
+,MSB-VM,TBM-PRGL,Down line,01:30,04:30,03:00
+,MSB-VM,PRGL-VDR,Down line,01:30,04:30,03:00
+,MSB-VM,VDR-UPM,Down line,01:30,04:30,03:00
+,MSB-VM,UPM-GI,Down line,01:30,04:30,03:00
+,MSB-VM,POTI-CTM,Down line,01:30,04:30,03:00
+,MSB-VM,CTM-MMNK,Down line,01:30,04:30,03:00
+,MSB-VM,MMNK-SKL,Down line,01:30,04:30,03:00
+,MSB-VM,SKL-PWU,Down line,01:30,04:30,03:00
+,MSB-VM,PWU-CGL,Down line,01:30,04:30,03:00
+,MSB-VM,TBM-YD,Down line,01:30,04:30,03:00
+,MSB-VM,VDR-YD,Down line,01:30,04:30,03:00
+,MSB-VM,GI-YD,Down line,01:30,04:30,03:00
+,MSB-VM,CTM-YD,Down line,01:30,04:30,03:00
+,MSB-VM,SKL-YD,Down line,01:30,04:30,03:00
+,MSB-VM,CGL-YD,Down line,01:30,04:30,03:00
+,MSB-VM,CGL-OV,Down line,02:00,05:00,03:00
+,MSB-VM,OV-PTM,Down line,02:00,05:00,03:00
+,MSB-VM,PTM-KGZ,Down line,02:00,05:00,03:00
+,MSB-VM,KGZ-MMK,Down line,02:00,05:00,03:00
+,MSB-VM,MMK-MLMR,Down line,02:00,05:00,03:00
+,MSB-VM,MLMR-ACK,Down line,02:00,05:00,03:00
+,MSB-VM,ACK-TZD,Down line,02:00,05:00,03:00
+,MSB-VM,TZD-OLA,Down line,02:00,05:00,03:00
+,MSB-VM,OLA-TMV,Down line,02:00,05:00,03:00
+,MSB-VM,TMV-MTL,Down line,02:00,05:00,03:00
+,MSB-VM,MTL-PEI,Down line,02:00,05:00,03:00
+,MSB-VM,PEI-VVN,Down line,02:00,05:00,03:00
+,MSB-VM,VVN-MYP,Down line,02:00,05:00,03:00
+,MSB-VM,MYP -VM,Down line,02:00,05:00,03:00
+,MSB-VM,OV-YD,Down line,02:00,05:00,03:00
+,MSB-VM,KGZ-YD,Down line,02:00,05:00,03:00
+,MSB-VM,MMK-YD,Down line,02:00,05:00,03:00
+,MSB-VM,MLMR-YD,Down line,02:00,05:00,03:00
+,MSB-VM,TZD-YD,Down line,02:00,05:00,03:00
+,MSB-VM,OLA-YD,Down line,02:00,05:00,03:00
+,MSB-VM,TMV-YD,Down line,02:00,05:00,03:00
+,MSB-VM,MTL-YD,Down line,02:00,05:00,03:00
+,MSB-VM,PEI-YD,Down line,02:00,05:00,03:00
+,MSB-VM,VVN-YD,Down line,02:00,05:00,03:00
+,MSB-VM,MYP-YD,Down line,02:00,05:00,03:00
+,MSB-VM,VM-YD,Down line,02:00,05:00,03:00
+,MSB-VM,MS-MKK, B Line,22:00,01:00,03:00
+,MSB-VM,MKK-MBM, B Line,22:00,01:00,03:00
+,MSB-VM,MBM-STM, B Line,22:00,01:00,03:00
+,MSB-VM,STM -PV, B Line,22:00,01:00,03:00
+,MSB-VM,PV -TBM, B Line,22:00,01:00,03:00
+,MSB-VM,MS-YD, B Line,22:00,01:00,03:00
+,MSB-VM,MKK-YD, B Line,22:00,01:00,03:00
+,MSB-VM,MBM-YD, B Line,22:00,01:00,03:00
+,MSB-VM,STM-YD, B Line,22:00,01:00,03:00
+,MSB-VM,PV-YD, B Line,22:00,01:00,03:00
+,MSB-VM,MS-MKK,Up sub urban,23:00,02:00,03:00
+,MSB-VM,MKK-MBM,Up sub urban,23:00,02:00,03:00
+,MSB-VM,MBM-STM,Up sub urban,23:00,02:00,03:00
+,MSB-VM,STM -PV,Up sub urban,23:00,02:00,03:00
+,MSB-VM,PV -TBM,Up sub urban,23:00,02:00,03:00
+,MSB-VM,MS-YD,Up sub urban,23:00,02:00,03:00
+,MSB-VM,MKK-YD,Up sub urban,23:00,02:00,03:00
+,MSB-VM,MBM-YD,Up sub urban,23:00,02:00,03:00
+,MSB-VM,STM-YD,Up sub urban,23:00,02:00,03:00
+,MSB-VM,PV-YD,Up sub urban,23:00,02:00,03:00
+,MSB-VM,TBM-PRGL,UP line,23:00,02:00,03:00
+,MSB-VM,PRGL-VDR,UP line,23:00,02:00,03:00
+,MSB-VM,VDR-UPM,UP line,23:00,02:00,03:00
+,MSB-VM,UPM-GI,UP line,23:00,02:00,03:00
+,MSB-VM,POTI-CTM,UP line,23:00,02:00,03:00
+,MSB-VM,CTM-MMNK,UP line,23:00,02:00,03:00
+,MSB-VM,MMNK-SKL,UP line,23:00,02:00,03:00
+,MSB-VM,SKL-PWU,UP line,23:00,02:00,03:00
+,MSB-VM,PWU-CGL,UP line,23:00,02:00,03:00
+,MSB-VM,TBM-YD,UP line,23:00,02:00,03:00
+,MSB-VM,VDR-YD,UP line,23:00,02:00,03:00
+,MSB-VM,GI-YD,UP line,23:00,02:00,03:00
+,MSB-VM,CTM-YD,UP line,23:00,02:00,03:00
+,MSB-VM,SKL-YD,UP line,23:00,02:00,03:00
+,MSB-VM,CGL-YD,UP line,23:00,02:00,03:00
+,MSB-VM,CGL-OV,UP line,21:10,00:10,03:00
+,MSB-VM,OV-PTM,UP line,21:10,00:10,03:00
+,MSB-VM,PTM-KGZ,UP line,21:10,00:10,03:00
+,MSB-VM,KGZ-MMK,UP line,21:10,00:10,03:00
+,MSB-VM,MMK-MLMR,UP line,21:10,00:10,03:00
+,MSB-VM,MLMR-ACK,UP line,21:10,00:10,03:00
+,MSB-VM,ACK-TZD,UP line,21:10,00:10,03:00
+,MSB-VM,TZD-OLA,UP line,21:10,00:10,03:00
+,MSB-VM,OLA-TMV,UP line,21:10,00:10,03:00
+,MSB-VM,TMV-MTL,UP line,21:10,00:10,03:00
+,MSB-VM,MTL-PEI,UP line,21:10,00:10,03:00
+,MSB-VM,PEI-VVN,UP line,21:10,00:10,03:00
+,MSB-VM,VVN-MYP,UP line,21:10,00:10,03:00
+,MSB-VM,MYP -VM,UP line,21:10,00:10,03:00
+,MSB-VM,OV-YD,UP line,21:10,00:10,03:00
+,MSB-VM,KGZ-YD,UP line,21:10,00:10,03:00
+,MSB-VM,MMK-YD,UP line,21:10,00:10,03:00
+,MSB-VM,MLMR-YD,UP line,21:10,00:10,03:00
+,MSB-VM,TZD-YD,UP line,21:10,00:10,03:00
+,MSB-VM,OLA-YD,UP line,21:10,00:10,03:00
+,MSB-VM,TMV-YD,UP line,21:10,00:10,03:00
+,MSB-VM,MTL-YD,UP line,21:10,00:10,03:00
+,MSB-VM,PEI-YD,UP line,21:10,00:10,03:00
+,MSB-VM,VVN-YD,UP line,21:10,00:10,03:00
+,MSB-VM,MYP-YD,UP line,21:10,00:10,03:00
+,MSB-VM,VM-YD,UP line,21:10,00:10,03:00
+,AJJ-CGL,CGL-RDY,Down line,01:00,04:00,03:00
+,AJJ-CGL,RDY- VB,Down line,01:00,04:00,03:00
+,AJJ-CGL,VB-PALR,Down line,01:00,04:00,03:00
+,AJJ-CGL,PALR-PYV,Down line,01:00,04:00,03:00
+,AJJ-CGL,PYV-WJ,Down line,01:00,04:00,03:00
+,AJJ-CGL,WJ-NTT,Down line,01:00,04:00,03:00
+,AJJ-CGL,NTT-CJ(O),Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(O)-CJ(E),Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(E)-TMLP,Down line,01:00,04:00,03:00
+,AJJ-CGL,TMLP-TKO,Down line,01:00,04:00,03:00
+,AJJ-CGL,TKO-MLPM,Down line,01:00,04:00,03:00
+,AJJ-CGL,MLPM-AJJ,Down line,01:00,04:00,03:00
+,AJJ-CGL,CGL-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,PALR-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,WJ-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(O)-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,CJ(E)-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,TMLP-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,MLPM-YD,Down line,01:00,04:00,03:00
+,AJJ-CGL,AJJ-YD,Down line,01:00,04:00,03:00
