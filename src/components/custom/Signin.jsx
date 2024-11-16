@@ -155,7 +155,6 @@ export function Signin() {
           redirect: false,
           username: formValues.username,
           password: formValues.password,
-          callbackUrl,
         });
 
         setLoading(false);

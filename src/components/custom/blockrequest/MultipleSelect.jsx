@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 
 const MultipleSelect = (props) => {
   const [dropdown, setDropdown] = useState(false);
   const [selectedItems, setSelected] = useState([]);
+  const [searchTag, setSearchTag] = useState("");
 
   // Set selectedItems based on the initial value passed via props
   useEffect(() => {
@@ -17,6 +18,10 @@ const MultipleSelect = (props) => {
 
   const toggleDropdown = () => {
     setDropdown(!dropdown);
+  };
+
+  const changeHandler = (e) => {
+    setSearchTag(e.target.value);
   };
 
   const addTag = (item) => {
@@ -92,12 +97,14 @@ const MultipleSelect = (props) => {
                     ))}
                     <div className="flex-1">
                       <input
-                        readOnly
                         placeholder={
-                          props.placeholder ? "Select Your Value" : ""
+                          props.placeholder
+                            ? "Search and Select Your Value"
+                            : ""
                         }
                         className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-slate-900"
                         onClick={toggleDropdown}
+                        onChange={changeHandler}
                       />
                     </div>
                   </div>
@@ -129,6 +136,7 @@ const MultipleSelect = (props) => {
               <Dropdown
                 list={props.items}
                 limit={props.limit}
+                searchTag={searchTag}
                 addItem={addTag}
                 selectedItems={selectedItems}
               />

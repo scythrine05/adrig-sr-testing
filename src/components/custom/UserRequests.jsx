@@ -16,10 +16,9 @@ import currentUser, {
   currentOptimizedValue,
   setOptimised,
 } from "../../app/actions/user";
-import zIndex from "@mui/material/styles/zIndex";
-import { red } from "@mui/material/colors";
+import { formatData } from "lib/utils";
 
-export default function UserRequests() {
+export default function UserRequests({ date }) {
   const [requests, setRequests] = useState([]);
   const [user, setUser] = useState(null);
   const [currentoptvalue, setCurrentOptValue] = useState("");
@@ -43,14 +42,52 @@ export default function UserRequests() {
           return;
         }
         const formDataResponse = await getFormData(userIdResponse.id);
-        setRequests(formDataResponse.requestData);
+        // console.log(formDataResponse);
+        const formattedData = formatData(formDataResponse.requestData);
+        // console.log(formattedData);
+        setRequests(formattedData);
+        // if (!date) {
+        //   const result = filterByRecentDates(formDataResponse.requestData);
+        //   setRequests(result);
+        // } else {
+        //   const result = filterByToday(formDataResponse.requestData);
+        //   setRequests(result);
+        // }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
 
     fetchData();
-  }, [currentoptvalue, showPopup]);
+  }, [currentoptvalue, showPopup, date]);
+
+  const filterByRecentDates = (requestData) => {
+    const today = new Date();
+    const pastDate1 = new Date(today);
+    pastDate1.setDate(today.getDate() - 1);
+    const pastDate2 = new Date(today);
+    pastDate2.setDate(today.getDate() - 2);
+
+    const formatDate = (date) => date.toISOString().slice(0, 10);
+
+    const todayFormatted = formatDate(today);
+    const pastDate1Formatted = formatDate(pastDate1);
+    const pastDate2Formatted = formatDate(pastDate2);
+
+    return requestData.filter((item) => {
+      return (
+        item.date === todayFormatted ||
+        item.date === pastDate1Formatted ||
+        item.date === pastDate2Formatted
+      );
+    });
+  };
+
+  const filterByToday = (requestData) => {
+    return requestData.filter((item) => {
+      return item.date === date;
+    });
+  };
 
   const editRequestHandler = (request) => {
     setCurrentReq(request);
@@ -176,7 +213,7 @@ export default function UserRequests() {
                   <TableCell>{request.missionBlock}</TableCell>
                   <TableCell>{request.workType}</TableCell>
                   <TableCell>{request.workDescription}</TableCell>
-                  <TableCell>{request.selectedLine}</TableCell>
+                  <TableCell>{request.selectedLine?.split(":")[1]}</TableCell>
                   <TableCell>{request.cautionRequired}</TableCell>
                   <TableCell>{request.cautionSpeed}</TableCell>
                   <TableCell>{request.cautionLocationFrom}</TableCell>

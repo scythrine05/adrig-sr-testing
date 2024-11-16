@@ -27,8 +27,8 @@ import {
   postDataOptimisedFirst,
 } from "../../actions/optimisetable";
 import { Oval } from "react-loader-spinner";
-
 import { useToast } from "../../../components/ui/use-toast";
+import { formatData } from "../../../lib/utils";
 
 const SearchForm = () => {
   let timerfirst;
@@ -47,8 +47,16 @@ const SearchForm = () => {
     async function fxn() {
       try {
         const res = await getFormDataAll();
-        setFilteredRequests(res.requestData);
-        setCurrentReq(res.requestData);
+        // setFilteredRequests(res.requestData);
+        const formattedData = formatData(res.requestData);
+        const finalData = formattedData.map((e) => {
+          return {
+            ...e,
+            selectedLine: e.selectedLine.split(":")[1],
+          };
+        });
+        setFilteredRequests(finalData);
+        setCurrentReq(formattedData);
       } catch (e) {
         console.log(e);
       }
@@ -97,7 +105,9 @@ const SearchForm = () => {
       searchDepartment,
       dateRange
     );
-    setFilteredRequests(requests.res);
+
+    const formattedData = formatData(requests.res);
+    setFilteredRequests(formattedData);
   };
 
   const handleClear = async () => {
@@ -117,16 +127,18 @@ const SearchForm = () => {
     try {
       if (currentReq != null) {
         const res = await axios.post(
-          `https://sr.adrig.co.in/backend/optimize`,
+          `https://sr-optimization.vercel.app/backend/optimize`,
           {
             requestData: filteredRequests,
           }
         );
+
+        console.log(res.data);
         const data = filteredRequests;
         const res1 = await deleteOptimizedData();
         const res2 = await postBulkOptimised(res.data.optimizedData);
 
-        console.log(res2);
+        // console.log(data);
       } else {
         throw Error("the admin data didnt came");
       }

@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const Dropdown = ({ list, addItem, selectedItems, limit }) => {
+const Dropdown = ({ list, addItem, selectedItems, searchTag, limit }) => {
+  const [dropDownList, setDropdownList] = useState(list);
+
+  useEffect(() => {
+    console.log(dropDownList);
+    if (searchTag != "") {
+      setDropdownList(list.filter((e) => e.includes(searchTag.toUpperCase())));
+    } else {
+      setDropdownList(list);
+    }
+  }, [selectedItems, searchTag]);
+
   return (
     <div
       id="dropdown"
@@ -9,10 +20,8 @@ const Dropdown = ({ list, addItem, selectedItems, limit }) => {
       }  `}
     >
       <div className="flex flex-col w-full">
-        {list &&
-          list.map((item, key) => {
-            console.log(selectedItems);
-            console.log(selectedItems.includes(item));
+        {dropDownList &&
+          dropDownList.map((item, key) => {
             if (selectedItems.includes(item)) {
               return <></>;
             } else {

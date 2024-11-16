@@ -1,17 +1,24 @@
 "use client";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
 import { postFormData } from "../../../app/actions/formdata";
 import { getUserId } from "../../../app/actions/user";
 import { sectionData, machine, work, data, workData } from "../../../lib/store";
 import MultipleSelect from "./MultipleSelect";
+import MultipleSelectOld from "./MultipleSelectOld";
 import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
 import validateForm from "./formValidation";
+import { yardData } from "../../../lib/yard";
 
-export default function RequestForm(props) {
+export default function RequestForm2(props) {
+  const maxDate = "2030-12-31";
   const router = useRouter();
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
+  // const [lineData, setLineData] = useState({
+  //   station: [],
+  //   yard: [],
+  // });
   const [formData, setFormData] = useState({
     date: "",
     selectedDepartment: "",
@@ -19,7 +26,11 @@ export default function RequestForm(props) {
     stationID: "",
     workType: "",
     workDescription: "",
-    selectedLine: "",
+    selectedLine: {
+      station: [],
+      yard: [],
+    },
+    stream: "",
     missionBlock: "",
     cautionRequired: "",
     cautionSpeed: "",
@@ -36,13 +47,34 @@ export default function RequestForm(props) {
     sigElementarySectionFrom: "",
     sigElementarySectionTo: "",
     repercussions: "",
-    otherLinesAffected: "",
+    otherLinesAffected: {
+      station: [],
+      yard: [],
+    },
     requestremarks: "",
   });
 
+  const inputRefs = useRef([]);
+  const dateref = useRef();
+  const departmentRef = useRef();
+
+  const handleKeyDown = (e, index) => {
+    e.preventDefault();
+    if (e.key === "ArrowRight") {
+      const nextIndex = index + 1;
+      if (nextIndex < inputRefs.current.length) {
+        inputRefs.current[nextIndex].focus();
+      }
+      // departmentRef.current.focus();
+    }
+  };
+
+  useEffect(() => {
+    // console.log(getTheList("VLK-YD"));
+  }, [formData]);
+
   const formValidation = (value) => {
     let res = validateForm(value);
-    console.log(res);
     if (
       res.date ||
       res.selectedDepartment ||
@@ -99,35 +131,108 @@ export default function RequestForm(props) {
     return res;
   };
 
-  const getTheList = () => {
-    const result = [];
-    // blockGenerator().map((element, ind) => {
-    //   return element.lines.map((e) => {
-    //     if (element.block === formData.missionBlock) {
-    //       if (formData.selectedLine != "" && e != formData.selectedLine)
-    //         result.push(e);
-    //     }
-    //   });
-    // });
-    if (formData.stationID != "" && formData.selectedSection != "") {
-      for (let section of data.sections) {
-        if (formData.selectedSection == section.name) {
-          // console.log(formData.selectedSection);
-          // if (formData.stationID === "Section") {
-          //   return section.section_blocks;
-          // } else if (formData.stationID === "Station") {
-          //   return section.station_blocks;
-          // } else {
-          //   return [];
-          // }
-          let res = section.lines;
-          console.log(res);
-          return res;
-        }
-      }
+  const getMissionBlock = () => {
+    if (formData.missionBlock === "") {
       return [];
     } else {
-      return [];
+      const check = formData.missionBlock.split(",").map((name) => name.trim());
+      return check;
+    }
+  };
+
+  const getTheListFilter = (missionBlock) => {
+    let result = [];
+    const arr = missionBlock?.split("-").map((name) => name.trim());
+    // console.log(arr);
+    if (arr?.includes("YD")) {
+      const found = formData.selectedLine.yard.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      yardData.stations.map((yard) => {
+        // console.log(yard);
+        if (yard.station_code === arr[0]) {
+          // result = yard.roads;
+          result = yard.roads.map((item) => item.road_no);
+          const indexToFilterOut = result.findIndex(
+            (item) => item === commondata
+          );
+          result = result.filter((_, index) => index !== indexToFilterOut);
+        }
+      });
+    } else {
+      const found = formData.selectedLine.station.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      blockGenerator().map((element, ind) => {
+        if (element.block === missionBlock) {
+          result = element.lines;
+        }
+        const indexToFilterOut = result.findIndex(
+          (item) => item === commondata
+        );
+        result = result.filter((_, index) => index !== indexToFilterOut);
+      });
+    }
+
+    return result;
+  };
+
+  const getTheList = (missionBlock) => {
+    let result = [];
+    const arr = missionBlock?.split("-").map((name) => name.trim());
+    // console.log(arr);
+    if (arr?.includes("YD")) {
+      const found = formData.selectedLine.yard.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      yardData.stations.map((yard) => {
+        // console.log(yard);
+        if (yard.station_code === arr[0]) {
+          // result = yard.roads;
+          result = yard.roads.map((item) => item.road_no);
+        }
+      });
+    } else {
+      const found = formData.selectedLine.station.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      blockGenerator().map((element, ind) => {
+        if (element.block === missionBlock) {
+          result = element.lines;
+        }
+      });
+    }
+
+    return result;
+  };
+
+  const getLineSectionValue = (ele, arr) => {
+    if (arr?.includes("YD")) {
+      const foundItem = formData.selectedLine.yard.find((item) =>
+        item?.startsWith(`${ele}:`)
+      );
+      if (foundItem) {
+        return foundItem;
+      }
+      return "";
+    } else {
+      const foundItem = formData.selectedLine.station.find((item) =>
+        item?.startsWith(`${ele}:`)
+      );
+      if (foundItem) {
+        return foundItem;
+      }
+      return "";
+    }
+  };
+
+  const handleMoveToNext = (index) => (e) => {
+    if (e.target.value.length > 0 && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
     }
   };
 
@@ -188,10 +293,67 @@ export default function RequestForm(props) {
       formData.workDescription = "";
       setFormData({ ...formData, [name]: value });
     } else if (name === "selectedSection") {
-      formData.stationID = "";
+      formData.stationID = "Section/Yard";
       formData.missionBlock = "";
       formData.otherLinesAffected = "";
       setFormData({ ...formData, [name]: value });
+    } else if (name === "date") {
+      if (value > maxDate) {
+        event.target.value = maxDate; // Reset the input value to maxDate
+        alert(`Date cannot be later than ${maxDate}`);
+        return;
+      }
+      setFormData({ ...formData, [name]: value });
+    } else if (name === "selectedLine") {
+      if (value.includes("YD")) {
+        const [newKey] = value.split(":");
+
+        formData.selectedLine = {
+          ...formData.selectedLine,
+          yard: [
+            ...formData.selectedLine.yard.filter(
+              (item) => !item?.startsWith(`${newKey}:`)
+            ),
+            value,
+          ],
+        };
+      } else {
+        const [newKey] = value.split(":");
+        console.log(newKey);
+        formData.selectedLine = {
+          ...formData.selectedLine,
+          station: [
+            ...formData.selectedLine.station.filter(
+              (item) => !item?.startsWith(`${newKey}:`)
+            ),
+            ,
+            value,
+          ],
+        };
+
+        // setLineData((prevData) => ({
+        //   ...prevData,
+        //   station: [
+        //     ...prevData.station.filter(
+        //       (item) => !item.startsWith(`${newKey}:`)
+        //     ),
+        //     value,
+        //   ],
+        // }));
+      }
+      formData.selectedLine = {
+        yard: [
+          ...formData.selectedLine.yard.filter(
+            (item) => item != null || item != undefined
+          ),
+        ],
+        station: [
+          ...formData.selectedLine.station.filter(
+            (item) => item != null || item != undefined
+          ),
+        ],
+      };
+      setFormData({ ...formData, [name]: formData.selectedLine });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -225,10 +387,14 @@ export default function RequestForm(props) {
             selectedDepartment: "",
             selectedSection: "",
             stationID: "",
-            missionBlock: "",
             workType: "",
             workDescription: "",
-            selectedLine: "",
+            selectedLine: {
+              station: [],
+              yard: [],
+            },
+            stream: "",
+            missionBlock: "",
             cautionRequired: "",
             cautionSpeed: "",
             cautionLocationFrom: "",
@@ -244,7 +410,10 @@ export default function RequestForm(props) {
             sigElementarySectionFrom: "",
             sigElementarySectionTo: "",
             repercussions: "",
-            otherLinesAffected: "",
+            otherLinesAffected: {
+              station: [],
+              yard: [],
+            },
             requestremarks: "",
           });
           toast({
@@ -273,11 +442,14 @@ export default function RequestForm(props) {
             Date <span style={{ color: "red" }}>*</span>
           </label>
           <input
+            ref={(el) => (inputRefs.current[0] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 0)}
             value={formData.date}
             type="date"
             name="date"
             className="mt-1 w-full p-2 border rounded"
             onChange={handleChange}
+            max={maxDate}
           />
         </div>
         <div>
@@ -285,6 +457,8 @@ export default function RequestForm(props) {
             Department <span style={{ color: "red" }}>*</span>
           </label>
           <select
+            ref={(el) => (inputRefs.current[1] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 1)}
             value={formData.selectedDepartment}
             name="selectedDepartment"
             className="mt-1 w-full p-2.5 border rounded"
@@ -301,6 +475,8 @@ export default function RequestForm(props) {
             Section <span style={{ color: "red" }}>*</span>
           </label>
           <select
+            ref={(el) => (inputRefs.current[2] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 2)}
             value={formData.selectedSection}
             name="selectedSection"
             className="mt-1 w-full p-2.5 border rounded"
@@ -320,10 +496,13 @@ export default function RequestForm(props) {
 
       <div className="inline relative mb-4 ">
         <select
+          ref={(el) => (inputRefs.current[3] = el)}
+          onKeyDown={(e) => handleKeyDown(e, 3)}
           name="stationID"
           value={formData.stationID}
           className="mt-1 p-2 w-[535px] rounded-md"
           onChange={handleChange}
+          disabled={true}
         >
           <option className="block text-sm font-medium " value={""}>
             Select Block Section
@@ -347,6 +526,8 @@ export default function RequestForm(props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
         <select
+          ref={(el) => (inputRefs.current[5] = el)}
+          onKeyDown={(e) => handleKeyDown(e, 5)}
           value={formData.workType}
           name="workType"
           className="mt-1 p-2 rounded-md"
@@ -389,6 +570,8 @@ export default function RequestForm(props) {
           />
         ) : (
           <select
+            ref={(el) => (inputRefs.current[6] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 6)}
             name="workDescription"
             className="mt-1 w-full p-2.5 border rounded z-1000"
             onChange={handleChange}
@@ -430,38 +613,72 @@ export default function RequestForm(props) {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium">
-            Line <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            name="selectedLine"
-            value={formData.selectedLine}
-            className="mt-1 w-full p-2 border rounded"
-            onChange={handleChange}
-          >
-            <option value={""}>Select Line</option>
-            {/* {blockGenerator().map((element, ind) => {
-              return element.lines.map((e) => {
-                if (element.block === formData.missionBlock) {
-                  return (
-                    <option value={e} key={ind}>
-                      {e}
-                    </option>
-                  );
-                }
-              });
-            })} */}
-            {getTheList().map((e) => {
-              return (
-                <option value={e} key={e}>
-                  {e}
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
+        {getMissionBlock().map((ele) => {
+          const arr = ele?.split("-").map((name) => name.trim());
+          const value = getLineSectionValue(ele, arr);
+          console.log(value);
+          return (
+            <div>
+              <label className="block text-sm font-medium">
+                {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <select
+                name="selectedLine"
+                ref={(el) => (inputRefs.current[5] = el)}
+                onKeyDown={(e) => handleKeyDown(e, 5)}
+                value={value}
+                className="mt-1 w-full p-2 border rounded"
+                onChange={handleChange}
+              >
+                <option value={""}>
+                  Select {arr?.includes("YD") ? `Road ` : `Line `}
                 </option>
-              );
-            })}
-          </select>
-        </div>
+                {getTheList(ele).map((e) => {
+                  if (e.road_no) {
+                    return (
+                      <>
+                        <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                          {e.road_no}
+                        </option>
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <option value={`${ele}:${e}`} key={e}>
+                          {e}
+                        </option>
+                      </>
+                    );
+                  }
+                })}
+              </select>
+
+              {ele.split("-")[1] === "YD" && (
+                <div className="mt-3">
+                  <label className="block text-sm font-medium">
+                    Stream for {ele}
+                    <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <select
+                    name="upstream"
+                    // value={formData.selectedLine}
+                    className="mt-1 w-full p-2 border rounded"
+                    // onChange={handleChange}
+                  >
+                    <option value={""}>Select Stream</option>
+                    <option value={"Upstream"}>Up Stream</option>
+                    <option value={"Downstream"}>Down Stream</option>
+                    <option value={"Both"}>Both</option>
+                  </select>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
         <div>
           {formData.selectedDepartment === "ENGG" && (
             <label className="block text-sm font-medium">Work location</label>
@@ -735,8 +952,9 @@ export default function RequestForm(props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium">
-                  {formData.selectedDepartment === "SIG"
-                    ? "Gear"
+                  {formData.selectedDepartment === "SIG" ||
+                  formData.selectedDepartment === "ENGG"
+                    ? "Line"
                     : "Elementary section"}{" "}
                   <span style={{ color: "red" }}>*</span>
                 </label>
@@ -774,23 +992,27 @@ export default function RequestForm(props) {
         </div>
       )}
       {/* Other Affected Lines */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Other affected lines
-        </label>
-        {/* <select
-          value={formData.otherLinesAffected}
-          name="otherLinesAffected"
-          className="mt-1 w-full p-2 border rounded"
-          onChange={handleChange}
-        ></select> */}
-      </div>
-      <MultipleSelect
-        items={getTheList().filter((item) => item !== formData.selectedLine)}
-        value={formData.otherLinesAffected}
-        setFormData={setFormData}
-        name="otherLinesAffected"
-      />
+      {getMissionBlock().map((ele) => {
+        // console.log(getTheList(ele));
+        const arr = ele?.split("-").map((name) => name.trim());
+        return (
+          <div className="mb-4">
+            <label className="block text-sm font-medium">
+              Other affected
+              {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
+            </label>
+            <MultipleSelectOld
+              items={getTheListFilter(ele)}
+              value={formData.otherLinesAffected}
+              setFormData={setFormData}
+              name="otherLinesAffected"
+              ele={ele}
+              flag={arr?.includes("YD") ? true : false}
+            />
+          </div>
+        );
+      })}
+
       <div className="mb-4 mt-2">
         <label className="block text-sm font-medium">Remarks</label>
         <textarea

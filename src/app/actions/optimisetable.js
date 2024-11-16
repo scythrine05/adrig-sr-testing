@@ -8,7 +8,7 @@ export async function postDataOptimisedFirst(request) {
     data: {
       Optimisedtimefrom: request.Optimisedtimefrom,
       Optimisedtimeto: request.Optimisedtimeto,
-      optimization_details: request.optimization_details,
+      // optimization_details: request.optimization_details,
       requestId: request.requestId,
       date: request.date,
       selectedDepartment: request.selectedDepartment,
@@ -49,14 +49,14 @@ export async function postBulkOptimised(requestArray) {
 
   const updatedData = filteredData.map((item) => {
     const {
-      optimisation_details,
+      // optimisation_details,
       optimisedTimeFrom,
       optimisedTimeTo,
       ...rest
     } = item;
     return {
       ...rest,
-      optimization_details: optimisation_details.join(" "),
+      // optimization_details: optimisation_details.join(" "),
       Optimisedtimefrom: optimisedTimeFrom,
       Optimisedtimeto: optimisedTimeTo,
     };

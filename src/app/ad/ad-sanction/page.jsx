@@ -100,9 +100,9 @@ const SearchForm = () => {
               <TableCell>
                 <strong>Optimised Time (To)</strong>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <strong>Optimization Details</strong>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <strong>SIG Disconnection</strong>
               </TableCell>
@@ -149,7 +149,7 @@ const SearchForm = () => {
                   <TableCell>{request.demandTimeTo}</TableCell>
                   <TableCell>{request.Optimisedtimefrom}</TableCell>
                   <TableCell>{request.Optimisedtimeto}</TableCell>
-                  <TableCell>{request.optimization_details}</TableCell>
+                  {/* <TableCell>{request.optimization_details}</TableCell> */}
                   <TableCell>{request.sigDisconnection}</TableCell>
                   <TableCell>{request.ohDisconnection}</TableCell>
                   <TableCell>{request.elementarySectionFrom}</TableCell>
