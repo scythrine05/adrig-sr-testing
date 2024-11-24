@@ -4,29 +4,18 @@ import Dropdown from "./DropdownOld";
 const MultipleSelectOld = (props) => {
   const [dropdown, setDropdown] = useState(false);
   const [selectedItems, setSelected] = useState({
-    station: [],
-    yard: [],
+    station: props.value?.station || [],
+    yard: props.value?.yard || [],
   });
 
-  // Set selectedItems based on the initial value passed via props
   useEffect(() => {
     if (props.value) {
-      const initialValue = props.value.split(", ").map((item) => {
-        const [key, value] = item.split(":");
-        return `${key}:${value}`;
-      });
-
-      setSelected({
-        station: props.flag ? [] : initialValue,
-        yard: props.flag ? initialValue : [],
-      });
-    } else {
-      setSelected({
-        station: [],
-        yard: [],
-      });
+      setSelected((prevState) => ({
+        station: props.value.station || prevState.station,
+        yard: props.value.yard || prevState.yard,
+      }));
     }
-  }, [props.value, props.flag]);
+  }, [props.value]);
 
   const toggleDropdown = () => {
     setDropdown(!dropdown);
@@ -35,16 +24,24 @@ const MultipleSelectOld = (props) => {
   const addTag = (item) => {
     const key = `${props?.ele}:${item}`;
 
+    const newSelectedItems = {
+      ...selectedItems,
+      station: [...selectedItems.station],
+      yard: [...selectedItems.yard],
+    };
+
     if (props.flag) {
-      setSelected((prevData) => ({
-        ...prevData,
-        yard: [...prevData.yard, key],
-      }));
+      newSelectedItems.yard = [...newSelectedItems.yard, key];
     } else {
-      setSelected((prevData) => ({
-        ...prevData,
-        station: [...prevData.station, key],
-      }));
+      newSelectedItems.station = [...newSelectedItems.station, key];
+    }
+
+    setSelected(newSelectedItems);
+    if (props.formData) {
+      props.formData.otherLinesAffected = {
+        station: newSelectedItems.station,
+        yard: newSelectedItems.yard,
+      };
     }
 
     setDropdown(false);
@@ -53,18 +50,35 @@ const MultipleSelectOld = (props) => {
   const removeTag = (item) => {
     const key = `${props?.ele}:${item}`;
 
+    const newSelectedItems = {
+      ...selectedItems,
+      station: [...selectedItems.station],
+      yard: [...selectedItems.yard],
+    };
+
     if (props.flag) {
-      setSelected((prevData) => ({
-        ...prevData,
-        yard: prevData.yard.filter((entry) => entry !== key),
-      }));
+      newSelectedItems.yard = newSelectedItems.yard.filter(
+        (entry) => entry !== key
+      );
     } else {
-      setSelected((prevData) => ({
-        ...prevData,
-        station: prevData.station.filter((entry) => entry !== key),
-      }));
+      newSelectedItems.station = newSelectedItems.station.filter(
+        (entry) => entry !== key
+      );
+    }
+
+    setSelected(newSelectedItems);
+
+    if (props.formData) {
+      props.formData.otherLinesAffected = {
+        station: newSelectedItems.station,
+        yard: newSelectedItems.yard,
+      };
     }
   };
+
+  // Debug logging
+  // console.log("Current selectedItems:", selectedItems);
+  // console.log("Form data:", props.formData);
 
   return (
     <div className="autocomplete-wrapper">

@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  name      String
-  username  String     @unique
-  password  String
-  optimised String     @default("notset")
-  requests  Requests[]
+  id              Int               @id @default(autoincrement())
+  name            String
+  username        String            @unique
+  password        String
+  optimised       String            @default("notset")
+  requests        Requests[]
+  StagingRequests StagingRequests[]
 }
 
 model Otp {
@@ -28,6 +29,39 @@ model Otp {
   code      String
   createdAt DateTime @default(now())
   validTill DateTime
+}
+
+model StagingRequests {
+  requestId                String   @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 6, '0'))::TEXT"))
+  date                     String
+  selectedDepartment       String
+  selectedSection          String
+  stationID                String
+  missionBlock             String
+  workType                 String
+  workDescription          String
+  selectedLine             Json
+  selectedStream           String?
+  cautionRequired          String
+  cautionSpeed             String
+  cautionLocationFrom      String
+  cautionLocationTo        String
+  workLocationFrom         String
+  workLocationTo           String
+  demandTimeFrom           String
+  demandTimeTo             String
+  sigDisconnection         String
+  ohDisconnection          String
+  elementarySectionFrom    String
+  elementarySectionTo      String
+  sigElementarySectionFrom String
+  sigElementarySectionTo   String
+  repercussions            String
+  otherLinesAffected       Json
+  requestremarks           String
+  createdAt                DateTime @default(now())
+  userId                   Int
+  User                     User     @relation(fields: [userId], references: [id])
 }
 
 model Requests {
@@ -40,6 +74,7 @@ model Requests {
   workType                 String
   workDescription          String
   selectedLine             Json
+  selectedStream           String?
   cautionRequired          String
   cautionSpeed             String
   cautionLocationFrom      String
@@ -72,7 +107,8 @@ model Sanctiontable {
   missionBlock             String
   workType                 String
   workDescription          String
-  selectedLine             Json
+  selectedLine             String
+  selectedStream           String?
   cautionRequired          String
   cautionSpeed             String
   cautionLocationFrom      String

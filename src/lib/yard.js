@@ -6,73 +6,73 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 2A",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 9",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 10",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 11",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
@@ -84,31 +84,31 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 12",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST SLOW DESPATCH LINE / UP SOUTH WEST SLOW RECEPTION LINE / DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 13",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST SLOW DESPATCH LINE / UP SOUTH WEST SLOW RECEPTION LINE / DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE / UP NORTH EAST RECEPTION LINE",
         },
         {
           road_no: "Rd 14",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST SLOW DESPATCH LINE / UP SOUTH WEST SLOW RECEPTION LINE / DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE",
         },
         {
           road_no: "Rd 15",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST SLOW DESPATCH LINE / UP SOUTH WEST SLOW RECEPTION LINE / DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE",
         },
         {
           road_no: "Rd 16",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SOUTH WEST SLOW DESPATCH LINE / UP SOUTH WEST SLOW RECEPTION LINE / DOWN SOUTH WEST DESPATCH LINE / UP SOUTH WEST RECEPTION LINE / DOWN NORTH EAST DESPATCH LINE",
         },
@@ -120,38 +120,38 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP FAST MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN NEL",
+          direction: "Both",
+          line_name: "Both NEL",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN NEL",
+          direction: "Both",
+          line_name: "Both NEL",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN NEL",
+          direction: "Both",
+          line_name: "Both NEL",
         },
       ],
     },
@@ -166,22 +166,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN SLOW MAIN LINE AND UP SLOW DESPATCH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP FAST MAIN LINE",
         },
       ],
@@ -192,37 +192,37 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN SLOW LOOP LINE / UP SLOW DESPATCH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP FAST MAIN LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP FAST LOOP LINE / DOWN FAST RECEPTION LINE",
         },
       ],
@@ -233,55 +233,55 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN SLOW LOOP LINE",
         },
       ],
     },
-    
+
     {
       station_name: "PATTABIRAM PAB",
       station_code: "PAB",
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN FAST LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP FAST LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN LINE TO PTMS",
+          direction: "Both",
+          line_name: "Both LINE TO PTMS",
         },
       ],
     },
@@ -292,12 +292,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN LINE",
+          direction: "Both",
+          line_name: "Both LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP DESPTACH LINE / DOWN RECEPTION LINE",
         },
       ],
@@ -309,37 +309,37 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN SLOW LOOP LINE",
+          direction: "Both",
+          line_name: "Both SLOW LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN FAST LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP FAST LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP FAST LOOP LINE AND DOWN FAST RECEPTION LINE",
         },
       ],
@@ -351,37 +351,37 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "UP FAST MAIN LINE / UP SLOW LOOP LINE AND DOWN SLOW LOOP LINE / DOWN FAST LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN FAST MAIN LINE / DOWN SLOW LOOP LINE AND UP FAST LOOP LINE / UP SLOW LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "UP SLOW MAIN LINE / UP FAST LOOP LINE AND DOWN SLOW LOOP LINE / DOWN FAST LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN SLOW MAIN LINE / DOWN FAST LOOP LINE AND UP SLOW LOOP / UP FAST LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN SLOW/FAST LOOP LINE",
+          direction: "Both",
+          line_name: "Both SLOW/FAST LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN SLOW/FAST LOOP LINE",
+          direction: "Both",
+          line_name: "Both SLOW/FAST LOOP LINE",
         },
       ],
     },
@@ -391,22 +391,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -417,22 +417,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -443,22 +443,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -469,22 +469,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -495,33 +495,33 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAINE LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN GOODS LOOP LINE",
+          direction: "Both",
+          line_name: "Both GOODS LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN GOODS LOOP LINE",
+          direction: "Both",
+          line_name: "Both GOODS LOOP LINE",
         },
       ],
     },
@@ -531,22 +531,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -557,27 +557,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -588,12 +588,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
@@ -603,37 +603,37 @@ export let yardData = {
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 9",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE (GOODS LINE)",
         },
         {
           road_no: "Rd 10",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE (GOODS LINE)",
         },
       ],
@@ -644,22 +644,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP UP / DOWN LOOP LINE",
         },
       ],
@@ -670,22 +670,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -696,22 +696,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -722,22 +722,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -748,22 +748,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -774,22 +774,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -800,22 +800,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -826,17 +826,17 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
       ],
@@ -847,22 +847,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -873,17 +873,17 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -894,72 +894,72 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS THROUGH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS THROUGH LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN MAIN LINE AND UP LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP MAIN LINE AND DOWN LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 9",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LINE",
         },
         {
           road_no: "Rd 10",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LINE",
         },
         {
           road_no: "Rd 11",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LINE",
         },
         {
           road_no: "Rd 12",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LINE",
         },
         {
           road_no: "Rd 13",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LINE",
         },
         {
           road_no: "Rd 14",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LINE",
         },
       ],
@@ -970,32 +970,32 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP FAST MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP GOODS LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN GOODS LINE",
         },
       ],
@@ -1006,32 +1006,32 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP FAST MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP GOODS LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN GOODS LINE",
         },
       ],
@@ -1042,32 +1042,32 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1A",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP FAST MAIN LINE AND DOWN FAST LOOP LINE",
         },
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN FAST MAIN LINE AND UP SLOW LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP/DOWN SLOW LOOP LINE AND UP/DOWN FAST LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP/DOWN SLOW LOOP LINE AND UP/DOWN FAST LOOP LINE",
         },
       ],
@@ -1078,39 +1078,39 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN SLOW LOOP LINE AND UP SLOW TURN BACK LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN FAST MAIN LINE AND UP SLOW LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "UP FAST MAIN LINE, DOWN FAST LOOP LINE, UP SLOW DESPATCH LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN FAST LOOP LINE, UP FAST LOOP LINE, UP SLOW LOOP LINE, DOWN SLOW RECEPTION LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name:
             "DOWN FAST LOOP LINE, UP FAST LOOP LINE, UP SLOW LOOP LINE, DOWN SLOW RECEPTION LINE",
         },
@@ -1122,22 +1122,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP FAST MAIN LINE",
         },
       ],
@@ -1148,33 +1148,33 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SLOW MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SLOW MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP FAST MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN GOODS LINE",
+          direction: "Both",
+          line_name: "Both GOODS LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN GOODS LINE",
+          direction: "Both",
+          line_name: "Both GOODS LINE",
         },
       ],
     },
@@ -1184,17 +1184,17 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
       ],
@@ -1205,27 +1205,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -1236,22 +1236,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -1262,32 +1262,32 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LOOP LINE",
         },
       ],
@@ -1298,32 +1298,32 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP GOODS LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN GOODS LOOP LINE",
         },
       ],
@@ -1334,22 +1334,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -1360,22 +1360,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -1386,22 +1386,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -1412,22 +1412,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -1438,22 +1438,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -1464,22 +1464,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -1490,22 +1490,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -1516,22 +1516,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -1542,22 +1542,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN UP MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP FAST MAIN LINE",
         },
       ],
@@ -1568,42 +1568,42 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN GOODS RECEPTION AND UP GOODS DESPATCH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN GOODS RECEPTION LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP GOODS DESPATCH LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN FAST MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP FAST MAIN LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP MAIN LINE / DOWN DESPATCH LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN GOODS LOOP LINE",
         },
       ],
@@ -1614,48 +1614,48 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN SUB-URBAN DESPATCH AND UP SUB-URBAN RECEPTION LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN SUB-URBAN DESPATCH AND UP SUB-URBAN RECEPTION LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN SUB-URBAN DESPATCH AND UP SUB-URBAN RECEPTION LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN RECEPTION AND DESPATCH LINE",
+          direction: "Both",
+          line_name: "Both RECEPTION AND DESPATCH LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN RECEPTION AND DESPATCH LINE",
+          direction: "Both",
+          line_name: "Both RECEPTION AND DESPATCH LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN RECEPTION AND DESPATCH LINE",
+          direction: "Both",
+          line_name: "Both RECEPTION AND DESPATCH LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN RECEPTION AND DESPATCH LINE",
+          direction: "Both",
+          line_name: "Both RECEPTION AND DESPATCH LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN RECEPTION AND DESPATCH LINE",
+          direction: "Both",
+          line_name: "Both RECEPTION AND DESPATCH LINE",
         },
         {
           road_no: "Rd 9",
-          direction: "UP AND DOWN",
-          line_name: "UP AND DOWN RECEPTION AND DESPATCH LINE",
+          direction: "Both",
+          line_name: "Both RECEPTION AND DESPATCH LINE",
         },
       ],
     },
@@ -1665,12 +1665,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP SUB-URBAN MAIN LINE AND DOWN SUB-URBAN DESPATCH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SUB-URBAN MAIN LINE",
         },
       ],
@@ -1681,57 +1681,57 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP RECEPTION AND DOWN DESPATCH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP RECEPTION AND DOWN DESPATCH LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP RECEPTION AND DOWN DESPATCH LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 9",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 10",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SUB-URBAN MAIN LINE",
         },
         {
           road_no: "Rd 11",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP SUB-URBAN MAIN LINE AND DOWN SUB-URBAN DESPATCH LINE",
         },
       ],
@@ -1742,27 +1742,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'A' LINE LOOP",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'A' MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'B' MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SUB-URBAN MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SUB-URBAN MAIN LINE",
         },
       ],
@@ -1773,27 +1773,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'A' / 'B' LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'A' MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'B' MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN SUB-URBAN MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SUB-URBAN MAIN LINE",
         },
       ],
@@ -1804,28 +1804,28 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'A' LINE LOOP",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'A' MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN 'B' MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name:
             "DOWN DOWN SUB-URBAN MAIN LINE AND UP SUB-URBAN DESPATCH LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP SUB-URBAN MAIN LINE",
         },
       ],
@@ -1836,57 +1836,57 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 9",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 10",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
         {
           road_no: "Rd 11",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN RECEPTION / DESPATCH LINE",
         },
       ],
@@ -1897,22 +1897,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP THIRD MAIN LINE / DOWN THIRD MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
       ],
@@ -1923,27 +1923,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP THIRD MAIN LINE / DOWN THIRD MAIN LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN THIRD LOOP LINE",
         },
       ],
@@ -1954,22 +1954,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN THIRD MAIN LINE / DOWN THIRD MAIN LINE",
         },
       ],
@@ -1980,27 +1980,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP LOOP LINE, UP / DOWN THIRD LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP THIRD MAIN LINE / DOWN THIRD MAIN LINE",
         },
       ],
@@ -2011,42 +2011,42 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP DESPATCH AND DOWN RECEPTION LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN THIRD MAIN LINE, UP LOOP LINE, DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP MAIN LINE AND DOWN LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 6",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN MAIN LINE AND UP LOOP LINE",
         },
         {
           road_no: "Rd 7",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 8",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -2057,22 +2057,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -2083,22 +2083,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -2109,22 +2109,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -2135,22 +2135,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN MAIN LINE AND UP DESPATCH LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN LOOP LINE AND UP DESPATCH LINE",
         },
       ],
@@ -2161,22 +2161,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -2187,22 +2187,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
       ],
@@ -2213,21 +2213,21 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN MAIN LINE AND UP LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
-          road_no: "DOWN",
+          road_no: "Downstream",
           line_name: "DOWN LOOP LINE",
         },
       ],
@@ -2238,22 +2238,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP LOOP LINE",
         },
       ],
@@ -2264,22 +2264,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
       ],
@@ -2290,22 +2290,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -2316,27 +2316,27 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP MAIN LINE / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN MAIN LINE / UP LOOP LINE",
         },
         {
           road_no: "Rd 5",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -2347,22 +2347,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
       ],
@@ -2373,22 +2373,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN MAIN LINE",
         },
       ],
@@ -2399,22 +2399,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP LOOP LINE AND DOWN MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN LOOP LINE",
         },
       ],
@@ -2425,22 +2425,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
       ],
@@ -2451,22 +2451,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
       ],
@@ -2477,22 +2477,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
       ],
@@ -2503,12 +2503,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
       ],
@@ -2519,22 +2519,22 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP MAIN LINE",
         },
         {
           road_no: "Rd 4",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP LOOP LINE",
         },
       ],
@@ -2545,12 +2545,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -2561,12 +2561,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -2577,17 +2577,17 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN MAIN LINE",
         },
         {
           road_no: "Rd 3",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
       ],
@@ -2598,12 +2598,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP / DOWN MAIN LINE",
         },
       ],
@@ -2614,12 +2614,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
       ],
@@ -2630,12 +2630,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
       ],
@@ -2646,12 +2646,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "DOWN",
+          direction: "Downstream",
           line_name: "DOWN DOWN MAIN LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP",
+          direction: "Upstream",
           line_name: "UP UP MAIN LINE",
         },
       ],
@@ -2662,12 +2662,12 @@ export let yardData = {
       roads: [
         {
           road_no: "Rd 1",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "UP MAIN LINE AND DOWN LOOP LINE",
         },
         {
           road_no: "Rd 2",
-          direction: "UP AND DOWN",
+          direction: "Both",
           line_name: "DOWN MAIN LINE AND UP LOOP LINE",
         },
       ],

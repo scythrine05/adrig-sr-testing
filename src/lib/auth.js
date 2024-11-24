@@ -16,13 +16,38 @@ export const NEXT_AUTH_CONFIG = {
           console.log(credentials);
           if (!credentials?.username || !credentials.password) {
             return null;
-          }
-
-          if (
+          } else if (
             credentials.username == process.env.ADMIN_USER &&
             credentials.password == process.env.ADMIN_PASS
           ) {
             return { id: "001", email: credentials.username, role: "admin" };
+          } else if (
+            credentials.username == process.env.ENGG_MANAGER &&
+            credentials.password == process.env.ENGG_PASS
+          ) {
+            return {
+              id: "#EnggManager",
+              email: credentials.username,
+              role: "engg",
+            };
+          } else if (
+            credentials.username == process.env.SIG_MANAGER &&
+            credentials.password == process.env.SIG_PASS
+          ) {
+            return {
+              id: "#SigManager",
+              email: credentials.username,
+              role: "sig",
+            };
+          } else if (
+            credentials.username == process.env.TRD_MANAGER &&
+            credentials.password == process.env.TRD_PASS
+          ) {
+            return {
+              id: "#TrdManager",
+              email: credentials.username,
+              role: "trd",
+            };
           }
 
           const user = await prisma.user.findFirst({

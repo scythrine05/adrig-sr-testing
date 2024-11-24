@@ -115,9 +115,7 @@ const WelcomeScreenContainer = () => {
           const formData = await getFormData(res.id);
           setUserRequest(formData.requestData.length);
         }
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     }
     fxxn();
   }, []);
@@ -175,9 +173,7 @@ const WelcomeScreenContainer = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full bg-secondary p-6 rounded-xl">
         <div className="p-6 bg-primary border-t rounded-xl shadow-md col-span-2">
-          <h2 className="text-xl text-textcolor mb-4">
-            User Requests Accepted{" "}
-          </h2>
+          <h2 className="text-xl text-textcolor mb-4">User Made Requests</h2>
           <span className="text-5xl font-bold">{userRequest}</span>
           <div className="py-6">
             <Chart

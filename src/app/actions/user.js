@@ -48,8 +48,20 @@ export async function getUserId(email) {
   return res;
 }
 
+export async function getUsersByDept(dept) {
+  const res = await prisma.user.findMany({
+    where: { selectedManager: dept },
+  });
+  return res;
+}
+
 export async function getUserById(id) {
   const res = await prisma.user.findUnique({ where: { id: id } });
+  return res;
+}
+
+export async function getUserByName(name) {
+  const res = await prisma.user.findMany({ where: { name: name } });
   return res;
 }
 
@@ -59,13 +71,34 @@ export async function getUsersAll() {
 }
 
 export async function userCheck(username, password) {
-  const res = await prisma.user.findUnique({ where: { username: username } });
-  if (res == null) {
-    return { success: false, error: "No User Exist" };
-  } else if (res.password !== password) {
-    return { success: false, error: "Password Does Not Match" };
+  const manager_array = [
+    process.env.ENGG_MANAGER,
+    process.env.SIG_MANAGER,
+    process.env.TRD_MANAGER,
+  ];
+  let manager_password = new Map();
+  manager_password.set(manager_array[0], process.env.ENGG_PASS);
+  manager_password.set(manager_array[1], process.env.SIG_PASS);
+  // manager_password.set(manager_array[2], process.env.TRD_PASS);
+
+  console.log(manager_password);
+  console.log(manager_array);
+
+  if (manager_array.includes(username)) {
+    if (manager_password.get(username) !== password) {
+      return { success: false, error: "Password Does Not Match" };
+    } else {
+      return { success: true, msg: "Correct details" };
+    }
   } else {
-    return { success: true, msg: "Correct details" };
+    const res = await prisma.user.findUnique({ where: { username: username } });
+    if (res == null) {
+      return { success: false, error: "No User Exist" };
+    } else if (res.password !== password) {
+      return { success: false, error: "Password Does Not Match" };
+    } else {
+      return { success: true, msg: "Correct details" };
+    }
   }
 }
 

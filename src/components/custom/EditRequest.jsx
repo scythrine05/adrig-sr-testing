@@ -1,47 +1,104 @@
 "use client";
-import { useState } from "react";
-import { updateFormData } from "../../app/actions/formdata";
-import { machine, work, data, workData } from "../../lib/store";
-import MultipleSelect from "../custom/blockrequest/MultipleSelect";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
+import {
+  getStagingFormData,
+  getStagingFormDataByRequestId,
+  postStagingFormData,
+  updateStagingFormData,
+} from "../../app/actions/stagingform";
+import { getUserId } from "../../app/actions/user";
+import { sectionData, machine, work, data, workData } from "../../lib/store";
+import MultipleSelect from "./blockrequest/MultipleSelect";
+import MultipleSelectOld from "./blockrequest/MultipleSelectOld";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
-import validateForm from "../custom/blockrequest/formValidation";
+import validateForm from "./blockrequest/formValidation";
+import { yardData } from "../../lib/yard";
+import { getFormDataByRequestId } from "app/actions/formdata";
 
 export default function EditRequest(props) {
+  const maxDate = "2030-12-31";
   const router = useRouter();
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
+
   const [formData, setFormData] = useState({
-    date: props.request.date,
-    selectedDepartment: props.request.selectedDepartment,
-    selectedSection: props.request.selectedSection,
-    stationID: props.request.stationID,
-    workType: props.request.workType,
-    workDescription: props.request.workDescription,
-    selectedLine: props.request.selectedLine,
-    missionBlock: props.request.missionBlock,
-    cautionRequired: props.request.cautionRequired,
-    cautionSpeed: props.request.cautionSpeed,
-    cautionLocationFrom: props.request.cautionLocationFrom,
-    cautionLocationTo: props.request.cautionLocationTo,
-    workLocationFrom: props.request.workLocationFrom,
-    workLocationTo: props.request.workLocationTo,
-    demandTimeFrom: props.request.demandTimeFrom,
-    demandTimeTo: props.request.demandTimeTo,
-    sigDisconnection: props.request.sigDisconnection,
-    ohDisconnection: props.request.ohDisconnection,
-    elementarySectionFrom: props.request.elementarySectionFrom,
-    elementarySectionTo: props.request.elementarySectionTo,
-    sigElementarySectionFrom: props.request.sigElementarySectionFrom,
-    sigElementarySectionTo: props.sigElementarySectionTo,
-    repercussions: props.repercussions,
-    otherLinesAffected: props.request.otherLinesAffected,
-    requestremarks: props.requestremarks,
+    date: "",
+    selectedDepartment: "",
+    selectedSection: "",
+    stationID: "",
+    workType: "",
+    workDescription: "",
+    selectedLine: {
+      station: [],
+      yard: [],
+    },
+    selectedStream: "",
+    missionBlock: "",
+    cautionRequired: "",
+    cautionSpeed: "",
+    cautionLocationFrom: "",
+    cautionLocationTo: "",
+    workLocationFrom: "",
+    workLocationTo: "",
+    demandTimeFrom: "",
+    demandTimeTo: "",
+    sigDisconnection: "",
+    ohDisconnection: "",
+    elementarySectionFrom: "",
+    elementarySectionTo: "",
+    sigElementarySectionFrom: "",
+    sigElementarySectionTo: "",
+    repercussions: "",
+    otherLinesAffected: {
+      station: [],
+      yard: [],
+    },
+    requestremarks: "",
   });
+
+  const inputRefs = useRef([]);
+  const dateref = useRef();
+  const departmentRef = useRef();
+
+  const handleKeyDown = (e, index) => {
+    e.preventDefault();
+    if (e.key === "ArrowRight") {
+      const nextIndex = index + 1;
+      if (nextIndex < inputRefs.current.length) {
+        inputRefs.current[nextIndex].focus();
+      }
+      // departmentRef.current.focus();
+    }
+  };
+
+  function removeAfterLastDash(input) {
+    return input.includes("-") ? input.slice(0, input.lastIndexOf("-")) : input;
+  }
+
+  useEffect(() => {
+    // console.log(getTheList("VLK-YD"));
+    if (props.flag) {
+      setFormData(props.request);
+    } else {
+      const res = removeAfterLastDash(props.request.requestId);
+      console.log(res);
+      const fxn = async () => {
+        const data = await getStagingFormDataByRequestId(res);
+        if (data.requestData.length == 0) {
+          const oldRequestResult = await getFormDataByRequestId(res);
+          setFormData(oldRequestResult.requestData[0]);
+        } else {
+          console.log(data);
+          setFormData(data.requestData[0]);
+        }
+      };
+      fxn();
+    }
+  }, [props.request.requestId]);
 
   const formValidation = (value) => {
     let res = validateForm(value);
-    console.log(res);
     if (
       res.date ||
       res.selectedDepartment ||
@@ -67,25 +124,6 @@ export default function EditRequest(props) {
     }
     return formattedCategory.split(" ").join("_");
   }
-
-  // const blockGenerator = () => {
-  //   if (formData.stationID != "" && formData.selectedSection != "") {
-  //     for (const section of data.sections) {
-  //       console.log(section.name);
-  //       if (formData.selectedSection === section.name) {
-  //         if (formData.stationID === "Section") {
-  //           return section.section_blocks;
-  //         } else if (formData.stationID === "Station") {
-  //           return section.station_blocks;
-  //         } else {
-  //           return [];
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     return [];
-  //   }
-  // };
 
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
@@ -117,35 +155,111 @@ export default function EditRequest(props) {
     return res;
   };
 
-  const getTheList = () => {
-    const result = [];
-    // blockGenerator().map((element, ind) => {
-    //   return element.lines.map((e) => {
-    //     if (element.block === formData.missionBlock) {
-    //       if (formData.selectedLine != "" && e != formData.selectedLine)
-    //         result.push(e);
-    //     }
-    //   });
-    // });
-    if (formData.stationID != "" && formData.selectedSection != "") {
-      for (let section of data.sections) {
-        if (formData.selectedSection == section.name) {
-          // console.log(formData.selectedSection);
-          // if (formData.stationID === "Section") {
-          //   return section.section_blocks;
-          // } else if (formData.stationID === "Station") {
-          //   return section.station_blocks;
-          // } else {
-          //   return [];
-          // }
-          let res = section.lines;
-          console.log(res);
-          return res;
-        }
-      }
+  const getMissionBlock = () => {
+    if (formData.missionBlock === "") {
       return [];
     } else {
-      return [];
+      const check = formData.missionBlock.split(",").map((name) => name.trim());
+      return check;
+    }
+  };
+
+  const getTheListFilter = (missionBlock) => {
+    let result = [];
+    const arr = missionBlock?.split("-").map((name) => name.trim());
+    // console.log(arr);
+    if (arr?.includes("YD")) {
+      const found = formData.selectedLine.yard.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      yardData.stations.map((yard) => {
+        // console.log(yard);
+        if (yard.station_code === arr[0]) {
+          // result = yard.roads;
+          result = yard.roads.filter(
+            (item) => item?.direction === formData.selectedStream
+          );
+          result = result.map((item) => item.road_no);
+          const indexToFilterOut = result.findIndex(
+            (item) => item === commondata
+          );
+          result = result.filter((_, index) => index !== indexToFilterOut);
+        }
+      });
+    } else {
+      const found = formData.selectedLine.station.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      blockGenerator().map((element, ind) => {
+        if (element.block === missionBlock) {
+          result = element.lines;
+        }
+        const indexToFilterOut = result.findIndex(
+          (item) => item === commondata
+        );
+        result = result.filter((_, index) => index !== indexToFilterOut);
+      });
+    }
+
+    return result;
+  };
+
+  const getTheList = (missionBlock) => {
+    let result = [];
+    const arr = missionBlock?.split("-").map((name) => name.trim());
+    // console.log(arr);
+    if (arr?.includes("YD")) {
+      // const found = formData.selectedLine.yard.find((item) =>
+      //   item?.startsWith(`${missionBlock}:`)
+      // );
+      // const commondata = found ? found.split(":")[1] : null;
+      yardData.stations.map((yard) => {
+        // console.log(yard);
+        if (yard.station_code === arr[0]) {
+          result = yard.roads;
+          // result = yard.roads.map((item) => item.road_no);
+        }
+      });
+    } else {
+      const found = formData.selectedLine.station.find((item) =>
+        item?.startsWith(`${missionBlock}:`)
+      );
+      const commondata = found ? found.split(":")[1] : null;
+      blockGenerator().map((element, ind) => {
+        if (element.block === missionBlock) {
+          result = element.lines;
+        }
+      });
+    }
+
+    return result;
+  };
+
+  const getLineSectionValue = (ele, arr) => {
+    if (arr?.includes("YD")) {
+      const foundItem = formData.selectedLine.yard.find((item) =>
+        item?.startsWith(`${ele}:`)
+      );
+      if (foundItem) {
+        return foundItem;
+      }
+      return "";
+    } else {
+      const foundItem = formData.selectedLine.station.find((item) =>
+        item?.startsWith(`${ele}:`)
+      );
+      if (foundItem) {
+        return foundItem;
+      }
+      return "";
+    }
+  };
+
+  const handleMoveToNext = (index) => (e) => {
+    if (e.target.value.length > 0 && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
     }
   };
 
@@ -206,10 +320,67 @@ export default function EditRequest(props) {
       formData.workDescription = "";
       setFormData({ ...formData, [name]: value });
     } else if (name === "selectedSection") {
-      formData.stationID = "";
+      formData.stationID = "Section/Yard";
       formData.missionBlock = "";
       formData.otherLinesAffected = "";
       setFormData({ ...formData, [name]: value });
+    } else if (name === "date") {
+      if (value > maxDate) {
+        event.target.value = maxDate; // Reset the input value to maxDate
+        alert(`Date cannot be later than ${maxDate}`);
+        return;
+      }
+      setFormData({ ...formData, [name]: value });
+    } else if (name === "selectedLine") {
+      if (value.includes("YD")) {
+        const [newKey] = value.split(":");
+
+        formData.selectedLine = {
+          ...formData.selectedLine,
+          yard: [
+            ...formData.selectedLine.yard.filter(
+              (item) => !item?.startsWith(`${newKey}:`)
+            ),
+            value,
+          ],
+        };
+      } else {
+        const [newKey] = value.split(":");
+        console.log(newKey);
+        formData.selectedLine = {
+          ...formData.selectedLine,
+          station: [
+            ...formData.selectedLine.station.filter(
+              (item) => !item?.startsWith(`${newKey}:`)
+            ),
+            ,
+            value,
+          ],
+        };
+
+        // setLineData((prevData) => ({
+        //   ...prevData,
+        //   station: [
+        //     ...prevData.station.filter(
+        //       (item) => !item.startsWith(`${newKey}:`)
+        //     ),
+        //     value,
+        //   ],
+        // }));
+      }
+      formData.selectedLine = {
+        yard: [
+          ...formData.selectedLine.yard.filter(
+            (item) => item != null || item != undefined
+          ),
+        ],
+        station: [
+          ...formData.selectedLine.station.filter(
+            (item) => item != null || item != undefined
+          ),
+        ],
+      };
+      setFormData({ ...formData, [name]: formData.selectedLine });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -217,63 +388,69 @@ export default function EditRequest(props) {
 
   const formSubmitHandler = async () => {
     console.log(formData);
-
-    if (formValidation(formData) == true) {
-      if (formData.workDescription === "others") {
-        if (otherData === "") {
-          toast({
-            title: "Invalid Format",
-            description: "Fill the section in the format xxx/yy",
-            variant: "destructive",
-          });
-          return;
+    try {
+      if (formValidation(formData) == true) {
+        if (formData.workDescription === "others") {
+          if (otherData === "") {
+            toast({
+              title: "Invalid Format",
+              description: "Fill the section in the format xxx/yy",
+              variant: "destructive",
+            });
+            return;
+          }
+          formData.workDescription = "Other Entry" + ":" + otherData;
         }
-        formData.workDescription = "Other Entry" + ":" + otherData;
-      }
-      const res = await updateFormData(formData, props.request.requestId);
-      setFormData({
-        date: "",
-        selectedDepartment: "",
-        selectedSection: "",
-        stationID: "",
-        missionBlock: "",
-        workType: "",
-        workDescription: "",
-        selectedLine: "",
-        cautionRequired: "",
-        cautionSpeed: "",
-        cautionLocationFrom: "",
-        cautionLocationTo: "",
-        workLocationFrom: "",
-        workLocationTo: "",
-        demandTimeFrom: "",
-        demandTimeTo: "",
-        sigDisconnection: "",
-        ohDisconnection: "",
-        elementarySectionFrom: "",
-        elementarySectionTo: "",
-        sigElementarySectionFrom: "",
-        sigElementarySectionTo: "",
-        repercussions: "",
-        otherLinesAffected: "",
-        requestremarks: "",
-      });
-      toast({
-        title: "Success",
-        description: "Request Submitted",
-      });
-      props.setShowPopup(false);
-      if (props.admin) {
-        router.push("/ad/ad-form");
+        const res = await updateStagingFormData(formData, formData.requestId);
+        console.log(res);
+        setFormData({
+          date: "",
+          selectedDepartment: "",
+          selectedSection: "",
+          stationID: "",
+          workType: "",
+          workDescription: "",
+          selectedLine: {
+            station: [],
+            yard: [],
+          },
+          selectedStream: "",
+          missionBlock: "",
+          cautionRequired: "",
+          cautionSpeed: "",
+          cautionLocationFrom: "",
+          cautionLocationTo: "",
+          workLocationFrom: "",
+          workLocationTo: "",
+          demandTimeFrom: "",
+          demandTimeTo: "",
+          sigDisconnection: "",
+          ohDisconnection: "",
+          elementarySectionFrom: "",
+          elementarySectionTo: "",
+          sigElementarySectionFrom: "",
+          sigElementarySectionTo: "",
+          repercussions: "",
+          otherLinesAffected: {
+            station: [],
+            yard: [],
+          },
+          requestremarks: "",
+        });
+        toast({
+          title: "Success",
+          description: "Request Submitted",
+        });
+        props.setShowPopup((prev) => !prev);
       } else {
-        router.push("/schedule-manager");
+        toast({
+          title: "Submission Failed",
+          description: "Fill All The Details",
+          variant: "destructive",
+        });
       }
-    } else {
-      toast({
-        title: "Submission Failed",
-        description: "Fill All The Details",
-        variant: "destructive",
-      });
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -287,11 +464,14 @@ export default function EditRequest(props) {
             Date <span style={{ color: "red" }}>*</span>
           </label>
           <input
+            ref={(el) => (inputRefs.current[0] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 0)}
             value={formData.date}
             type="date"
             name="date"
             className="mt-1 w-full p-2 border rounded"
             onChange={handleChange}
+            max={maxDate}
           />
         </div>
         <div>
@@ -299,6 +479,8 @@ export default function EditRequest(props) {
             Department <span style={{ color: "red" }}>*</span>
           </label>
           <select
+            ref={(el) => (inputRefs.current[1] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 1)}
             value={formData.selectedDepartment}
             name="selectedDepartment"
             className="mt-1 w-full p-2.5 border rounded"
@@ -315,6 +497,8 @@ export default function EditRequest(props) {
             Section <span style={{ color: "red" }}>*</span>
           </label>
           <select
+            ref={(el) => (inputRefs.current[2] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 2)}
             value={formData.selectedSection}
             name="selectedSection"
             className="mt-1 w-full p-2.5 border rounded"
@@ -333,19 +517,24 @@ export default function EditRequest(props) {
       </div>
 
       <div className="inline relative mb-4 ">
-        <select
+        <input
+          ref={(el) => (inputRefs.current[3] = el)}
+          onKeyDown={(e) => handleKeyDown(e, 3)}
           name="stationID"
           value={formData.stationID}
           className="mt-1 p-2 w-[535px] rounded-md"
           onChange={handleChange}
-        >
-          <option className="block text-sm font-medium " value={""}>
+          placeholder="Select Block Section"
+          // disabled={true}
+          readOnly
+        />
+        {/* <option className="block text-sm font-medium " value={""}>
             Select Block Section
           </option>
           <option className="block text-sm font-medium " value={"Section/Yard"}>
             Section/Yard
-          </option>
-        </select>
+          </option> */}
+        {/* </select> */}
 
         <div className="absolute w-[538px] top-[-20px] left-[552px] mb-4">
           <MultipleSelect
@@ -361,6 +550,8 @@ export default function EditRequest(props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
         <select
+          ref={(el) => (inputRefs.current[5] = el)}
+          onKeyDown={(e) => handleKeyDown(e, 5)}
           value={formData.workType}
           name="workType"
           className="mt-1 p-2 rounded-md"
@@ -403,6 +594,8 @@ export default function EditRequest(props) {
           />
         ) : (
           <select
+            ref={(el) => (inputRefs.current[6] = el)}
+            onKeyDown={(e) => handleKeyDown(e, 6)}
             name="workDescription"
             className="mt-1 w-full p-2.5 border rounded z-1000"
             onChange={handleChange}
@@ -444,44 +637,84 @@ export default function EditRequest(props) {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium">
-            Line <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            name="selectedLine"
-            value={formData.selectedLine}
-            className="mt-1 w-full p-2 border rounded"
-            onChange={handleChange}
-          >
-            <option value={""}>Select Line</option>
-            {/* {blockGenerator().map((element, ind) => {
-              return element.lines.map((e) => {
-                if (element.block === formData.missionBlock) {
-                  return (
-                    <option value={e} key={ind}>
-                      {e}
-                    </option>
-                  );
-                }
-              });
-            })} */}
-            {getTheList().map((e) => {
-              return (
-                <option value={e} key={e}>
-                  {e}
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
+        {getMissionBlock().map((ele) => {
+          const arr = ele?.split("-").map((name) => name.trim());
+          const value = getLineSectionValue(ele, arr);
+          console.log(value);
+          return (
+            <div>
+              {ele.split("-")[1] === "YD" && (
+                <div>
+                  <label className="block text-sm font-medium">
+                    Stream for {ele}
+                    <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <select
+                    name="selectedStream"
+                    value={formData.selectedStream}
+                    className="mt-1 w-full p-2 border rounded"
+                    onChange={handleChange}
+                  >
+                    <option value={""}>Select Stream</option>
+                    <option value={"Upstream"}>Up Stream</option>
+                    <option value={"Downstream"}>Down Stream</option>
+                    <option value={"Both"}>Both</option>
+                  </select>
+                </div>
+              )}
+              <label className="block mt-3 text-sm font-medium">
+                {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <select
+                name="selectedLine"
+                ref={(el) => (inputRefs.current[5] = el)}
+                onKeyDown={(e) => handleKeyDown(e, 5)}
+                value={value}
+                className="mt-1 w-full p-2 border rounded"
+                onChange={handleChange}
+              >
+                <option value={""}>
+                  Select {arr?.includes("YD") ? `Road ` : `Line `}
                 </option>
-              );
-            })}
-          </select>
-        </div>
+                {getTheList(ele).map((e) => {
+                  console.log(formData.selectedStream);
+                  if (e.road_no) {
+                    if (e.direction === formData.selectedStream) {
+                      return (
+                        <>
+                          <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                            {e.road_no}
+                          </option>
+                        </>
+                      );
+                    }
+                  } else {
+                    return (
+                      <>
+                        <option value={`${ele}:${e}`} key={e}>
+                          {e}
+                        </option>
+                      </>
+                    );
+                  }
+                })}
+              </select>
+            </div>
+          );
+        })}
+
         <div>
           {formData.selectedDepartment === "ENGG" && (
-            <label className="block text-sm font-medium">Work location</label>
+            <label className="block text-sm font-medium">
+              Work location <span style={{ color: "red" }}>*</span>
+            </label>
           )}
           {formData.selectedDepartment === "SIG" && (
-            <label className="block text-sm font-medium">Route </label>
+            <label className="block text-sm font-medium">
+              Route <span style={{ color: "red" }}>*</span>
+            </label>
           )}
           {formData.selectedDepartment === "TRD" && (
             <label className="block text-sm font-medium">
@@ -749,52 +982,68 @@ export default function EditRequest(props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium">
-                  {formData.selectedDepartment === "SIG"
-                    ? "Gear"
+                  {formData.selectedDepartment === "SIG" ||
+                  formData.selectedDepartment === "ENGG"
+                    ? "Line"
                     : "Elementary section"}{" "}
                   <span style={{ color: "red" }}>*</span>
                 </label>
-                <div className="flex space-x-2">
+                {formData.selectedDepartment === "SIG" ? (
                   <input
                     type="text"
                     value={formData.sigElementarySectionFrom}
                     name="sigElementarySectionFrom"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="from"
+                    className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
                     onChange={handleChange}
                   />
-                  <input
-                    type="text"
-                    value={formData.sigElementarySectionTo}
-                    name="sigElementarySectionTo"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="to"
-                    onChange={handleChange}
-                  />
-                </div>
+                ) : (
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={formData.sigElementarySectionFrom}
+                      name="sigElementarySectionFrom"
+                      className="mt-1 w-1/2 p-2 border rounded"
+                      placeholder="from"
+                      onChange={handleChange}
+                    />
+                    <input
+                      type="text"
+                      value={formData.sigElementarySectionTo}
+                      name="sigElementarySectionTo"
+                      className="mt-1 w-1/2 p-2 border rounded"
+                      placeholder="to"
+                      onChange={handleChange}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       )}
       {/* Other Affected Lines */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Other affected lines
-        </label>
-        {/* <select
-          value={formData.otherLinesAffected}
-          name="otherLinesAffected"
-          className="mt-1 w-full p-2 border rounded"
-          onChange={handleChange}
-        ></select> */}
-      </div>
-      <MultipleSelect
-        items={getTheList().filter((item) => item !== formData.selectedLine)}
-        value={formData.otherLinesAffected}
-        setFormData={setFormData}
-        name="otherLinesAffected"
-      />
+      {getMissionBlock().map((ele) => {
+        // console.log(getTheList(ele));
+        const arr = ele?.split("-").map((name) => name.trim());
+        return (
+          <div className="mb-4">
+            <label className="block text-sm font-medium">
+              Other affected
+              {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
+            </label>
+            <MultipleSelectOld
+              items={getTheListFilter(ele)}
+              value={formData.otherLinesAffected}
+              setFormData={setFormData}
+              formData={formData}
+              name="otherLinesAffected"
+              ele={ele}
+              flag={arr?.includes("YD") ? true : false}
+            />
+          </div>
+        );
+      })}
+
       <div className="mb-4 mt-2">
         <label className="block text-sm font-medium">Remarks</label>
         <textarea
@@ -805,7 +1054,6 @@ export default function EditRequest(props) {
           className="mt-2 p-2 w-full border border-slate-950 rounded"
         />
       </div>
-
       {/* Submit Button */}
       <div className="flex justify-center">
         <button

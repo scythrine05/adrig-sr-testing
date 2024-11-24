@@ -1,6 +1,7 @@
 "use client";
 import { ChangeEvent, useEffect, useState, useRef } from "react";
 import { postFormData } from "../../../app/actions/formdata";
+import { postStagingFormData } from "../../../app/actions/stagingform";
 import { getUserId } from "../../../app/actions/user";
 import { sectionData, machine, work, data, workData } from "../../../lib/store";
 import MultipleSelect from "./MultipleSelect";
@@ -15,10 +16,7 @@ export default function RequestForm2(props) {
   const router = useRouter();
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
-  // const [lineData, setLineData] = useState({
-  //   station: [],
-  //   yard: [],
-  // });
+
   const [formData, setFormData] = useState({
     date: "",
     selectedDepartment: "",
@@ -30,7 +28,7 @@ export default function RequestForm2(props) {
       station: [],
       yard: [],
     },
-    stream: "",
+    selectedStream: "",
     missionBlock: "",
     cautionRequired: "",
     cautionSpeed: "",
@@ -153,7 +151,10 @@ export default function RequestForm2(props) {
         // console.log(yard);
         if (yard.station_code === arr[0]) {
           // result = yard.roads;
-          result = yard.roads.map((item) => item.road_no);
+          result = yard.roads.filter(
+            (item) => item?.direction === formData.selectedStream
+          );
+          result = result.map((item) => item.road_no);
           const indexToFilterOut = result.findIndex(
             (item) => item === commondata
           );
@@ -184,15 +185,15 @@ export default function RequestForm2(props) {
     const arr = missionBlock?.split("-").map((name) => name.trim());
     // console.log(arr);
     if (arr?.includes("YD")) {
-      const found = formData.selectedLine.yard.find((item) =>
-        item?.startsWith(`${missionBlock}:`)
-      );
-      const commondata = found ? found.split(":")[1] : null;
+      // const found = formData.selectedLine.yard.find((item) =>
+      //   item?.startsWith(`${missionBlock}:`)
+      // );
+      // const commondata = found ? found.split(":")[1] : null;
       yardData.stations.map((yard) => {
         // console.log(yard);
         if (yard.station_code === arr[0]) {
-          // result = yard.roads;
-          result = yard.roads.map((item) => item.road_no);
+          result = yard.roads;
+          // result = yard.roads.map((item) => item.road_no);
         }
       });
     } else {
@@ -380,7 +381,7 @@ export default function RequestForm2(props) {
             }
             formData.workDescription = "Other Entry" + ":" + otherData;
           }
-          const res = await postFormData(formData, UserData?.id);
+          const res = await postStagingFormData(formData, UserData?.id);
           console.log(res);
           setFormData({
             date: "",
@@ -393,7 +394,7 @@ export default function RequestForm2(props) {
               station: [],
               yard: [],
             },
-            stream: "",
+            selectedStream: "",
             missionBlock: "",
             cautionRequired: "",
             cautionSpeed: "",
@@ -495,22 +496,24 @@ export default function RequestForm2(props) {
       </div>
 
       <div className="inline relative mb-4 ">
-        <select
+        <input
           ref={(el) => (inputRefs.current[3] = el)}
           onKeyDown={(e) => handleKeyDown(e, 3)}
           name="stationID"
           value={formData.stationID}
           className="mt-1 p-2 w-[535px] rounded-md"
           onChange={handleChange}
-          disabled={true}
-        >
-          <option className="block text-sm font-medium " value={""}>
+          placeholder="Select Block Section"
+          // disabled={true}
+          readOnly
+        />
+        {/* <option className="block text-sm font-medium " value={""}>
             Select Block Section
           </option>
           <option className="block text-sm font-medium " value={"Section/Yard"}>
             Section/Yard
-          </option>
-        </select>
+          </option> */}
+        {/* </select> */}
 
         <div className="absolute w-[538px] top-[-20px] left-[552px] mb-4">
           <MultipleSelect
@@ -620,7 +623,26 @@ export default function RequestForm2(props) {
           console.log(value);
           return (
             <div>
-              <label className="block text-sm font-medium">
+              {ele.split("-")[1] === "YD" && (
+                <div>
+                  <label className="block text-sm font-medium">
+                    Stream for {ele}
+                    <span style={{ color: "red" }}>*</span>
+                  </label>
+                  <select
+                    name="selectedStream"
+                    value={formData.selectedStream}
+                    className="mt-1 w-full p-2 border rounded"
+                    onChange={handleChange}
+                  >
+                    <option value={""}>Select Stream</option>
+                    <option value={"Upstream"}>Up Stream</option>
+                    <option value={"Downstream"}>Down Stream</option>
+                    <option value={"Both"}>Both</option>
+                  </select>
+                </div>
+              )}
+              <label className="block mt-3 text-sm font-medium">
                 {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
                 <span style={{ color: "red" }}>*</span>
               </label>
@@ -636,14 +658,17 @@ export default function RequestForm2(props) {
                   Select {arr?.includes("YD") ? `Road ` : `Line `}
                 </option>
                 {getTheList(ele).map((e) => {
+                  console.log(formData.selectedStream);
                   if (e.road_no) {
-                    return (
-                      <>
-                        <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                          {e.road_no}
-                        </option>
-                      </>
-                    );
+                    if (e.direction === formData.selectedStream) {
+                      return (
+                        <>
+                          <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                            {e.road_no}
+                          </option>
+                        </>
+                      );
+                    }
                   } else {
                     return (
                       <>
@@ -655,36 +680,18 @@ export default function RequestForm2(props) {
                   }
                 })}
               </select>
-
-              {ele.split("-")[1] === "YD" && (
-                <div className="mt-3">
-                  <label className="block text-sm font-medium">
-                    Stream for {ele}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <select
-                    name="upstream"
-                    // value={formData.selectedLine}
-                    className="mt-1 w-full p-2 border rounded"
-                    // onChange={handleChange}
-                  >
-                    <option value={""}>Select Stream</option>
-                    <option value={"Upstream"}>Up Stream</option>
-                    <option value={"Downstream"}>Down Stream</option>
-                    <option value={"Both"}>Both</option>
-                  </select>
-                </div>
-              )}
             </div>
           );
         })}
 
         <div>
           {formData.selectedDepartment === "ENGG" && (
-            <label className="block text-sm font-medium">Work location</label>
+            <label className="block text-sm font-medium">
+              Work location <span style={{ color: "red" }}>*</span>
+            </label>
           )}
           {formData.selectedDepartment === "SIG" && (
-            <label className="block text-sm font-medium">Route </label>
+            <label className="block text-sm font-medium">Route</label>
           )}
           {formData.selectedDepartment === "TRD" && (
             <label className="block text-sm font-medium">
@@ -1005,6 +1012,7 @@ export default function RequestForm2(props) {
               items={getTheListFilter(ele)}
               value={formData.otherLinesAffected}
               setFormData={setFormData}
+              formData={formData}
               name="otherLinesAffected"
               ele={ele}
               flag={arr?.includes("YD") ? true : false}

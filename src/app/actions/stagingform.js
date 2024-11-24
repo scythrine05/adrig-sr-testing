@@ -1,8 +1,8 @@
 "use server";
 import prisma from "../../lib/prisma";
 
-export async function postFormData(formData) {
-  const res = await prisma.requests.create({
+export async function postStagingFormData(formData, userId) {
+  const res = await prisma.StagingRequests.create({
     data: {
       date: formData.date,
       selectedDepartment: formData.selectedDepartment,
@@ -30,7 +30,7 @@ export async function postFormData(formData) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       requestremarks: formData.requestremarks,
-      userId: formData.userId,
+      userId: userId,
     },
     select: {
       requestId: true,
@@ -41,8 +41,8 @@ export async function postFormData(formData) {
   return res;
 }
 
-export async function updateFormData(formData, requestId) {
-  const res = await prisma.requests.update({
+export async function updateStagingFormData(formData, requestId) {
+  const res = await prisma.StagingRequests.update({
     where: {
       requestId: requestId,
     },
@@ -79,54 +79,33 @@ export async function updateFormData(formData, requestId) {
   return res;
 }
 
-export async function getFormData(id) {
-  const res = await prisma.requests.findMany({ where: { userId: id } });
+export async function getStagingFormData(id) {
+  const res = await prisma.StagingRequests.findMany({ where: { userId: id } });
   return { requestData: res };
 }
 
-export async function getFormDataByRequestId(id) {
-  const res = await prisma.requests.findMany({ where: { requestId: id } });
+export async function getStagingFormDataByRequestId(id) {
+  const res = await prisma.StagingRequests.findMany({
+    where: { requestId: id },
+  });
   return { requestData: res };
 }
 
-export async function getFormDataByDepartment(dept) {
-  const res = await prisma.requests.findMany({
+export async function deleteStagingFormData(id) {
+  const res = await prisma.StagingRequests.delete({
+    where: { requestId: id },
+  });
+  return { requestData: res };
+}
+
+export async function getStagingFormDataByDepartment(dept) {
+  const res = await prisma.StagingRequests.findMany({
     where: { selectedDepartment: dept },
   });
   return res;
 }
 
-export async function getFormDataAll() {
-  const res = await prisma.requests.findMany();
+export async function getStagingFormDataAll() {
+  const res = await prisma.StagingRequests.findMany();
   return { requestData: res };
-}
-
-export async function getAdminFormData(
-  selectedSection,
-  searchDepartment,
-  dateRange
-) {
-  try {
-    const filters = {};
-    if (selectedSection) {
-      filters.stationID = selectedSection;
-    }
-    if (searchDepartment) {
-      filters.selectedDepartment = searchDepartment;
-    }
-    if (dateRange?.from && dateRange?.to) {
-      filters.date = {
-        gte: dateRange.from,
-        lte: dateRange.to,
-      };
-    }
-    const requestData = await prisma.requests.findMany({
-      where: filters,
-    });
-
-    return { res: requestData };
-  } catch (e) {
-    console.log(e);
-    return { error: "failed" };
-  }
 }

@@ -17,6 +17,7 @@ import currentUser, {
   setOptimised,
 } from "../../app/actions/user";
 import { formatData } from "lib/utils";
+import { getStagingFormData } from "app/actions/stagingform";
 
 export default function UserRequests({ date }) {
   const [requests, setRequests] = useState([]);
@@ -43,8 +44,13 @@ export default function UserRequests({ date }) {
         }
         const formDataResponse = await getFormData(userIdResponse.id);
         // console.log(formDataResponse);
-        const formattedData = formatData(formDataResponse.requestData);
-        // console.log(formattedData);
+        const stagingFormData = await getStagingFormData(userIdResponse.id);
+        console.log(stagingFormData);
+        const finalData = formDataResponse.requestData.concat(
+          stagingFormData.requestData
+        );
+        const formattedData = formatData(finalData);
+        console.log(formattedData);
         setRequests(formattedData);
         // if (!date) {
         //   const result = filterByRecentDates(formDataResponse.requestData);
@@ -95,7 +101,13 @@ export default function UserRequests({ date }) {
   };
 
   if (showPopup) {
-    return <EditRequest request={currentReq} setShowPopup={setShowPopup} />;
+    return (
+      <EditRequest
+        request={currentReq}
+        setShowPopup={setShowPopup}
+        flag={false}
+      />
+    );
   } else {
     return (
       <TableContainer
@@ -131,6 +143,9 @@ export default function UserRequests({ date }) {
               </TableCell>
               <TableCell>
                 <strong>Line Selected</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Stream Selected</strong>
               </TableCell>
               <TableCell>
                 <strong>Caution Required</strong>
@@ -214,6 +229,7 @@ export default function UserRequests({ date }) {
                   <TableCell>{request.workType}</TableCell>
                   <TableCell>{request.workDescription}</TableCell>
                   <TableCell>{request.selectedLine?.split(":")[1]}</TableCell>
+                  <TableCell>{request.selectedStream}</TableCell>
                   <TableCell>{request.cautionRequired}</TableCell>
                   <TableCell>{request.cautionSpeed}</TableCell>
                   <TableCell>{request.cautionLocationFrom}</TableCell>

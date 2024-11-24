@@ -20,8 +20,8 @@ export async function middleware(request) {
 
   const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "/ad/ad-optimised-table"];
   const userRoutes = ["/"];
-
-  if (!request.cookies.get("__Secure-next-auth.session-token")) {
+  // __Secure-next-auth.session-token
+  if (!request.cookies.get("next-auth.session-token")) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);
@@ -29,12 +29,23 @@ export async function middleware(request) {
 
   const userRole = token ? token.role : "";
 
-
   if (pathname === "/") {
     if (userRole === "user") {
       return NextResponse.next();
     } else if (userRole === "admin") {
       return NextResponse.redirect(new URL("/ad/ad-home", request.url));
+    } else if (userRole === "engg") {
+      return NextResponse.redirect(
+        new URL(`/manager/${userRole}`, request.url)
+      );
+    } else if (userRole === "sig") {
+      return NextResponse.redirect(
+        new URL(`/manager/${userRole}`, request.url)
+      );
+    } else if (userRole === "trd") {
+      return NextResponse.redirect(
+        new URL(`/manager/${userRole}`, request.url)
+      );
     } else {
       return NextResponse.redirect(new URL("/signin", request.url));
     }
@@ -44,7 +55,7 @@ export async function middleware(request) {
     if (userRole !== "admin") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
-  }""
+  }
 
   if (userRoutes.includes(pathname)) {
     if (userRole !== "user") {

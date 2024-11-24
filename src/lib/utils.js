@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { split } from "postcss/lib/list";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -24,13 +25,22 @@ export const formatData = (requestData) => {
 
     let subRequestCounter = 0;
 
-    console.log(request);
-
     selectedLineData.station.forEach((station) => {
       const subRequest = { ...request };
       subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
       subRequest.selectedLine = station;
+      subRequest.selectedStream = "Not Applicable";
       subRequest.missionBlock = station.split(":")[0];
+
+      const otherLines = request.otherLinesAffected.station.map((e) => {
+        const key = e?.split(":")[0];
+        if (key == subRequest.missionBlock) {
+          return e?.split(":")[1];
+        }
+      });
+
+      subRequest.otherLinesAffected = otherLines.join(", ");
+
       newRequests.push(subRequest);
     });
 
@@ -39,6 +49,16 @@ export const formatData = (requestData) => {
       subRequest.missionBlock = yard.split(":")[0];
       subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
       subRequest.selectedLine = yard;
+
+      const otherLines = request.otherLinesAffected.yard.map((e) => {
+        const key = e?.split(":")[0];
+        if (key == subRequest.missionBlock) {
+          return e?.split(":")[1];
+        }
+      });
+
+      subRequest.otherLinesAffected = otherLines.join(", ");
+
       newRequests.push(subRequest);
     });
   });
