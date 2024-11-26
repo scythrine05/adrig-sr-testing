@@ -68,7 +68,15 @@ export default function RequestForm2(props) {
   };
 
   useEffect(() => {
-    // console.log(getTheList("VLK-YD"));
+    const fxn = async () => {
+      const UserData = await getUserId(props.user?.user);
+      if (UserData == null || UserData == undefined || UserData.id == null) {
+        return;
+      } else {
+        formData.selectedDepartment = UserData.department;
+      }
+    };
+    fxn();
   }, [formData]);
 
   const formValidation = (value) => {
@@ -83,8 +91,17 @@ export default function RequestForm2(props) {
       res.missionBlock ||
       res.demandTimeFrom ||
       res.demandTimeTo ||
-      (formData.selectedDepartment != "TRD" &&
-        (res.sigDisconnection || res.ohDisconnection || res.cautionRequired))
+      res.sigDisconnection ||
+      res.ohDisconnection ||
+      res.cautionRequired ||
+      res.cautionLocationFrom ||
+      res.cautionLocationTo ||
+      res.cautionSpeed ||
+      res.elementarySectionFrom ||
+      res.elementarySectionTo ||
+      res.sigElementarySectionFrom ||
+      (value.selectedDepartment === "ENGG" && res.sigElementarySectionTo) ||
+      (value.selectedDepartment === "ENGG" && res.repercussions)
     ) {
       return false;
     } else {
@@ -366,9 +383,16 @@ export default function RequestForm2(props) {
       return;
     } else {
       const UserData = await getUserId(props.user?.user);
-      if (UserData == null || UserData == undefined || UserData.id == null) {
+      console.log(UserData);
+      if (
+        UserData == null ||
+        UserData == undefined ||
+        UserData.id == null ||
+        UserData.manager === ""
+      ) {
         return;
       } else {
+        console.log(formValidation(formData));
         if (formValidation(formData) == true) {
           if (formData.workDescription === "others") {
             if (otherData === "") {
@@ -464,6 +488,7 @@ export default function RequestForm2(props) {
             name="selectedDepartment"
             className="mt-1 w-full p-2.5 border rounded"
             onChange={handleChange}
+            disabled
           >
             <option value={""}>Select department </option>
             <option value={"ENGG"}>ENGG</option>
@@ -686,9 +711,7 @@ export default function RequestForm2(props) {
 
         <div>
           {formData.selectedDepartment === "ENGG" && (
-            <label className="block text-sm font-medium">
-              Work location <span style={{ color: "red" }}>*</span>
-            </label>
+            <label className="block text-sm font-medium">Work location</label>
           )}
           {formData.selectedDepartment === "SIG" && (
             <label className="block text-sm font-medium">Route</label>

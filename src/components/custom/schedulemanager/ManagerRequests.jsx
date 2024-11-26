@@ -7,11 +7,16 @@ import {
 import React, { useEffect, useState } from "react";
 import EditRequest from "../EditRequest";
 import {
+  getManagerId,
   getUserById,
   getUserByName,
+  getUserId,
   getUserName,
   getUsersByDept,
+  getUserUnderManager,
 } from "app/actions/user";
+
+import { useSession } from "next-auth/react";
 
 const RequestList = ({
   requests,
@@ -158,6 +163,7 @@ const ManagerRequests = ({ id }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
 
+  const { data: session, status } = useSession();
   useEffect(() => {
     async function fetchData() {
       try {
@@ -165,6 +171,17 @@ const ManagerRequests = ({ id }) => {
           id.toUpperCase()
         );
 
+        console.log(session);
+
+        const ManagerId = await getManagerId(session?.user?.email);
+
+        console.log(ManagerId);
+
+        const userIdUnderManager = await getUserUnderManager(ManagerId);
+
+        const filteredRequests = formDataResponse?.filter((e) =>
+          userIdUnderManager?.includes(e?.userId)
+        );
         const uniqueUserIds = [
           ...new Set(formDataResponse.map((e) => e.userId)),
         ];
@@ -178,13 +195,13 @@ const ManagerRequests = ({ id }) => {
         }));
 
         setUsers(userList);
-        setRequests(formDataResponse);
+        setRequests(filteredRequests);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchData();
-  }, [id]);
+  }, [id, status]);
 
   const handleSelectRequest = (request) => {
     setSelectedRequest(request);

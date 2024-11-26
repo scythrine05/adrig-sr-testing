@@ -21,7 +21,7 @@ export default function validateForm(values) {
     errors.missionBlock = "Mission Block is required";
   }
 
-  if (!values.workType) {
+  if (!values.workType || values.workType === "") {
     errors.workType = "Work Type is required";
   }
 
@@ -67,26 +67,26 @@ export default function validateForm(values) {
 
   if (values.sigDisconnection === "") {
     errors.sigDisconnection = "Signal Disconnection is required";
+  } else if (values.sigDisconnection === "Yes") {
+    if (!values.sigElementarySectionFrom) {
+      errors.sigElementarySectionFrom = "Elementary Section From is required";
+    }
+
+    if (!values.sigElementarySectionTo) {
+      errors.sigElementarySectionTo = "Elementary Section To is required";
+    }
   }
 
   if (values.ohDisconnection === "") {
     errors.ohDisconnection = "O/H Disconnection is required";
-  }
+  } else if (values.ohDisconnection === "Yes") {
+    if (!values.elementarySectionFrom) {
+      errors.elementarySectionFrom = "Elementary Section From is required";
+    }
 
-  if (!values.elementarySectionFrom) {
-    errors.elementarySectionFrom = "Elementary Section From is required";
-  }
-
-  if (!values.elementarySectionTo) {
-    errors.elementarySectionTo = "Elementary Section To is required";
-  }
-
-  if (!values.sigElementarySectionFrom) {
-    errors.sigElementarySectionFrom = "Elementary Section From is required";
-  }
-
-  if (!values.sigElementarySectionTo) {
-    errors.sigElementarySectionTo = "Elementary Section To is required";
+    if (!values.elementarySectionTo) {
+      errors.elementarySectionTo = "Elementary Section To is required";
+    }
   }
 
   if (!values.repercussions) {

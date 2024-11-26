@@ -32,14 +32,15 @@ export const formatData = (requestData) => {
       subRequest.selectedStream = "Not Applicable";
       subRequest.missionBlock = station.split(":")[0];
 
-      const otherLines = request.otherLinesAffected.station.map((e) => {
+      const otherLines = request.otherLinesAffected?.station?.map((e) => {
         const key = e?.split(":")[0];
         if (key == subRequest.missionBlock) {
           return e?.split(":")[1];
         }
       });
 
-      subRequest.otherLinesAffected = otherLines.join(", ");
+      subRequest.otherLinesAffected =
+        otherLines != undefined ? otherLines.join(", ") : otherLines;
 
       newRequests.push(subRequest);
     });
@@ -50,14 +51,15 @@ export const formatData = (requestData) => {
       subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
       subRequest.selectedLine = yard;
 
-      const otherLines = request.otherLinesAffected.yard.map((e) => {
+      const otherLines = request.otherLinesAffected?.yard?.map((e) => {
         const key = e?.split(":")[0];
         if (key == subRequest.missionBlock) {
           return e?.split(":")[1];
         }
       });
 
-      subRequest.otherLinesAffected = otherLines.join(", ");
+      subRequest.otherLinesAffected =
+        otherLines != undefined ? otherLines.join(", ") : otherLines;
 
       newRequests.push(subRequest);
     });

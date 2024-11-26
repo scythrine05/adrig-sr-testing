@@ -64,15 +64,15 @@ export function SidebarManagerMenu() {
             <span>Request Table</span>
           </Link>
 
-          {/* <Link
-            href={`/manager/${id[0]}/optmised`}
+          <Link
+            href={`/manager/${id[0]}/optimised`}
             className={`flex items-center hover:bg-secondary-foreground rounded-full p-4 font-semibold ease-in-out duration-300 w-full 
-              ${pathname === `/manager/${id[0]}/optmised` && "bg-primary"}
+              ${pathname === `/manager/${id[0]}/optimised` && "bg-primary"}
               `}
           >
             <CalendarCheck className="w-4 h-4 mr-2" />
             <span>Optimised Table</span>
-          </Link> */}
+          </Link>
         </nav>
       </div>
       <div className="px-2 w-[90%] mx-auto py-4 border-t-2 border-secondary-foreground flex flex-col items-start space-y-2">

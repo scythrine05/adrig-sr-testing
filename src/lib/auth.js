@@ -26,7 +26,7 @@ export const NEXT_AUTH_CONFIG = {
             credentials.password == process.env.ENGG_PASS
           ) {
             return {
-              id: "#EnggManager",
+              id: "#ME01",
               email: credentials.username,
               role: "engg",
             };
@@ -35,7 +35,7 @@ export const NEXT_AUTH_CONFIG = {
             credentials.password == process.env.SIG_PASS
           ) {
             return {
-              id: "#SigManager",
+              id: "#MS01",
               email: credentials.username,
               role: "sig",
             };
@@ -44,7 +44,7 @@ export const NEXT_AUTH_CONFIG = {
             credentials.password == process.env.TRD_PASS
           ) {
             return {
-              id: "#TrdManager",
+              id: "#MT01",
               email: credentials.username,
               role: "trd",
             };

@@ -48,6 +48,25 @@ export async function getUserId(email) {
   return res;
 }
 
+export async function getManagerId(email) {
+  const idMap = new Map();
+  idMap.set(process.env.ENGG_MANAGER, "#ME01");
+  idMap.set(process.env.SIG_MANAGER, "#MS01");
+  idMap.set(process.env.TRD_MANAGER, "#MT01");
+
+  if (idMap.has(email)) {
+    return idMap.get(email);
+  } else {
+    return "";
+  }
+}
+
+export async function getUserUnderManager(managerId) {
+  const res = await prisma.user.findMany({ where: { manager: managerId } });
+  const result = res.map((e) => e?.id);
+  return result;
+}
+
 export async function getUsersByDept(dept) {
   const res = await prisma.user.findMany({
     where: { selectedManager: dept },

@@ -19,6 +19,8 @@ model User {
   username        String            @unique
   password        String
   optimised       String            @default("notset")
+  department      String?           @default("")
+  manager         String?           @default("")
   requests        Requests[]
   StagingRequests StagingRequests[]
 }
