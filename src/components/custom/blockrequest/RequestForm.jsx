@@ -390,6 +390,12 @@ export default function RequestForm2(props) {
         UserData.id == null ||
         UserData.manager === ""
       ) {
+        toast({
+          title: "Invalid User",
+          description:
+            "Request Cannot Be Made Because Of Insufficent User Details",
+          variant: "destructive",
+        });
         return;
       } else {
         console.log(formValidation(formData));
