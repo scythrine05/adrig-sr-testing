@@ -100,8 +100,10 @@ export default function RequestForm2(props) {
       res.elementarySectionFrom ||
       res.elementarySectionTo ||
       res.sigElementarySectionFrom ||
-      (value.selectedDepartment === "ENGG" && res.sigElementarySectionTo) ||
-      (value.selectedDepartment === "ENGG" && res.repercussions)
+      (value.selectedDepartment === "ENGG" &&
+        value.sigDisconnection === "Yes" &&
+        res.sigElementarySectionTo) ||
+      (value.selectedDepartment === "TRD" && res.repercussions)
     ) {
       return false;
     } else {
