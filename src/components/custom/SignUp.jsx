@@ -29,6 +29,7 @@ export function SignUp() {
     username: "",
     password: "",
     confirmPassword: "",
+    department: "",
     agreeTerms: false,
   });
 
@@ -112,7 +113,8 @@ export function SignUp() {
       if (
         formValues.name == "" ||
         formValues.username == "" ||
-        formValues.password == ""
+        formValues.password == "" ||
+        formValues.department == ""
       ) {
         toast({
           title: "Failed",
@@ -194,7 +196,8 @@ export function SignUp() {
         const res = await sendUserData(
           formValues.name,
           formValues.username,
-          formValues.password
+          formValues.password,
+          formValues.department
         );
         setLoading(false);
         console.log(res);
@@ -353,7 +356,9 @@ export function SignUp() {
                       required
                     >
                       <option value="">Select a department</option>
-                      <option value="Management">Management</option>
+                      <option value="ENGG">ENGG</option>
+                      <option value="SIG">SIG</option>
+                      <option value="TRD">TRD</option>
                     </select>
                   </div>
                   <div className="mb-4">

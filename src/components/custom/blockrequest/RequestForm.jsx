@@ -386,12 +386,7 @@ export default function RequestForm2(props) {
     } else {
       const UserData = await getUserId(props.user?.user);
       console.log(UserData);
-      if (
-        UserData == null ||
-        UserData == undefined ||
-        UserData.id == null ||
-        UserData.manager === ""
-      ) {
+      if (UserData == null || UserData == undefined || UserData.id == null) {
         toast({
           title: "Invalid User",
           description:

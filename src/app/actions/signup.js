@@ -3,9 +3,11 @@
 import prisma from "../../lib/prisma";
 import { error } from "console";
 
-export const sendUserData = async (name, username, password) => {
+export const sendUserData = async (name, username, password, department) => {
   try {
-    const res = prisma.user.create({ data: { name, username, password } });
+    const res = prisma.user.create({
+      data: { name, username, password, department },
+    });
     return {
       message: "The user has been created sucessfully",
       success: true,
