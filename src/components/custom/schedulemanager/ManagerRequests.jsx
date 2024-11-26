@@ -182,11 +182,9 @@ const ManagerRequests = ({ id }) => {
         const filteredRequests = formDataResponse?.filter((e) =>
           userIdUnderManager?.includes(e?.userId)
         );
-        const uniqueUserIds = [
-          ...new Set(formDataResponse.map((e) => e.userId)),
-        ];
+
         const userResponses = await Promise.all(
-          uniqueUserIds.map((userId) => getUserById(userId))
+          userIdUnderManager.map((userId) => getUserById(userId))
         );
 
         const userList = userResponses.map((user) => ({
