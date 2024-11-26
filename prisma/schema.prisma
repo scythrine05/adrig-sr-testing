@@ -126,7 +126,7 @@ model Sanctiontable {
   sigElementarySectionFrom String
   sigElementarySectionTo   String
   repercussions            String
-  otherLinesAffected       Json
+  otherLinesAffected       Json?
   requestremarks           String
   final                    String?
   userId                   Int
