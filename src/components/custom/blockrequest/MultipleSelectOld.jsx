@@ -76,10 +76,6 @@ const MultipleSelectOld = (props) => {
     }
   };
 
-  // Debug logging
-  // console.log("Current selectedItems:", selectedItems);
-  // console.log("Form data:", props.formData);
-
   return (
     <div className="autocomplete-wrapper">
       <div className="autocomplete">

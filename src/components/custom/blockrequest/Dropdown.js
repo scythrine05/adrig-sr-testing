@@ -4,7 +4,6 @@ const Dropdown = ({ list, addItem, selectedItems, searchTag, limit }) => {
   const [dropDownList, setDropdownList] = useState(list);
 
   useEffect(() => {
-    console.log(dropDownList);
     if (searchTag != "") {
       setDropdownList(list.filter((e) => e.includes(searchTag.toUpperCase())));
     } else {

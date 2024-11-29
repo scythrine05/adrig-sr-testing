@@ -100,9 +100,6 @@ export async function userCheck(username, password) {
   manager_password.set(manager_array[1], process.env.SIG_PASS);
   // manager_password.set(manager_array[2], process.env.TRD_PASS);
 
-  console.log(manager_password);
-  console.log(manager_array);
-
   if (manager_array.includes(username)) {
     if (manager_password.get(username) !== password) {
       return { success: false, error: "Password Does Not Match" };

@@ -26,7 +26,6 @@ export function SidebarMenu() {
     const fetchOptimizedCheck = async () => {
       try {
         const user = await currentUser();
-        console.log(user);
 
         const response = await currentOptimizedValue(user.user);
         setOptimizedCheck(response);

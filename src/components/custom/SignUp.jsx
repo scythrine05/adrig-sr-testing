@@ -37,7 +37,6 @@ export function SignUp() {
 
   const handleVerifyOtp = async () => {
     const res = await verifyHandler(formValues.username, otp, code);
-    console.log(res);
     if (res.success != true) {
       return false;
     } else {
@@ -159,7 +158,6 @@ export function SignUp() {
         }
         setLoading(true);
         const result = await getGeneratedOtp(formValues.username);
-        console.log(result);
         setView(true);
         setLoading(false);
         startTimer(10);
@@ -187,7 +185,6 @@ export function SignUp() {
   const clickHandler = async () => {
     try {
       setLoading(true);
-      console.log(formValues);
 
       const valid = await handleVerifyOtp();
 
@@ -200,7 +197,6 @@ export function SignUp() {
           formValues.department
         );
         setLoading(false);
-        console.log(res);
         if (!res?.error) {
           toast({
             title: "User Created",

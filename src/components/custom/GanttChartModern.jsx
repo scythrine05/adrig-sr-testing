@@ -83,10 +83,6 @@ const groupStations = (stations) => {
 const groupDataByStations = (stations, data, section, date) => {
   const grouped = {};
 
-  // console.log(stations);
-  // console.log(data);
-  // console.log(section);
-
   stations.forEach((e) => {
     grouped[e.block] = {
       stationName: e.block,
@@ -97,7 +93,6 @@ const groupDataByStations = (stations, data, section, date) => {
   if (date != null || date != "") {
     data.forEach((element) => {
       if (element.selectedSection === section) {
-        console.log("lol");
         let stationName = element.missionBlock
           .split(",")
           .map((name) => name.trim());
@@ -112,7 +107,6 @@ const groupDataByStations = (stations, data, section, date) => {
   } else {
     data.forEach((element) => {
       if (element.selectedSection === section) {
-        console.log("lol");
         let stationName = element.missionBlock
           .split(",")
           .map((name) => name.trim());
@@ -128,15 +122,8 @@ const groupDataByStations = (stations, data, section, date) => {
 };
 
 const StationGantt = ({ station, stationData }) => {
-  // console.log(station);
   const nonClashingRequests = station;
-  // const clashingRequests = station.filter((r) => r.clashed);
   const clashingRequests = station;
-
-  // const handleClick = () => {
-  //   console.log("Non-Clashing Requests:", nonClashingRequests);
-  //   console.log("Clashing Requests:", clashingRequests);
-  // };
 
   return (
     <div className="space-y-2">
@@ -182,7 +169,6 @@ const StationGantt = ({ station, stationData }) => {
 
 export const GanttChartModern = ({ data, stationData, section, date }) => {
   const groupedData = groupDataByStations(stationData, data, section, date);
-  console.log(groupedData);
   return (
     <Card className="rounded-lg">
       <CardHeader>

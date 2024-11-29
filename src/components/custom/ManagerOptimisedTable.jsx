@@ -18,11 +18,9 @@ const ManagerOptmisedTable = ({ id }) => {
     async function fxn() {
       try {
         const res = await getDataOptimised();
-        console.log(res);
         const result = res.result.filter(
           (e) => e.selectedDepartment === id.toUpperCase()
         );
-        console.log(result);
         setFilteredRequests(result);
       } catch (e) {
         console.log(e);

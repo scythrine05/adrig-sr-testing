@@ -6,9 +6,6 @@ import { useToast } from "../../../components/ui/use-toast";
 function EditOptimised({ request, setShowPopup }) {
   const { toast } = useToast();
 
-  useEffect(() => {
-    console.log(request);
-  });
   const [formData, setFormData] = useState({
     date: request.date,
     department: request.selectedDepartment,

@@ -122,7 +122,6 @@ export default function RequestForm2(props) {
     if (formData.stationID != "" && formData.selectedSection != "") {
       for (let section of data.sections) {
         if (formData.selectedSection == section.name) {
-          // console.log(formData.selectedSection);
           // if (formData.stationID === "Section") {
           //   return section.section_blocks;
           // } else if (formData.stationID === "Station") {
@@ -143,7 +142,16 @@ export default function RequestForm2(props) {
   const getTheListForYard = () => {
     const res = [];
     blockGenerator().map((element, inf) => {
-      res.push(element.block);
+      const arr = element?.block?.split("-").map((name) => name.trim());
+      if (arr?.includes("YD")) {
+        yardData.stations.map((e) => {
+          if (e.station_code === arr[0]) {
+            res.push(element.block);
+          }
+        });
+      } else {
+        res.push(element.block);
+      }
     });
     return res;
   };
@@ -160,16 +168,13 @@ export default function RequestForm2(props) {
   const getTheListFilter = (missionBlock) => {
     let result = [];
     const arr = missionBlock?.split("-").map((name) => name.trim());
-    // console.log(arr);
     if (arr?.includes("YD")) {
       const found = formData.selectedLine.yard.find((item) =>
         item?.startsWith(`${missionBlock}:`)
       );
       const commondata = found ? found.split(":")[1] : null;
       yardData.stations.map((yard) => {
-        // console.log(yard);
         if (yard.station_code === arr[0]) {
-          // result = yard.roads;
           result = yard.roads.filter(
             (item) => item?.direction === formData.selectedStream
           );
@@ -202,14 +207,12 @@ export default function RequestForm2(props) {
   const getTheList = (missionBlock) => {
     let result = [];
     const arr = missionBlock?.split("-").map((name) => name.trim());
-    // console.log(arr);
     if (arr?.includes("YD")) {
       // const found = formData.selectedLine.yard.find((item) =>
       //   item?.startsWith(`${missionBlock}:`)
       // );
       // const commondata = found ? found.split(":")[1] : null;
       yardData.stations.map((yard) => {
-        // console.log(yard);
         if (yard.station_code === arr[0]) {
           result = yard.roads;
           // result = yard.roads.map((item) => item.road_no);
@@ -339,7 +342,6 @@ export default function RequestForm2(props) {
         };
       } else {
         const [newKey] = value.split(":");
-        console.log(newKey);
         formData.selectedLine = {
           ...formData.selectedLine,
           station: [
@@ -380,12 +382,10 @@ export default function RequestForm2(props) {
   };
 
   const formSubmitHandler = async () => {
-    console.log(formData);
     if (props.user == undefined || props.user?.user == undefined) {
       return;
     } else {
       const UserData = await getUserId(props.user?.user);
-      console.log(UserData);
       if (UserData == null || UserData == undefined || UserData.id == null) {
         toast({
           title: "Invalid User",
@@ -395,7 +395,6 @@ export default function RequestForm2(props) {
         });
         return;
       } else {
-        console.log(formValidation(formData));
         if (formValidation(formData) == true) {
           if (formData.workDescription === "others") {
             if (otherData === "") {
@@ -409,7 +408,6 @@ export default function RequestForm2(props) {
             formData.workDescription = "Other Entry" + ":" + otherData;
           }
           const res = await postStagingFormData(formData, UserData?.id);
-          console.log(res);
           setFormData({
             date: "",
             selectedDepartment: "",
@@ -648,7 +646,6 @@ export default function RequestForm2(props) {
         {getMissionBlock().map((ele) => {
           const arr = ele?.split("-").map((name) => name.trim());
           const value = getLineSectionValue(ele, arr);
-          console.log(value);
           return (
             <div>
               {ele.split("-")[1] === "YD" && (
@@ -686,7 +683,6 @@ export default function RequestForm2(props) {
                   Select {arr?.includes("YD") ? `Road ` : `Line `}
                 </option>
                 {getTheList(ele).map((e) => {
-                  console.log(formData.selectedStream);
                   if (e.road_no) {
                     if (e.direction === formData.selectedStream) {
                       return (
@@ -1026,7 +1022,6 @@ export default function RequestForm2(props) {
       )}
       {/* Other Affected Lines */}
       {getMissionBlock().map((ele) => {
-        // console.log(getTheList(ele));
         const arr = ele?.split("-").map((name) => name.trim());
         return (
           <div className="mb-4">

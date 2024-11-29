@@ -62,7 +62,6 @@ export async function postBulkOptimised(requestArray) {
     };
   });
 
-  console.log(requestArray);
   const res = await prisma.sanctiontable.createMany({
     data: [...updatedData],
   });

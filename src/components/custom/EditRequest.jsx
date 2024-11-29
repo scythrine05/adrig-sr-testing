@@ -77,19 +77,16 @@ export default function EditRequest(props) {
   }
 
   useEffect(() => {
-    // console.log(getTheList("VLK-YD"));
     if (props.flag) {
       setFormData(props.request);
     } else {
       const res = removeAfterLastDash(props.request.requestId);
-      console.log(res);
       const fxn = async () => {
         const data = await getStagingFormDataByRequestId(res);
         if (data.requestData.length == 0) {
           const oldRequestResult = await getFormDataByRequestId(res);
           setFormData(oldRequestResult.requestData[0]);
         } else {
-          console.log(data);
           setFormData(data.requestData[0]);
         }
       };
@@ -129,14 +126,6 @@ export default function EditRequest(props) {
     if (formData.stationID != "" && formData.selectedSection != "") {
       for (let section of data.sections) {
         if (formData.selectedSection == section.name) {
-          // console.log(formData.selectedSection);
-          // if (formData.stationID === "Section") {
-          //   return section.section_blocks;
-          // } else if (formData.stationID === "Station") {
-          //   return section.station_blocks;
-          // } else {
-          //   return [];
-          // }
           let res = section.section_blocks.concat(section.station_blocks);
           return res;
         }
@@ -167,14 +156,12 @@ export default function EditRequest(props) {
   const getTheListFilter = (missionBlock) => {
     let result = [];
     const arr = missionBlock?.split("-").map((name) => name.trim());
-    // console.log(arr);
     if (arr?.includes("YD")) {
       const found = formData.selectedLine.yard.find((item) =>
         item?.startsWith(`${missionBlock}:`)
       );
       const commondata = found ? found.split(":")[1] : null;
       yardData.stations.map((yard) => {
-        // console.log(yard);
         if (yard.station_code === arr[0]) {
           // result = yard.roads;
           result = yard.roads.filter(
@@ -209,14 +196,12 @@ export default function EditRequest(props) {
   const getTheList = (missionBlock) => {
     let result = [];
     const arr = missionBlock?.split("-").map((name) => name.trim());
-    // console.log(arr);
     if (arr?.includes("YD")) {
       // const found = formData.selectedLine.yard.find((item) =>
       //   item?.startsWith(`${missionBlock}:`)
       // );
       // const commondata = found ? found.split(":")[1] : null;
       yardData.stations.map((yard) => {
-        // console.log(yard);
         if (yard.station_code === arr[0]) {
           result = yard.roads;
           // result = yard.roads.map((item) => item.road_no);
@@ -346,7 +331,6 @@ export default function EditRequest(props) {
         };
       } else {
         const [newKey] = value.split(":");
-        console.log(newKey);
         formData.selectedLine = {
           ...formData.selectedLine,
           station: [
@@ -387,7 +371,6 @@ export default function EditRequest(props) {
   };
 
   const formSubmitHandler = async () => {
-    console.log(formData);
     try {
       if (formValidation(formData) == true) {
         if (formData.workDescription === "others") {
@@ -402,7 +385,7 @@ export default function EditRequest(props) {
           formData.workDescription = "Other Entry" + ":" + otherData;
         }
         const res = await updateStagingFormData(formData, formData.requestId);
-        console.log(res);
+
         setFormData({
           date: "",
           selectedDepartment: "",
@@ -641,7 +624,7 @@ export default function EditRequest(props) {
         {getMissionBlock().map((ele) => {
           const arr = ele?.split("-").map((name) => name.trim());
           const value = getLineSectionValue(ele, arr);
-          console.log(value);
+
           return (
             <div>
               {ele.split("-")[1] === "YD" && (
@@ -679,7 +662,6 @@ export default function EditRequest(props) {
                   Select {arr?.includes("YD") ? `Road ` : `Line `}
                 </option>
                 {getTheList(ele).map((e) => {
-                  console.log(formData.selectedStream);
                   if (e.road_no) {
                     if (e.direction === formData.selectedStream) {
                       return (
@@ -1023,7 +1005,6 @@ export default function EditRequest(props) {
       )}
       {/* Other Affected Lines */}
       {getMissionBlock().map((ele) => {
-        // console.log(getTheList(ele));
         const arr = ele?.split("-").map((name) => name.trim());
         return (
           <div className="mb-4">

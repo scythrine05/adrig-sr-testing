@@ -42,7 +42,6 @@ export default function OptimisedTable() {
           return;
         }
         const formDataResponse = await currentOptimizedData(userIdResponse.id);
-        console.log(formDataResponse);
         setRequests(formDataResponse);
       } catch (error) {
         console.error("Error fetching data:", error);

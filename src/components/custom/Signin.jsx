@@ -36,7 +36,6 @@ export function Signin() {
 
   const handleVerifyOtp = async () => {
     const res = await verifyHandler(formValues.username, otp, code);
-    console.log(res);
     if (res.success != true) {
       return false;
     } else {
@@ -80,7 +79,6 @@ export function Signin() {
         return;
       } else {
         const res = await userCheck(formValues.username, formValues.password);
-        console.log(res);
         if (res.success == false) {
           if (res.error === "No User Exist") {
             toast({
@@ -99,8 +97,6 @@ export function Signin() {
         }
         setLoading(true);
         const result = await getGeneratedOtp(formValues.username);
-
-        console.log(result);
         setView(true);
         setLoading(false);
         startTimer(10);
@@ -147,7 +143,6 @@ export function Signin() {
   const clickHandler = async () => {
     try {
       setLoading(true);
-      console.log(formValues);
 
       const valid = await handleVerifyOtp();
       if (valid) {
@@ -158,7 +153,6 @@ export function Signin() {
         });
 
         setLoading(false);
-        console.log(res);
         if (!res?.error) {
           toast({
             title: "Signed in successfully",

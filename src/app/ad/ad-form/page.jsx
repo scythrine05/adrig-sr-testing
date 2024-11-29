@@ -133,12 +133,9 @@ const SearchForm = () => {
           }
         );
 
-        console.log(res.data);
         const data = filteredRequests;
         const res1 = await deleteOptimizedData();
         const res2 = await postBulkOptimised(res.data.optimizedData);
-
-        // console.log(data);
       } else {
         throw Error("the admin data didnt came");
       }

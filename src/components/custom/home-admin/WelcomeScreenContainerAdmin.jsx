@@ -305,8 +305,6 @@ const WelcomeScreenContainerUser = () => {
                 accept=".csv"
                 onChange={async (event) => {
                   await handleFileChange(event); // First, handle the file upload
-                  console.log("working after");
-
                   await fetchRequestCheck(); // Then, re-fetch the data
                 }}
                 className="hidden"

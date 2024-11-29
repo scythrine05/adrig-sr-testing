@@ -43,14 +43,11 @@ export default function UserRequests({ date }) {
           return;
         }
         const formDataResponse = await getFormData(userIdResponse.id);
-        // console.log(formDataResponse);
         const stagingFormData = await getStagingFormData(userIdResponse.id);
-        console.log(stagingFormData);
         const finalData = formDataResponse.requestData.concat(
           stagingFormData.requestData
         );
         const formattedData = formatData(finalData);
-        console.log(formattedData);
         setRequests(formattedData);
         // if (!date) {
         //   const result = filterByRecentDates(formDataResponse.requestData);
