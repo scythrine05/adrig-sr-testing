@@ -6,7 +6,6 @@ const AddHoc = () => {
   const [isAdHocEnabled, setIsAdHocEnabled] = useState(false);
 
   const handleSwitchChange = async (newState) => {
-    console.log(newState); // Directly logs the new state
     setIsAdHocEnabled(newState);
 
     try {
@@ -24,7 +23,6 @@ const AddHoc = () => {
 
       // Handle response data if needed
       const result = await response.json();
-      console.log("Ad-Hoc status updated:", result);
     } catch (error) {
       console.error("Error updating Ad-Hoc status:", error);
     }

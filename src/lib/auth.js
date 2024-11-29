@@ -13,7 +13,6 @@ export const NEXT_AUTH_CONFIG = {
       },
       async authorize(credentials) {
         try {
-          console.log(credentials);
           if (!credentials?.username || !credentials.password) {
             return null;
           } else if (
@@ -97,6 +96,5 @@ export const NEXT_AUTH_CONFIG = {
 
 export async function getUser() {
   const session = await getServerSession();
-  console.log(session);
   return session;
 }

@@ -79,6 +79,208 @@ export let yardData = {
       ],
     },
     {
+      station_name: "ARAKKONAM Jn AJJ",
+      station_code: "AJJ",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Both",
+          line_name: "UP AND DOWN DOWN MAIN LINE AND UP LOOP LINE",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Both",
+          line_name: "UP AND DOWN UP MAIN LINE AND DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 4",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 5",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 1A",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 10",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 11",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+      ],
+    },
+    {
+      station_name: "KADAMBATTUR KBT",
+      station_code: "KBT",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Down",
+          line_name: "DOWN DOWN SLOW LOOP LINE",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Down",
+          line_name: "DOWN DOWN SLOW MAIN LINE",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Up",
+          line_name: "UP UP SLOW MAIN LINE",
+        },
+        {
+          road_no: "Rd 4",
+          direction: "Both",
+          line_name:
+            "UP AND DOWN UP/DOWN SLOW LOOP LINE AND DOWN FAST LOOP LINE",
+        },
+        {
+          road_no: "Rd 5",
+          direction: "Down",
+          line_name: "DOWN DOWN FAST MAIN LINE",
+        },
+        {
+          road_no: "Rd 6",
+          direction: "Up",
+          line_name: "UP UP FAST MAIN LINE",
+        },
+      ],
+    },
+    {
+      station_name: "TIRUVALANGADU TO",
+      station_code: "TO",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Both",
+          line_name: "UP AND DOWN DOWN SLOW LOOP LINE",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Down",
+          line_name: "DOWN DOWN SLOW MAIN LINE",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Up",
+          line_name: "UP UP SLOW MAIN LINE",
+        },
+        {
+          road_no: "Rd 4",
+          direction: "Both",
+          line_name: "UP AND DOWN UP SLOW LOOP LINE AND DOWN FAST LOOP LINE",
+        },
+        {
+          road_no: "Rd 5",
+          direction: "Down",
+          line_name: "DOWN DOWN FAST MAIN LINE",
+        },
+        {
+          road_no: "Rd 6",
+          direction: "Up",
+          line_name: "UP UP FAST MAIN LINE",
+        },
+        {
+          road_no: "Rd 7",
+          direction: "Up",
+          line_name: "UP UP FAST LOOP LINE",
+        },
+      ],
+    },
+    {
+      station_name: "CHITTERI CTRE",
+      station_code: "CTRE",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Down",
+          line_name: "DOWN DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Down",
+          line_name: "DOWN DOWN MAIN LINE",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Up",
+          line_name: "UP UP MAIN LINE",
+        },
+        {
+          road_no: "Rd 4",
+          direction: "Both",
+          line_name: "UP AND DOWN UP / DOWN LOOP LINE",
+        },
+      ],
+    },
+    {
+      station_name: "ARAKKONAM NORTH",
+      station_code: "AJJN",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Both",
+          line_name: "ALL",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Both",
+          line_name: "ALL",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Both",
+          line_name: "ALL",
+        },
+      ],
+    },
+    {
+      station_name: "MELPAKKAM",
+      station_code: "MLPM",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Both",
+          line_name: "ALL",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Both",
+          line_name: "ALL",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Both",
+          line_name: "ALL",
+        },
+        {
+          road_no: "Rd 4",
+          direction: "Both",
+          line_name: "ALL",
+        },
+        {
+          road_no: "Rd 5",
+          direction: "Both",
+          line_name: "ALL",
+        },
+      ],
+    },
+    {
       station_name: "CHENNAI CENTRAL SUBURBAN",
       station_code: "MASS",
       roads: [

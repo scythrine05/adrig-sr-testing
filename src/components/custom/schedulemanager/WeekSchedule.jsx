@@ -95,8 +95,6 @@ const WeekSchedule = ({ isStationFetching, viewState, setViewState }) => {
   }, [api]);
 
   const handleItemClick = (index, day) => {
-    console.log(`Day: ${JSON.stringify(day)}`);
-
     setCurrent(index);
   };
 

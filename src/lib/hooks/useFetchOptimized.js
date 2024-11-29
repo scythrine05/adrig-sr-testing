@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useFetchOptimized = () => {
   const [data, setData] = useState({});
@@ -8,12 +8,13 @@ const useFetchOptimized = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/read_optimized_requests`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/read_optimized_requests`
+        );
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const result = await response.json();
-        console.log(result);
         setData(result);
       } catch (err) {
         setError(err.message);

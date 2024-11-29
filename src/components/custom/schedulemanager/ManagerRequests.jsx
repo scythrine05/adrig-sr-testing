@@ -171,11 +171,7 @@ const ManagerRequests = ({ id }) => {
           id.toUpperCase()
         );
 
-        console.log(session);
-
         const ManagerId = await getManagerId(session?.user?.email);
-
-        console.log(ManagerId);
 
         const userIdUnderManager = await getUserUnderManager(ManagerId);
 

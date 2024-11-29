@@ -23,7 +23,6 @@ const Crousel = () => {
       try {
         const res = await getFormDataAll();
         const filteredRequests = filterLastFiveHours(res.requestData);
-        console.log(filteredRequests);
         setLatestRequests(filteredRequests);
       } catch (e) {
         console.log(e);

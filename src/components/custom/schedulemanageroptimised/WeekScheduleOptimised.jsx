@@ -3,17 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
 import { GanttChartModern } from "../GanttChartModern";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import moment from "moment"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import moment from "moment";
 import useFetchOptimized from "@/lib/hooks/useFetchOptimized";
 
-
-
-const WeekScheduleOptimised = ({
-  isStationFetching,
-  setIsGanttView,
-}) => {
-    const { data, isLoading, error } = useFetchOptimized();
+const WeekScheduleOptimised = ({ isStationFetching, setIsGanttView }) => {
+  const { data, isLoading, error } = useFetchOptimized();
 
   const [api, setApi] = useState(null);
   const [current, setCurrent] = useState(0);
@@ -22,7 +23,7 @@ const WeekScheduleOptimised = ({
 
   let contentCarousel;
   let contentChart;
-  
+
   if (isLoading) {
     contentCarousel = <div>Loading...</div>;
   } else if (!data || !data.week || !data.week.length) {
@@ -46,9 +47,14 @@ const WeekScheduleOptimised = ({
                 <div className="flex items-center space-x-2">
                   <div className="w-4 aspect-square rounded-full bg-orange-400 animate-pulse"></div>
                   <span className="text-sm font-semibold">
-                    <strong>{day.stations.reduce((acc, curr) => {
-                      return acc + curr.requests.filter(r => r.clashed).length;
-                    }, 0)}</strong> no. of conflicts
+                    <strong>
+                      {day.stations.reduce((acc, curr) => {
+                        return (
+                          acc + curr.requests.filter((r) => r.clashed).length
+                        );
+                      }, 0)}
+                    </strong>{" "}
+                    no. of conflicts
                   </span>
                 </div>
               </div>
@@ -64,9 +70,7 @@ const WeekScheduleOptimised = ({
   } else if (!data || !data.week || !data.week.length) {
     contentChart = <div>No data available</div>;
   } else {
-    contentChart = (
-        <GanttChartModern data={data.week[0].days[current]}/>
-    );
+    contentChart = <GanttChartModern data={data.week[0].days[current]} />;
   }
 
   useEffect(() => {}, [isStationFetching]);
@@ -81,10 +85,8 @@ const WeekScheduleOptimised = ({
       api.off("select");
     };
   }, [api]);
-  
-  const handleItemClick = (index,day) => {
-    console.log(`Day: ${JSON.stringify(day)}`);
 
+  const handleItemClick = (index, day) => {
     setCurrent(index);
   };
 
@@ -118,7 +120,6 @@ const WeekScheduleOptimised = ({
 
       // Handle response data if needed
       const result = await response.json();
-      console.log("File uploaded successfully:", result);
       alert("File uploaded successfully!");
       setSelectedFile(null); // Clear the file input after upload
     } catch (error) {
@@ -128,7 +129,6 @@ const WeekScheduleOptimised = ({
       setUploading(false);
     }
   };
-
 
   return (
     <div className="w-full max-w-6xl mx-auto py-8 px-6 bg-secondary rounded-xl">
@@ -150,22 +150,19 @@ const WeekScheduleOptimised = ({
         </div>
       </div>
       <section className="w-full">
-          <Carousel
-            opts={{
-              align: "start",
-            }}
-            className="w-full mb-5"
-            setApi={setApi}
-          >
-            <CarouselContent className="ml-1">
-            {contentCarousel}
-            
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </section>
-              {contentChart}
+        <Carousel
+          opts={{
+            align: "start",
+          }}
+          className="w-full mb-5"
+          setApi={setApi}
+        >
+          <CarouselContent className="ml-1">{contentCarousel}</CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </section>
+      {contentChart}
 
       {/* {isStationFetching ? (
         <div className="w-full h-full flex items-center justify-center">

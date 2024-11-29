@@ -13,7 +13,6 @@ const useOptimizedCheck = () => {
         setIsFetching(true);
         const user = getUser();
         const response = await currentOptimizedValue(user);
-        console.log(response);
         setOptimizedCheck(response);
       } catch (err) {
         setError(err.message);
