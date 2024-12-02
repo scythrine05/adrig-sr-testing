@@ -2775,7 +2775,28 @@ export let yardData = {
     },
     {
       station_name: "KANCHIPURAM CJ",
-      station_code: "CJ",
+      station_code: "CJ(E)",
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Both",
+          line_name: "UP / DOWN LOOP LINE",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Both",
+          line_name: "UP / DOWN MAIN LINE",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Both",
+          line_name: "UP / DOWN LOOP LINE",
+        },
+      ],
+    },
+    {
+      station_name: "KANCHIPURAM CJ",
+      station_code: "CJ(O)",
       roads: [
         {
           road_no: "Rd 1",

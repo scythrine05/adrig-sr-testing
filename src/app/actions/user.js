@@ -42,6 +42,10 @@ export async function getUserName(email) {
   const res = await prisma.user.findFirst({ where: { username: email } });
   return res;
 }
+export async function getManager(email) {
+  const res = await prisma.manager.findUnique({ where: { email } });
+  return res;
+}
 
 export async function getUserId(email) {
   const res = await prisma.user.findUnique({ where: { username: email } });
@@ -49,16 +53,8 @@ export async function getUserId(email) {
 }
 
 export async function getManagerId(email) {
-  const idMap = new Map();
-  idMap.set(process.env.ENGG_MANAGER, "#ME01");
-  idMap.set(process.env.SIG_MANAGER, "#MS01");
-  idMap.set(process.env.TRD_MANAGER, "#MT01");
-
-  if (idMap.has(email)) {
-    return idMap.get(email);
-  } else {
-    return "";
-  }
+  const res = await prisma.manager.findUnique({ where: { email } });
+  return res ? res.id : "";
 }
 
 export async function getUserUnderManager(managerId) {
@@ -90,24 +86,22 @@ export async function getUsersAll() {
 }
 
 export async function userCheck(username, password) {
-  const manager_array = [
-    process.env.ENGG_MANAGER,
-    process.env.SIG_MANAGER,
-    process.env.TRD_MANAGER,
-  ];
-  let manager_password = new Map();
-  manager_password.set(manager_array[0], process.env.ENGG_PASS);
-  manager_password.set(manager_array[1], process.env.SIG_PASS);
-  // manager_password.set(manager_array[2], process.env.TRD_PASS);
+  const manager_data = await prisma.manager.findUnique({
+    where: {
+      email: username,
+    },
+  });
+  console.log("wiudhiwuhds");
+  console.log(manager_data);
 
-  if (manager_array.includes(username)) {
-    if (manager_password.get(username) !== password) {
+  if (manager_data != null) {
+    if (manager_data.password !== password) {
       return { success: false, error: "Password Does Not Match" };
     } else {
       return { success: true, msg: "Correct details" };
     }
   } else {
-    const res = await prisma.user.findUnique({ where: { username: username } });
+    const res = await prisma.user.findUnique({ where: { username } });
     if (res == null) {
       return { success: false, error: "No User Exist" };
     } else if (res.password !== password) {

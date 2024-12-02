@@ -8,7 +8,6 @@ export async function postDataOptimisedFirst(request) {
     data: {
       Optimisedtimefrom: request.Optimisedtimefrom,
       Optimisedtimeto: request.Optimisedtimeto,
-      // optimization_details: request.optimization_details,
       requestId: request.requestId,
       date: request.date,
       selectedDepartment: request.selectedDepartment,
@@ -36,6 +35,7 @@ export async function postDataOptimisedFirst(request) {
       otherLinesAffected: request.otherLinesAffected,
       requestremarks: request.requestremarks,
       userId: request.userId,
+      managerId: request.managerId,
     },
   });
 
@@ -117,6 +117,11 @@ export async function updateFinalStatus(requestId) {
 
 export async function currentOptimizedData(id) {
   const res = await prisma.sanctiontable.findMany({ where: { userId: id } });
+  return res;
+}
+
+export async function currentOptimizedManagerData(id) {
+  const res = await prisma.sanctiontable.findMany({ where: { managerId: id } });
   return res;
 }
 

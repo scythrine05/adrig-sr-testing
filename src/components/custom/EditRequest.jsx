@@ -94,6 +94,18 @@ export default function EditRequest(props) {
     }
   }, [props.request.requestId]);
 
+  useEffect(() => {
+    const fxn = async () => {
+      const UserData = await getUserId(props.user?.user);
+      if (UserData == null || UserData == undefined || UserData.id == null) {
+        return;
+      } else {
+        formData.selectedDepartment = UserData.department;
+      }
+    };
+    fxn();
+  }, [formData]);
+
   const formValidation = (value) => {
     let res = validateForm(value);
     if (
@@ -468,6 +480,7 @@ export default function EditRequest(props) {
             name="selectedDepartment"
             className="mt-1 w-full p-2.5 border rounded"
             onChange={handleChange}
+            disabled
           >
             <option value={""}>Select department </option>
             <option value={"ENGG"}>ENGG</option>

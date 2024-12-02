@@ -12,7 +12,7 @@ export default function Manager() {
   const id = params.slug;
 
   if (id[1] === "create-request") {
-    return <ManagerForm />;
+    return <ManagerForm id={id[0]} />;
   } else if (id[1] === "requests") {
     return <ManagerRequests id={id[0]} />;
   } else if (id[1] === "optimised") {

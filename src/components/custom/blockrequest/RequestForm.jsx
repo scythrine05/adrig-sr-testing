@@ -10,6 +10,7 @@ import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
 import validateForm from "./formValidation";
 import { yardData } from "../../../lib/yard";
+import { input } from "@material-tailwind/react";
 
 export default function RequestForm2(props) {
   const maxDate = "2030-12-31";
@@ -176,7 +177,9 @@ export default function RequestForm2(props) {
       yardData.stations.map((yard) => {
         if (yard.station_code === arr[0]) {
           result = yard.roads.filter(
-            (item) => item?.direction === formData.selectedStream
+            (item) =>
+              formData.selectedStream === "Both" ||
+              item?.direction === formData.selectedStream
           );
           result = result.map((item) => item.road_no);
           const indexToFilterOut = result.findIndex(
@@ -229,6 +232,21 @@ export default function RequestForm2(props) {
         }
       });
     }
+
+    return result;
+  };
+
+  const getRoadData = (missionBlock) => {
+    let result = [];
+    const arr = missionBlock?.split("-").map((name) => name.trim());
+    if (!arr?.includes("YD")) {
+      return [];
+    }
+    yardData.stations.map((yard) => {
+      if (yard.station_code === arr[0]) {
+        result = yard.roads;
+      }
+    });
 
     return result;
   };
@@ -407,7 +425,9 @@ export default function RequestForm2(props) {
             }
             formData.workDescription = "Other Entry" + ":" + otherData;
           }
+          console.log(formData);
           const res = await postStagingFormData(formData, UserData?.id);
+          console.log(res);
           setFormData({
             date: "",
             selectedDepartment: "",
@@ -646,6 +666,12 @@ export default function RequestForm2(props) {
         {getMissionBlock().map((ele) => {
           const arr = ele?.split("-").map((name) => name.trim());
           const value = getLineSectionValue(ele, arr);
+          const filteredData =
+            formData.selectedStream === "Both"
+              ? getRoadData(ele)
+              : getRoadData(ele).filter(
+                  (e) => e.direction === formData.selectedStream
+                );
           return (
             <div>
               {ele.split("-")[1] === "YD" && (
@@ -682,17 +708,53 @@ export default function RequestForm2(props) {
                 <option value={""}>
                   Select {arr?.includes("YD") ? `Road ` : `Line `}
                 </option>
-                {getTheList(ele).map((e) => {
-                  if (e.road_no) {
-                    if (e.direction === formData.selectedStream) {
+                {arr?.includes("YD") ? (
+                  <>
+                    {filteredData.length > 0 ? (
+                      filteredData.map((e) => (
+                        <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                          {e.road_no}
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>
+                        No data available for the selected stream
+                      </option>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {getTheList(ele).map((e) => {
                       return (
                         <>
-                          <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                            {e.road_no}
+                          <option value={`${ele}:${e}`} key={e}>
+                            {e}
                           </option>
                         </>
                       );
-                    }
+                    })}
+                  </>
+                )}
+                {/* {getTheList(ele).map((e) => {
+                  if (e.road_no) {
+                    return (
+                      <>
+                        {filteredData.length > 0 ? (
+                          filteredData.map((e) => (
+                            <option
+                              value={`${ele}:${e.road_no}`}
+                              key={e.road_no}
+                            >
+                              {e.road_no}
+                            </option>
+                          ))
+                        ) : (
+                          <option disabled>
+                            No data available for the selected stream
+                          </option>
+                        )}
+                      </>
+                    );
                   } else {
                     return (
                       <>
@@ -702,7 +764,7 @@ export default function RequestForm2(props) {
                       </>
                     );
                   }
-                })}
+                })} */}
               </select>
             </div>
           );

@@ -1,5 +1,5 @@
 "use client";
-import { postFormData } from "app/actions/formdata";
+import { postFormData, postFormManagerData } from "app/actions/formdata";
 import {
   deleteStagingFormData,
   getStagingFormDataByDepartment,
@@ -175,8 +175,8 @@ const ManagerRequests = ({ id }) => {
 
         const userIdUnderManager = await getUserUnderManager(ManagerId);
 
-        const filteredRequests = formDataResponse?.filter((e) =>
-          userIdUnderManager?.includes(e?.userId)
+        const filteredRequests = formDataResponse?.filter(
+          (e) => userIdUnderManager?.includes(e?.userId) || e?.userId == null
         );
 
         const userResponses = await Promise.all(
@@ -217,7 +217,11 @@ const ManagerRequests = ({ id }) => {
 
   const handleConfirmRequest = async (request) => {
     try {
-      await postFormData(request);
+      if (request.userId == null) {
+        await postFormManagerData(request);
+      } else {
+        await postFormData(request);
+      }
       await deleteStagingFormData(request.requestId);
       setRequests((prev) =>
         prev.filter((req) => req.requestId !== request.requestId)

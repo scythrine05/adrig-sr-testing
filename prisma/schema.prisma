@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id              Int               @id @default(autoincrement())
+  id              String            @id @default(uuid())
   name            String
   username        String            @unique
   password        String
@@ -31,6 +31,15 @@ model Otp {
   code      String
   createdAt DateTime @default(now())
   validTill DateTime
+}
+
+model Manager {
+  id         String            @id @default(uuid())
+  email      String            @unique
+  password   String
+  department String?
+  requests   StagingRequests[]
+  Requests   Requests[]
 }
 
 model StagingRequests {
@@ -62,8 +71,10 @@ model StagingRequests {
   otherLinesAffected       Json
   requestremarks           String
   createdAt                DateTime @default(now())
-  userId                   Int
-  User                     User     @relation(fields: [userId], references: [id])
+  userId                   String?
+  managerId                String?
+  User                     User?    @relation(fields: [userId], references: [id])
+  Manager                  Manager? @relation(fields: [managerId], references: [id])
 }
 
 model Requests {
@@ -95,8 +106,10 @@ model Requests {
   otherLinesAffected       Json
   requestremarks           String
   createdAt                DateTime @default(now())
-  userId                   Int
-  User                     User     @relation(fields: [userId], references: [id])
+  userId                   String?
+  managerId                String?
+  User                     User?    @relation(fields: [userId], references: [id])
+  Manager                  Manager? @relation(fields: [managerId], references: [id])
 }
 
 model Sanctiontable {
@@ -129,7 +142,8 @@ model Sanctiontable {
   otherLinesAffected       Json?
   requestremarks           String
   final                    String?
-  userId                   Int
+  userId                   String?
+  managerId                String?
   action                   String  @default("none")
   remarks                  String?
   Optimisedtimefrom        String?

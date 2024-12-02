@@ -15,60 +15,80 @@ export const NEXT_AUTH_CONFIG = {
         try {
           if (!credentials?.username || !credentials.password) {
             return null;
-          } else if (
-            credentials.username == process.env.ADMIN_USER &&
-            credentials.password == process.env.ADMIN_PASS
-          ) {
-            return { id: "001", email: credentials.username, role: "admin" };
-          } else if (
-            credentials.username == process.env.ENGG_MANAGER &&
-            credentials.password == process.env.ENGG_PASS
-          ) {
-            return {
-              id: "#ME01",
-              email: credentials.username,
-              role: "engg",
-            };
-          } else if (
-            credentials.username == process.env.SIG_MANAGER &&
-            credentials.password == process.env.SIG_PASS
-          ) {
-            return {
-              id: "#MS01",
-              email: credentials.username,
-              role: "sig",
-            };
-          } else if (
-            credentials.username == process.env.TRD_MANAGER &&
-            credentials.password == process.env.TRD_PASS
-          ) {
-            return {
-              id: "#MT01",
-              email: credentials.username,
-              role: "trd",
-            };
+          } else {
+            const manager = await prisma.manager.findFirst({
+              where: {
+                email: credentials.username,
+              },
+            });
+
+            if (!manager) {
+              const user = await prisma.user.findFirst({
+                where: {
+                  username: credentials.username,
+                },
+              });
+
+              if (!user) {
+                return null;
+              }
+
+              if (credentials.password !== user.password) {
+                return null;
+              }
+
+              return {
+                id: user.id,
+                name: user.name,
+                email: user.username,
+                role: "user",
+              };
+            } else {
+              if (credentials.password !== manager.password) {
+                return null;
+              }
+
+              return {
+                id: manager.id,
+                name: manager.name,
+                email: manager.email,
+                role: manager.department,
+              };
+            }
           }
-
-          const user = await prisma.user.findFirst({
-            where: {
-              username: credentials.username,
-            },
-          });
-
-          if (!user) {
-            return null;
-          }
-
-          if (credentials.password !== user.password) {
-            return null;
-          }
-
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.username,
-            role: "user",
-          };
+          // } else if (
+          //   credentials.username == process.env.ADMIN_USER &&
+          //   credentials.password == process.env.ADMIN_PASS
+          // ) {
+          //   return { id: "001", email: credentials.username, role: "admin" };
+          // } else if (
+          //   credentials.username == process.env.ENGG_MANAGER &&
+          //   credentials.password == process.env.ENGG_PASS
+          // ) {
+          //   return {
+          //     id: "#ME01",
+          //     email: credentials.username,
+          //     role: "engg",
+          //   };
+          // } else if (
+          //   credentials.username == process.env.SIG_MANAGER &&
+          //   credentials.password == process.env.SIG_PASS
+          // ) {
+          //   return {
+          //     id: "#MS01",
+          //     email: credentials.username,
+          //     role: "sig",
+          //   };
+          // } else if (
+          //   credentials.username == process.env.TRD_MANAGER &&
+          //   credentials.password == process.env.TRD_PASS
+          // ) {
+          //   return {
+          //     id: "#MT01",
+          //     email: credentials.username,
+          //     role: "trd",
+          //   };
+          // }
         } catch (e) {
           console.log(e);
         }

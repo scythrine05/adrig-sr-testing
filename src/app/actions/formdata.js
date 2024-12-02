@@ -41,6 +41,46 @@ export async function postFormData(formData) {
   return res;
 }
 
+export async function postFormManagerData(formData) {
+  const res = await prisma.requests.create({
+    data: {
+      date: formData.date,
+      selectedDepartment: formData.selectedDepartment,
+      selectedSection: formData.selectedSection,
+      stationID: formData.stationID,
+      missionBlock: formData.missionBlock,
+      workType: formData.workType,
+      workDescription: formData.workDescription,
+      selectedLine: formData.selectedLine,
+      selectedStream: formData.selectedStream,
+      cautionRequired: formData.cautionRequired,
+      cautionSpeed: formData.cautionSpeed,
+      cautionLocationFrom: formData.cautionLocationFrom,
+      cautionLocationTo: formData.cautionLocationTo,
+      workLocationFrom: formData.workLocationFrom,
+      workLocationTo: formData.workLocationTo,
+      demandTimeFrom: formData.demandTimeFrom,
+      demandTimeTo: formData.demandTimeTo,
+      sigDisconnection: formData.sigDisconnection,
+      ohDisconnection: formData.ohDisconnection,
+      elementarySectionFrom: formData.elementarySectionFrom,
+      elementarySectionTo: formData.elementarySectionTo,
+      sigElementarySectionFrom: formData.sigElementarySectionFrom,
+      sigElementarySectionTo: formData.sigElementarySectionTo,
+      repercussions: formData.repercussions,
+      otherLinesAffected: formData.otherLinesAffected,
+      requestremarks: formData.requestremarks,
+      managerId: formData.managerId,
+    },
+    select: {
+      requestId: true,
+      managerId: true,
+    },
+  });
+
+  return res;
+}
+
 export async function updateFormData(formData, requestId) {
   const res = await prisma.requests.update({
     where: {
