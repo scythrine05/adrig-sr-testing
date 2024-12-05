@@ -15,6 +15,11 @@ export const NEXT_AUTH_CONFIG = {
         try {
           if (!credentials?.username || !credentials.password) {
             return null;
+          } else if (
+            credentials.username == process.env.ADMIN_USER &&
+            credentials.password == process.env.ADMIN_PASS
+          ) {
+            return { id: "001", email: credentials.username, role: "admin" };
           } else {
             const manager = await prisma.manager.findFirst({
               where: {
