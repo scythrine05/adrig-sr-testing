@@ -360,7 +360,28 @@ export let yardData = {
     {
       station_name: "VYASARPADI VPY",
       station_code: "VPY",
-      roads: [],
+      roads: [
+        {
+          road_no: "Rd 1",
+          direction: "Upstream",
+          line_name: "DOWN SLOW MAIN LINE AND UP SLOW DESPATCH LINE",
+        },
+        {
+          road_no: "Rd 2",
+          direction: "Upstream",
+          line_name: "UP SLOW MAIN LINE",
+        },
+        {
+          road_no: "Rd 3",
+          direction: "Downstream",
+          line_name: "DOWN FAST MAIN LINE",
+        },
+        {
+          road_no: "Rd 4",
+          direction: "Downstream",
+          line_name: "UP FAST MAIN LINE",
+        },
+      ],
     },
     {
       station_name: "VILLIVAKKAM VLK",
