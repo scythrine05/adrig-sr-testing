@@ -35,7 +35,7 @@ model Otp {
 
 model Manager {
   id         String            @id @default(uuid())
-  name       String            @default("")
+  name       String?
   email      String            @unique
   password   String
   department String?
