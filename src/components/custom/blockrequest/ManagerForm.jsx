@@ -108,8 +108,7 @@ export default function ManagerForm() {
       res.sigElementarySectionFrom ||
       (value.selectedDepartment === "ENGG" &&
         value.sigDisconnection === "Yes" &&
-        res.sigElementarySectionTo) ||
-      (value.selectedDepartment === "TRD" && res.repercussions)
+        res.sigElementarySectionTo)
     ) {
       return false;
     } else {
@@ -879,7 +878,7 @@ export default function ManagerForm() {
         <div className="bg-blue-200 p-4 rounded-lg mb-4">
           <div className="mb-4">
             <label className="block text-sm font-medium">
-              Coaching repercussions <span style={{ color: "red" }}>*</span>
+              Coaching repercussions
             </label>
             <textarea
               type="text"
