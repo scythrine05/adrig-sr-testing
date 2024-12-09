@@ -82,6 +82,7 @@ export default function RequestForm2(props) {
 
   const formValidation = (value) => {
     let res = validateForm(value);
+    console.log(validateForm(value));
     if (
       res.date ||
       res.selectedDepartment ||
@@ -103,8 +104,7 @@ export default function RequestForm2(props) {
       res.sigElementarySectionFrom ||
       (value.selectedDepartment === "ENGG" &&
         value.sigDisconnection === "Yes" &&
-        res.sigElementarySectionTo) ||
-      (value.selectedDepartment === "TRD" && res.repercussions)
+        res.sigElementarySectionTo)
     ) {
       return false;
     } else {
@@ -413,6 +413,7 @@ export default function RequestForm2(props) {
         });
         return;
       } else {
+        console.log(formValidation(formData));
         if (formValidation(formData) == true) {
           if (formData.workDescription === "others") {
             if (otherData === "") {
@@ -877,7 +878,7 @@ export default function RequestForm2(props) {
         <div className="bg-blue-200 p-4 rounded-lg mb-4">
           <div className="mb-4">
             <label className="block text-sm font-medium">
-              Coaching repercussions <span style={{ color: "red" }}>*</span>
+              Coaching repercussions
             </label>
             <textarea
               type="text"
