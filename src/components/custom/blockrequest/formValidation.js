@@ -33,7 +33,7 @@ export default function validateForm(values) {
     errors.selectedLine = "Selected Line is required";
   }
 
-  if (values.cautionRequired === "") {
+  if (values.cautionRequired === "" && values.selectedDepartment != "TRD") {
     errors.cautionRequired = "Caution Required is required";
   } else if (values.cautionRequired === "Yes") {
     if (!values.cautionSpeed || isNaN(values.cautionSpeed)) {
@@ -49,11 +49,11 @@ export default function validateForm(values) {
     }
   }
 
-  if (!values.workLocationFrom) {
+  if (!values.workLocationFrom && values.selectedDepartment != "TRD") {
     errors.workLocationFrom = "Work Location From is required";
   }
 
-  if (!values.workLocationTo) {
+  if (!values.workLocationTo && values.selectedDepartment != "TRD") {
     errors.workLocationTo = "Work Location To is required";
   }
 
@@ -65,7 +65,7 @@ export default function validateForm(values) {
     errors.demandTimeTo = "Demand Time To is required";
   }
 
-  if (values.sigDisconnection === "") {
+  if (values.sigDisconnection === "" && values.selectedDepartment != "TRD") {
     errors.sigDisconnection = "Signal Disconnection is required";
   } else if (values.sigDisconnection === "Yes") {
     if (!values.sigElementarySectionFrom) {
@@ -77,7 +77,7 @@ export default function validateForm(values) {
     }
   }
 
-  if (values.ohDisconnection === "") {
+  if (values.ohDisconnection === "" && values.selectedDepartment != "TRD") {
     errors.ohDisconnection = "O/H Disconnection is required";
   } else if (values.ohDisconnection === "Yes") {
     if (!values.elementarySectionFrom) {
