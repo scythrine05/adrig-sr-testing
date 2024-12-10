@@ -44,8 +44,10 @@ export async function postDataOptimisedFirst(request) {
 
 export async function postBulkOptimised(requestArray) {
   const filteredData = requestArray.map(
-    ({ createdAt, duration, pushed, ...rest }) => rest
+    ({ createdAt, duration, pushed, push, ...rest }) => rest
   );
+
+  console.log(filteredData);
 
   const updatedData = filteredData.map((item) => {
     const {
