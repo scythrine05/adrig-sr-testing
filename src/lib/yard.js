@@ -1579,7 +1579,7 @@ export let yardData = {
     },
     {
       station_name: "TADA TADA",
-      station_code: "TADA",
+      station_code: "TAD",
       roads: [
         {
           road_no: "Rd 1",
