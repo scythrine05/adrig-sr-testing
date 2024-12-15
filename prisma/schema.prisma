@@ -72,6 +72,7 @@ model StagingRequests {
   otherLinesAffected       Json
   requestremarks           String
   createdAt                DateTime @default(now())
+  status                   String?
   userId                   String?
   managerId                String?
   User                     User?    @relation(fields: [userId], references: [id])
@@ -133,6 +134,8 @@ model Sanctiontable {
   workLocationTo           String
   demandTimeFrom           String
   demandTimeTo             String
+  Optimisedtimefrom        String?
+  Optimisedtimeto          String?
   sigDisconnection         String
   ohDisconnection          String
   elementarySectionFrom    String
@@ -147,7 +150,5 @@ model Sanctiontable {
   managerId                String?
   action                   String  @default("none")
   remarks                  String?
-  Optimisedtimefrom        String?
-  Optimisedtimeto          String?
   optimization_details     String?
 }
