@@ -1,77 +1,25 @@
 "use client";
-import { ChangeEvent, useEffect, useState, useRef } from "react";
-import { postFormData } from "../../../app/actions/formdata";
-import {
-  postStagingFormData,
-  postStagingManagerFormData,
-} from "../../../app/actions/stagingform";
-import { getManager, getManagerId, getUserId } from "../../../app/actions/user";
-import { sectionData, machine, work, data, workData } from "../../../lib/store";
+import { useEffect, useState, useRef } from "react";
+import { postStagingManagerFormData } from "../../../app/actions/stagingform";
+import { getManager } from "../../../app/actions/user";
+import { data, workData } from "../../../lib/store";
 import MultipleSelect from "./MultipleSelect";
 import MultipleSelectOld from "./MultipleSelectOld";
 import { useToast } from "../../ui/use-toast";
 import { useRouter } from "next/navigation";
-import validateForm from "./formValidation";
 import { yardData } from "../../../lib/yard";
 import { useSession } from "next-auth/react";
+import { useFormState, handleKeyDown, formValidation, revertCategoryFormat, handleChange } from "../../../lib/utils";
+import FormLayout from "../FormLayout";
 
 export default function ManagerForm() {
   const maxDate = "2030-12-31";
-  const router = useRouter();
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
-
-  const [formData, setFormData] = useState({
-    date: "",
-    selectedDepartment: "",
-    selectedSection: "",
-    stationID: "",
-    workType: "",
-    workDescription: "",
-    selectedLine: {
-      station: [],
-      yard: [],
-    },
-    selectedStream: "",
-    missionBlock: "",
-    cautionRequired: "",
-    cautionSpeed: "",
-    cautionLocationFrom: "",
-    cautionLocationTo: "",
-    workLocationFrom: "",
-    workLocationTo: "",
-    demandTimeFrom: "",
-    demandTimeTo: "",
-    sigDisconnection: "",
-    ohDisconnection: "",
-    elementarySectionFrom: "",
-    elementarySectionTo: "",
-    sigElementarySectionFrom: "",
-    sigElementarySectionTo: "",
-    repercussions: "",
-    otherLinesAffected: {
-      station: [],
-      yard: [],
-    },
-    requestremarks: "",
-  });
-
+  const [formData, setFormData] = useFormState();
   const { data: session, status } = useSession();
   console.log(session);
   const inputRefs = useRef([]);
-  const dateref = useRef();
-  const departmentRef = useRef();
-
-  const handleKeyDown = (e, index) => {
-    e.preventDefault();
-    if (e.key === "ArrowRight") {
-      const nextIndex = index + 1;
-      if (nextIndex < inputRefs.current.length) {
-        inputRefs.current[nextIndex].focus();
-      }
-      // departmentRef.current.focus();
-    }
-  };
 
   useEffect(() => {
     const fxn = async () => {
@@ -85,55 +33,10 @@ export default function ManagerForm() {
     fxn();
   }, [formData, status]);
 
-  const formValidation = (value) => {
-    let res = validateForm(value);
-    if (
-      res.date ||
-      res.selectedDepartment ||
-      res.stationID ||
-      res.workType ||
-      res.workDescription ||
-      res.selectedLine ||
-      res.missionBlock ||
-      res.demandTimeFrom ||
-      res.demandTimeTo ||
-      res.sigDisconnection ||
-      res.ohDisconnection ||
-      res.cautionRequired ||
-      res.cautionLocationFrom ||
-      res.cautionLocationTo ||
-      res.cautionSpeed ||
-      res.elementarySectionFrom ||
-      res.elementarySectionTo ||
-      res.sigElementarySectionFrom ||
-      (value.selectedDepartment === "ENGG" &&
-        value.sigDisconnection === "Yes" &&
-        res.sigElementarySectionTo)
-    ) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  function revertCategoryFormat(formattedCategory) {
-    if (formattedCategory === "Gear") {
-      return formattedCategory;
-    }
-    return formattedCategory.split(" ").join("_");
-  }
-
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
       for (let section of data.sections) {
         if (formData.selectedSection == section.name) {
-          // if (formData.stationID === "Section") {
-          //   return section.section_blocks;
-          // } else if (formData.stationID === "Station") {
-          //   return section.station_blocks;
-          // } else {
-          //   return [];
-          // }
           let res = section.section_blocks.concat(section.station_blocks);
           return res;
         }
@@ -215,14 +118,9 @@ export default function ManagerForm() {
     let result = [];
     const arr = missionBlock?.split("-").map((name) => name.trim());
     if (arr?.includes("YD")) {
-      // const found = formData.selectedLine.yard.find((item) =>
-      //   item?.startsWith(`${missionBlock}:`)
-      // );
-      // const commondata = found ? found.split(":")[1] : null;
       yardData.stations.map((yard) => {
         if (yard.station_code === arr[0]) {
           result = yard.roads;
-          // result = yard.roads.map((item) => item.road_no);
         }
       });
     } else {
@@ -275,15 +173,8 @@ export default function ManagerForm() {
     }
   };
 
-  const handleMoveToNext = (index) => (e) => {
-    if (e.target.value.length > 0 && inputRefs.current[index + 1]) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
-
     if (
       formData.selectedDepartment === "ENGG" &&
       (name === "cautionLocationFrom" ||
@@ -344,7 +235,7 @@ export default function ManagerForm() {
       setFormData({ ...formData, [name]: value });
     } else if (name === "date") {
       if (value > maxDate) {
-        event.target.value = maxDate; // Reset the input value to maxDate
+        event.target.value = maxDate;
         alert(`Date cannot be later than ${maxDate}`);
         return;
       }
@@ -374,16 +265,6 @@ export default function ManagerForm() {
             value,
           ],
         };
-
-        // setLineData((prevData) => ({
-        //   ...prevData,
-        //   station: [
-        //     ...prevData.station.filter(
-        //       (item) => !item.startsWith(`${newKey}:`)
-        //     ),
-        //     value,
-        //   ],
-        // }));
       }
       formData.selectedLine = {
         yard: [
@@ -468,7 +349,6 @@ export default function ManagerForm() {
           title: "Success",
           description: "Request Submitted",
         });
-        // router.push("/schedule-manager");
       } else {
         toast({
           title: "Submission Failed",
@@ -479,652 +359,625 @@ export default function ManagerForm() {
     }
   };
 
-  return (
-    <div className="custom-main-w mx-auto p-4 mt-10 bg-blue-100 rounded-lg shadow-lg">
-      <h1 className="text-center text-xl font-bold mb-4">Request Form</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium">
-            Date <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            ref={(el) => (inputRefs.current[0] = el)}
-            onKeyDown={(e) => handleKeyDown(e, 0)}
-            value={formData.date}
-            type="date"
-            name="date"
-            className="mt-1 w-full p-2 border rounded"
-            onChange={handleChange}
-            max={maxDate}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium">
-            Department <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            ref={(el) => (inputRefs.current[1] = el)}
-            onKeyDown={(e) => handleKeyDown(e, 1)}
-            value={formData.selectedDepartment}
-            name="selectedDepartment"
-            className="mt-1 w-full p-2.5 border rounded"
-            onChange={handleChange}
-            disabled
-          >
-            <option value={""}>Select department </option>
-            <option value={"ENGG"}>ENGG</option>
-            <option value={"SIG"}>SIG</option>
-            <option value={"TRD"}>TRD</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium">
-            Section <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            ref={(el) => (inputRefs.current[2] = el)}
-            onKeyDown={(e) => handleKeyDown(e, 2)}
-            value={formData.selectedSection}
-            name="selectedSection"
-            className="mt-1 w-full p-2.5 border rounded"
-            onChange={handleChange}
-          >
-            <option>Select section</option>
-            <option value={"AJJ-RU"}>AJJ-RU</option>
-            <option value={"MAS-AJJ"}>MAS-AJJ</option>
-            <option value={"MSB-VM"}>MSB-VM</option>
-            <option value={"AJJ-KPD"}>AJJ-KPD</option>
-            <option value={"KPD-JTJ"}>KPD-JTJ</option>
-            <option value={"AJJ-CGL"}>AJJ-CGL</option>
-            <option value={"MAS-GDR"}>MAS-GDR</option>
-          </select>
-        </div>
-      </div>
+  const handleInputRefsChange = (idx) => {
+    (el) => (inputRefs.current[idx] = el)
+  }
 
-      <div className="inline relative mb-4 ">
-        <input
-          ref={(el) => (inputRefs.current[3] = el)}
-          onKeyDown={(e) => handleKeyDown(e, 3)}
-          name="stationID"
-          value={formData.stationID}
-          className="mt-1 p-2 w-[535px] rounded-md"
-          onChange={handleChange}
-          placeholder="Select Block Section"
-          // disabled={true}
-          readOnly
-        />
-        {/* <option className="block text-sm font-medium " value={""}>
-            Select Block Section
+  const handleKeyDownChange = (idx) =>{
+    (e) => handleKeyDown(e, idx)
+  }
+
+  const getFormDate = () => {
+    return formData.date;
+  }
+
+  const getHandleChange = () => {
+    return handleChange;
+  }
+
+  const formSelectedDepartment = () => {
+    return formData.selectedDepartment;
+  }
+
+  const formSelectedSection = () => {
+    return formData.selectedSection;
+  }
+
+  const handleGetTheListForYard = () => {
+    return getTheListForYard();
+  }
+
+  const formMissionBlock = () => {
+    return formData.missionBlock;
+  }
+
+  const handleSetFormData = () => {
+    return setFormData;
+  }
+  
+  const formWorkType = () => {
+    return formData.workType;
+  }
+  const customOption1 = () => {
+    return(
+    formData.selectedDepartment != "" && Object.keys(workData[`${formData.selectedDepartment}`]).map((element) => {
+        const formattedCategory = element
+          .replace(/_/g, " ")
+          .split(" ")
+          .map(
+            (word) =>
+              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(" ");
+        return (
+          <option
+            className="block text-sm font-medium "
+            value={`${formattedCategory}`}
+            key={formattedCategory}
+          >
+            {formattedCategory}
           </option>
-          <option className="block text-sm font-medium " value={"Section/Yard"}>
-            Section/Yard
-          </option> */}
-        {/* </select> */}
+        );
+      }
+    ))};
 
-        <div className="absolute w-[538px] top-[-20px] left-[552px] mb-4">
-          <MultipleSelect
-            items={getTheListForYard()}
-            value={formData.missionBlock}
-            setFormData={setFormData}
-            name="missionBlock"
-            placeholder={true}
-            limit={true}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
-        <select
-          ref={(el) => (inputRefs.current[5] = el)}
-          onKeyDown={(e) => handleKeyDown(e, 5)}
-          value={formData.workType}
-          name="workType"
-          className="mt-1 p-2 rounded-md"
-          onChange={handleChange}
-        >
-          <option className="block text-sm font-medium " value={""}>
-            Select The Work Description
-          </option>
-
-          {formData.selectedDepartment != "" &&
-            Object.keys(workData[`${formData.selectedDepartment}`]).map(
-              (element) => {
-                const formattedCategory = element
-                  .replace(/_/g, " ")
-                  .split(" ")
-                  .map(
-                    (word) =>
-                      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                  )
-                  .join(" ");
-                return (
-                  <option
-                    className="block text-sm font-medium "
-                    value={`${formattedCategory}`}
-                    key={formattedCategory}
-                  >
-                    {formattedCategory}
-                  </option>
-                );
-              }
-            )}
-        </select>
-        {formData.workType != "" && formData.workType === "others" ? (
-          <input
-            type="text"
-            name="workDescription"
-            className="mt-1 w-full p-2.5 border rounded z-1000"
-            onChange={handleChange}
-            value={formData.workDescription}
-          />
-        ) : (
-          <select
-            ref={(el) => (inputRefs.current[6] = el)}
-            onKeyDown={(e) => handleKeyDown(e, 6)}
-            name="workDescription"
-            className="mt-1 w-full p-2.5 border rounded z-1000"
-            onChange={handleChange}
-            value={formData.workDescription}
-          >
-            <option>Select work description </option>
-            {formData.workType != "" &&
-              workData[`${formData.selectedDepartment}`][
-                `${revertCategoryFormat(formData.workType)}`
-              ].map((e) => {
-                return (
-                  <option
-                    className="block text-sm font-medium"
-                    value={e}
-                    key={e}
-                  >
-                    {e}
-                  </option>
-                );
-              })}
-            <option className="block text-sm font-medium " value={"others"}>
-              Others
-            </option>
-          </select>
-        )}
-        {formData.workDescription === "others" && (
-          <div className="ml-[555px] ">
-            <input
-              type="text"
-              name="otherData"
-              placeholder="Enter The Other Task Here"
-              className="border border-slate-900 rounded-lg p-2 w-[400px]"
-              value={otherData}
-              onChange={(e) => {
-                setOtherData(e.target.value);
-              }}
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
-        {getMissionBlock().map((ele) => {
-          const arr = ele?.split("-").map((name) => name.trim());
-          const value = getLineSectionValue(ele, arr);
-          const filteredData =
-            formData.selectedStream === "Both"
-              ? getRoadData(ele)
-              : getRoadData(ele).filter(
-                  (e) => e.direction === formData.selectedStream
-                );
+  const customOption2 = () => {
+    return (
+    formData.workType != "" && formData.workType === "others" ? (
+    <input
+      type="text"
+      name="workDescription"
+      className="mt-1 w-full p-2.5 border rounded z-1000"
+      onChange={handleChange}
+      value={formData.workDescription}
+    />
+  ) : (
+    <select
+      ref={(el) => (inputRefs.current[6] = el)}
+      onKeyDown={(e) => handleKeyDown(e, 6)}
+      name="workDescription"
+      className="mt-1 w-full p-2.5 border rounded z-1000"
+      onChange={handleChange}
+      value={formData.workDescription}
+    >
+      <option>Select work description </option>
+      {formData.workType != "" &&
+        workData[`${formData.selectedDepartment}`][
+          `${revertCategoryFormat(formData.workType)}`
+        ].map((e) => {
           return (
-            <div>
-              {ele.split("-")[1] === "YD" && (
-                <div>
-                  <label className="block text-sm font-medium">
-                    Stream for {ele}
-                    <span style={{ color: "red" }}>*</span>
-                  </label>
-                  <select
-                    name="selectedStream"
-                    value={formData.selectedStream}
-                    className="mt-1 w-full p-2 border rounded"
-                    onChange={handleChange}
-                  >
-                    <option value={""}>Select Stream</option>
-                    <option value={"Upstream"}>Up Stream</option>
-                    <option value={"Downstream"}>Down Stream</option>
-                    <option value={"Both"}>Both</option>
-                  </select>
-                </div>
-              )}
-              <label className="block mt-3 text-sm font-medium">
-                {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
-                <span style={{ color: "red" }}>*</span>
-              </label>
-              <select
-                name="selectedLine"
-                ref={(el) => (inputRefs.current[5] = el)}
-                onKeyDown={(e) => handleKeyDown(e, 5)}
-                value={value}
-                className="mt-1 w-full p-2 border rounded"
-                onChange={handleChange}
-              >
-                <option value={""}>
-                  Select {arr?.includes("YD") ? `Road ` : `Line `}
-                </option>
-                {arr?.includes("YD") ? (
-                  <>
-                    {filteredData.length > 0 ? (
-                      filteredData.map((e) => (
-                        <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                          {e.road_no}
-                        </option>
-                      ))
-                    ) : (
-                      <option disabled>
-                        No data available for the selected stream
-                      </option>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {getTheList(ele).map((e) => {
-                      return (
-                        <>
-                          <option value={`${ele}:${e}`} key={e}>
-                            {e}
-                          </option>
-                        </>
-                      );
-                    })}
-                  </>
-                )}
-                {/* {getTheList(ele).map((e) => {
-                  if (e.road_no) {
-                    return (
-                      <>
-                        {filteredData.length > 0 ? (
-                          filteredData.map((e) => (
-                            <option
-                              value={`${ele}:${e.road_no}`}
-                              key={e.road_no}
-                            >
-                              {e.road_no}
-                            </option>
-                          ))
-                        ) : (
-                          <option disabled>
-                            No data available for the selected stream
-                          </option>
-                        )}
-                      </>
-                    );
-                  } else {
-                    return (
-                      <>
-                        <option value={`${ele}:${e}`} key={e}>
-                          {e}
-                        </option>
-                      </>
-                    );
-                  }
-                })} */}
-              </select>
-            </div>
+            <option
+              className="block text-sm font-medium"
+              value={e}
+              key={e}
+            >
+              {e}
+            </option>
           );
         })}
+      <option className="block text-sm font-medium " value={"others"}>
+        Others
+      </option>
+    </select>
+  ))}
 
-        <div>
-          {formData.selectedDepartment === "ENGG" && (
-            <label className="block text-sm font-medium">Work location</label>
-          )}
-          {formData.selectedDepartment === "SIG" && (
-            <label className="block text-sm font-medium">Route</label>
-          )}
-          {formData.selectedDepartment === "TRD" && (
+  const customOption3 = () => {
+    return(
+    formData.workDescription === "others" && (
+    <div className="ml-[555px] ">
+      <input
+        type="text"
+        name="otherData"
+        placeholder="Enter The Other Task Here"
+        className="border border-slate-900 rounded-lg p-2 w-[400px]"
+        value={otherData}
+        onChange={(e) => {
+          setOtherData(e.target.value);
+        }}
+      />
+    </div>
+  ))}
+
+  const handleGetMissionBlock1 = () => {
+    return(
+    getMissionBlock().map((ele) => {
+    const arr = ele?.split("-").map((name) => name.trim());
+    const value = getLineSectionValue(ele, arr);
+    const filteredData =
+      formData.selectedStream === "Both"
+        ? getRoadData(ele)
+        : getRoadData(ele).filter(
+            (e) => e.direction === formData.selectedStream
+          );
+    return (
+      <div>
+        {ele.split("-")[1] === "YD" && (
+          <div>
             <label className="block text-sm font-medium">
-              Elementry Section
+              Stream for {ele}
+              <span style={{ color: "red" }}>*</span>
             </label>
+            <select
+              name="selectedStream"
+              value={formData.selectedStream}
+              className="mt-1 w-full p-2 border rounded"
+              onChange={handleChange}
+            >
+              <option value={""}>Select Stream</option>
+              <option value={"Upstream"}>Up Stream</option>
+              <option value={"Downstream"}>Down Stream</option>
+              <option value={"Both"}>Both</option>
+            </select>
+          </div>
+        )}
+        <label className="block mt-3 text-sm font-medium">
+          {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
+          <span style={{ color: "red" }}>*</span>
+        </label>
+        <select
+          name="selectedLine"
+          ref={(el) => (inputRefs.current[5] = el)}
+          onKeyDown={(e) => handleKeyDown(e, 5)}
+          value={value}
+          className="mt-1 w-full p-2 border rounded"
+          onChange={handleChange}
+        >
+          <option value={""}>
+            Select {arr?.includes("YD") ? `Road ` : `Line `}
+          </option>
+          {arr?.includes("YD") ? (
+            <>
+              {filteredData.length > 0 ? (
+                filteredData.map((e) => (
+                  <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                    {e.road_no}
+                  </option>
+                ))
+              ) : (
+                <option disabled>
+                  No data available for the selected stream
+                </option>
+              )}
+            </>
+          ) : (
+            <>
+              {getTheList(ele).map((e) => {
+                return (
+                  <>
+                    <option value={`${ele}:${e}`} key={e}>
+                      {e}
+                    </option>
+                  </>
+                );
+              })}
+            </>
           )}
-          {formData.selectedDepartment === "" ||
-            (formData.selectedDepartment === "ENGG" && (
+        </select>
+      </div>
+    );
+  }))}
+
+  const formConditionalRendering1 = () => {
+    return(
+      <div>
+      {formData.selectedDepartment === "ENGG" && (
+        <label className="block text-sm font-medium">Work location</label>
+      )}
+      {formData.selectedDepartment === "SIG" && (
+        <label className="block text-sm font-medium">Route</label>
+      )}
+      {formData.selectedDepartment === "TRD" && (
+        <label className="block text-sm font-medium">
+          Elementry Section
+        </label>
+      )}
+      {formData.selectedDepartment === "" ||
+        (formData.selectedDepartment === "ENGG" && (
+          <div className="flex space-x-2">
+            <input
+              type="alphanumeric"
+              value={formData.workLocationTo}
+              name="workLocationTo"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="Work Location"
+              onChange={handleChange}
+            />
+          </div>
+        ))}
+      {formData.selectedDepartment === "SIG" && (
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={formData.workLocationFrom}
+            name="workLocationFrom"
+            className="mt-1 w-1/2 p-2 border rounded"
+            placeholder="from"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            value={formData.workLocationTo}
+            name="workLocationTo"
+            className="mt-1 w-1/2 p-2 border rounded"
+            placeholder="to"
+            onChange={handleChange}
+          />
+        </div>
+      )}
+      {formData.selectedDepartment === "TRD" && (
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={formData.workLocationFrom}
+            name="workLocationFrom"
+            className="mt-1 w-1/2 p-2 border rounded"
+            placeholder="from"
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            value={formData.workLocationTo}
+            name="workLocationTo"
+            className="mt-1 w-1/2 p-2 border rounded"
+            placeholder="to"
+            onChange={handleChange}
+          />
+        </div>
+      )}
+    </div>
+    )
+  }
+
+  const formDemandTimeFrom = () => {
+    return(formData.demandTimeFrom);
+  }
+
+  const formDemandTimeTo = () => {
+    return(formData.demandTimeTo);
+  }
+
+  const formConditionalRendering2 = () => {
+    return(formData.selectedDepartment === "TRD" ? (
+    <div className="bg-blue-200 p-4 rounded-lg mb-4">
+      <div className="mb-4">
+        <label className="block text-sm font-medium">
+          Coaching repercussions
+        </label>
+        <textarea
+          type="text"
+          name="repercussions"
+          onChange={handleChange}
+          value={formData.repercussions}
+          className="mt-2 p-2 w-1/2 border border-slate-950 rounded"
+        />
+      </div>
+    </div>
+  ) : (
+    <div className="bg-blue-200 p-4 rounded-lg mb-4">
+      <div className="mb-4">
+        <label className="block text-sm font-medium">
+          Caution required <span style={{ color: "red" }}>*</span>
+        </label>
+        <div className="flex space-x-4">
+          <label>
+            <input
+              type="radio"
+              name="cautionRequired"
+              value="Yes"
+              checked={formData.cautionRequired === "Yes"}
+              onChange={handleChange}
+            />
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="cautionRequired"
+              checked={formData.cautionRequired === "No"}
+              value="No"
+              onChange={handleChange}
+            />{" "}
+            No
+          </label>
+        </div>
+      </div>
+      {formData.cautionRequired === "Yes" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium">
+              Caution location <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={formData.cautionLocationFrom}
+                name="cautionLocationFrom"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="from"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                value={formData.cautionLocationTo}
+                name="cautionLocationTo"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="to"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium">
+              Caution speed <span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.cautionSpeed}
+              name="cautionSpeed"
+              className="mt-1 w-full p-2 border rounded"
+              placeholder="In format km/h"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium">
+          OHE Disconnection <span style={{ color: "red" }}>*</span>
+        </label>
+        <div className="flex space-x-4">
+          <label>
+            <input
+              type="radio"
+              name="ohDisconnection"
+              value="Yes"
+              checked={formData.ohDisconnection === "Yes"}
+              onChange={handleChange}
+            />{" "}
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="ohDisconnection"
+              checked={formData.ohDisconnection === "No"}
+              value="No"
+              onChange={handleChange}
+            />{" "}
+            No
+          </label>
+        </div>
+      </div>
+      {formData.ohDisconnection === "Yes" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium">
+              Elementary section <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={formData.elementarySectionFrom}
+                name="elementarySectionFrom"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="from"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                value={formData.elementarySectionTo}
+                name="elementarySectionTo"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="to"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">
+          SIG Disconnection <span style={{ color: "red" }}>*</span>
+        </label>
+        <div className="flex space-x-4">
+          <label>
+            <input
+              type="radio"
+              name="sigDisconnection"
+              value="Yes"
+              checked={formData.sigDisconnection === "Yes"}
+              onChange={handleChange}
+            />{" "}
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="sigDisconnection"
+              value="No"
+              checked={formData.sigDisconnection === "No"}
+              onChange={handleChange}
+            />{" "}
+            No
+          </label>
+        </div>
+      </div>
+      {formData.sigDisconnection === "Yes" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium">
+              {formData.selectedDepartment === "SIG" ||
+              formData.selectedDepartment === "ENGG"
+                ? "Line"
+                : "Elementary section"}{" "}
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            {formData.selectedDepartment === "SIG" ? (
+              <input
+                type="text"
+                value={formData.sigElementarySectionFrom}
+                name="sigElementarySectionFrom"
+                className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
+                onChange={handleChange}
+              />
+            ) : (
               <div className="flex space-x-2">
                 <input
                   type="text"
-                  value={formData.workLocationFrom}
-                  name="workLocationFrom"
+                  value={formData.sigElementarySectionFrom}
+                  name="sigElementarySectionFrom"
                   className="mt-1 w-1/2 p-2 border rounded"
                   placeholder="from"
                   onChange={handleChange}
                 />
                 <input
                   type="text"
-                  value={formData.workLocationTo}
-                  name="workLocationTo"
+                  value={formData.sigElementarySectionTo}
+                  name="sigElementarySectionTo"
                   className="mt-1 w-1/2 p-2 border rounded"
                   placeholder="to"
                   onChange={handleChange}
                 />
               </div>
-            ))}
-          {formData.selectedDepartment === "SIG" && (
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={formData.workLocationFrom}
-                name="workLocationFrom"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="from"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                value={formData.workLocationTo}
-                name="workLocationTo"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="to"
-                onChange={handleChange}
-              />
-            </div>
-          )}
-          {formData.selectedDepartment === "TRD" && (
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={formData.workLocationFrom}
-                name="workLocationFrom"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="from"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                value={formData.workLocationTo}
-                name="workLocationTo"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="to"
-                onChange={handleChange}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium">
-            Demanded time (Click On the Clock To Select){" "}
-            <span style={{ color: "red" }}>*</span>
-          </label>
-          <div className="flex space-x-2">
-            <input
-              type="time"
-              value={formData.demandTimeFrom}
-              name="demandTimeFrom"
-              className="mt-1 w-1/2 p-2 border rounded"
-              placeholder="from"
-              onChange={handleChange}
-            />
-            <input
-              type="time"
-              value={formData.demandTimeTo}
-              name="demandTimeTo"
-              className="mt-1 w-1/2 p-2 border rounded"
-              placeholder="to"
-              onChange={handleChange}
-            />
+            )}
           </div>
-        </div>
-      </div>
-
-      {formData.selectedDepartment === "TRD" ? (
-        <div className="bg-blue-200 p-4 rounded-lg mb-4">
-          <div className="mb-4">
-            <label className="block text-sm font-medium">
-              Coaching repercussions
-            </label>
-            <textarea
-              type="text"
-              name="repercussions"
-              onChange={handleChange}
-              value={formData.repercussions}
-              className="mt-2 p-2 w-1/2 border border-slate-950 rounded"
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="bg-blue-200 p-4 rounded-lg mb-4">
-          <div className="mb-4">
-            <label className="block text-sm font-medium">
-              Caution required <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="flex space-x-4">
-              <label>
-                <input
-                  type="radio"
-                  name="cautionRequired"
-                  value="Yes"
-                  checked={formData.cautionRequired === "Yes"}
-                  onChange={handleChange}
-                />
-                Yes
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="cautionRequired"
-                  checked={formData.cautionRequired === "No"}
-                  value="No"
-                  onChange={handleChange}
-                />{" "}
-                No
-              </label>
-            </div>
-          </div>
-          {formData.cautionRequired === "Yes" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium">
-                  Caution location <span style={{ color: "red" }}>*</span>
-                </label>
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    value={formData.cautionLocationFrom}
-                    name="cautionLocationFrom"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="from"
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="text"
-                    value={formData.cautionLocationTo}
-                    name="cautionLocationTo"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="to"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium">
-                  Caution speed <span style={{ color: "red" }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.cautionSpeed}
-                  name="cautionSpeed"
-                  className="mt-1 w-full p-2 border rounded"
-                  placeholder="In format km/h"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium">
-              OHE Disconnection <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="flex space-x-4">
-              <label>
-                <input
-                  type="radio"
-                  name="ohDisconnection"
-                  value="Yes"
-                  checked={formData.ohDisconnection === "Yes"}
-                  onChange={handleChange}
-                />{" "}
-                Yes
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="ohDisconnection"
-                  checked={formData.ohDisconnection === "No"}
-                  value="No"
-                  onChange={handleChange}
-                />{" "}
-                No
-              </label>
-            </div>
-          </div>
-          {formData.ohDisconnection === "Yes" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium">
-                  Elementary section <span style={{ color: "red" }}>*</span>
-                </label>
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    value={formData.elementarySectionFrom}
-                    name="elementarySectionFrom"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="from"
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="text"
-                    value={formData.elementarySectionTo}
-                    name="elementarySectionTo"
-                    className="mt-1 w-1/2 p-2 border rounded"
-                    placeholder="to"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-          <div className="mb-4">
-            <label className="block text-sm font-medium">
-              SIG Disconnection <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="flex space-x-4">
-              <label>
-                <input
-                  type="radio"
-                  name="sigDisconnection"
-                  value="Yes"
-                  checked={formData.sigDisconnection === "Yes"}
-                  onChange={handleChange}
-                />{" "}
-                Yes
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="sigDisconnection"
-                  value="No"
-                  checked={formData.sigDisconnection === "No"}
-                  onChange={handleChange}
-                />{" "}
-                No
-              </label>
-            </div>
-          </div>
-          {formData.sigDisconnection === "Yes" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium">
-                  {formData.selectedDepartment === "SIG" ||
-                  formData.selectedDepartment === "ENGG"
-                    ? "Line"
-                    : "Elementary section"}{" "}
-                  <span style={{ color: "red" }}>*</span>
-                </label>
-                {formData.selectedDepartment === "SIG" ? (
-                  <input
-                    type="text"
-                    value={formData.sigElementarySectionFrom}
-                    name="sigElementarySectionFrom"
-                    className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={formData.sigElementarySectionFrom}
-                      name="sigElementarySectionFrom"
-                      className="mt-1 w-1/2 p-2 border rounded"
-                      placeholder="from"
-                      onChange={handleChange}
-                    />
-                    <input
-                      type="text"
-                      value={formData.sigElementarySectionTo}
-                      name="sigElementarySectionTo"
-                      className="mt-1 w-1/2 p-2 border rounded"
-                      placeholder="to"
-                      onChange={handleChange}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       )}
-      {/* Other Affected Lines */}
-      {getMissionBlock().map((ele) => {
-        const arr = ele?.split("-").map((name) => name.trim());
-        return (
-          <div className="mb-4">
-            <label className="block text-sm font-medium">
-              Other affected
-              {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
-            </label>
-            <MultipleSelectOld
-              items={getTheListFilter(ele)}
-              value={formData.otherLinesAffected}
-              setFormData={setFormData}
-              formData={formData}
-              name="otherLinesAffected"
-              ele={ele}
-              flag={arr?.includes("YD") ? true : false}
-            />
-          </div>
-        );
-      })}
+    </div>
+  ))};
 
-      <div className="mb-4 mt-2">
-        <label className="block text-sm font-medium">Remarks</label>
-        <textarea
-          type="text"
-          name="requestremarks"
-          onChange={handleChange}
-          value={formData.requestremarks}
-          className="mt-2 p-2 w-full border border-slate-950 rounded"
+  const formRequestRemarks = () => {
+    return formData.requestremarks;
+  }
+
+  const getHandleMissionBlock2 = () =>           {
+    return(getMissionBlock().map((ele) => {
+    const arr = ele?.split("-").map((name) => name.trim());
+    return (
+      <div className="mb-4">
+        <label className="block text-sm font-medium">
+          Other affected
+          {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
+        </label>
+        <MultipleSelectOld
+          items={getTheListFilter(ele)}
+          value={formData.otherLinesAffected}
+          setFormData={setFormData}
+          formData={formData}
+          name="otherLinesAffected"
+          ele={ele}
+          flag={arr?.includes("YD") ? true : false}
         />
       </div>
+    );
+  }))}
 
-      {/* Submit Button */}
-      <div className="text-center">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={formSubmitHandler}
-        >
-          Submit
-        </button>
+  const getFormSubmitHandler = () => {
+    return formSubmitHandler;
+  }
+
+  const formSelectedDepo = () => {
+    return formData.depo;
+  }
+
+  const formConditionalRenderingSelectedDepot = () => {
+    if (formData.selectedDepartment === "ENGG" && formData.selectedSection === "MAS-GDR") {
+      return(
+        <div className='inline relative mb-4'>
+          <label className='block text-sm font-medium'>
+            Depo/SSE <span style={{ color: "red"}}>*</span>
+          </label>
+          <select
+          ref = {handleInputRefsChange(3)}
+          onKeyDown={handleKeyDownChange(3)}
+          value={formSelectedDepo()}
+          name="selectedDepo"
+          className="mt-1 w-full p-2.5 border rounded"
+          onChange={getHandleChange()}>
+        <option>Select Depo/SSE</option>
+        <option value="TVT">TVT</option>
+        <option value="PON">PON</option>
+        <option value="SPE">SPE</option>
+        <option value="GDR">GDR</option>
+          </select>
+        </div>
+      )
+    }
+    else  if (formData.selectedDepartment === "TRD" && formData.selectedSection == "MAS-GDR"){
+      return(
+        <div className='inline relative mb-4'>
+        <label className='block text-sm font-medium'>
+          Depo/SSE <span style={{ color: "red"}}>*</span>
+        </label>
+        <select
+        ref = {handleInputRefsChange(3)}
+        onKeyDown={handleKeyDownChange(3)}
+        value={formSelectedDepo()}
+        name="selectedDepo"
+        className="mt-1 w-full p-2.5 border rounded"
+        onChange={handleChange}>
+        <option>Select Depo/SSE</option>
+        <option value="TRD/BBQ">TRD/BBQ</option>
+        <option value="TRD/TVT">TRD/TVT</option>
+        <option value="TRD/SPE">TRD/SPE</option>
+        <option value="TRD/GDR">TRD/GDR</option>
+        </select>
       </div>
-    </div>
+      )
+    }
+    else  if (formData.selectedDepartment === "SIG" && formData.selectedSection == "MAS-GDR"){
+      return(
+        <div className='inline relative mb-4'>
+        <label className='block text-sm font-medium'>
+          Depo/SSE <span style={{ color: "red"}}>*</span>
+        </label>
+        <select
+        ref = {handleInputRefsChange(3)}
+        onKeyDown={handleKeyDownChange(3)}
+        value={formSelectedDepo()}
+        name="selectedDepo"
+        className="mt-1 w-full p-2.5 border rounded"
+        onChange={handleChange}>
+        <option>Select Depo/SSE</option>
+        <option value="TRD/BBQ">NYP</option>
+        <option value="TRD/TVT">SPE</option>
+        <option value="TRD/SPE">GPD</option>
+        <option value="TRD/GDR">TVT</option>
+        <option value="TRD/GDR">BBQ</option>
+        <option value="TRD/GDR">MAS</option>
+        </select>
+      </div>
+      )
+    }
+  }
+
+  return (
+    <FormLayout
+     handleInputRefsChange={handleInputRefsChange}
+     handleKeyDownChange={handleKeyDownChange}
+     getFormDate={getFormDate}
+     getHandleChange={getHandleChange}
+     maxDate={maxDate}
+     formSelectedDepartment={formSelectedDepartment}
+      formSelectedSection={formSelectedSection}
+      handleGetTheListForYard={handleGetTheListForYard}
+      formMissionBlock={formMissionBlock}
+      handleSetFormData={handleSetFormData}
+      formWorkType={formWorkType}
+      customOption1={customOption1}
+      customOption2={customOption2}
+      customOption3={customOption3}
+      handleGetMissionBlock1={handleGetMissionBlock1}
+      formConditionalRendering1={formConditionalRendering1}
+      formDemandTimeFrom={formDemandTimeFrom}
+      formDemandTimeTo={formDemandTimeTo}
+      formConditionalRendering2={formConditionalRendering2}
+      handleGetMissionBlock2 = {getHandleMissionBlock2}
+      formRequestRemarks={formRequestRemarks}
+      formSubmitHandler={getFormSubmitHandler}
+      formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
+    />
   );
 }
