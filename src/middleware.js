@@ -5,6 +5,7 @@ export async function middleware(request) {
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
+
   const { pathname } = request.nextUrl;
 
   if (
@@ -21,7 +22,8 @@ export async function middleware(request) {
   const adminRoutes = ["/ad/ad-home", "/ad/ad-form", "/ad/ad-optimised-table"];
   const userRoutes = ["/"];
 
-  if (!request.cookies.get("__Secure-next-auth.session-token")) {
+  //__Secure-
+  if (!request.cookies.get("next-auth.session-token")) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);

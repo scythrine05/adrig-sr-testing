@@ -68,3 +68,140 @@ export const formatData = (requestData) => {
   const updatedData = [...newRequests];
   return updatedData;
 };
+
+// to be reviewed ---------------------------------------------------------------------------------------------------------
+
+
+// For RequestForm and ManagerForm---------------------------------------------------------
+
+import validateForm from "../components/custom/blockrequest/formValidation";
+import { useState } from "react";
+
+
+export const useFormState = () =>{
+  const [formData, setFormData] = useState({
+    date: "",
+    selectedDepartment: "",
+    selectedSection: "",
+    stationID: "",
+    workType: "",
+    workDescription: "",
+    selectedLine: {
+      station: [],
+      yard: [],
+    },
+    selectedStream: "", 
+    missionBlock: "",
+    cautionRequired: "",
+    cautionSpeed: "",
+    cautionLocationFrom: "",
+    cautionLocationTo: "",
+    workLocationFrom: "",
+    workLocationTo: "",
+    demandTimeFrom: "",
+    demandTimeTo: "",
+    sigDisconnection: "",
+    ohDisconnection: "",
+    elementarySectionFrom: "",
+    elementarySectionTo: "",
+    sigElementarySectionFrom: "",
+    sigElementarySectionTo: "",
+    repercussions: "",
+    otherLinesAffected: {
+      station: [],
+      yard: [],
+    },
+    requestremarks: "",
+    selectedDepo: "",
+  });
+  return [formData, setFormData];
+}
+
+
+export const handleKeyDown = (e, index) => {
+  e.preventDefault();
+  if (e.key === "ArrowRight") {
+    const nextIndex = index + 1;
+    if (nextIndex < inputRefs.current.length) {
+      inputRefs.current[nextIndex].focus();
+    }
+  }
+};
+
+export const formValidation = (value) => {
+  let res = validateForm(value);
+  console.log(validateForm(value));
+  if (
+    res.date ||
+    res.selectedDepartment ||
+    res.stationID ||
+    res.workType ||
+    res.workDescription ||
+    res.selectedLine ||
+    res.missionBlock ||
+    res.demandTimeFrom ||
+    res.demandTimeTo ||
+    res.sigDisconnection ||
+    res.ohDisconnection ||
+    res.cautionRequired ||
+    res.cautionLocationFrom ||
+    res.cautionLocationTo ||
+    res.cautionSpeed ||
+    res.elementarySectionFrom ||
+    res.elementarySectionTo ||
+    res.sigElementarySectionFrom ||
+    (value.selectedDepartment === "ENGG" &&
+      value.sigDisconnection === "Yes" &&
+      res.sigElementarySectionTo)
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export function revertCategoryFormat(formattedCategory) {
+if (formattedCategory === "Gear") {
+  return formattedCategory;
+}
+return formattedCategory.split(" ").join("_");
+}
+
+
+
+
+export const handleMoveToNext = (index) => (e) => {
+  if (e.target.value.length > 0 && inputRefs.current[index + 1]) {
+    inputRefs.current[index + 1].focus();
+  }
+};
+
+
+
+//------------------------------------------------------------------------------------------
+
+// SignIn and SignUp
+// fn list -> handleVerifyOtp, formatTime
+
+
+export const handleVerifyOtp = async () => {
+    const res = await verifyHandler(formValues.username, otp, code);
+    if (res.success != true) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+
+
+export const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+// ----------------------------------------------------------------------------------------------------------
+

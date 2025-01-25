@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import currentUser, { getUserName } from "../../../app/actions/user";
 import { currentApprovedData } from "../../../app/actions/optimisetable";
+import { getManagerForUser } from "../../../app/actions/user";
 
 const getFormattedDate = () => {
   const date = new Date();
@@ -102,6 +103,7 @@ const WelcomeScreenContainer = () => {
   const [approved, setApproved] = useState(null);
   const [user, setUser] = useState("");
   const [userRequest, setUserRequest] = useState(0);
+  const [manager, setManager] = useState(null);
   useEffect(() => {
     async function fxxn() {
       try {
@@ -109,7 +111,8 @@ const WelcomeScreenContainer = () => {
         if (email) {
           const res = await getUserName(email.user);
           const userSanctionData = await currentApprovedData(res.id);
-
+          const managerObj = await getManagerForUser(email.user);
+          setManager(managerObj); 
           setApproved(userSanctionData);
           setUser(res.name);
           const formData = await getFormData(res.id);
@@ -140,6 +143,9 @@ const WelcomeScreenContainer = () => {
             <h1 className="text-3xl font-bold mb-4 text-slate-950">
               Welcome {user}🎉
             </h1>
+            <span className="text-md mb-4 text-slate-500 font-sans font-medium">
+              Manager : {manager}
+              </span>
             <p className="text-md text-textcolor mb-4">
               Manage your block requests efficiently and effectively.
             </p>

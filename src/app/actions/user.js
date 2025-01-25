@@ -21,6 +21,12 @@ export async function currentUserDetails() {
   }
 }
 
+export async function getManagerForUser(email) {
+  const res = await prisma.user.findUnique({ where: { username: email } });
+  const managerName = await prisma.manager.findUnique({ where: { id: res.manager } }); 
+  return managerName ? managerName.name : "";
+}
+
 export async function currentOptimizedValue(email) {
   const res = await prisma.user.findUnique({ where: { username: email } });
   return res.optimised;
