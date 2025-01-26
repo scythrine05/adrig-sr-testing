@@ -30,6 +30,7 @@ export async function postStagingFormData(formData, userId) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       requestremarks: formData.requestremarks,
+      selectedDepo: formData.selectedDepo,
       userId: userId,
     },
     select: {
@@ -70,6 +71,7 @@ export async function postStagingManagerFormData(formData, userId) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       requestremarks: formData.requestremarks,
+      selectedDepo: formData.selectedDepo,
       managerId: userId,
     },
     select: {
@@ -113,6 +115,7 @@ export async function updateStagingFormData(formData, requestId) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       requestremarks: formData.requestremarks,
+      selectedDepo: formData.selectedDepo,
     },
   });
 

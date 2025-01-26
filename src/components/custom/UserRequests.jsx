@@ -212,6 +212,9 @@ export default function UserRequests({ date }) {
                 <TableCell>
                   <strong>Remarks</strong>
                 </TableCell>
+                <TableCell>
+                  <strong>Depo/sse</strong>
+                </TableCell>
                 <TableCell
                   sx={{
                     backgroundColor: "#E8DEF8",

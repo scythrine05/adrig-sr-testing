@@ -150,6 +150,7 @@ export const formValidation = (value) => {
     res.elementarySectionFrom ||
     res.elementarySectionTo ||
     res.sigElementarySectionFrom ||
+    res.selectedDepo ||
     (value.selectedDepartment === "ENGG" &&
       value.sigDisconnection === "Yes" &&
       res.sigElementarySectionTo)

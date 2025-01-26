@@ -71,6 +71,7 @@ model StagingRequests {
   repercussions            String
   otherLinesAffected       Json
   requestremarks           String
+  selectedDepo             String?
   createdAt                DateTime @default(now())
   status                   String?
   userId                   String?
@@ -107,6 +108,7 @@ model Requests {
   repercussions            String
   otherLinesAffected       Json
   requestremarks           String
+  selectedDepo             String?
   createdAt                DateTime @default(now())
   userId                   String?
   managerId                String?
@@ -145,6 +147,7 @@ model Sanctiontable {
   repercussions            String
   otherLinesAffected       Json?
   requestremarks           String
+  selectedDepo             String?
   final                    String?
   userId                   String?
   managerId                String?

@@ -352,6 +352,7 @@ export default function RequestForm2(props) {
               yard: [],
             },
             requestremarks: "",
+            selectedDepo: "",
           });
           toast({
             title: "Success",

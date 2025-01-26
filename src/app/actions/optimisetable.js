@@ -34,6 +34,7 @@ export async function postDataOptimisedFirst(request) {
       repercussions: request.repercussions,
       otherLinesAffected: request.otherLinesAffected,
       requestremarks: request.requestremarks,
+      selectedDepo: request.selectedDepo,
       userId: request.userId,
       managerId: request.managerId,
     },

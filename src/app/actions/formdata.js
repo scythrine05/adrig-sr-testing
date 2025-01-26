@@ -30,6 +30,7 @@ export async function postFormData(formData) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       requestremarks: formData.requestremarks,
+      selectedDepo: formData.selectedDepo,
       userId: formData.userId,
     },
     select: {
@@ -70,6 +71,7 @@ export async function postFormManagerData(formData) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       requestremarks: formData.requestremarks,
+      selectedDepo: formData.selectedDepo,
       managerId: formData.managerId,
     },
     select: {
@@ -112,6 +114,7 @@ export async function updateFormData(formData, requestId) {
       sigElementarySectionTo: formData.sigElementarySectionTo,
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
+      selectedDepo: formData.selectedDepo,
       requestremarks: formData.requestremarks,
     },
   });
