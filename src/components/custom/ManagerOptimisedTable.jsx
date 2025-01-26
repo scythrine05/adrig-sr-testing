@@ -158,7 +158,7 @@ const ManagerOptmisedTable = ({ id }) => {
               <strong>Accept The Optimised Requests</strong>
             </TableCell>
             <TableCell>
-              <strong>Depo/SSE</strong>
+              <strong>Depot/SSE</strong>
             </TableCell>
           </TableRow>
         </TableHead>

@@ -55,6 +55,7 @@ export default function EditRequest(props) {
       yard: [],
     },
     requestremarks: "",
+    selectedDepo: "",
   });
 
   const inputRefs = useRef([]);
@@ -118,6 +119,7 @@ export default function EditRequest(props) {
       res.missionBlock ||
       res.demandTimeFrom ||
       res.demandTimeTo ||
+      res.selectedDepo ||
       (formData.selectedDepartment != "TRD" &&
         (res.sigDisconnection || res.ohDisconnection || res.cautionRequired))
     ) {
@@ -431,6 +433,7 @@ export default function EditRequest(props) {
             yard: [],
           },
           requestremarks: "",
+          selectedDepo: "",
         });
         toast({
           title: "Success",

@@ -213,7 +213,7 @@ export default function UserRequests({ date }) {
                   <strong>Remarks</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>Depo/sse</strong>
+                  <strong>Depot/SSE</strong>
                 </TableCell>
                 <TableCell
                   sx={{

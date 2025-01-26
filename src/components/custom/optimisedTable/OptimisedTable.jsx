@@ -168,6 +168,9 @@ export default function OptimisedTable() {
               <strong>Other Lines Affected</strong>
             </TableCell>
             <TableCell>
+              <strong>Depot/SSE</strong>
+            </TableCell>
+            <TableCell>
               <strong>Accept The Optimised Requests</strong>
             </TableCell>
             <TableCell>
