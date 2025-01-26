@@ -304,6 +304,7 @@ export default function UserRequests({ date }) {
                     </TableCell>
                     <TableCell>{request.otherLinesAffected}</TableCell>
                     <TableCell>{request.requestremarks}</TableCell>
+                    <TableCell>{request.selectedDepo}</TableCell>
                     <TableCell
                       sx={{
                         backgroundColor: "#FFEFF4",

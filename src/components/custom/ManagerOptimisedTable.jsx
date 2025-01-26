@@ -157,6 +157,9 @@ const ManagerOptmisedTable = ({ id }) => {
             <TableCell>
               <strong>Accept The Optimised Requests</strong>
             </TableCell>
+            <TableCell>
+              <strong>Depo/SSE</strong>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -190,6 +193,7 @@ const ManagerOptmisedTable = ({ id }) => {
                 <TableCell>{request.sigElementarySectionFrom}</TableCell>
                 <TableCell>{request.sigElementarySectionTo}</TableCell>
                 <TableCell>{request.otherLinesAffected}</TableCell>
+                <TableCell>{request.selectedDepo}</TableCell>
                 <TableCell>
                   {request.action === "none" ? (
                     <div className=" flex justify-around">

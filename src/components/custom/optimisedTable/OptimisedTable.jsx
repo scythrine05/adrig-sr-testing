@@ -170,6 +170,9 @@ export default function OptimisedTable() {
             <TableCell>
               <strong>Accept The Optimised Requests</strong>
             </TableCell>
+            <TableCell>
+              <strong>Accept The Optimised Requests</strong>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -203,6 +206,7 @@ export default function OptimisedTable() {
                 <TableCell>{request.sigElementarySectionFrom}</TableCell>
                 <TableCell>{request.sigElementarySectionTo}</TableCell>
                 <TableCell>{request.otherLinesAffected}</TableCell>
+                <TableCell>{request.selectedDepo}</TableCell>
                 <TableCell>
                   {request.action === "none" ? (
                     <div className=" flex justify-around">

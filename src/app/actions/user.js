@@ -29,7 +29,7 @@ export async function getManagerForUser(email) {
 
 export async function currentOptimizedValue(email) {
   const res = await prisma.user.findUnique({ where: { username: email } });
-  return res.optimised;
+  return res.optimised; 
 }
 
 export async function setOptimised(str, userId) {
