@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { currentOptimizedValue } from "../../app/actions/user";
-import { getUser } from "../../lib/auth";
+import { getUser } from "../../app/actions/user";
 
 const useOptimizedCheck = () => {
   const [optimizedCheck, setOptimizedCheck] = useState(null);
