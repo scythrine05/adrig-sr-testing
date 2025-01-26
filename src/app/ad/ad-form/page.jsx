@@ -300,6 +300,9 @@ const SearchForm = () => {
               <TableCell>
                 <strong>Other Lines Affected</strong>
               </TableCell>
+              <TableCell>
+                <strong>Depo/SSE</strong>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -328,6 +331,7 @@ const SearchForm = () => {
                   <TableCell>{request.elementarySectionFrom}</TableCell>
                   <TableCell>{request.elementarySectionTo}</TableCell>
                   <TableCell>{request.otherLinesAffected}</TableCell>
+                  <TableCell>{request.selectedDepo}</TableCell>
                 </TableRow>
               ))
             ) : (
