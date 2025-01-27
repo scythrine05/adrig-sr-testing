@@ -344,6 +344,7 @@ export default function ManagerForm() {
             yard: [],
           },
           requestremarks: "",
+          selectedDepo: "",
         });
         toast({
           title: "Success",
@@ -887,7 +888,7 @@ export default function ManagerForm() {
       return(
         <div className='inline relative mb-4'>
           <label className='block text-sm font-medium'>
-            Depo/SSE <span style={{ color: "red"}}>*</span>
+            Depot/SSE <span style={{ color: "red"}}>*</span>
           </label>
           <select
           ref = {handleInputRefsChange(3)}
@@ -896,7 +897,7 @@ export default function ManagerForm() {
           name="selectedDepo"
           className="mt-1 w-full p-2.5 border rounded"
           onChange={getHandleChange()}>
-        <option>Select Depo/SSE</option>
+        <option>Select Depot/SSE</option>
         <option value="TVT">TVT</option>
         <option value="PON">PON</option>
         <option value="SPE">SPE</option>
@@ -909,7 +910,7 @@ export default function ManagerForm() {
       return(
         <div className='inline relative mb-4'>
         <label className='block text-sm font-medium'>
-          Depo/SSE <span style={{ color: "red"}}>*</span>
+          Depot/SSE <span style={{ color: "red"}}>*</span>
         </label>
         <select
         ref = {handleInputRefsChange(3)}
@@ -918,7 +919,7 @@ export default function ManagerForm() {
         name="selectedDepo"
         className="mt-1 w-full p-2.5 border rounded"
         onChange={handleChange}>
-        <option>Select Depo/SSE</option>
+        <option>Select Depot/SSE</option>
         <option value="TRD/BBQ">TRD/BBQ</option>
         <option value="TRD/TVT">TRD/TVT</option>
         <option value="TRD/SPE">TRD/SPE</option>
@@ -931,7 +932,7 @@ export default function ManagerForm() {
       return(
         <div className='inline relative mb-4'>
         <label className='block text-sm font-medium'>
-          Depo/SSE <span style={{ color: "red"}}>*</span>
+          Depot/SSE <span style={{ color: "red"}}>*</span>
         </label>
         <select
         ref = {handleInputRefsChange(3)}
@@ -940,7 +941,7 @@ export default function ManagerForm() {
         name="selectedDepo"
         className="mt-1 w-full p-2.5 border rounded"
         onChange={handleChange}>
-        <option>Select Depo/SSE</option>
+        <option>Select Depot/SSE</option>
         <option value="TRD/BBQ">NYP</option>
         <option value="TRD/TVT">SPE</option>
         <option value="TRD/SPE">GPD</option>
