@@ -922,6 +922,7 @@ export default function ManagerForm() {
         <option>Select Depot/SSE</option>
         <option value="TRD/BBQ">TRD/BBQ</option>
         <option value="TRD/TVT">TRD/TVT</option>
+        <option value="TRD/TVT">TRD/PON</option>
         <option value="TRD/SPE">TRD/SPE</option>
         <option value="TRD/GDR">TRD/GDR</option>
         </select>
