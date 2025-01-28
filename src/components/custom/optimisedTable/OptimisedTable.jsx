@@ -173,9 +173,7 @@ export default function OptimisedTable() {
             <TableCell>
               <strong>Accept The Optimised Requests</strong>
             </TableCell>
-            <TableCell>
-              <strong>Accept The Optimised Requests</strong>
-            </TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>

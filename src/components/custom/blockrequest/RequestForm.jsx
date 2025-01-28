@@ -358,6 +358,7 @@ export default function RequestForm2(props) {
             title: "Success",
             description: "Request Submitted",
           });
+          
           router.push("/schedule-manager");
         } else {
           toast({

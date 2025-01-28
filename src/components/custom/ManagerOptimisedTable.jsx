@@ -155,10 +155,10 @@ const ManagerOptmisedTable = ({ id }) => {
               <strong>Other Lines Affected</strong>
             </TableCell>
             <TableCell>
-              <strong>Accept The Optimised Requests</strong>
+              <strong>Depot/SSE</strong>
             </TableCell>
             <TableCell>
-              <strong>Depot/SSE</strong>
+              <strong>Accept The Optimised Requests</strong>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -194,7 +194,7 @@ const ManagerOptmisedTable = ({ id }) => {
                 <TableCell>{request.sigElementarySectionTo}</TableCell>
                 <TableCell>{request.otherLinesAffected}</TableCell>
                 <TableCell>{request.selectedDepo}</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   {request.action === "none" ? (
                     <div className=" flex justify-around">
                       <button
@@ -215,7 +215,16 @@ const ManagerOptmisedTable = ({ id }) => {
                   ) : (
                     <span>Rejected❌ {request.remarks}</span>
                   )}
-                </TableCell>
+                </TableCell> */}
+                  <TableCell>
+                    {request.action === "none" ? (
+                      "No Action Taken"
+                    ) : request.action === "Accepted" ? (
+                      <span>Accepted ✅</span>
+                    ) : (
+                      <span>Rejected❌ </span>
+                    )}
+                  </TableCell>
               </TableRow>
             ))
           ) : (

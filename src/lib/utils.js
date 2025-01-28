@@ -28,7 +28,7 @@ export const formatData = (requestData) => {
     selectedLineData.station.forEach((station) => {
       const subRequest = { ...request };
       subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
-      subRequest.selectedLine = station;
+      subRequest.selectedLine = station.split(":")[1];
       subRequest.selectedStream = "Not Applicable";
       subRequest.missionBlock = station.split(":")[0];
 
