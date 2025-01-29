@@ -102,14 +102,18 @@ const WelcomeScreenContainer = () => {
   const [approved, setApproved] = useState(null);
   const [user, setUser] = useState("");
   const [userRequest, setUserRequest] = useState(0);
+  const [reqUrl, setReqUrl] = useState("");
   useEffect(() => {
     async function fxxn() {
       try {
         const email = await currentUser();
         if (email) {
-          const res = await getUserName(email.user);
+          const res = await getUserName(email.user.email);
           const userSanctionData = await currentApprovedData(res.id);
-
+          const dept = res.department.toLowerCase();
+          console.log(dept);
+          const reqUrl = `/manager/${dept}/requests`;
+          setReqUrl(reqUrl);
           setApproved(userSanctionData);
           setUser(res.name);
           const formData = await getFormData(res.id);
@@ -161,7 +165,7 @@ const WelcomeScreenContainer = () => {
               <span className="flex-1 text-center">Create Block Request</span>
             </Link>
             <Link
-              href="/schedule-manager"
+              href={reqUrl}
               className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full w-1/2"
             >
               <MoveRight />{" "}
