@@ -2,6 +2,7 @@
 
 import prisma from "../../lib/prisma";
 import { data } from "../../lib/store";
+import { getUserUnderManager } from "./user";
 
 export async function postDataOptimisedFirst(request) {
   const res = await prisma.sanctiontable.create({
@@ -126,6 +127,23 @@ export async function currentOptimizedData(id) {
 export async function currentOptimizedManagerData(id) {
   const res = await prisma.sanctiontable.findMany({ where: { managerId: id } });
   return res;
+}
+
+export async function currentApprovedDataForManager(managerId) {
+  const umail = await prisma.user.findMany({ where: { manager: managerId } });
+  const umails = umail.map((e) => e?.id);
+
+  console.log(umails,'umail');
+  let count = 0;
+  for (let i = 0; i < umails.length; i++) {
+    const res = await prisma.sanctiontable.findMany({ where: { userId: umails[i] } });
+    for (let j = 0; j < res.length; j++) {
+      count++;
+    }
+  }
+  // const res = await prisma.sanctiontable.findMany({ where: { umail } });
+  // return res;
+  return count;
 }
 
 export async function currentApprovedData(id) {

@@ -255,6 +255,10 @@ export default function RequestForm2(props) {
             value,
           ],
         };
+        formData.otherLinesAffected = {
+          station: [],
+          yard: [],
+        };
       } else {
         const [newKey] = value.split(":");
         formData.selectedLine = {
@@ -265,6 +269,10 @@ export default function RequestForm2(props) {
             ),
             value,
           ],
+        };
+        formData.otherLinesAffected = {
+          station: [],
+          yard: [],
         };
       }
       formData.selectedLine = {

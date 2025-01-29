@@ -16,8 +16,8 @@ import {
   CircleUserRound,
   MoveRight,
 } from "lucide-react";
-import currentUser, { getUserName } from "../../../app/actions/user";
-import { currentApprovedData } from "../../../app/actions/optimisetable";
+import currentUser, { getManager, getManagerId, getUserName } from "../../../app/actions/user";
+import { currentApprovedData, currentApprovedDataForManager } from "../../../app/actions/optimisetable";
 
 const getFormattedDate = () => {
   const date = new Date();
@@ -108,14 +108,16 @@ const WelcomeScreenContainer = () => {
       try {
         const email = await currentUser();
         if (email) {
-          const res = await getUserName(email.user.email);
-          const userSanctionData = await currentApprovedData(res.id);
+          const username = await getManager(email.user);
+          setUser(username.name);
+          const res = username.id;  
+          const userSanctionData = await currentApprovedDataForManager(res);
+          console.log(userSanctionData);
+          setUserRequest(userSanctionData);
           const dept = res.department.toLowerCase();
-          console.log(dept);
           const reqUrl = `/manager/${dept}/requests`;
           setReqUrl(reqUrl);
-          setApproved(userSanctionData);
-          setUser(res.name);
+
           const formData = await getFormData(res.id);
           setUserRequest(formData.requestData.length);
         }

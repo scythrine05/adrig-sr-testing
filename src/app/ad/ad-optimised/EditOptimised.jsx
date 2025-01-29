@@ -148,7 +148,7 @@ function EditOptimised({ request, setShowPopup }) {
             <input
               type="time"
               value={formData.Optimisedtimefrom}
-              name="demandTimeFrom"
+              name="Optimisedtimefrom"
               className="mt-1 w-1/2 p-2 border rounded"
               placeholder="from"
               onChange={handleChange}
@@ -156,7 +156,7 @@ function EditOptimised({ request, setShowPopup }) {
             <input
               type="time"
               value={formData.Optimisedtimeto}
-              name="demandTimeTo"
+              name="Optimisedtimeto"
               className="mt-1 w-1/2 p-2 border rounded"
               placeholder="to"
               onChange={handleChange}
@@ -164,7 +164,7 @@ function EditOptimised({ request, setShowPopup }) {
           </div>
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-sm font-medium">
             Action <span style={{ color: "red" }}>*</span>
           </label>
@@ -177,9 +177,9 @@ function EditOptimised({ request, setShowPopup }) {
             <option value="Accepted">Accepted</option>
             <option value="Rejected">Rejected</option>
           </select>
-        </div>
+        </div> */}
 
-        {formData.action !== "Accepted" && (
+        {/* {formData.action !== "Accepted" && (
           <label className="block mb-4">
             <textarea
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -190,14 +190,14 @@ function EditOptimised({ request, setShowPopup }) {
               placeholder="Enter your remarks here..."
             />
           </label>
-        )}
+        )} */}
 
         <div className="flex justify-end">
           <button
             className="bg-red-500 text-white py-2 px-4 mr-3 rounded-lg hover:bg-red-600 transition-colors"
             onClick={() => {
               setShowPopup(false);
-            }}
+            }}  
           >
             Cancel
           </button>
