@@ -18,11 +18,12 @@ export default function ManagerForm() {
   const [otherData, setOtherData] = useState("");
   const [formData, setFormData] = useFormState();
   const { data: session, status } = useSession();
-  console.log(session);
+
   const inputRefs = useRef([]);
 
   useEffect(() => {
     const fxn = async () => {
+      console.log(session?.user?.email);
       const res = await getManager(session?.user?.email);
       if (res == null || res == undefined) {
         return;
@@ -943,12 +944,12 @@ export default function ManagerForm() {
         className="mt-1 w-full p-2.5 border rounded"
         onChange={handleChange}>
         <option>Select Depot/SSE</option>
-        <option value="TRD/BBQ">NYP</option>
-        <option value="TRD/TVT">SPE</option>
-        <option value="TRD/SPE">GPD</option>
-        <option value="TRD/GDR">TVT</option>
-        <option value="TRD/GDR">BBQ</option>
-        <option value="TRD/GDR">MAS</option>
+        <option value="NYP">NYP</option>
+        <option value="SPET">SPE</option>
+        <option value="GPD">GPD</option>
+        <option value="TVT">TVT</option>
+        <option value="BBQ">BBQ</option>
+        <option value="MAS">MAS</option>
         </select>
       </div>
       )

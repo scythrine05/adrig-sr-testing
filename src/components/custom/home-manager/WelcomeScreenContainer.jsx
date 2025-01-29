@@ -112,7 +112,6 @@ const WelcomeScreenContainer = () => {
           setUser(username.name);
           const res = username.id;  
           const userSanctionData = await currentApprovedDataForManager(res);
-          console.log(userSanctionData);
           setUserRequest(userSanctionData);
           const dept = res.department.toLowerCase();
           const reqUrl = `/manager/${dept}/requests`;

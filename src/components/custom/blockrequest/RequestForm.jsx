@@ -415,9 +415,6 @@ export default function RequestForm2(props) {
     return setFormData;
   }
 
-  const handleGetDepoSSE = () => {
-    return 
-  }
   
   const formWorkType = () => {
     return formData.workType;
@@ -965,12 +962,12 @@ export default function RequestForm2(props) {
         className="mt-1 w-full p-2.5 border rounded"
         onChange={handleChange}>
         <option>Select Depot/SSE</option>
-        <option value="TRD/BBQ">NYP</option>
-        <option value="TRD/TVT">SPE</option>
-        <option value="TRD/SPE">GPD</option>
-        <option value="TRD/GDR">TVT</option>
-        <option value="TRD/GDR">BBQ</option>
-        <option value="TRD/GDR">MAS</option>
+        <option value="NYP">NYP</option>
+        <option value="SPE">SPE</option>
+        <option value="GPD">GPD</option>
+        <option value="TVT">TVT</option>
+        <option value="BBQ">BBQ</option>
+        <option value="MAS">MAS</option>
         </select>
       </div>
       )
