@@ -23,16 +23,23 @@ export default function ManagerForm() {
 
   useEffect(() => {
     const fxn = async () => {
-      console.log(session?.user?.email);
-      const res = await getManager(session?.user?.email);
-      if (res == null || res == undefined) {
+      if (!session || !session.user) {
+        console.log("Session is not available yet");
         return;
-      } else {
-        formData.selectedDepartment = res.department.toUpperCase();
       }
+  
+      const mail = session.user.email;
+      console.log(mail);
+  
+      const res = await getManager(mail);
+      if (!res) return;
+  
+      formData.selectedDepartment = res.department.toUpperCase();
     };
+  
     fxn();
-  }, [formData, status]);
+  }, [session, formData, status]); // Ensure session is a dependency
+  
 
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
@@ -280,10 +287,12 @@ export default function ManagerForm() {
         ],
       };
       setFormData({ ...formData, [name]: formData.selectedLine });
+      
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
+  
 
   const formSubmitHandler = async () => {
     const UserData = await getManager(session?.user?.email);
@@ -437,7 +446,7 @@ export default function ManagerForm() {
   ) : (
     <select
       ref={(el) => (inputRefs.current[6] = el)}
-      onKeyDown={(e) => handleKeyDown(e, 6)}
+      onKeyDown={(e) => handleKeyDownChange(e, 6)}
       name="workDescription"
       className="mt-1 w-full p-2.5 border rounded z-1000"
       onChange={handleChange}
@@ -520,42 +529,34 @@ export default function ManagerForm() {
         <select
           name="selectedLine"
           ref={(el) => (inputRefs.current[5] = el)}
-          onKeyDown={(e) => handleKeyDown(e, 5)}
+          onKeyDown={(e) => handleKeyDownChange(e, 5)}
           value={value}
           className="mt-1 w-full p-2 border rounded"
           onChange={handleChange}
+          required
         >
-          <option value={""}>
-            Select {arr?.includes("YD") ? `Road ` : `Line `}
-          </option>
+          <option value="">Select {arr?.includes("YD") ? `Road` : `Line`}</option>
           {arr?.includes("YD") ? (
-            <>
-              {filteredData.length > 0 ? (
-                filteredData.map((e) => (
-                  <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                    {e.road_no}
-                  </option>
-                ))
-              ) : (
-                <option disabled>
-                  No data available for the selected stream
+            filteredData.length > 0 ? (
+              filteredData.map((e) => (
+                <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                  {e.road_no}
                 </option>
-              )}
-            </>
+              ))
+            ) : (
+              <option disabled>No data available for the selected stream</option>
+            )
           ) : (
-            <>
-              {getTheList(ele).map((e) => {
-                return (
-                  <>
-                    <option value={`${ele}:${e}`} key={e}>
-                      {e}
-                    </option>
-                  </>
-                );
-              })}
-            </>
+            getTheList(ele).map((e) => (
+              <option value={`${ele}:${e}`} key={e}>
+                {e}
+              </option>
+            ))
           )}
         </select>
+
+
+
       </div>
     );
   }))}

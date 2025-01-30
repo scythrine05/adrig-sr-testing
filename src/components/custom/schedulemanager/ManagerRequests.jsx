@@ -112,10 +112,18 @@ const RequestList = ({
 
 const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
   return (
-    <div className="request-details p-6 bg-gray-100 rounded-lg shadow-lg">
+    <div className="request-details p-6 bg-gray-100 rounded-lg shadow-lg w-100">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
         Request Details
       </h2>
+      <div className="flex items-center mb-6 justify-end">
+      <button
+          onClick={onBack}
+          className="bg-white text-black px-4 py-2 rounded-lg shadow hover:bg-zinc-500 hover:text-white focus:ring focus:ring-red-300"
+        >
+          Go Back
+        </button>
+        </div>
       <div className="bg-white rounded-lg p-4 shadow">
         <ul className="divide-y divide-gray-200">
           {Object.entries(request).map(([key, value]) => (
@@ -245,7 +253,7 @@ const ManagerRequests = ({ id }) => {
   };
 
   return (
-    <div className="request-manager max-w-5xl mx-auto my-10 p-6 bg-gray-50 rounded-lg shadow">
+    <div className="request-manager max-w-90  mx-auto my-10 p-6 bg-gray-50 rounded-lg shadow">
       {!selectedRequest && !isEditing && (
         <RequestList
           requests={requests}

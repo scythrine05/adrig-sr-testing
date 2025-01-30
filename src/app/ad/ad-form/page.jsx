@@ -52,7 +52,7 @@ const SearchForm = () => {
         const finalData = formattedData.map((e) => {
           return {
             ...e,
-            selectedLine: e.selectedLine.split(":")[1],
+            selectedLine:  e.selectedLine && e.selectedLine.split(":")[1],
           };
         });
         setFilteredRequests(finalData);

@@ -27,10 +27,11 @@ export const formatData = (requestData) => {
 
     selectedLineData.station.forEach((station) => {
       const subRequest = { ...request };
+
       subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
-      subRequest.selectedLine = station.split(":")[1];
+      subRequest.selectedLine = station && station.split(":")[1];
       subRequest.selectedStream = "Not Applicable";
-      subRequest.missionBlock = station.split(":")[0];
+      subRequest.missionBlock = station && station.split(":")[0];
 
       const otherLines = request.otherLinesAffected?.station?.map((e) => {
         const key = e?.split(":")[0];
@@ -119,14 +120,27 @@ export const useFormState = () =>{
 
 
 export const handleKeyDown = (e, index) => {
-  e.preventDefault();
-  if (e.key === "ArrowRight") {
-    const nextIndex = index + 1;
-    if (nextIndex < inputRefs.current.length) {
+  const { key, target } = e;
+  const isDropdown = target.tagName === "SELECT";
+
+  if (isDropdown) {
+    if (key === "ArrowUp" || key === "ArrowDown") {
+      return; // Let dropdown navigation work normally
+    }
+  }
+
+  // Move focus between input fields & dropdowns
+  if (key === "ArrowRight" || key === "ArrowLeft") {
+    e.preventDefault();
+    const nextIndex = index + (key === "ArrowRight" ? 1 : -1);
+    if (inputRefs.current[nextIndex]) {
       inputRefs.current[nextIndex].focus();
     }
   }
 };
+
+
+
 
 export const formValidation = (value) => {
   let res = validateForm(value);

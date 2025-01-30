@@ -132,8 +132,6 @@ export async function currentOptimizedManagerData(id) {
 export async function currentApprovedDataForManager(managerId) {
   const umail = await prisma.user.findMany({ where: { manager: managerId } });
   const umails = umail.map((e) => e?.id);
-
-  console.log(umails,'umail');
   let count = 0;
   for (let i = 0; i < umails.length; i++) {
     const res = await prisma.sanctiontable.findMany({ where: { userId: umails[i] } });
@@ -141,8 +139,6 @@ export async function currentApprovedDataForManager(managerId) {
       count++;
     }
   }
-  // const res = await prisma.sanctiontable.findMany({ where: { umail } });
-  // return res;
   return count;
 }
 
