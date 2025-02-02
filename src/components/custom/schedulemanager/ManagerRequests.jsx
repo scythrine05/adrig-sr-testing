@@ -27,6 +27,7 @@ const RequestList = ({
   selectedRequests,
   toggleRequestSelection,
   handleSubmitSelected,
+  handleCancelSelected,
 }) => {
   const filteredRequests = selectedUser
     ? requests.filter((request) => request.userId !== selectedUser)
@@ -130,6 +131,18 @@ const RequestList = ({
           }`}
         >
           Submit Selected
+        </button>
+
+        <button
+          onClick={handleCancelSelected}
+          disabled={selectedRequests.length === 0}
+          className={`ml-3 px-6 py-2 rounded-lg shadow ${
+            selectedRequests.length === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-red-600 text-white hover:bg-red-700 focus:ring focus:ring-red-300"
+          }`}
+        >
+          Cancel Selected
         </button>
       </div>
     </div>
@@ -282,6 +295,20 @@ const ManagerRequests = ({ id }) => {
       console.error("Error cancelling request:", error);
     }
   };
+  const handleCancelSelected = async () => {
+    try {
+      for (const requestId of selectedRequests) {
+        await deleteStagingFormData(requestId);
+      }
+      setRequests((prev) =>
+        prev.filter((req) => !selectedRequests.includes(req.requestId))
+      );
+      setSelectedRequests([]);
+    } catch (error) {
+      console.error("Error canceling selected requests:", error);
+    }
+  };
+  
 
   const handleConfirmRequest = async (request) => {
     try {
@@ -320,6 +347,7 @@ const ManagerRequests = ({ id }) => {
           selectedRequests={selectedRequests}
           toggleRequestSelection={toggleRequestSelection}
           handleSubmitSelected={handleSubmitSelected}
+          handleCancelSelected={handleCancelSelected}
         />
       )}
       {selectedRequest && !isEditing && (
