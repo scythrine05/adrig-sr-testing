@@ -247,6 +247,9 @@ const SearchForm = () => {
                 <strong>Section</strong>
               </TableCell>
               <TableCell>
+                <strong>Depo/SSE</strong>
+              </TableCell>
+              <TableCell>
                 <strong>Block Section</strong>
               </TableCell>
               <TableCell>
@@ -300,9 +303,7 @@ const SearchForm = () => {
               <TableCell>
                 <strong>Other Lines Affected</strong>
               </TableCell>
-              <TableCell>
-                <strong>Depo/SSE</strong>
-              </TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
@@ -313,6 +314,7 @@ const SearchForm = () => {
                   <TableCell>{request.date}</TableCell>
                   <TableCell>{request.selectedDepartment}</TableCell>
                   <TableCell>{request.selectedSection}</TableCell>
+                  <TableCell>{request.selectedDepo}</TableCell>
                   <TableCell>{request.stationID}</TableCell>
                   <TableCell>{request.missionBlock}</TableCell>
                   <TableCell>{request.workDescription}</TableCell>
@@ -331,7 +333,7 @@ const SearchForm = () => {
                   <TableCell>{request.elementarySectionFrom}</TableCell>
                   <TableCell>{request.elementarySectionTo}</TableCell>
                   <TableCell>{request.otherLinesAffected}</TableCell>
-                  <TableCell>{request.selectedDepo}</TableCell>
+
                 </TableRow>
               ))
             ) : (

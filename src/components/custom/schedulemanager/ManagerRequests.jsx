@@ -24,6 +24,9 @@ const RequestList = ({
   users,
   selectedUser,
   setSelectedUser,
+  selectedRequests,
+  toggleRequestSelection,
+  handleSubmitSelected,
 }) => {
   const filteredRequests = selectedUser
     ? requests.filter((request) => request.userId !== selectedUser)
@@ -73,16 +76,20 @@ const RequestList = ({
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm font-medium">
-            {filteredRequests.map((request) => (
+          {filteredRequests.map((request) => (
               <tr
                 key={request.requestId}
                 className="border-b hover:bg-gray-100 transition-colors"
               >
                 <td className="px-6 py-4 text-center align-middle">
-                  {request.date}
+                  <input
+                    type="checkbox"
+                    checked={selectedRequests.includes(request.requestId)}
+                    onChange={() => toggleRequestSelection(request.requestId)}
+                  />
                 </td>
                 <td className="px-6 py-4 text-center align-middle">
-                  {request.selectedDepo}
+                  {request.requestId}
                 </td>
                 <td className="px-6 py-4 text-center align-middle">
                   {request.missionBlock}
@@ -106,6 +113,21 @@ const RequestList = ({
           </tbody>
         </table>
       )}
+      
+      {/* Submit Selected Requests */}
+      <div className="mt-4 flex justify-center">
+        <button
+          onClick={handleSubmitSelected}
+          disabled={selectedRequests.length === 0}
+          className={`px-6 py-2 rounded-lg shadow ${
+            selectedRequests.length === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 text-white hover:bg-green-700 focus:ring focus:ring-green-300"
+          }`}
+        >
+          Submit Selected
+        </button>
+      </div>
     </div>
   );
 };
@@ -174,6 +196,7 @@ const ManagerRequests = ({ id }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
+  const [selectedRequests, setSelectedRequests] = useState([]);
 
   const { data: session, status } = useSession();
   useEffect(() => {
@@ -208,6 +231,35 @@ const ManagerRequests = ({ id }) => {
     }
     fetchData();
   }, [id, status]);
+
+  const toggleRequestSelection = (requestId) => {
+    setSelectedRequests((prev) =>
+      prev.includes(requestId)
+        ? prev.filter((id) => id !== requestId)
+        : [...prev, requestId]
+    );
+  };
+
+  const handleSubmitSelected = async () => {
+    try {
+      for (const requestId of selectedRequests) {
+        const request = requests.find((req) => req.requestId === requestId);
+        if (request.userId == null) {
+          await postFormManagerData(request);
+        } else {
+          await postFormData(request);
+        }
+        await deleteStagingFormData(requestId);
+      }
+
+      setRequests((prev) =>
+        prev.filter((req) => !selectedRequests.includes(req.requestId))
+      );
+      setSelectedRequests([]);
+    } catch (error) {
+      console.error("Error submitting selected requests:", error);
+    }
+  };
 
   const handleSelectRequest = (request) => {
     setSelectedRequest(request);
@@ -261,6 +313,9 @@ const ManagerRequests = ({ id }) => {
           users={users}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
+          selectedRequests={selectedRequests}
+          toggleRequestSelection={toggleRequestSelection}
+          handleSubmitSelected={handleSubmitSelected}
         />
       )}
       {selectedRequest && !isEditing && (

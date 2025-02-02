@@ -1,32 +1,35 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "./Dropdown";
 
 const MultipleSelect = (props) => {
   const [dropdown, setDropdown] = useState(false);
   const [selectedItems, setSelected] = useState([]);
   const [searchTag, setSearchTag] = useState("");
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
 
-  // Set selectedItems based on the initial value passed via props
   useEffect(() => {
     if (props.value) {
       setSelected(props.value.split(", "));
     }
-    if (props.value == "") {
+    if (props.value === "") {
       setSelected([]);
     }
   }, [props.value]);
 
   const toggleDropdown = () => {
-    setDropdown(!dropdown);
+    setDropdown((prev) => !prev);
   };
 
   const changeHandler = (e) => {
     setSearchTag(e.target.value);
+    setHighlightedIndex(0); // Reset highlight on input change
   };
 
   const addTag = (item) => {
-    const newSelectedItems = selectedItems.concat(item);
+    const newSelectedItems = [...selectedItems, item];
     setSelected(newSelectedItems);
+    setSearchTag(""); // Clear search input
+
     if (props.limit) {
       props.setFormData((prevData) => ({
         ...prevData,
@@ -44,6 +47,7 @@ const MultipleSelect = (props) => {
   const removeTag = (item) => {
     const filtered = selectedItems.filter((e) => e !== item);
     setSelected(filtered);
+
     if (props.limit) {
       props.setFormData((prevData) => ({
         ...prevData,
@@ -54,6 +58,25 @@ const MultipleSelect = (props) => {
         ...prevData,
         otherLinesAffected: filtered.join(", "),
       }));
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (!dropdown) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev + 1) % props.items.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev === 0 ? props.items.length - 1 : prev - 1
+      );
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (props.items[highlightedIndex]) {
+        addTag(props.items[highlightedIndex]);
+      }
     }
   };
 
@@ -105,6 +128,8 @@ const MultipleSelect = (props) => {
                         className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-slate-900"
                         onClick={toggleDropdown}
                         onChange={changeHandler}
+                        onKeyDown={handleKeyDown}
+                        value={searchTag}
                       />
                     </div>
                   </div>
@@ -132,13 +157,14 @@ const MultipleSelect = (props) => {
                 </div>
               </div>
             </div>
-            {props.items.length != 0 && dropdown && (
+            {props.items.length !== 0 && dropdown && (
               <Dropdown
                 list={props.items}
                 limit={props.limit}
                 searchTag={searchTag}
                 addItem={addTag}
                 selectedItems={selectedItems}
+                highlightedIndex={highlightedIndex} // Pass highlighted index for styling
               />
             )}
           </div>
