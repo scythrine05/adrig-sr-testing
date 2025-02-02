@@ -67,6 +67,7 @@ const RequestList = ({
         <table className="table-auto w-full max-w-5xl mx-auto border-collapse bg-white rounded-lg overflow-hidden shadow">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal text-center">
+              <th className="px-6 py-3"></th>
               <th className="px-6 py-3">Date</th>
               <th className="px-6 py-3">Depo/SSE</th>
               <th className="px-6 py-3">Mission Block</th>
@@ -89,7 +90,10 @@ const RequestList = ({
                   />
                 </td>
                 <td className="px-6 py-4 text-center align-middle">
-                  {request.requestId}
+                  {request.date}
+                </td>
+                <td className="px-6 py-4 text-center align-middle">
+                  {request.selectedDepo}
                 </td>
                 <td className="px-6 py-4 text-center align-middle">
                   {request.missionBlock}
