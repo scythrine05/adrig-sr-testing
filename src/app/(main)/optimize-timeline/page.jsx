@@ -1,4 +1,4 @@
-import { OptimizeTimelineContainer } from '@/components/custom/optimizetimeline'
+import { OptimizeTimelineContainer } from '../../../components/custom/optimizetimeline'
 import React from 'react'
 
 const Page = () => {

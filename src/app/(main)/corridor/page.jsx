@@ -1,4 +1,4 @@
-import { CorridorContainer } from '@/components/custom/corridor'
+import CorridorContainer from "../../../components/custom/corridor/CorridorContainer"
 import React from 'react'
 
 const Page = () => {

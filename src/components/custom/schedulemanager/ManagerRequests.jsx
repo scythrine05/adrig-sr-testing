@@ -1,9 +1,9 @@
 "use client";
-import { postFormData, postFormManagerData } from "app/actions/formdata";
+import { postFormData, postFormManagerData } from "../../../app/actions/formdata";
 import {
   deleteStagingFormData,
   getStagingFormDataByDepartment,
-} from "app/actions/stagingform";
+} from "../../../app/actions/stagingform";
 import React, { useEffect, useState } from "react";
 import EditRequest from "../EditRequest";
 import {
@@ -14,7 +14,7 @@ import {
   getUserName,
   getUsersByDept,
   getUserUnderManager,
-} from "app/actions/user";
+} from "../../../app/actions/user";
 
 import { useSession } from "next-auth/react";
 

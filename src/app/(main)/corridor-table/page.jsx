@@ -1,4 +1,4 @@
-import { CorridorTable } from "@/components/custom/corridortable";
+import { CorridorTable } from "../../../components/custom/corridortable";
 import React from "react";
 
 

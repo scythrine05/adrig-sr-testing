@@ -8,10 +8,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import useFetchStationsList from "@/lib/hooks/useFetchStationsList";
-import useFetchByStation from "@/lib/hooks/useFetchByStation";
+} from "../../ui/select";
+import useFetchStationsList from "../../../lib/hooks/useFetchStationsList";
+import useFetchByStation from "../../../lib/hooks/useFetchByStation";
 import AddHoc from "./AddHoc";
 
 const ToolBarCorridor = ({ setScheduleDataByStation }) => {

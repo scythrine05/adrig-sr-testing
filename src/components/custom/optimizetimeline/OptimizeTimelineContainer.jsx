@@ -1,10 +1,10 @@
 'use client'
 
-import { OptimizedTimeline } from '@/assets';
+import { OptimizedTimeline } from '../../../assets';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Loader from '../Loader';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '../../../lib/utils';
 import Image from 'next/image';
 import moment from "moment";
 import GanttChart1 from '../GanttChart1';

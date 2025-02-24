@@ -1,17 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Lottie from "lottie-react";
 import {
   getFormDataAll,
   getFormDataByDepartment,
 } from "../../../app/actions/formdata";
 import Crousel from "../../ui/Crousel";
 import DataCard from "../DataCard";
-// import { NoActivity } from "@/assets";
 import {
   Mic,
-  MoveRight,
-  Upload,
   CircleX,
   CalendarClock,
   ChevronRight,

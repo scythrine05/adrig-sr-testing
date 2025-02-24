@@ -1,4 +1,4 @@
-import { RequestsContainer } from '@/components/custom/requests'
+import { RequestsContainer } from '../../../components/custom/requests'
 import React from 'react'
 
 const Page = () => {

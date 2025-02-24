@@ -21,12 +21,16 @@ export function AdminSidebarMenu() {
   const pathname = usePathname();
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [sanctionTableVisible, setSanctionTableVisible] = useState(false);
 
   useEffect(() => {
+    console.log(localStorage["sanctionTableVisible"],"local")
+    setSanctionTableVisible(localStorage.getItem("sanctionTableVisible") === "true");
     async function fxn() {
       try {
         const res = await getDataOptimised();
         setFilteredRequests(res.result);
+
       } catch (e) {
         console.log(e);
       }
@@ -67,7 +71,8 @@ export function AdminSidebarMenu() {
             <CalendarCheck className="w-4 h-4 mr-2" />
             <span>Optimised Table</span>
           </Link>
-          {filteredRequests &&
+          {sanctionTableVisible &&
+            filteredRequests &&
             filteredRequests[0] &&
             filteredRequests[0].final &&
             filteredRequests[0].final === "set" && (

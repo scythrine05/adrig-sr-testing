@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Label } from "../../ui/label";
+import { Switch } from "../../ui/switch";
 
 const AddHoc = () => {
   const [isAdHocEnabled, setIsAdHocEnabled] = useState(false);

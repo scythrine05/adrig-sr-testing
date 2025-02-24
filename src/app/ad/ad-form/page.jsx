@@ -117,6 +117,8 @@ const SearchForm = () => {
   };
 
   const handleOptimize = async () => {
+    localStorage.setItem("sanctionTableVisible", "false");
+    console.log(localStorage["sanctionTableVisible"],"local")
     let timer;
     clearTimeout(timer);
     setLoading(true);

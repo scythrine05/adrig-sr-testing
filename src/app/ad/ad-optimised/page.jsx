@@ -48,6 +48,9 @@ const SearchForm = () => {
     filteredRequests.forEach(async (request) => {
       const res = await updateFinalStatus(request.requestId);
     });
+
+    localStorage.setItem("sanctionTableVisible", "true");
+
     setUpdate(!update);
   };
 
@@ -173,6 +176,9 @@ const SearchForm = () => {
                       <strong>Edit The Request</strong>
                     </TableCell>
                   )}
+                  <TableCell>
+                    Status
+                  </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -217,6 +223,9 @@ const SearchForm = () => {
                       {request.remarks === null || request.remarks === ""
                         ? "No Remarks"
                         : request.remarks}
+                    </TableCell>
+                    <TableCell>
+                      {request.status}
                     </TableCell>
                     {request.final === "" ||
                       (request.final !== "set" && (

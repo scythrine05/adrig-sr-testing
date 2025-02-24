@@ -10,9 +10,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../../ui/table";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../ui/button";
 
 const createData = (
   id,

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { formatDate } from "@/lib/utils";
-import { CorridorTimeline } from "@/assets";
+import { formatDate } from "../../../lib/utils";
+import { CorridorTimeline } from "../../../assets";
 import Loader from "../Loader";
 import GanttChart from "../GanttChart";
 import moment from "moment";
