@@ -65,10 +65,10 @@ export default function OptimisedTable() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container min-w-full p-4">
       {/* Table for Desktop */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="min-w-full bg-secondary border border-gray-300">
+        <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-3 text-left">Request ID</th>

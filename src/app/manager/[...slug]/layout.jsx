@@ -19,7 +19,7 @@ export default async function RootLayout({ children }) {
         <SidebarManagerMenu />
 
         {/* <div className="w-[20%]"></div> */}
-        <main className="col-span-8 h-full overflow-y-scroll hide-scrollbar">
+        <main className="col-span-10 h-full overflow-y-scroll hide-scrollbar">
           {/* <NavBar></NavBar> */}
           {children}
           <Footer />
