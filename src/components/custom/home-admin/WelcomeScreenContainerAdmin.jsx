@@ -268,180 +268,87 @@ const WelcomeScreenContainerUser = () => {
     fxn();
   }, []);
   return (
-    <div className="flex min-h-screen flex-col items-center w-full space-y-6">
-      <section className="bg-secondary w-full rounded-xl flex flex-col items-start space-y-4 p-6">
-        <div className="w-full flex items-start justify-between">
-          <div className="text-center flex flex-col items-start">
-            <span className="text-md mb-4 text-slate-500 font-sans font-medium">
-              {getFormattedDate()}
-            </span>
-            <h1 className="text-3xl font-bold mb-4 text-slate-950">
-              Welcome, Admin 🎉
-            </h1>
-            <p className="text-md text-textcolor mb-4">
-              Manage your block requests efficiently and effectively.
-            </p>
-          </div>
-          {/* <Button className="bg-secondary-foreground text-textcolor flex items-center space-x-4 p-4 font-semibold rounded-full">
-        <CircleUserRound />
-        <span>Admin</span>
-        </Button> */}
-        </div>
-        <div className="flex gap-x-4">
-          <div className="w-64 p-4 bg-primary rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2">
-            <h2 className="text-xl font-bold  w-full text-start">
-              Engg Department
-            </h2>
-            <p className="text-xs text-left w-full">
-              There are the total request maded
-            </p>
-            {/* <div className="w-full flex justify-between pt-2">
-              <input
-                type="file"
-                accept=".csv"
-                onChange={async (event) => {
-                  await handleFileChange(event); // First, handle the file upload
-                  await fetchRequestCheck(); // Then, re-fetch the data
-                }}
-                className="hidden"
-                id="fileUpload"
-              />
-              <label
-                htmlFor="fileUpload"
-                className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full mr-2 cursor-pointer"
-              >
-                <Upload />
-                <span className="ml-2 text-nowrap text-center">Upload</span>
-              </label>
-            </div> */}
-            <h2 className="text-2xl font-bold text-left w-full">{engg}</h2>
-          </div>
-
-          <div
-            className={cn(
-              "w-64 p-4  rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2 bg-primary"
-            )}
-          >
-            <h2 className="text-xl font-bold  w-full text-start">
-              SIG Department
-            </h2>
-            <p className="text-xs text-left w-full">
-              There are the total request maded
-            </p>
-            {/* <div className="w-full flex justify-between pt-2">
-              <Link
-                href="/schedule-manager"
-                passHref
-                className={cn(
-                  "bg-white  text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full  mr-2",
-                  "pointer-events-none  opacity-50"
-                )}
-              >
-                <MoveRight />{" "}
-                <span className=" ml-2 text-nowrap text-center ">Open</span>
-              </Link>
-            </div> */}
-            <h2 className="text-2xl font-bold text-left w-full">{sig}</h2>
-          </div>
-
-          <div className="w-64 p-4 bg-primary rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2">
-            <h2 className="text-xl font-bold  w-full text-start">
-              TRD Department
-            </h2>
-            <p className="text-xs text-left w-full">
-              There are the total request maded
-            </p>
-            {/* <div className="w-full flex justify-between pt-2">
-              <Link
-                href="/block-request"
-                className="bg-white  text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full  mr-2"
-              >
-                <MoveRight />{" "}
-                <span className=" ml-2 text-nowrap text-center ">Open</span>
-              </Link>
-            </div> */}
-            <h2 className="text-2xl font-bold text-left w-full">{trd}</h2>
-          </div>
-        </div>
-      </section>
-
-      {/* <div className="bg-secondary"> */}
-
-      {/* <h2 className="text-xl text-textcolor ">Total Request Made</h2> */}
-
-      <div className="bg-secondary p-6 w-full">
-        <h2 className="text-xl text-textcolor mb-4 w-full">
-          How this week looks
+    <div className="flex min-h-screen flex-col items-center py-4 md:py-16 space-y-4 md:space-y-6 p-4">
+  <section className="bg-secondary w-full rounded-xl flex flex-col items-start space-y-4 p-4 md:p-6">
+    <div className="w-full flex flex-col md:flex-row items-start justify-between">
+      <div className="text-center flex flex-col items-start">
+        <span className="text-sm md:text-md mb-2 md:mb-4 text-slate-500 font-sans font-medium">
+          {getFormattedDate()}
+        </span>
+        <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4 text-slate-950">
+          Welcome, Admin 🎉
+        </h1>
+        <p className="text-sm md:text-md text-textcolor mb-2 md:mb-4">
+          Manage your block requests efficiently and effectively.
+        </p>
+      </div>
+    </div>
+    <div className="flex flex-col md:flex-row gap-4 md:gap-x-4 w-full">
+      <div className="w-full md:w-64 p-4 bg-primary rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2">
+        <h2 className="text-lg md:text-xl font-bold w-full text-start">
+          Engg Department
         </h2>
-        <div className="w-full rounded-xl">
-          <ScheduleCard requests={requests} />
-          {/* <QuickLinks
-            links={[
-              {
-                title: "This Week",
-                description: "There are requests to be optimised.",
-              },
-              { title: "Users", description: "Manage your users" },
-              {
-                title: "Timeslots",
-                description: "Edit and manage your timeslots",
-              },
-              { title: "Optimize", description: "Optimise Requests" },
-            ]}
-          /> */}
+        <p className="text-xs text-left w-full">
+          There are the total request maded
+        </p>
+        <h2 className="text-xl md:text-2xl font-bold text-left w-full">{engg}</h2>
+      </div>
 
-          <div className="flex mt-10 flex-col h-full col-span-2 justify-start space-y-8">
-            <div className="p-4 bg-primary rounded-xl shadow-md">
-              <h2 className="text-xl font-semibold mb-4 font-sans text-textcolor">
-                Recent Activities
-              </h2>
-              <div className="w-full flex flex-col items-center">
-                {loading && <h1>Loading...</h1>}
-                {!loading && <Crousel></Crousel>}
-              </div>
-            </div>
+      <div className="w-full md:w-64 p-4 rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2 bg-primary">
+        <h2 className="text-lg md:text-xl font-bold w-full text-start">
+          SIG Department
+        </h2>
+        <p className="text-xs text-left w-full">
+          There are the total request maded
+        </p>
+        <h2 className="text-xl md:text-2xl font-bold text-left w-full">{sig}</h2>
+      </div>
 
-            <div className="p-4 bg-white rounded-xl shadow-md border-t">
-              <h2 className="text-xl font-semibold mb-4 font-sans text-textcolor">
-                Announcements
-              </h2>
-              <div className="w-full flex flex-col items-center space-y-4 text-textcolor">
-                <Mic className="w-10 h-10" />
-                <p className="text-sm font-medium">
-                  No announcements at this time.
-                </p>
-              </div>
-            </div>
+      <div className="w-full md:w-64 p-4 bg-primary rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2">
+        <h2 className="text-lg md:text-xl font-bold w-full text-start">
+          TRD Department
+        </h2>
+        <p className="text-xs text-left w-full">
+          There are the total request maded
+        </p>
+        <h2 className="text-xl md:text-2xl font-bold text-left w-full">{trd}</h2>
+      </div>
+    </div>
+  </section>
+
+  <div className="bg-secondary p-4 md:p-6 w-full">
+    <h2 className="text-lg md:text-xl text-textcolor mb-2 md:mb-4 w-full">
+      How this week looks
+    </h2>
+    <div className="w-full rounded-xl">
+      <ScheduleCard requests={requests} />
+
+      <div className="flex mt-6 md:mt-10 flex-col h-full col-span-2 justify-start space-y-4 md:space-y-8">
+        <div className="p-4 bg-primary rounded-xl shadow-md">
+          <h2 className="text-lg md:text-xl font-semibold mb-2 md:mb-4 font-sans text-textcolor">
+            Recent Activities
+          </h2>
+          <div className="w-full flex flex-col items-center">
+            {loading && <h1>Loading...</h1>}
+            {!loading && <Crousel></Crousel>}
           </div>
-          {/* <div className="p-4 bg-white rounded-xl border-t shadow-md col-span-2">
-            <h2 className="text-xl font-bold mb-4">Statistics</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-blue-400 hover:bg-blue-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
-                <div className="w-10 h-10 bg-white rounded-full shadow-md animate-pulse shadow-slate-900 text-blue-400 flex items-center justify-center">
-                  <Send />
-                </div>
-                <h3 className="text-2xl font-bold">10</h3>
-                <p className="text-sm">Block Requests Submitted</p>
-              </div>
-              <div className="bg-green-400 hover:bg-green-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
-                <div className="w-10 h-10 bg-white rounded-full shadow-md animate-bounce shadow-slate-900 text-green-400 flex items-center justify-center">
-                  <CircleCheck />
-                </div>
-                <h3 className="text-2xl font-bold">5</h3>
-                <p className="text-sm">Approved Requests</p>
-              </div>
-              <div className="bg-orange-400 hover:bg-orange-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
-                <div className="w-10 h-10 bg-white rounded-full text-orange-400 animate-spin flex items-center justify-center">
-                  <CircleDashed />
-                </div>
-                <h3 className="text-2xl font-bold">2</h3>
-                <p className="text-sm">Pending Requests</p>
-              </div>
-            </div>
-          </div> */}
+        </div>
+
+        <div className="p-4 bg-white rounded-xl shadow-md border-t">
+          <h2 className="text-lg md:text-xl font-semibold mb-2 md:mb-4 font-sans text-textcolor">
+            Announcements
+          </h2>
+          <div className="w-full flex flex-col items-center space-y-2 md:space-y-4 text-textcolor">
+            <Mic className="w-8 h-8 md:w-10 md:h-10" />
+            <p className="text-sm font-medium">
+              No announcements at this time.
+            </p>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 };
 

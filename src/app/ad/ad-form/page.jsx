@@ -164,255 +164,258 @@ const SearchForm = () => {
   };
 
   return (
-    <div>
-      <div>
-        <div className="flex justify-between">
-          <FormControl fullWidth margin="normal" sx={{ margin: 2 }}>
-            <InputLabel id="search-Line-label">Department</InputLabel>
-            <Select
-              labelId="search-Line-label"
-              value={searchDepartment}
-              onChange={(e) => setSearchDepartment(e.target.value)}
-              label="Department"
-            >
-              <MenuItem value="ENGG">ENGG</MenuItem>
-              <MenuItem value="SIG">SIG</MenuItem>
-              <MenuItem value="TRD">TRD</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            sx={{ margin: 2 }}
-            label="Date From"
-            type="date"
-            value={dateRange.from}
-            onChange={(e) =>
-              setDateRange({ ...dateRange, from: e.target.value })
-            }
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-          />
-          <TextField
-            sx={{ margin: 2 }}
-            label="Date To"
-            type="date"
-            value={dateRange.to}
-            onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-          />
-        </div>
-        <div className="flex">
-          <button
-            className="bg-blue-500 p-3 ml-4 text-white rounded-lg text-center flex justify-center hover:bg-blue-700"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-          <button
-            className="border border-slate-950 py-3 px-4 ml-4  rounded-lg text-center flex justify-center hover:bg-slate-200"
-            onClick={handleClear}
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-
-      <TableContainer
-        component={Paper}
-        sx={{
-          marginTop: 4,
-          position: "relative",
-          maxHeight: 550,
-          border: "solid 1px #ddd",
-        }}
-      >
-        <Table
-          sx={{ minWidth: 800 }}
-          aria-label="request table"
-          stickyHeader={!loading}
+<div className="bg-secondary m-2 md:m-10 rounded-xl p-3 md:p-5 w-full md:w-[97%]">
+  <div>
+    <div className="flex flex-col md:flex-row justify-between">
+      <FormControl fullWidth margin="normal" sx={{ margin: 1 }}>
+        <InputLabel id="search-Line-label">Department</InputLabel>
+        <Select
+          labelId="search-Line-label"
+          value={searchDepartment}
+          onChange={(e) => setSearchDepartment(e.target.value)}
+          label="Department"
         >
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <strong>Request ID</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Date of Request</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Department</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Section</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Depo/SSE</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Block Section</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Selected Block</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Work Description</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Work Type Selected</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Line Selected</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Caution Required</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Caution Speed</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Caution Location (From)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Caution Location (To)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Work Location (From)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Work Location (To)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Demand Time (From)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Demand Time (To)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>SIG Disconnection</strong>
-              </TableCell>
-              <TableCell>
-                <strong>OHE Disconnection</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Elementary Section (From)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Elementary Section (To)</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Other Lines Affected</strong>
-              </TableCell>
+          <MenuItem value="ENGG">ENGG</MenuItem>
+          <MenuItem value="SIG">SIG</MenuItem>
+          <MenuItem value="TRD">TRD</MenuItem>
+        </Select>
+      </FormControl>
 
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredRequests.length > 0 ? (
-              filteredRequests.map((request) => (
-                <TableRow key={request.requestId}>
-                  <TableCell>{request.requestId}</TableCell>
-                  <TableCell>{request.date}</TableCell>
-                  <TableCell>{request.selectedDepartment}</TableCell>
-                  <TableCell>{request.selectedSection}</TableCell>
-                  <TableCell>{request.selectedDepo}</TableCell>
-                  <TableCell>{request.stationID}</TableCell>
-                  <TableCell>{request.missionBlock}</TableCell>
-                  <TableCell>{request.workDescription}</TableCell>
-                  <TableCell>{request.workType}</TableCell>
-                  <TableCell>{request.selectedLine}</TableCell>
-                  <TableCell>{request.cautionRequired}</TableCell>
-                  <TableCell>{request.cautionSpeed}</TableCell>
-                  <TableCell>{request.cautionLocationFrom}</TableCell>
-                  <TableCell>{request.cautionLocationTo}</TableCell>
-                  <TableCell>{request.workLocationFrom}</TableCell>
-                  <TableCell>{request.workLocationTo}</TableCell>
-                  <TableCell>{request.demandTimeFrom}</TableCell>
-                  <TableCell>{request.demandTimeTo}</TableCell>
-                  <TableCell>{request.sigDisconnection}</TableCell>
-                  <TableCell>{request.ohDisconnection}</TableCell>
-                  <TableCell>{request.elementarySectionFrom}</TableCell>
-                  <TableCell>{request.elementarySectionTo}</TableCell>
-                  <TableCell>{request.otherLinesAffected}</TableCell>
+      <TextField
+        sx={{ margin: 1 }}
+        label="Date From"
+        type="date"
+        value={dateRange.from}
+        onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
+        margin="normal"
+        InputLabelProps={{ shrink: true }}
+        fullWidth
+      />
+      <TextField
+        sx={{ margin: 1 }}
+        label="Date To"
+        type="date"
+        value={dateRange.to}
+        onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
+        margin="normal"
+        InputLabelProps={{ shrink: true }}
+        fullWidth
+      />
+    </div>
+    <div className="flex flex-col md:flex-row">
+      <button
+        className="bg-blue-500 p-2 md:p-3 mt-2 md:mt-0 md:ml-4 text-white rounded-lg text-center flex justify-center hover:bg-blue-700"
+        onClick={handleSearch}
+      >
+        Search
+      </button>
+      <button
+        className="border border-slate-950 py-2 md:py-3 px-3 md:px-4 mt-2 md:mt-0 md:ml-4 rounded-lg text-center flex justify-center hover:bg-slate-200"
+        onClick={handleClear}
+      >
+        Clear
+      </button>
+    </div>
+  </div>
 
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={21} align="center">
-                  No requests found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
 
-      {filteredRequests.length > 0 && (
-        <div className="flex justify-around">
-          <div>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ marginTop: 2, marginBottom: 4 }}
-              onClick={handleClick}
-            >
-              Download CSV
-            </Button>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>
-                <CSVLink
-                  data={currentReq}
-                  filename={"all_requests.csv"}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  Download All Data
-                </CSVLink>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <CSVLink
-                  data={filteredRequests}
-                  filename={"filtered_requests.csv"}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  Download Filtered Data
-                </CSVLink>
-              </MenuItem>
-            </Menu>
+  {/* Table Container */}
+  <div className="overflow-x-auto">
+    {/* Desktop Table */}
+    <table className="w-full hidden md:table border-collapse border border-gray-300">
+      <thead>
+        <tr className="">
+          <th className="border border-gray-300 p-2">Request ID</th>
+          <th className="border border-gray-300 p-2">Date of Request</th>
+          <th className="border border-gray-300 p-2">Department</th>
+          <th className="border border-gray-300 p-2">Section</th>
+          <th className="border border-gray-300 p-2">Depo/SSE</th>
+          <th className="border border-gray-300 p-2">Block Section</th>
+          <th className="border border-gray-300 p-2">Selected Block</th>
+          <th className="border border-gray-300 p-2">Work Description</th>
+          <th className="border border-gray-300 p-2">Work Type Selected</th>
+          <th className="border border-gray-300 p-2">Line Selected</th>
+          <th className="border border-gray-300 p-2">Caution Required</th>
+          <th className="border border-gray-300 p-2">Caution Speed</th>
+          <th className="border border-gray-300 p-2">Caution Location (From)</th>
+          <th className="border border-gray-300 p-2">Caution Location (To)</th>
+          <th className="border border-gray-300 p-2">Work Location (From)</th>
+          <th className="border border-gray-300 p-2">Work Location (To)</th>
+          <th className="border border-gray-300 p-2">Demand Time (From)</th>
+          <th className="border border-gray-300 p-2">Demand Time (To)</th>
+          <th className="border border-gray-300 p-2">SIG Disconnection</th>
+          <th className="border border-gray-300 p-2">OHE Disconnection</th>
+          <th className="border border-gray-300 p-2">Elementary Section (From)</th>
+          <th className="border border-gray-300 p-2">Elementary Section (To)</th>
+          <th className="border border-gray-300 p-2">Other Lines Affected</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filteredRequests.length > 0 ? (
+          filteredRequests.map((request) => (
+            <tr key={request.requestId} className="hover:bg-gray-50">
+              <td className="border border-gray-300 p-2">{request.requestId}</td>
+              <td className="border border-gray-300 p-2">{request.date}</td>
+              <td className="border border-gray-300 p-2">{request.selectedDepartment}</td>
+              <td className="border border-gray-300 p-2">{request.selectedSection}</td>
+              <td className="border border-gray-300 p-2">{request.selectedDepo}</td>
+              <td className="border border-gray-300 p-2">{request.stationID}</td>
+              <td className="border border-gray-300 p-2">{request.missionBlock}</td>
+              <td className="border border-gray-300 p-2">{request.workDescription}</td>
+              <td className="border border-gray-300 p-2">{request.workType}</td>
+              <td className="border border-gray-300 p-2">{request.selectedLine}</td>
+              <td className="border border-gray-300 p-2">{request.cautionRequired}</td>
+              <td className="border border-gray-300 p-2">{request.cautionSpeed}</td>
+              <td className="border border-gray-300 p-2">{request.cautionLocationFrom}</td>
+              <td className="border border-gray-300 p-2">{request.cautionLocationTo}</td>
+              <td className="border border-gray-300 p-2">{request.workLocationFrom}</td>
+              <td className="border border-gray-300 p-2">{request.workLocationTo}</td>
+              <td className="border border-gray-300 p-2">{request.demandTimeFrom}</td>
+              <td className="border border-gray-300 p-2">{request.demandTimeTo}</td>
+              <td className="border border-gray-300 p-2">{request.sigDisconnection}</td>
+              <td className="border border-gray-300 p-2">{request.ohDisconnection}</td>
+              <td className="border border-gray-300 p-2">{request.elementarySectionFrom}</td>
+              <td className="border border-gray-300 p-2">{request.elementarySectionTo}</td>
+              <td className="border border-gray-300 p-2">{request.otherLinesAffected}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan={23} className="border border-gray-300 p-2 text-center">
+              No requests found
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+
+    {/* Mobile Table (Vertical Layout) */}
+    <div className="md:hidden">
+      {filteredRequests.length > 0 ? (
+        filteredRequests.map((request) => (
+          <div key={request.requestId} className="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="border border-gray-300 p-2"><strong>Request ID:</strong></div>
+              <div className="border border-gray-300 p-2">{request.requestId}</div>
+              <div className="border border-gray-300 p-2"><strong>Date of Request:</strong></div>
+              <div className="border border-gray-300 p-2">{request.date}</div>
+              <div className="border border-gray-300 p-2"><strong>Department:</strong></div>
+              <div className="border border-gray-300 p-2">{request.selectedDepartment}</div>
+              <div className="border border-gray-300 p-2"><strong>Section:</strong></div>
+              <div className="border border-gray-300 p-2">{request.selectedSection}</div>
+              <div className="border border-gray-300 p-2"><strong>Depo/SSE:</strong></div>
+              <div className="border border-gray-300 p-2">{request.selectedDepo}</div>
+              <div className="border border-gray-300 p-2"><strong>Block Section:</strong></div>
+              <div className="border border-gray-300 p-2">{request.stationID}</div>
+              <div className="border border-gray-300 p-2"><strong>Selected Block:</strong></div>
+              <div className="border border-gray-300 p-2">{request.missionBlock}</div>
+              <div className="border border-gray-300 p-2"><strong>Work Description:</strong></div>
+              <div className="border border-gray-300 p-2">{request.workDescription}</div>
+              <div className="border border-gray-300 p-2"><strong>Work Type Selected:</strong></div>
+              <div className="border border-gray-300 p-2">{request.workType}</div>
+              <div className="border border-gray-300 p-2"><strong>Line Selected:</strong></div>
+              <div className="border border-gray-300 p-2">{request.selectedLine}</div>
+              <div className="border border-gray-300 p-2"><strong>Caution Required:</strong></div>
+              <div className="border border-gray-300 p-2">{request.cautionRequired}</div>
+              <div className="border border-gray-300 p-2"><strong>Caution Speed:</strong></div>
+              <div className="border border-gray-300 p-2">{request.cautionSpeed}</div>
+              <div className="border border-gray-300 p-2"><strong>Caution Location (From):</strong></div>
+              <div className="border border-gray-300 p-2">{request.cautionLocationFrom}</div>
+              <div className="border border-gray-300 p-2"><strong>Caution Location (To):</strong></div>
+              <div className="border border-gray-300 p-2">{request.cautionLocationTo}</div>
+              <div className="border border-gray-300 p-2"><strong>Work Location (From):</strong></div>
+              <div className="border border-gray-300 p-2">{request.workLocationFrom}</div>
+              <div className="border border-gray-300 p-2"><strong>Work Location (To):</strong></div>
+              <div className="border border-gray-300 p-2">{request.workLocationTo}</div>
+              <div className="border border-gray-300 p-2"><strong>Demand Time (From):</strong></div>
+              <div className="border border-gray-300 p-2">{request.demandTimeFrom}</div>
+              <div className="border border-gray-300 p-2"><strong>Demand Time (To):</strong></div>
+              <div className="border border-gray-300 p-2">{request.demandTimeTo}</div>
+              <div className="border border-gray-300 p-2"><strong>SIG Disconnection:</strong></div>
+              <div className="border border-gray-300 p-2">{request.sigDisconnection}</div>
+              <div className="border border-gray-300 p-2"><strong>OHE Disconnection:</strong></div>
+              <div className="border border-gray-300 p-2">{request.ohDisconnection}</div>
+              <div className="border border-gray-300 p-2"><strong>Elementary Section (From):</strong></div>
+              <div className="border border-gray-300 p-2">{request.elementarySectionFrom}</div>
+              <div className="border border-gray-300 p-2"><strong>Elementary Section (To):</strong></div>
+              <div className="border border-gray-300 p-2">{request.elementarySectionTo}</div>
+              <div className="border border-gray-300 p-2"><strong>Other Lines Affected:</strong></div>
+              <div className="border border-gray-300 p-2">{request.otherLinesAffected}</div>
+            </div>
           </div>
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ marginTop: 2, marginBottom: 4 }}
-            onClick={() => {
-              localStorage.setItem("optimizedbuttonnotclicked", "false");
-              clearTimeout(timerfirst);
-              handleOptimize();
-            }}
-          >
-            Optimise
-          </Button>
-        </div>
-      )}
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
-          <Oval
-            visible={true}
-            height="80"
-            width="80"
-            color="#0000FF"
-            ariaLabel="oval-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
+        ))
+      ) : (
+        <div className="text-center">No requests found</div>
       )}
     </div>
+  </div>
+
+
+
+  {filteredRequests.length > 0 && (
+    <div className="flex flex-col md:flex-row justify-around">
+      <div>
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{ marginTop: 2, marginBottom: 2 }}
+          onClick={handleClick}
+        >
+          Download CSV
+        </Button>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>
+            <CSVLink
+              data={currentReq}
+              filename={"all_requests.csv"}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              Download All Data
+            </CSVLink>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <CSVLink
+              data={filteredRequests}
+              filename={"filtered_requests.csv"}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              Download Filtered Data
+            </CSVLink>
+          </MenuItem>
+        </Menu>
+      </div>
+      <Button
+        variant="contained"
+        color="secondary"
+        sx={{ marginTop: 2, marginBottom: 2 }}
+        onClick={() => {
+          localStorage.setItem("optimizedbuttonnotclicked", "false");
+          clearTimeout(timerfirst);
+          handleOptimize();
+        }}
+      >
+        Optimise
+      </Button>
+    </div>
+  )}
+  {loading && (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
+      <Oval
+        visible={true}
+        height="80"
+        width="80"
+        color="#0000FF"
+        ariaLabel="oval-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
+    </div>
+  )}
+</div>
   );
 };
 
