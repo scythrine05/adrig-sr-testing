@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import WeekScheduleCorridor from "./WeekScheduleCorridor";
 
-import useFetchByStation from "@/lib/hooks/useFetchByStation";
+import useFetchByStation from "../../../lib/hooks/useFetchByStation";
 import {
   CalendarCheck2,
   CalendarClock,
@@ -13,7 +13,7 @@ import {
   Map,
   User,
 } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import ToolBarOptimised from "./TollBarCorridor";
 
 function CompactView({setIsGanttView}) {

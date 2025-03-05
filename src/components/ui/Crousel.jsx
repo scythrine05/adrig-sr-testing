@@ -58,7 +58,7 @@ const Crousel = () => {
       {/* Carousel */}
       {latestRequests.length == 0 ? (
         <div className="bg-white flex flex-col justify-center items-center w-92  border rounded-lg ">
-          <div className="p-2 ">
+          <div className="p-2 flex flex-col items-center space-y-2 ">
             <h2 className="text-xl text-center font-semibold text-gray-700 mb-2">
               No Data Available
             </h2>
@@ -70,7 +70,7 @@ const Crousel = () => {
 
             <button
               onClick={tryAgainClickHandler}
-              className="ml-[20rem] mt-6 px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none"
+              className="px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none"
             >
               Refresh
             </button>

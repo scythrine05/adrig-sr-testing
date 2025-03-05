@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
-import '@/app/GanttChart.css';
+import '../../app/GanttChart.css';
 
 const GanttChart1 = ({ tasks }) => {
   const [timeSlots, setTimeSlots] = useState([]);

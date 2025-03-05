@@ -2,21 +2,12 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { getFormData } from "../../../app/actions/formdata";
-import {
-  postDataOptimised,
-  checkOptimizedData,
-  currentOptimizedData,
-} from "../../../app/actions/optimisetable";
 import { useRouter } from "next/navigation";
 import currentUser, { getUserId } from "../../../app/actions/user";
+import {
+  postDataOptimised,
+  currentOptimizedData,
+} from "../../../app/actions/optimisetable";
 
 export default function OptimisedTable() {
   const router = useRouter();
@@ -34,7 +25,6 @@ export default function OptimisedTable() {
         if (!currentUserResult || !currentUserResult.user) {
           return;
         }
-
         setUser(currentUserResult.user);
 
         const userIdResponse = await getUserId(currentUserResult.user);
@@ -75,142 +65,294 @@ export default function OptimisedTable() {
   };
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        marginTop: 4,
-        maxHeight: 560,
-        border: "solid 1px #ddd",
-      }}
-    >
-      <Table sx={{ minWidth: 650 }} aria-label="request table">
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <strong>Request ID</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Date of Request</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Department</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Section</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Block Section</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Selected Block</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Work Description</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Work Type Selected</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Line Selected</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Caution Required</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Caution Speed</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Caution Location (From)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Caution Location (To)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Work Location (From)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Work Location (To)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Demand Time (From)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Demand Time (To)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Optimised Time (From)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Optimised Time (To)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Optimization Details</strong>
-            </TableCell>
-            <TableCell>
-              <strong>SIG Disconnection</strong>
-            </TableCell>
-            <TableCell>
-              <strong>OHE Disconnection</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Elementary Section (From)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Elementary Section (To)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>SIG Elementary Section (From)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>SIG Elementary Section (To)</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Other Lines Affected</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Depot/SSE</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Accept The Optimised Requests</strong>
-            </TableCell>
+    <div className="container min-w-full p-4">
+      {/* Table for Desktop */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-3 text-left">Request ID</th>
+              <th className="p-3 text-left">Date of Request</th>
+              <th className="p-3 text-left">Department</th>
+              <th className="p-3 text-left">Section</th>
+              <th className="p-3 text-left">Block Section</th>
+              <th className="p-3 text-left">Selected Block</th>
+              <th className="p-3 text-left">Work Description</th>
+              <th className="p-3 text-left">Work Type Selected</th>
+              <th className="p-3 text-left">Line Selected</th>
+              <th className="p-3 text-left">Caution Required</th>
+              <th className="p-3 text-left">Caution Speed</th>
+              <th className="p-3 text-left">Caution Location (From)</th>
+              <th className="p-3 text-left">Caution Location (To)</th>
+              <th className="p-3 text-left">Work Location (From)</th>
+              <th className="p-3 text-left">Work Location (To)</th>
+              <th className="p-3 text-left">Demand Time (From)</th>
+              <th className="p-3 text-left">Demand Time (To)</th>
+              <th className="p-3 text-left">Optimised Time (From)</th>
+              <th className="p-3 text-left">Optimised Time (To)</th>
+              <th className="p-3 text-left">Optimization Details</th>
+              <th className="p-3 text-left">SIG Disconnection</th>
+              <th className="p-3 text-left">OHE Disconnection</th>
+              <th className="p-3 text-left">Elementary Section (From)</th>
+              <th className="p-3 text-left">Elementary Section (To)</th>
+              <th className="p-3 text-left">SIG Elementary Section (From)</th>
+              <th className="p-3 text-left">SIG Elementary Section (To)</th>
+              <th className="p-3 text-left">Other Lines Affected</th>
+              <th className="p-3 text-left">Depot/SSE</th>
+              <th className="p-3 text-left">Accept The Optimised Requests</th>
+            </tr>
+          </thead>
+          <tbody>
+            {requests.length > 0 ? (
+              requests.map((request) => (
+                <tr key={request.requestId} className="border-b">
+                  <td className="p-3">{request.requestId}</td>
+                  <td className="p-3">{request.date}</td>
+                  <td className="p-3">{request.selectedDepartment}</td>
+                  <td className="p-3">{request.selectedSection}</td>
+                  <td className="p-3">{request.stationID}</td>
+                  <td className="p-3">{request.missionBlock}</td>
+                  <td className="p-3">{request.workType}</td>
+                  <td className="p-3">{request.workDescription}</td>
+                  <td className="p-3">{request.selectedLine}</td>
+                  <td className="p-3">{request.cautionRequired}</td>
+                  <td className="p-3">{request.cautionSpeed}</td>
+                  <td className="p-3">{request.cautionLocationFrom}</td>
+                  <td className="p-3">{request.cautionLocationTo}</td>
+                  <td className="p-3">{request.workLocationFrom}</td>
+                  <td className="p-3">{request.workLocationTo}</td>
+                  <td className="p-3">{request.demandTimeFrom}</td>
+                  <td className="p-3">{request.demandTimeTo}</td>
+                  <td className="p-3">{request.Optimisedtimefrom}</td>
+                  <td className="p-3">{request.Optimisedtimeto}</td>
+                  <td className="p-3">{request.optimization_details}</td>
+                  <td className="p-3">{request.sigDisconnection}</td>
+                  <td className="p-3">{request.ohDisconnection}</td>
+                  <td className="p-3">{request.elementarySectionFrom}</td>
+                  <td className="p-3">{request.elementarySectionTo}</td>
+                  <td className="p-3">{request.sigElementarySectionFrom}</td>
+                  <td className="p-3">{request.sigElementarySectionTo}</td>
+                  <td className="p-3">{request.otherLinesAffected}</td>
+                  <td className="p-3">{request.selectedDepo}</td>
+                  <td className="p-3">
+                    {request.action === "none" ? (
+                      <div className="flex justify-around">
+                        <button
+                          className="bg-green-500 text-white p-1 rounded-lg mr-3"
+                          onClick={() => optimisedYesHandler(request)}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          className="bg-red-500 text-white p-1 rounded-lg mr-3"
+                          onClick={() => optimisedNoHandler(request)}
+                        >
+                          No
+                        </button>
+                      </div>
+                    ) : request.action === "Accepted" ? (
+                      <span>Accepted ✅</span>
+                    ) : (
+                      <span>Rejected❌ {request.remarks}</span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={29} className="p-3 text-center">
+                  No requests found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {requests.length > 0 ? (
-            requests.map((request) => (
-              <TableRow key={request.requestId}>
-                <TableCell>{request.requestId}</TableCell>
-                <TableCell>{request.date}</TableCell>
-                <TableCell>{request.selectedDepartment}</TableCell>
-                <TableCell>{request.selectedSection}</TableCell>
-                <TableCell>{request.stationID}</TableCell>
-                <TableCell>{request.missionBlock}</TableCell>
-                <TableCell>{request.workType}</TableCell>
-                <TableCell>{request.workDescription}</TableCell>
-                <TableCell>{request.selectedLine}</TableCell>
-                <TableCell>{request.cautionRequired}</TableCell>
-                <TableCell>{request.cautionSpeed}</TableCell>
-                <TableCell>{request.cautionLocationFrom}</TableCell>
-                <TableCell>{request.cautionLocationTo}</TableCell>
-                <TableCell>{request.workLocationFrom}</TableCell>
-                <TableCell>{request.workLocationTo}</TableCell>
-                <TableCell>{request.demandTimeFrom}</TableCell>
-                <TableCell>{request.demandTimeTo}</TableCell>
-                <TableCell>{request.Optimisedtimefrom}</TableCell>
-                <TableCell>{request.Optimisedtimeto}</TableCell>
-                <TableCell>{request.optimization_details}</TableCell>
-                <TableCell>{request.sigDisconnection}</TableCell>
-                <TableCell>{request.ohDisconnection}</TableCell>
-                <TableCell>{request.elementarySectionFrom}</TableCell>
-                <TableCell>{request.elementarySectionTo}</TableCell>
-                <TableCell>{request.sigElementarySectionFrom}</TableCell>
-                <TableCell>{request.sigElementarySectionTo}</TableCell>
-                <TableCell>{request.otherLinesAffected}</TableCell>
-                <TableCell>{request.selectedDepo}</TableCell>
-                <TableCell>
+      {/* Table for Mobile */}
+      <div className="block md:hidden">
+        {requests.length > 0 ? (
+          requests.map((request) => (
+            <div
+              key={request.requestId}
+              className="bg-secondary border border-gray-300 p-4 mb-4 rounded-lg"
+            >
+              <div className="space-y-2">
+                {/* Fixed-width columns with centered vertical line */}
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Request ID:
+                  </strong>
+                  <span className="pl-2">{request.requestId}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Date of Request:
+                  </strong>
+                  <span className="pl-2">{request.date}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Department:
+                  </strong>
+                  <span className="pl-2">{request.selectedDepartment}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Section:
+                  </strong>
+                  <span className="pl-2">{request.selectedSection}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Block Section:
+                  </strong>
+                  <span className="pl-2">{request.stationID}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Selected Block:
+                  </strong>
+                  <span className="pl-2">{request.missionBlock}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Work Description:
+                  </strong>
+                  <span className="pl-2">{request.workType}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Work Type Selected:
+                  </strong>
+                  <span className="pl-2">{request.workDescription}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Line Selected:
+                  </strong>
+                  <span className="pl-2">{request.selectedLine}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Caution Required:
+                  </strong>
+                  <span className="pl-2">{request.cautionRequired}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Caution Speed:
+                  </strong>
+                  <span className="pl-2">{request.cautionSpeed}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Caution Location (From):
+                  </strong>
+                  <span className="pl-2">{request.cautionLocationFrom}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Caution Location (To):
+                  </strong>
+                  <span className="pl-2">{request.cautionLocationTo}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Work Location (From):
+                  </strong>
+                  <span className="pl-2">{request.workLocationFrom}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Work Location (To):
+                  </strong>
+                  <span className="pl-2">{request.workLocationTo}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Demand Time (From):
+                  </strong>
+                  <span className="pl-2">{request.demandTimeFrom}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Demand Time (To):
+                  </strong>
+                  <span className="pl-2">{request.demandTimeTo}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Optimised Time (From):
+                  </strong>
+                  <span className="pl-2">{request.Optimisedtimefrom}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Optimised Time (To):
+                  </strong>
+                  <span className="pl-2">{request.Optimisedtimeto}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Optimization Details:
+                  </strong>
+                  <span className="pl-2">{request.optimization_details}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    SIG Disconnection:
+                  </strong>
+                  <span className="pl-2">{request.sigDisconnection}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    OHE Disconnection:
+                  </strong>
+                  <span className="pl-2">{request.ohDisconnection}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Elementary Section (From):
+                  </strong>
+                  <span className="pl-2">{request.elementarySectionFrom}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Elementary Section (To):
+                  </strong>
+                  <span className="pl-2">{request.elementarySectionTo}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    SIG Elementary Section (From):
+                  </strong>
+                  <span className="pl-2">
+                    {request.sigElementarySectionFrom}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    SIG Elementary Section (To):
+                  </strong>
+                  <span className="pl-2">{request.sigElementarySectionTo}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Other Lines Affected:
+                  </strong>
+                  <span className="pl-2">{request.otherLinesAffected}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                  <strong className="text-right pr-2 border-r border-gray-200">
+                    Depot/SSE:
+                  </strong>
+                  <span className="pl-2">{request.selectedDepo}</span>
+                </div>
+                <div className="pt-2">
+                  <strong>Accept The Optimised Requests:</strong>
                   {request.action === "none" ? (
-                    <div className=" flex justify-around">
+                    <div className="flex justify-around mt-2">
                       <button
                         className="bg-green-500 text-white p-1 rounded-lg mr-3"
                         onClick={() => optimisedYesHandler(request)}
@@ -229,19 +371,16 @@ export default function OptimisedTable() {
                   ) : (
                     <span>Rejected❌ {request.remarks}</span>
                   )}
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={23} align="center">
-                No requests found
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center p-4">No requests found</div>
+        )}
+      </div>
 
+      {/* Popup for Remarks */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -279,6 +418,6 @@ export default function OptimisedTable() {
           </div>
         </div>
       )}
-    </TableContainer>
+    </div>
   );
 }

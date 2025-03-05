@@ -167,3 +167,19 @@ export async function checkOptimizedData(requestId) {
     return res;
   }
 }
+
+export async function toggleStatus(requestId) {
+  const res = await prisma.sanctiontable.findMany({ where: { requestId } });
+  const newStatus = res.status === "completed" ? "in progress" : "completed";
+  try{
+    const updatedRecord = await prisma.sanctiontable.update({
+      where: { requestId },
+      data: { status: newStatus },
+    });
+  return("Status Updated");
+  }
+  catch{
+    return("Error has occured")
+  }
+
+}

@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import GanttChart from "../GanttChart";
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '../../../lib/utils';
 import moment from "moment";
 import Image from 'next/image';
 import Loader from '../Loader';
-import { RequestTimeline } from "@/assets";
-import { Button } from "@/components/ui/button";
+import { RequestTimeline } from "../../../assets";
+import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 import Spinner from "../Spinner";
 import HeaderContent from "../HeaderContent";

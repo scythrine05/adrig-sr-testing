@@ -881,81 +881,73 @@ export default function ManagerForm() {
     return formSubmitHandler;
   }
 
-  const formSelectedDepo = () => {
-    return formData.depo;
-  }
 
+  const depotOptions = {
+    ENGG: {
+      "MAS-GDR": ["TVT", "PON", "SPE", "GDR"],
+      "MAS-AJJ": ["WSTA", "WSTB", "AVD", "TRLA", "TRLB", "TRT"],
+      "AJJ-KPD": ["AJJ", "WJR"],
+      "KPD-JTJ": ["KPD", "AB", "JTJ"],
+      "AJJ-RU": ["PUT"],
+      "AJJ-CGL": ["CJ"],
+      "MSB-VM": ["MS", "TBM", "CGL", "ACK", "TMV"],
+    },
+    SIG: {
+      "MAS-GDR": ["MAS", "BBQ", "TVT", "GPD", "SPE", "NYP"],
+      "MAS-AJJ": ["BBQ", "TRL", "AJJE"],
+      "AJJ-RU": ["TRT"],
+      "AJJ-KPD": ["AJJW", "KPDE"],
+      "KPD-JTJ": ["KPDW", "AB", "JTJ"],
+      "MSB-VM": ["MSB", "MS", "TBM", "CGL", "TMV"],
+      "CGL-AJJ": ["CGL"],
+    },
+    TRD: {
+      "MAS Divn": ["SR DEE/TRD/MAS", "DEE/TRD/MAS", "CTPC/TRD/MAS"],
+      "MAS-GDR": ["TRD/BBQ", "TRD/TVT", "TRD/PON", "TRD/SPE", "TRD/GDR", "ADEE/TRD/PON"],
+      "MAS-AJJ": ["TRD/BBQ", "TRD/AVD", "TRD/TRL", "TRD/AJJ"],
+      "AJJ-RU": ["TRD/AJJ", "TRD/PUT"],
+      "AJJ-KPD": ["TRD/AJJ", "TRD/WJR", "TRD/KPD"],
+      "KPD-JTJ": ["TRD/KPD", "TRD/AB", "TRD/JTJ"],
+      "MSB-VM": ["TRD/MS", "TRD/TBM", "TRD/CGL", "TRD/ACK", "TRD/VM"],
+      "AJJ-CGL": ["TRD/AJJ", "TRD/CGL"],
+    },
+  };
+  
+    
+  const formSelectedDepo = () => {
+    return formData.selectedDepo;
+  }
+  
   const formConditionalRenderingSelectedDepot = () => {
-    if (formData.selectedDepartment === "ENGG" && formData.selectedSection === "MAS-GDR") {
-      return(
-        <div className='inline relative mb-4'>
-          <label className='block text-sm font-medium'>
-            Depot/SSE <span style={{ color: "red"}}>*</span>
-          </label>
-          <select
-          ref = {handleInputRefsChange(3)}
+    const { selectedDepartment, selectedSection } = formData;
+  
+    if (!depotOptions[selectedDepartment] || !depotOptions[selectedDepartment][selectedSection]) {
+      return null;
+    }
+  
+    return (
+      <div className="inline relative mb-4">
+        <label className="block text-sm font-medium">
+          Depot/SSE <span style={{ color: "red" }}>*</span>
+        </label>
+        <select
+          ref={handleInputRefsChange(3)}
           onKeyDown={handleKeyDownChange(3)}
           value={formSelectedDepo()}
           name="selectedDepo"
           className="mt-1 w-full p-2.5 border rounded"
-          onChange={getHandleChange()}>
-        <option>Select Depot/SSE</option>
-        <option value="TVT">TVT</option>
-        <option value="PON">PON</option>
-        <option value="SPE">SPE</option>
-        <option value="GDR">GDR</option>
-          </select>
-        </div>
-      )
-    }
-    else  if (formData.selectedDepartment === "TRD" && formData.selectedSection == "MAS-GDR"){
-      return(
-        <div className='inline relative mb-4'>
-        <label className='block text-sm font-medium'>
-          Depot/SSE <span style={{ color: "red"}}>*</span>
-        </label>
-        <select
-        ref = {handleInputRefsChange(3)}
-        onKeyDown={handleKeyDownChange(3)}
-        value={formSelectedDepo()}
-        name="selectedDepo"
-        className="mt-1 w-full p-2.5 border rounded"
-        onChange={handleChange}>
-        <option>Select Depot/SSE</option>
-        <option value="TRD/BBQ">TRD/BBQ</option>
-        <option value="TRD/TVT">TRD/TVT</option>
-        <option value="TRD/PON">TRD/PON</option>
-        <option value="TRD/SPE">TRD/SPE</option>
-        <option value="TRD/GDR">TRD/GDR</option>
+          onChange={getHandleChange()}
+        >
+          <option>Select Depot/SSE</option>
+          {depotOptions[selectedDepartment][selectedSection].map((depot) => (
+            <option key={depot} value={depot}>
+              {depot}
+            </option>
+          ))}
         </select>
       </div>
-      )
-    }
-    else  if (formData.selectedDepartment === "SIG" && formData.selectedSection == "MAS-GDR"){
-      return(
-        <div className='inline relative mb-4'>
-        <label className='block text-sm font-medium'>
-          Depot/SSE <span style={{ color: "red"}}>*</span>
-        </label>
-        <select
-        ref = {handleInputRefsChange(3)}
-        onKeyDown={handleKeyDownChange(3)}
-        value={formSelectedDepo()}
-        name="selectedDepo"
-        className="mt-1 w-full p-2.5 border rounded"
-        onChange={handleChange}>
-        <option>Select Depot/SSE</option>
-        <option value="NYP">NYP</option>
-        <option value="SPET">SPE</option>
-        <option value="GPD">GPD</option>
-        <option value="TVT">TVT</option>
-        <option value="BBQ">BBQ</option>
-        <option value="MAS">MAS</option>
-        </select>
-      </div>
-      )
-    }
-  }
+    );
+  };
 
   return (
     <FormLayout

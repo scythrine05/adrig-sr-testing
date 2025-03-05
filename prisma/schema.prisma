@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,6 +15,7 @@ model User {
   optimised       String            @default("notset")
   department      String?           @default("")
   manager         String?           @default("")
+  phone           String?           @unique
   requests        Requests[]
   StagingRequests StagingRequests[]
 }
@@ -31,20 +26,22 @@ model Otp {
   code      String
   createdAt DateTime @default(now())
   validTill DateTime
+  phone     String?  @unique
 }
 
 model Manager {
-  id         String            @id @default(uuid())
-  name       String?
   email      String            @unique
   password   String
+  id         String            @id @default(uuid())
   department String?
-  requests   StagingRequests[]
+  name       String?
   Requests   Requests[]
+  requests   StagingRequests[]
+  phone      String?           @unique
 }
 
 model StagingRequests {
-  requestId                String   @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 6, '0'))::TEXT"))
+  requestId                String   @id @default(dbgenerated("((to_char(CURRENT_TIMESTAMP, 'YYYYMMDD'::text) || '-'::text) || lpad((nextval('request_id_seq'::regclass))::text, 6, '0'::text))"))
   date                     String
   selectedDepartment       String
   selectedSection          String
@@ -71,17 +68,17 @@ model StagingRequests {
   repercussions            String
   otherLinesAffected       Json
   requestremarks           String
-  selectedDepo             String?
   createdAt                DateTime @default(now())
-  status                   String?
   userId                   String?
   managerId                String?
-  User                     User?    @relation(fields: [userId], references: [id])
+  status                   String?
+  selectedDepo             String?
   Manager                  Manager? @relation(fields: [managerId], references: [id])
+  User                     User?    @relation(fields: [userId], references: [id])
 }
 
 model Requests {
-  requestId                String   @id @default(dbgenerated("(TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD') || '-' || LPAD(NEXTVAL('request_id_seq')::TEXT, 6, '0'))::TEXT"))
+  requestId                String   @id @default(dbgenerated("((to_char(CURRENT_TIMESTAMP, 'YYYYMMDD'::text) || '-'::text) || lpad((nextval('request_id_seq'::regclass))::text, 6, '0'::text))"))
   date                     String
   selectedDepartment       String
   selectedSection          String
@@ -89,8 +86,6 @@ model Requests {
   missionBlock             String
   workType                 String
   workDescription          String
-  selectedLine             Json
-  selectedStream           String?
   cautionRequired          String
   cautionSpeed             String
   cautionLocationFrom      String
@@ -103,17 +98,19 @@ model Requests {
   ohDisconnection          String
   elementarySectionFrom    String
   elementarySectionTo      String
+  userId                   String?
   sigElementarySectionFrom String
   sigElementarySectionTo   String
   repercussions            String
-  otherLinesAffected       Json
   requestremarks           String
-  selectedDepo             String?
   createdAt                DateTime @default(now())
-  userId                   String?
+  selectedStream           String?
+  selectedLine             Json
+  otherLinesAffected       Json
   managerId                String?
-  User                     User?    @relation(fields: [userId], references: [id])
+  selectedDepo             String?
   Manager                  Manager? @relation(fields: [managerId], references: [id])
+  User                     User?    @relation(fields: [userId], references: [id])
 }
 
 model Sanctiontable {
@@ -127,7 +124,6 @@ model Sanctiontable {
   workType                 String
   workDescription          String
   selectedLine             String
-  selectedStream           String?
   cautionRequired          String
   cautionSpeed             String
   cautionLocationFrom      String
@@ -136,22 +132,24 @@ model Sanctiontable {
   workLocationTo           String
   demandTimeFrom           String
   demandTimeTo             String
-  Optimisedtimefrom        String?
-  Optimisedtimeto          String?
   sigDisconnection         String
   ohDisconnection          String
   elementarySectionFrom    String
   elementarySectionTo      String
+  userId                   String?
+  action                   String  @default("none")
+  remarks                  String?
   sigElementarySectionFrom String
   sigElementarySectionTo   String
   repercussions            String
-  otherLinesAffected       Json?
   requestremarks           String
-  selectedDepo             String?
   final                    String?
-  userId                   String?
-  managerId                String?
-  action                   String  @default("none")
-  remarks                  String?
+  Optimisedtimefrom        String?
+  Optimisedtimeto          String?
   optimization_details     String?
+  selectedStream           String?
+  otherLinesAffected       Json?
+  managerId                String?
+  selectedDepo             String?
+  status                   String   @default("in progress")
 }

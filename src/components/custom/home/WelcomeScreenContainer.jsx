@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { getFormData } from "../../../app/actions/formdata";
 import Link from "next/link";
-import Lottie from "lottie-react";
-// import { NoActivity } from "@/assets";
-import { Chart } from "react-google-charts";
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-google-charts"), { ssr: false });
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+
 import { useSession } from "next-auth/react";
 import {
   Mic,
@@ -133,130 +134,130 @@ const WelcomeScreenContainer = () => {
     colors: ["#1e3a8a", "#22c55e", "#ef233c", "#f97316"], // Use appropriate colors
   };
   return (
-    <div className="flex min-h-screen flex-col items-center w-full space-y-6">
-      <section className="bg-secondary w-full rounded-xl flex flex-col items-start space-y-4 p-6">
-        <div className="w-full flex items-start justify-between">
-          <div className="text-center flex flex-col items-start">
-            <span className="text-md mb-4 text-slate-500 font-sans font-medium">
-              {getFormattedDate()}
-            </span>
-            <h1 className="text-3xl font-bold mb-4 text-slate-950">
-              Welcome {user}🎉
-            </h1>
-            <span className="text-md mb-4 text-slate-500 font-sans font-medium">
-              Manager : {manager}
-              </span>
-            <p className="text-md text-textcolor mb-4">
-              Manage your block requests efficiently and effectively.
-            </p>
-          </div>
-          {/* <Button className="bg-secondary-foreground text-textcolor flex items-center space-x-4 p-4 font-semibold rounded-full">
-        <CircleUserRound />
-        <span>Admin</span>
-        </Button> */}
-        </div>
-        <div className="p-4 w-1/2 bg-primary rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2">
-          <h2 className="text-xl font-bold mb-4 w-full text-start">
-            Quick Actions
-          </h2>
-          <Activity className="w-10 h-10 animate-pulse" />
-          <div className="w-full flex justify-between pt-2">
-            <Link
-              href="/block-request"
-              className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full w-1/2 mr-2"
-            >
-              <MoveRight />{" "}
-              <span className="flex-1 text-center">Create Block Request</span>
-            </Link>
-            <Link
-              href="/schedule-manager"
-              className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full w-1/2"
-            >
-              <MoveRight />{" "}
-              <span className="flex-1 text-center">View Requests</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+<div className="flex min-h-screen flex-col items-center py-16 space-y-6 p-4">
+  {/* Welcome Section */}
+  <section className="bg-secondary w-full rounded-xl flex flex-col items-start space-y-4 p-6">
+    <div className="w-full flex flex-col md:flex-row items-start justify-between">
+      <div className="text-center flex flex-col items-start">
+        <span className="text-md mb-4 text-slate-500 font-sans font-medium">
+          {getFormattedDate()}
+        </span>
+        <h1 className="text-3xl font-bold mb-4 text-slate-950">
+          Welcome {user}🎉
+        </h1>
+        <span className="text-md mb-4 text-slate-500 font-sans font-medium">
+          Manager : {manager}
+        </span>
+        <p className="text-md text-textcolor mb-4">
+          Manage your block requests efficiently and effectively.
+        </p>
+      </div>
+    </div>
+    <div className="p-4 w-full md:w-1/2 bg-primary rounded-xl text-textcolor shadow-md col-span-1 flex flex-col items-center justify-between space-y-2">
+      <h2 className="text-xl font-bold mb-4 w-full text-start">
+        Quick Actions
+      </h2>
+      <Activity className="w-10 h-10 animate-pulse" />
+      <div className="w-full flex flex-col md:flex-row justify-between pt-2 space-y-2 md:space-y-0">
+        <Link
+          href="/block-request"
+          className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full w-full md:w-1/2 mr-0 md:mr-2"
+        >
+          <MoveRight />{" "}
+          <span className="flex-1 text-center">Create Block Request</span>
+        </Link>
+        <Link
+          href="/schedule-manager"
+          className="bg-white text-sm text-center font-semibold px-6 py-2 flex items-center rounded-full w-full md:w-1/2"
+        >
+          <MoveRight />{" "}
+          <span className="flex-1 text-center">View Requests</span>
+        </Link>
+      </div>
+    </div>
+  </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full bg-secondary p-6 rounded-xl">
-        <div className="p-6 bg-primary border-t rounded-xl shadow-md col-span-2">
-          <h2 className="text-xl text-textcolor mb-4">
-            User Requests Accepted{" "}
-          </h2>
-          <span className="text-5xl font-bold">{userRequest}</span>
-          <div className="py-6">
-            <Chart
-              chartType="ScatterChart"
-              width="100%"
-              height="360px"
-              data={data}
-              options={options}
-            />
-          </div>
-        </div>
+  {/* Main Content Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 w-full bg-secondary p-4 md:p-6 rounded-xl">
+    {/* User Requests Accepted */}
+    <div className="p-4 md:p-6 bg-primary border-t rounded-xl shadow-md col-span-1 md:col-span-2">
+      <h2 className="text-xl text-textcolor mb-4">User Requests Accepted</h2>
+      <span className="text-5xl font-bold">{userRequest}</span>
+      <div className="py-6">
+        <Chart
+          chartType="ScatterChart"
+          width="100%"
+          height="360px"
+          data={data}
+          options={options}
+        />
+      </div>
+    </div>
 
-        <div className="flex flex-col h-full col-span-1 justify-start space-y-8">
-          <div className="p-4 bg-primary rounded-xl shadow-md">
-            <h2 className="text-xl font-semibold mb-4 font-sans text-textcolor">
-              Recent Activities
-            </h2>
-            <div className="w-full flex flex-col items-center">
-              <Lottie
-                // animationData={NoActivity}
-                loop={true}
-                className="w-36 h-36"
-              />
-              <p className="text-sm font-medium text-textcolor">
-                No recent activities to display.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-4 bg-white rounded-xl shadow-md border-t">
-            <h2 className="text-xl font-semibold mb-4 font-sans text-textcolor">
-              Announcements
-            </h2>
-            <div className="w-full flex flex-col items-center space-y-4 text-textcolor">
-              <Mic className="w-10 h-10" />
-              <p className="text-sm font-medium">
-                No announcements at this time.
-              </p>
-            </div>
-          </div>
+    {/* Recent Activities and Announcements */}
+    <div className="flex flex-col h-full col-span-1 justify-start space-y-4 md:space-y-8">
+      <div className="p-4 bg-primary rounded-xl shadow-md">
+        <h2 className="text-xl font-semibold mb-4 font-sans text-textcolor">
+          Recent Activities
+        </h2>
+        <div className="w-full flex flex-col items-center">
+          <Lottie
+            // animationData={NoActivity}
+            loop={true}
+            className="w-36 h-36"
+          />
+          <p className="text-sm font-medium text-textcolor">
+            No recent activities to display.
+          </p>
         </div>
-        <div className="p-4 bg-white rounded-xl border-t shadow-md col-span-2">
-          <h2 className="text-xl font-bold mb-4">Statistics</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-blue-400 hover:bg-blue-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
-              <div className="w-10 h-10 bg-white rounded-full shadow-md animate-pulse shadow-slate-900 text-blue-400 flex items-center justify-center">
-                <Send />
-              </div>
-              <h3 className="text-2xl font-bold">{userRequest}</h3>
-              <p className="text-sm">Block Requests Submitted</p>
-            </div>
-            <div className="bg-green-400 hover:bg-green-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
-              <div className="w-10 h-10 bg-white rounded-full shadow-md animate-bounce shadow-slate-900 text-green-400 flex items-center justify-center">
-                <CircleCheck />
-              </div>
-              <h3 className="text-2xl font-bold">
-                {approved != null ? approved : "0"}
-              </h3>
-              <p className="text-sm">Approved Requests</p>
-            </div>
-            <div className="bg-orange-400 hover:bg-orange-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
-              <div className="w-10 h-10 bg-white rounded-full text-orange-400 animate-spin flex items-center justify-center">
-                <CircleDashed />
-              </div>
-              <h3 className="text-2xl font-bold">
-                {approved != null ? userRequest - approved : userRequest}
-              </h3>
-              <p className="text-sm">Pending Requests</p>
-            </div>
-          </div>
+      </div>
+
+      <div className="p-4 bg-white rounded-xl shadow-md border-t">
+        <h2 className="text-xl font-semibold mb-4 font-sans text-textcolor">
+          Announcements
+        </h2>
+        <div className="w-full flex flex-col items-center space-y-4 text-textcolor">
+          <Mic className="w-10 h-10" />
+          <p className="text-sm font-medium">
+            No announcements at this time.
+          </p>
         </div>
       </div>
     </div>
+
+    {/* Statistics */}
+    <div className="p-4 bg-white rounded-xl border-t shadow-md col-span-1 md:col-span-2">
+      <h2 className="text-xl font-bold mb-4">Statistics</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="bg-blue-400 hover:bg-blue-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
+          <div className="w-10 h-10 bg-white rounded-full shadow-md animate-pulse shadow-slate-900 text-blue-400 flex items-center justify-center">
+            <Send />
+          </div>
+          <h3 className="text-2xl font-bold">{userRequest}</h3>
+          <p className="text-sm">Block Requests Submitted</p>
+        </div>
+        <div className="bg-green-400 hover:bg-green-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
+          <div className="w-10 h-10 bg-white rounded-full shadow-md animate-bounce shadow-slate-900 text-green-400 flex items-center justify-center">
+            <CircleCheck />
+          </div>
+          <h3 className="text-2xl font-bold">
+            {approved != null ? approved : "0"}
+          </h3>
+          <p className="text-sm">Approved Requests</p>
+        </div>
+        <div className="bg-orange-400 hover:bg-orange-500 ease-in-out duration-300 py-6 text-center rounded-3xl text-slate-50 flex flex-col items-center space-y-2">
+          <div className="w-10 h-10 bg-white rounded-full text-orange-400 animate-spin flex items-center justify-center">
+            <CircleDashed />
+          </div>
+          <h3 className="text-2xl font-bold">
+            {approved != null ? userRequest - approved : userRequest}
+          </h3>
+          <p className="text-sm">Pending Requests</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   );
 };
 

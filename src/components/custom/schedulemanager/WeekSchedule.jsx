@@ -100,8 +100,8 @@ const WeekSchedule = ({ isStationFetching, viewState, setViewState }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto py-8 px-6 bg-secondary rounded-xl">
-      <div className="flex justify-between items-center mb-4 w-full">
-        <h1 className="text-2xl font-semibold">Gantt View</h1>
+      <div className="flex justify-between items-center mb-4 w-full flex-col">
+        <h1 className="text-2xl font-semibold py-2">Gantt View</h1>
         <ViewSelector viewState={viewState} setViewState={setViewState} />
       </div>
       <ToolBar

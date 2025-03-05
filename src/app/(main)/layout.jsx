@@ -11,7 +11,7 @@ export default async function RootLayout({ children }) {
   return (
     <>
       <main
-        className={`${inter.className} w-full h-screen grid grid-cols-10 gap-6 mt-4 px-6 overflow-hidden`}
+        className={`${inter.className} w-full h-screen grid grid-cols-10 gap-6 px-2 mt-4 overflow-hidden`}
       >
         <div className="absolute right-20 top-12">
           {/* <SignedIn>
@@ -22,7 +22,7 @@ export default async function RootLayout({ children }) {
         <SidebarMenu />
 
         {/* <div className="w-[20%]"></div> */}
-        <main className="col-span-8 h-full overflow-y-scroll hide-scrollbar">
+        <main className="col-span-10 h-full overflow-y-scroll hide-scrollbar">
           {/* <NavBar></NavBar> */}
           {children}
           <Footer />

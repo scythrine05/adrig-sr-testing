@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Lottie from "lottie-react";
-import { NoActivity } from "@/assets";
+import { NoActivity } from "../../../assets";
 import { Chart } from "react-google-charts";
 import {
   Mic,
@@ -21,7 +21,7 @@ import {
   ChevronRightIcon,
   User,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 
 const getFormattedDate = () => {
   const date = new Date();

@@ -1,9 +1,9 @@
 "use client";
-import { postFormData, postFormManagerData } from "app/actions/formdata";
+import { postFormData, postFormManagerData } from "../../../app/actions/formdata";
 import {
   deleteStagingFormData,
   getStagingFormDataByDepartment,
-} from "app/actions/stagingform";
+} from "../../../app/actions/stagingform";
 import React, { useEffect, useState } from "react";
 import EditRequest from "../EditRequest";
 import {
@@ -14,8 +14,7 @@ import {
   getUserName,
   getUsersByDept,
   getUserUnderManager,
-} from "app/actions/user";
-
+} from "../../../app/actions/user";
 import { useSession } from "next-auth/react";
 
 const RequestList = ({
@@ -34,21 +33,21 @@ const RequestList = ({
     : requests;
 
   return (
-    <div className="request-list h-screen p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+    <div className="request-list h-screen p-4 md:p-6 bg-gray-100 rounded-lg shadow-lg">
+      <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
         Request Table
       </h2>
 
       {/* User Filter */}
-      <div className="mb-6 flex items-center justify-center">
-        <label htmlFor="userFilter" className="mr-4 font-medium text-gray-700">
+      <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+        <label htmlFor="userFilter" className="font-medium text-gray-700">
           Filter by User:
         </label>
         <select
           id="userFilter"
           value={selectedUser}
           onChange={(e) => setSelectedUser(e.target.value)}
-          className="w-2/5 px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring focus:ring-blue-300"
+          className="w-full md:w-2/5 px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring focus:ring-blue-300"
         >
           <option value="">All Users</option>
           {users.map((user) => (
@@ -61,66 +60,113 @@ const RequestList = ({
 
       {/* Request Table */}
       {filteredRequests.length === 0 ? (
-        <h1 className="p-10 text-center w-full max-w-5xl mx-auto bg-white rounded-lg overflow-hidden shadow">
-          No Requests to Show
-        </h1>
-      ) : (
-        <table className="table-auto w-full max-w-5xl mx-auto border-collapse bg-white rounded-lg overflow-hidden shadow">
-          <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal text-center">
-              <th className="px-6 py-3"></th>
-              <th className="px-6 py-3">Date</th>
-              <th className="px-6 py-3">Depo/SSE</th>
-              <th className="px-6 py-3">Mission Block</th>
-              <th className="px-6 py-3">DemandTime From</th>
-              <th className="px-6 py-3">DemandTime To</th>
-              <th className="px-6 py-3">Action</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700 text-sm font-medium">
+  <h1 className="p-4 md:p-10 text-center w-full max-w-5xl mx-auto bg-white rounded-lg overflow-hidden shadow">
+    No Requests to Show
+  </h1>
+) : (
+  <div className="w-full max-w-5xl mx-auto">
+    {/* Desktop Table */}
+    <div className="hidden md:block overflow-x-auto">
+      <table className="table-auto w-full border-collapse bg-white rounded-lg overflow-hidden shadow">
+        <thead>
+          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal text-center">
+            <th className="px-4 py-3"></th>
+            <th className="px-4 py-3">Date</th>
+            <th className="px-4 py-3">Depo/SSE</th>
+            <th className="px-4 py-3">Mission Block</th>
+            <th className="px-4 py-3">DemandTime From</th>
+            <th className="px-4 py-3">DemandTime To</th>
+            <th className="px-4 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody className="text-gray-700 text-sm font-medium">
           {filteredRequests.map((request) => (
-              <tr
-                key={request.requestId}
-                className="border-b hover:bg-gray-100 transition-colors"
-              >
-                <td className="px-6 py-4 text-center align-middle">
-                  <input
-                    type="checkbox"
-                    checked={selectedRequests.includes(request.requestId)}
-                    onChange={() => toggleRequestSelection(request.requestId)}
-                  />
-                </td>
-                <td className="px-6 py-4 text-center align-middle">
-                  {request.date}
-                </td>
-                <td className="px-6 py-4 text-center align-middle">
-                  {request.selectedDepo}
-                </td>
-                <td className="px-6 py-4 text-center align-middle">
-                  {request.missionBlock}
-                </td>
-                <td className="px-6 py-4 text-center align-middle">
-                  {request.demandTimeFrom}
-                </td>
-                <td className="px-6 py-4 text-center align-middle">
-                  {request.demandTimeTo}
-                </td>
-                <td className="px-6 py-4 text-center align-middle">
-                  <button
-                    onClick={() => onSelectRequest(request)}
-                    className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
-                  >
-                    View Request
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      
+            <tr
+              key={request.requestId}
+              className="border-b hover:bg-gray-100 transition-colors"
+            >
+              <td className="px-4 py-4 text-center align-middle">
+                <input
+                  type="checkbox"
+                  checked={selectedRequests.includes(request.requestId)}
+                  onChange={() => toggleRequestSelection(request.requestId)}
+                />
+              </td>
+              <td className="px-4 py-4 text-center align-middle">
+                {request.date}
+              </td>
+              <td className="px-4 py-4 text-center align-middle">
+                {request.selectedDepo}
+              </td>
+              <td className="px-4 py-4 text-center align-middle">
+                {request.missionBlock}
+              </td>
+              <td className="px-4 py-4 text-center align-middle">
+                {request.demandTimeFrom}
+              </td>
+              <td className="px-4 py-4 text-center align-middle">
+                {request.demandTimeTo}
+              </td>
+              <td className="px-4 py-4 text-center align-middle">
+                <button
+                  onClick={() => onSelectRequest(request)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
+                >
+                  View Request
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* Mobile Layout (Vertical Cards) */}
+    <div className="md:hidden space-y-4">
+      {filteredRequests.map((request) => (
+        <div
+          key={request.requestId}
+          className="bg-white rounded-lg shadow p-4"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <input
+              type="checkbox"
+              checked={selectedRequests.includes(request.requestId)}
+              onChange={() => toggleRequestSelection(request.requestId)}
+              className="mr-2"
+            />
+            <button
+              onClick={() => onSelectRequest(request)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
+            >
+              View Request
+            </button>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <span className="font-medium">Date:</span> {request.date}
+            </div>
+            <div>
+              <span className="font-medium">Depo/SSE:</span> {request.selectedDepo}
+            </div>
+            <div>
+              <span className="font-medium">Mission Block:</span> {request.missionBlock}
+            </div>
+            <div>
+              <span className="font-medium">DemandTime From:</span> {request.demandTimeFrom}
+            </div>
+            <div>
+              <span className="font-medium">DemandTime To:</span> {request.demandTimeTo}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
       {/* Submit Selected Requests */}
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
         <button
           onClick={handleSubmitSelected}
           disabled={selectedRequests.length === 0}
@@ -136,7 +182,7 @@ const RequestList = ({
         <button
           onClick={handleCancelSelected}
           disabled={selectedRequests.length === 0}
-          className={`ml-3 px-6 py-2 rounded-lg shadow ${
+          className={`px-6 py-2 rounded-lg shadow ${
             selectedRequests.length === 0
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-red-600 text-white hover:bg-red-700 focus:ring focus:ring-red-300"
@@ -151,18 +197,18 @@ const RequestList = ({
 
 const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
   return (
-    <div className="request-details p-6 bg-gray-100 rounded-lg shadow-lg w-100">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+    <div className="request-details p-4 md:p-6 bg-gray-100 rounded-lg shadow-lg w-full">
+      <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
         Request Details
       </h2>
       <div className="flex items-center mb-6 justify-end">
-      <button
+        <button
           onClick={onBack}
           className="bg-white text-black px-4 py-2 rounded-lg shadow hover:bg-zinc-500 hover:text-white focus:ring focus:ring-red-300"
         >
           Go Back
         </button>
-        </div>
+      </div>
       <div className="bg-white rounded-lg p-4 shadow">
         <ul className="divide-y divide-gray-200">
           {Object.entries(request).map(([key, value]) => (
@@ -177,7 +223,7 @@ const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
           ))}
         </ul>
       </div>
-      <div className="mt-6 flex justify-end space-x-4">
+      <div className="mt-6 flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4">
         <button
           onClick={onBack}
           className="bg-white text-black px-4 py-2 rounded-lg shadow hover:bg-zinc-500 hover:text-white focus:ring focus:ring-red-300"
@@ -308,7 +354,6 @@ const ManagerRequests = ({ id }) => {
       console.error("Error canceling selected requests:", error);
     }
   };
-  
 
   const handleConfirmRequest = async (request) => {
     try {
@@ -336,7 +381,7 @@ const ManagerRequests = ({ id }) => {
   };
 
   return (
-    <div className="request-manager max-w-90  mx-auto my-10 p-6 bg-gray-50 rounded-lg shadow">
+    <div className="request-manager max-w-90 mx-auto my-10 p-4 md:p-6 bg-gray-50 rounded-lg shadow">
       {!selectedRequest && !isEditing && (
         <RequestList
           requests={requests}
