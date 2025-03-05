@@ -289,7 +289,7 @@ const WelcomeScreenContainerUser = () => {
           Engg Department
         </h2>
         <p className="text-xs text-left w-full">
-          There are the total request maded
+          Total Requests Made
         </p>
         <h2 className="text-xl md:text-2xl font-bold text-left w-full">{engg}</h2>
       </div>
@@ -299,7 +299,7 @@ const WelcomeScreenContainerUser = () => {
           SIG Department
         </h2>
         <p className="text-xs text-left w-full">
-          There are the total request maded
+          Total Requests Made
         </p>
         <h2 className="text-xl md:text-2xl font-bold text-left w-full">{sig}</h2>
       </div>
@@ -309,7 +309,7 @@ const WelcomeScreenContainerUser = () => {
           TRD Department
         </h2>
         <p className="text-xs text-left w-full">
-          There are the total request maded
+          Total Requests Made
         </p>
         <h2 className="text-xl md:text-2xl font-bold text-left w-full">{trd}</h2>
       </div>
@@ -318,7 +318,7 @@ const WelcomeScreenContainerUser = () => {
 
   <div className="bg-secondary p-4 md:p-6 w-full">
     <h2 className="text-lg md:text-xl text-textcolor mb-2 md:mb-4 w-full">
-      How this week looks
+     Recent Activities & Schedule Overview
     </h2>
     <div className="w-full rounded-xl">
       <ScheduleCard requests={requests} />

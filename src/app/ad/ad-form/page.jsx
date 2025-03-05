@@ -204,13 +204,13 @@ const SearchForm = () => {
     </div>
     <div className="flex flex-col md:flex-row">
       <button
-        className="bg-blue-500 p-2 md:p-3 mt-2 md:mt-0 md:ml-4 text-white rounded-lg text-center flex justify-center hover:bg-blue-700"
+        className="bg-blue-500 p-2 md:p-3 md:mt-0 md:ml-4 text-white rounded-lg text-center flex justify-center hover:bg-blue-700 my-2"
         onClick={handleSearch}
       >
         Search
       </button>
       <button
-        className="border border-slate-950 py-2 md:py-3 px-3 md:px-4 mt-2 md:mt-0 md:ml-4 rounded-lg text-center flex justify-center hover:bg-slate-200"
+        className="border border-slate-950 py-2 md:py-3 px-3 md:px-4 my-2 md:mt-0 md:ml-4 rounded-lg text-center flex justify-center hover:bg-slate-200"
         onClick={handleClear}
       >
         Clear
