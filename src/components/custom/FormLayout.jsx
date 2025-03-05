@@ -28,7 +28,7 @@ const FormLayout = ({
   formConditionalRenderingSelectedDepot
 }) => {
     return (
-<div className="p-4 mt-10 bg-blue-100 rounded-lg shadow-lg min-w-full overflow-hidden">
+<div className="p-4 mt-10 bg-blue-100 rounded-lg shadow-lg min-w-full overflow-hidden ">
   <h1 className="text-center text-xl font-bold mb-4">Request Form</h1>
 
   {/* Grid for Date, Department, and Section */}

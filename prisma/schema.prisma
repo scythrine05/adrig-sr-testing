@@ -15,6 +15,7 @@ model User {
   optimised       String            @default("notset")
   department      String?           @default("")
   manager         String?           @default("")
+  phone           String?           @unique
   requests        Requests[]
   StagingRequests StagingRequests[]
 }
@@ -25,6 +26,7 @@ model Otp {
   code      String
   createdAt DateTime @default(now())
   validTill DateTime
+  phone     String?  @unique
 }
 
 model Manager {
@@ -35,6 +37,7 @@ model Manager {
   name       String?
   Requests   Requests[]
   requests   StagingRequests[]
+  phone      String?           @unique
 }
 
 model StagingRequests {
