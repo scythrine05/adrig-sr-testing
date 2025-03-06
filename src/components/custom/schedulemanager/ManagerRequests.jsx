@@ -217,7 +217,25 @@ const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
                 {key}:
               </span>{" "}
               <span className="text-gray-600">
-                {typeof value === "object" ? JSON.stringify(value) : value}
+                {typeof value === "object" && value !== null ? (
+                  Array.isArray(value) ? (
+                    <ul className="list-disc pl-5">
+                      {value.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <ul className="list-disc pl-5">
+                      {Object.entries(value).map(([k, v]) => (
+                        <li key={k}>
+                          <span className="font-medium">{k}:</span> {v}
+                        </li>
+                      ))}
+                    </ul>
+                  )
+                ) : (
+                  value || "N/A"
+                )}
               </span>
             </li>
           ))}

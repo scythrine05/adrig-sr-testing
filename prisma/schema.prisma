@@ -60,7 +60,7 @@ model StagingRequests {
   demandTimeFrom           String
   demandTimeTo             String
   sigDisconnection         String
-  ohDisconnection          String
+  oheDisconnection         String?
   elementarySectionFrom    String
   elementarySectionTo      String
   sigElementarySectionFrom String
@@ -95,7 +95,7 @@ model Requests {
   demandTimeFrom           String
   demandTimeTo             String
   sigDisconnection         String
-  ohDisconnection          String
+  oheDisconnection         String?
   elementarySectionFrom    String
   elementarySectionTo      String
   userId                   String?
@@ -133,7 +133,7 @@ model Sanctiontable {
   demandTimeFrom           String
   demandTimeTo             String
   sigDisconnection         String
-  ohDisconnection          String
+  oheDisconnection         String?
   elementarySectionFrom    String
   elementarySectionTo      String
   userId                   String?
