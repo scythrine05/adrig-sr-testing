@@ -26,6 +26,7 @@ const SearchForm = () => {
   const [currentReq, setCurrentReq] = useState([]);
   const [update, setUpdate] = useState(true);
   const [edit, setEdit] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
     async function fxn() {
@@ -67,12 +68,34 @@ const SearchForm = () => {
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Optimised Table</h1>
                 <p className="text-sm sm:text-base text-gray-600">View and manage optimised requests</p>
               </div>
-              <button
-                onClick={saveButtonHandler}
-                className="w-full sm:w-auto bg-slate-950 text-white px-6 py-2.5 rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm"
-              >
-                Save Changes
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={saveButtonHandler}
+                  className="w-full sm:w-auto bg-slate-950 text-white px-6 py-2.5 rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setIsFullScreen(!isFullScreen)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
+                >
+                  {isFullScreen ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9L4 4m0 0l5-5M4 4h16m0 0l-5 5m5-5v16m0 0l-5-5m5 5l-5-5" />
+                      </svg>
+                      Exit Full Screen
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+                      </svg>
+                      Full Screen
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -81,109 +104,124 @@ const SearchForm = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
             {/* Desktop Table */}
-            <div className="hidden md:block">
-              <TableContainer
-                component={Paper}
-                sx={{
-                  marginTop: 2,
-                  position: "relative",
-                  maxHeight: 600,
-                  border: "solid 1px #e5e7eb",
-                  borderRadius: "0.5rem",
-                  boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-                }}
-              >
-                <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell><strong>Request ID</strong></TableCell>
-                      <TableCell><strong>Date of Request</strong></TableCell>
-                      <TableCell><strong>Department</strong></TableCell>
-                      <TableCell><strong>Section</strong></TableCell>
-                      <TableCell><strong>Block Section</strong></TableCell>
-                      <TableCell><strong>Selected Block</strong></TableCell>
-                      <TableCell><strong>Work Description</strong></TableCell>
-                      <TableCell><strong>Work Type Selected</strong></TableCell>
-                      <TableCell><strong>Line Selected</strong></TableCell>
-                      <TableCell><strong>Caution Required</strong></TableCell>
-                      <TableCell><strong>Caution Speed</strong></TableCell>
-                      <TableCell><strong>Caution Location (From)</strong></TableCell>
-                      <TableCell><strong>Caution Location (To)</strong></TableCell>
-                      <TableCell><strong>Work Location (From)</strong></TableCell>
-                      <TableCell><strong>Work Location (To)</strong></TableCell>
-                      <TableCell><strong>Demand Time (From)</strong></TableCell>
-                      <TableCell><strong>Demand Time (To)</strong></TableCell>
-                      <TableCell><strong>Optimised Time (From)</strong></TableCell>
-                      <TableCell><strong>Optimised Time (To)</strong></TableCell>
-                      <TableCell><strong>Optimization Details</strong></TableCell>
-                      <TableCell><strong>SIG Disconnection</strong></TableCell>
-                      <TableCell><strong>OHE Disconnection</strong></TableCell>
-                      <TableCell><strong>Elementary Section (From)</strong></TableCell>
-                      <TableCell><strong>Elementary Section (To)</strong></TableCell>
-                      <TableCell><strong>Other Lines Affected</strong></TableCell>
-                      <TableCell><strong>Action</strong></TableCell>
-                      <TableCell><strong>Remarks</strong></TableCell>
-                      <TableCell><strong>Status</strong></TableCell>
-                      {filteredRequests && filteredRequests[0] && (filteredRequests[0].final == null || filteredRequests[0].final !== "set") && (
-                        <TableCell sx={{ backgroundColor: "#E8DEF8", position: "sticky", right: 0, zIndex: 100 }}>
-                          <strong>Edit The Request</strong>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filteredRequests.length > 0 ? (
-                      filteredRequests.map((request) => (
-                        <TableRow key={request.requestId}>
-                          <TableCell>{request.requestId}</TableCell>
-                          <TableCell>{request.date}</TableCell>
-                          <TableCell>{request.selectedDepartment}</TableCell>
-                          <TableCell>{request.selectedSection}</TableCell>
-                          <TableCell>{request.stationID}</TableCell>
-                          <TableCell>{request.missionBlock}</TableCell>
-                          <TableCell>{request.workDescription}</TableCell>
-                          <TableCell>{request.workType}</TableCell>
-                          <TableCell>{request.selectedLine}</TableCell>
-                          <TableCell>{request.cautionRequired}</TableCell>
-                          <TableCell>{request.cautionSpeed}</TableCell>
-                          <TableCell>{request.cautionLocationFrom}</TableCell>
-                          <TableCell>{request.cautionLocationTo}</TableCell>
-                          <TableCell>{request.workLocationFrom}</TableCell>
-                          <TableCell>{request.workLocationTo}</TableCell>
-                          <TableCell>{request.demandTimeFrom}</TableCell>
-                          <TableCell>{request.demandTimeTo}</TableCell>
-                          <TableCell>{request.Optimisedtimefrom}</TableCell>
-                          <TableCell>{request.Optimisedtimeto}</TableCell>
-                          <TableCell>{request.optimization_details}</TableCell>
-                          <TableCell>{request.sigDisconnection}</TableCell>
-                          <TableCell>{request.ohDisconnection}</TableCell>
-                          <TableCell>{request.elementarySectionFrom}</TableCell>
-                          <TableCell>{request.elementarySectionTo}</TableCell>
-                          <TableCell>{request.otherLinesAffected}</TableCell>
-                          <TableCell>
-                            {request.action === "none" ? "No Action Taken" : request.action === "Accepted" ? <span>Accepted ✅</span> : <span>Rejected❌ </span>}
-                          </TableCell>
-                          <TableCell>
-                            {request.remarks === null || request.remarks === "" ? "No Remarks" : request.remarks}
-                          </TableCell>
-                          <TableCell>{request.status}</TableCell>
-                          {request.final === "" || (request.final !== "set" && (
-                            <TableCell sx={{ backgroundColor: "#FFEFF4", position: "sticky", right: 0, zIndex: 1 }}>
-                              <button className="bg-blue-500 text-white p-2 rounded-lg" onClick={() => editRequestHandler(request)}>
-                                Edit
-                              </button>
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))
-                    ) : (
+            <div className={`hidden md:block ${isFullScreen ? 'fixed inset-0 z-50 bg-white p-4' : ''}`}>
+              {isFullScreen && (
+                <div className="flex justify-end mb-4">
+                  <button
+                    onClick={() => setIsFullScreen(false)}
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9L4 4m0 0l5-5M4 4h16m0 0l-5 5m5-5v16m0 0l-5-5m5 5l-5-5" />
+                    </svg>
+                    Exit Full Screen
+                  </button>
+                </div>
+              )}
+              <div className={`${isFullScreen ? 'h-[calc(100vh-120px)] overflow-auto' : ''}`}>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    marginTop: isFullScreen ? 0 : 2,
+                    position: "relative",
+                    maxHeight: isFullScreen ? "none" : 600,
+                    border: "solid 1px #e5e7eb",
+                    borderRadius: "0.5rem",
+                    boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+                  }}
+                >
+                  <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
+                    <TableHead>
                       <TableRow>
-                        <TableCell colSpan={21} align="center">No requests found</TableCell>
+                        <TableCell><strong>Request ID</strong></TableCell>
+                        <TableCell><strong>Date of Request</strong></TableCell>
+                        <TableCell><strong>Department</strong></TableCell>
+                        <TableCell><strong>Section</strong></TableCell>
+                        <TableCell><strong>Block Section</strong></TableCell>
+                        <TableCell><strong>Selected Block</strong></TableCell>
+                        <TableCell><strong>Work Type Selected</strong></TableCell>                        
+                        <TableCell><strong>Work Description</strong></TableCell>
+                        <TableCell><strong>Demand Time (From)</strong></TableCell>
+                        <TableCell><strong>Demand Time (To)</strong></TableCell>
+                        <TableCell><strong>Line Selected</strong></TableCell>
+                        <TableCell><strong>Caution Required</strong></TableCell>
+                        <TableCell><strong>Caution Speed</strong></TableCell>
+                        <TableCell><strong>Caution Location (From)</strong></TableCell>
+                        <TableCell><strong>Caution Location (To)</strong></TableCell>
+                        <TableCell><strong>Work Location (From)</strong></TableCell>
+                        <TableCell><strong>Work Location (To)</strong></TableCell>
+                        <TableCell><strong>Optimised Time (From)</strong></TableCell>
+                        <TableCell><strong>Optimised Time (To)</strong></TableCell>
+                        <TableCell><strong>Optimization Details</strong></TableCell>
+                        <TableCell><strong>SIG Disconnection</strong></TableCell>
+                        <TableCell><strong>OHE Disconnection</strong></TableCell>
+                        <TableCell><strong>Elementary Section (From)</strong></TableCell>
+                        <TableCell><strong>Elementary Section (To)</strong></TableCell>
+                        <TableCell><strong>Other Lines Affected</strong></TableCell>
+                        <TableCell><strong>Action</strong></TableCell>
+                        <TableCell><strong>Remarks</strong></TableCell>
+                        <TableCell><strong>Status</strong></TableCell>
+                        {filteredRequests && filteredRequests[0] && (filteredRequests[0].final == null || filteredRequests[0].final !== "set") && (
+                          <TableCell sx={{ backgroundColor: "#E8DEF8", position: "sticky", right: 0, zIndex: 100 }}>
+                            <strong>Edit The Request</strong>
+                          </TableCell>
+                        )}
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {filteredRequests.length > 0 ? (
+                        filteredRequests.map((request) => (
+                          <TableRow key={request.requestId}>
+                            <TableCell>{request.requestId}</TableCell>
+                            <TableCell>{request.date}</TableCell>
+                            <TableCell>{request.selectedDepartment}</TableCell>
+                            <TableCell>{request.selectedSection}</TableCell>
+                            <TableCell>{request.stationID}</TableCell>
+                            <TableCell>{request.missionBlock}</TableCell>
+                            <TableCell>{request.workType}</TableCell>
+                            <TableCell>{request.workDescription}</TableCell>
+                            <TableCell>{request.demandTimeFrom}</TableCell>
+                            <TableCell>{request.demandTimeTo}</TableCell>                                                        
+                            <TableCell>{request.selectedLine}</TableCell>
+                            <TableCell>{request.cautionRequired}</TableCell>
+                            <TableCell>{request.cautionSpeed}</TableCell>
+                            <TableCell>{request.cautionLocationFrom}</TableCell>
+                            <TableCell>{request.cautionLocationTo}</TableCell>
+                            <TableCell>{request.workLocationFrom}</TableCell>
+                            <TableCell>{request.workLocationTo}</TableCell>
+                            <TableCell>{request.Optimisedtimefrom}</TableCell>
+                            <TableCell>{request.Optimisedtimeto}</TableCell>
+                            <TableCell>{request.optimization_details}</TableCell>
+                            <TableCell>{request.sigDisconnection}</TableCell>
+                            <TableCell>{request.ohDisconnection}</TableCell>
+                            <TableCell>{request.elementarySectionFrom}</TableCell>
+                            <TableCell>{request.elementarySectionTo}</TableCell>
+                            <TableCell>{request.otherLinesAffected}</TableCell>
+                            <TableCell>
+                              {request.action === "none" ? "No Action Taken" : request.action === "Accepted" ? <span>Accepted ✅</span> : <span>Rejected❌ </span>}
+                            </TableCell>
+                            <TableCell>
+                              {request.remarks === null || request.remarks === "" ? "No Remarks" : request.remarks}
+                            </TableCell>
+                            <TableCell>{request.status}</TableCell>
+                            {request.final === "" || (request.final !== "set" && (
+                              <TableCell sx={{ backgroundColor: "#FFEFF4", position: "sticky", right: 0, zIndex: 1 }}>
+                                <button className="bg-blue-500 text-white p-2 rounded-lg" onClick={() => editRequestHandler(request)}>
+                                  Edit
+                                </button>
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={21} align="center">No requests found</TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
             </div>
 
             {/* Mobile Cards */}
@@ -217,13 +255,20 @@ const SearchForm = () => {
                         <span className="pl-2">{request.missionBlock}</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                        <strong className="text-right pr-2 border-r border-gray-200">Work Type:</strong>
+                        <span className="pl-2">{request.workType}</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                         <strong className="text-right pr-2 border-r border-gray-200">Work Description:</strong>
                         <span className="pl-2">{request.workDescription}</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                        <strong className="text-right pr-2 border-r border-gray-200">Work Type:</strong>
-                        <span className="pl-2">{request.workType}</span>
+                        <strong className="text-right pr-2 border-r border-gray-200">Demand Time (From):</strong>
+                        <span className="pl-2">{request.demandTimeFrom}</span>
                       </div>
+                      <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                        <strong className="text-right pr-2 border-r border-gray-200">Demand Time (To):</strong>
+                        <span className="pl-2">{request.demandTimeTo}</span>            
                       <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                         <strong className="text-right pr-2 border-r border-gray-200">Line Selected:</strong>
                         <span className="pl-2">{request.selectedLine}</span>
@@ -252,13 +297,7 @@ const SearchForm = () => {
                         <strong className="text-right pr-2 border-r border-gray-200">Work Location (To):</strong>
                         <span className="pl-2">{request.workLocationTo}</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                        <strong className="text-right pr-2 border-r border-gray-200">Demand Time (From):</strong>
-                        <span className="pl-2">{request.demandTimeFrom}</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                        <strong className="text-right pr-2 border-r border-gray-200">Demand Time (To):</strong>
-                        <span className="pl-2">{request.demandTimeTo}</span>
+
                       </div>
                       <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                         <strong className="text-right pr-2 border-r border-gray-200">Optimised Time (From):</strong>
