@@ -32,6 +32,7 @@ const SearchForm = () => {
     async function fxn() {
       try {
         const res = await getDataOptimised();
+        console.log("Optimised requests:", res.result.map(req => ({ id: req.requestId, final: req.final })));
         setFilteredRequests(res.result);
       } catch (e) {
         console.log(e);
@@ -204,13 +205,13 @@ const SearchForm = () => {
                               {request.remarks === null || request.remarks === "" ? "No Remarks" : request.remarks}
                             </TableCell>
                             <TableCell>{request.status}</TableCell>
-                            {request.final === "" || (request.final !== "set" && (
+                            {(request.final === "" || request.final !== "set") && (
                               <TableCell sx={{ backgroundColor: "#FFEFF4", position: "sticky", right: 0, zIndex: 1 }}>
                                 <button className="bg-blue-500 text-white p-2 rounded-lg" onClick={() => editRequestHandler(request)}>
                                   Edit
                                 </button>
                               </TableCell>
-                            ))}
+                            )}
                           </TableRow>
                         ))
                       ) : (
