@@ -121,6 +121,15 @@ export function AdminSidebarMenu() {
                     <span>Sanction Table</span>
                   </Link>
                 )}
+                <Link
+                href="/ad/ad-ftcb"
+                className={`flex items-center hover:bg-secondary-foreground rounded-full p-2 font-semibold ease-in-out duration-300 w-full ${
+                  pathname === "/ad/ad-ftcb" && "bg-primary"
+                }`}
+              >
+                <CalendarCheck className="w-4 h-4 mr-2" />
+                <span>FTCB Request</span>
+              </Link>
             </nav>
           </div>
 

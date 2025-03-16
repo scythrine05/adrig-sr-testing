@@ -16,6 +16,7 @@ model User {
   department      String?           @default("")
   manager         String?           @default("")
   phone           String?           @unique
+  depot           String?           @default("")
   requests        Requests[]
   StagingRequests StagingRequests[]
 }
@@ -60,6 +61,7 @@ model StagingRequests {
   demandTimeFrom           String
   demandTimeTo             String
   sigDisconnection         String
+  ohDisconnection          String?
   oheDisconnection         String?
   elementarySectionFrom    String
   elementarySectionTo      String
@@ -73,6 +75,7 @@ model StagingRequests {
   managerId                String?
   status                   String?
   selectedDepo             String?
+  sigResponse              String? @default("no")
   Manager                  Manager? @relation(fields: [managerId], references: [id])
   User                     User?    @relation(fields: [userId], references: [id])
 }
@@ -95,6 +98,7 @@ model Requests {
   demandTimeFrom           String
   demandTimeTo             String
   sigDisconnection         String
+  ohDisconnection          String?
   oheDisconnection         String?
   elementarySectionFrom    String
   elementarySectionTo      String
@@ -109,6 +113,7 @@ model Requests {
   otherLinesAffected       Json
   managerId                String?
   selectedDepo             String?
+  sigResponse              String? @default("no")
   Manager                  Manager? @relation(fields: [managerId], references: [id])
   User                     User?    @relation(fields: [userId], references: [id])
 }
@@ -133,6 +138,7 @@ model Sanctiontable {
   demandTimeFrom           String
   demandTimeTo             String
   sigDisconnection         String
+  ohDisconnection          String?
   oheDisconnection         String?
   elementarySectionFrom    String
   elementarySectionTo      String
@@ -151,5 +157,6 @@ model Sanctiontable {
   otherLinesAffected       Json?
   managerId                String?
   selectedDepo             String?
+  sigResponse              String? @default("no")
   status                   String   @default("in progress")
 }

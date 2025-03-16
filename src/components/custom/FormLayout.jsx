@@ -8,6 +8,7 @@ const FormLayout = ({
   getFormDate,
   getHandleChange,
   maxDate,
+  minDate,
   formSelectedDepartment,
   formSelectedSection,
   handleGetTheListForYard,
@@ -25,18 +26,19 @@ const FormLayout = ({
   handleGetMissionBlock2,
   formRequestRemarks,
   formSubmitHandler,
-  formConditionalRenderingSelectedDepot
+  formConditionalRenderingSelectedDepot,
+  disabled_option,
 }) => {
     return (
 <div className="p-4 mt-10 bg-blue-100 rounded-lg shadow-lg min-w-full overflow-hidden ">
-  <h1 className="text-center text-xl font-bold mb-4">Request Form</h1>
+  <h1 className="text-center text-xl font-bold mb-4">Block Requestion form</h1>
 
   {/* Grid for Date, Department, and Section */}
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 ">
     {/* Date Input */}
     <div>
       <label className="block text-sm font-medium">
-        Date <span style={{ color: "red" }}>*</span>
+      Date of Block<span style={{ color: "red" }}>*</span>
       </label>
       <input
         ref={handleInputRefsChange(0)}
@@ -46,8 +48,14 @@ const FormLayout = ({
         name="date"
         className="mt-1 w-full p-2 border rounded"
         onChange={getHandleChange()}
+        min={minDate}
         max={maxDate}
       />
+      {minDate && (
+        <p className="text-xs text-gray-600 mt-1">
+          Select a date from {minDate} onwards
+        </p>
+      )}
     </div>
 
     {/* Department Dropdown */}
@@ -62,7 +70,7 @@ const FormLayout = ({
         name="selectedDepartment"
         className="mt-1 w-full p-2.5 border rounded"
         onChange={getHandleChange()}
-        disabled
+        disabled={disabled_option}
       >
         <option value={""}>Select department</option>
         <option value={"ENGG"}>ENGG</option>
@@ -74,7 +82,7 @@ const FormLayout = ({
     {/* Section Dropdown */}
     <div>
       <label className="block text-sm font-medium">
-        Section <span style={{ color: "red" }}>*</span>
+        Major Section <span style={{ color: "red" }}>*</span>
       </label>
       <select
         ref={handleInputRefsChange(2)}
@@ -104,7 +112,7 @@ const FormLayout = ({
   {/* Mission Block Dropdown */}
   <div className="mb-4">
     <label className="block text-sm font-medium">
-      Mission Block <span style={{ color: "red" }}>*</span>
+      Block Section <span style={{ color: "red" }}>*</span>
     </label>
     <MultipleSelect
       items={handleGetTheListForYard()}
@@ -128,7 +136,7 @@ const FormLayout = ({
       onChange={getHandleChange()}
     >
       <option className="block text-sm font-medium" value={""}>
-        Select The Work Description
+        Work Type
       </option>
       {customOption1()}
     </select>

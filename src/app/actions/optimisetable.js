@@ -27,7 +27,7 @@ export async function postDataOptimisedFirst(request) {
       demandTimeFrom: request.demandTimeFrom,
       demandTimeTo: request.demandTimeTo,
       sigDisconnection: request.sigDisconnection,
-      ohDisconnection: request.ohDisconnection,
+      oheDisconnection: request.oheDisconnection,
       elementarySectionFrom: request.elementarySectionFrom,
       elementarySectionTo: request.elementarySectionTo,
       sigElementarySectionFrom: request.sigElementarySectionFrom,

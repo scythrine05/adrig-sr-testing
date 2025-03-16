@@ -2,85 +2,113 @@
 import prisma from "../../lib/prisma";
 
 export async function postFormData(formData) {
-  const res = await prisma.requests.create({
-    data: {
-      date: formData.date,
-      selectedDepartment: formData.selectedDepartment,
-      selectedSection: formData.selectedSection,
-      stationID: formData.stationID,
-      missionBlock: formData.missionBlock,
-      workType: formData.workType,
-      workDescription: formData.workDescription,
-      selectedLine: formData.selectedLine,
-      selectedStream: formData.selectedStream,
-      cautionRequired: formData.cautionRequired,
-      cautionSpeed: formData.cautionSpeed,
-      cautionLocationFrom: formData.cautionLocationFrom,
-      cautionLocationTo: formData.cautionLocationTo,
-      workLocationFrom: formData.workLocationFrom,
-      workLocationTo: formData.workLocationTo,
-      demandTimeFrom: formData.demandTimeFrom,
-      demandTimeTo: formData.demandTimeTo,
-      sigDisconnection: formData.sigDisconnection,
-      ohDisconnection: formData.ohDisconnection,
-      elementarySectionFrom: formData.elementarySectionFrom,
-      elementarySectionTo: formData.elementarySectionTo,
-      sigElementarySectionFrom: formData.sigElementarySectionFrom,
-      sigElementarySectionTo: formData.sigElementarySectionTo,
-      repercussions: formData.repercussions,
-      otherLinesAffected: formData.otherLinesAffected,
-      requestremarks: formData.requestremarks,
-      selectedDepo: formData.selectedDepo,
-      userId: formData.userId,
-    },
-    select: {
-      requestId: true,
-      userId: true,
-    },
-  });
-
-  return res;
+  try {
+    // Ensure both field names are set for compatibility
+    if (formData.ohDisconnection) {
+      formData.oheDisconnection = formData.ohDisconnection;
+    } else if (formData.oheDisconnection) {
+      formData.ohDisconnection = formData.oheDisconnection;
+    }
+    
+    const res = await prisma.requests.create({
+      data: {
+        date: formData.date,
+        selectedDepartment: formData.selectedDepartment,
+        selectedSection: formData.selectedSection,
+        stationID: formData.stationID,
+        missionBlock: formData.missionBlock,
+        workType: formData.workType,
+        workDescription: formData.workDescription,
+        selectedLine: formData.selectedLine,
+        selectedStream: formData.selectedStream,
+        cautionRequired: formData.cautionRequired,
+        cautionSpeed: formData.cautionSpeed,
+        cautionLocationFrom: formData.cautionLocationFrom,
+        cautionLocationTo: formData.cautionLocationTo,
+        workLocationFrom: formData.workLocationFrom,
+        workLocationTo: formData.workLocationTo,
+        demandTimeFrom: formData.demandTimeFrom,
+        demandTimeTo: formData.demandTimeTo,
+        sigDisconnection: formData.sigDisconnection,
+        ohDisconnection: formData.ohDisconnection,
+        oheDisconnection: formData.oheDisconnection,
+        elementarySectionFrom: formData.elementarySectionFrom,
+        elementarySectionTo: formData.elementarySectionTo,
+        sigElementarySectionFrom: formData.sigElementarySectionFrom,
+        sigElementarySectionTo: formData.sigElementarySectionTo,
+        repercussions: formData.repercussions,
+        otherLinesAffected: formData.otherLinesAffected,
+        requestremarks: formData.requestremarks,
+        selectedDepo: formData.selectedDepo,
+        userId: formData.userId,
+      },
+      select: {
+        requestId: true,
+        userId: true,
+      },
+    });
+    
+    console.log("Created request:", res);
+    return res;
+  } catch (error) {
+    console.error("Error creating request:", error);
+    throw new Error("Failed to create request");
+  }
 }
 
 export async function postFormManagerData(formData) {
-  const res = await prisma.requests.create({
-    data: {
-      date: formData.date,
-      selectedDepartment: formData.selectedDepartment,
-      selectedSection: formData.selectedSection,
-      stationID: formData.stationID,
-      missionBlock: formData.missionBlock,
-      workType: formData.workType,
-      workDescription: formData.workDescription,
-      selectedLine: formData.selectedLine,
-      selectedStream: formData.selectedStream,
-      cautionRequired: formData.cautionRequired,
-      cautionSpeed: formData.cautionSpeed,
-      cautionLocationFrom: formData.cautionLocationFrom,
-      cautionLocationTo: formData.cautionLocationTo,
-      workLocationFrom: formData.workLocationFrom,
-      workLocationTo: formData.workLocationTo,
-      demandTimeFrom: formData.demandTimeFrom,
-      demandTimeTo: formData.demandTimeTo,
-      sigDisconnection: formData.sigDisconnection,
-      ohDisconnection: formData.ohDisconnection,
-      elementarySectionFrom: formData.elementarySectionFrom,
-      elementarySectionTo: formData.elementarySectionTo,
-      sigElementarySectionFrom: formData.sigElementarySectionFrom,
-      sigElementarySectionTo: formData.sigElementarySectionTo,
-      repercussions: formData.repercussions,
-      otherLinesAffected: formData.otherLinesAffected,
-      requestremarks: formData.requestremarks,
-      selectedDepo: formData.selectedDepo,
-      managerId: formData.managerId,
-    },
-    select: {
-      requestId: true,
-      managerId: true,
-    },
-  });
-
-  return res;
+  try {
+    // Ensure both field names are set for compatibility
+    if (formData.ohDisconnection) {
+      formData.oheDisconnection = formData.ohDisconnection;
+    } else if (formData.oheDisconnection) {
+      formData.ohDisconnection = formData.oheDisconnection;
+    }
+    
+    const res = await prisma.requests.create({
+      data: {
+        date: formData.date,
+        selectedDepartment: formData.selectedDepartment,
+        selectedSection: formData.selectedSection,
+        stationID: formData.stationID,
+        missionBlock: formData.missionBlock,
+        workType: formData.workType,
+        workDescription: formData.workDescription,
+        selectedLine: formData.selectedLine,
+        selectedStream: formData.selectedStream,
+        cautionRequired: formData.cautionRequired,
+        cautionSpeed: formData.cautionSpeed,
+        cautionLocationFrom: formData.cautionLocationFrom,
+        cautionLocationTo: formData.cautionLocationTo,
+        workLocationFrom: formData.workLocationFrom,
+        workLocationTo: formData.workLocationTo,
+        demandTimeFrom: formData.demandTimeFrom,
+        demandTimeTo: formData.demandTimeTo,
+        sigDisconnection: formData.sigDisconnection,
+        ohDisconnection: formData.ohDisconnection,
+        oheDisconnection: formData.oheDisconnection,
+        elementarySectionFrom: formData.elementarySectionFrom,
+        elementarySectionTo: formData.elementarySectionTo,
+        sigElementarySectionFrom: formData.sigElementarySectionFrom,
+        sigElementarySectionTo: formData.sigElementarySectionTo,
+        repercussions: formData.repercussions,
+        otherLinesAffected: formData.otherLinesAffected,
+        requestremarks: formData.requestremarks,
+        selectedDepo: formData.selectedDepo,
+        managerId: formData.managerId,
+      },
+      select: {
+        requestId: true,
+        managerId: true,
+      },
+    });
+    
+    console.log("Created manager request:", res);
+    return res;
+  } catch (error) {
+    console.error("Error creating manager request:", error);
+    throw new Error("Failed to create manager request");
+  }
 }
 
 export async function updateFormData(formData, requestId) {

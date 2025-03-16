@@ -344,7 +344,7 @@ export function Signin() {
             </div>
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                Already a member?{" "}
+                Not a member?{" "}
                 <a href="/signup" className="text-blue-600 hover:underline">
                   Sign Up
                 </a>{" "}

@@ -22,6 +22,33 @@ import { getStagingFormData } from "../../app/actions/stagingform";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 
+// Helper function to get week dates
+const getWeekDates = (weekOffset = 0) => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 = Sunday, 6 = Saturday
+  
+  // Calculate the date of Monday (start of week)
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (currentDay === 0 ? 6 : currentDay - 1) + (weekOffset * 7));
+  monday.setHours(0, 0, 0, 0);
+  
+  // Calculate the date of Sunday (end of week)
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+  
+  return {
+    start: monday,
+    end: sunday,
+    weekLabel: `Week ${weekOffset === 0 ? '(Current)' : weekOffset > 0 ? '+' + weekOffset : weekOffset}`
+  };
+};
+
+// Format date as YYYY-MM-DD
+const formatDateToString = (date) => {
+  return date.toISOString().split('T')[0];
+};
+
 export default function UserRequests({ date }) {
   const [requests, setRequests] = useState([]);
   const [user, setUser] = useState(null);
@@ -29,6 +56,8 @@ export default function UserRequests({ date }) {
   const [showPopup, setShowPopup] = useState(false);
   const [currentReq, setCurrentReq] = useState([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const weekDates = getWeekDates(weekOffset);
 
   useEffect(() => {
     async function fetchData() {
@@ -54,13 +83,6 @@ export default function UserRequests({ date }) {
         );
         const formattedData = formatData(finalData);
         setRequests(formattedData);
-        // if (!date) {
-        //   const result = filterByRecentDates(formDataResponse.requestData);
-        //   setRequests(result);
-        // } else {
-        //   const result = filterByToday(formDataResponse.requestData);
-        //   setRequests(result);
-        // }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -106,6 +128,14 @@ export default function UserRequests({ date }) {
     setIsFullscreen(!isFullscreen);
   };
 
+  // Filter requests by week if no specific date is selected
+  const filteredRequests = date 
+    ? requests.filter(item => item.date === date)
+    : requests.filter(item => {
+        const requestDate = new Date(item.date);
+        return requestDate >= weekDates.start && requestDate <= weekDates.end;
+      });
+
   if (showPopup) {
     return (
       <EditRequest
@@ -127,6 +157,43 @@ export default function UserRequests({ date }) {
           backgroundColor: isFullscreen ? "white" : "transparent",
         }}
       >
+        {/* Week Selection - Only show if no specific date is selected */}
+        {!date && (
+          <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex items-center space-x-2">
+              <Button 
+                variant="contained"
+                onClick={() => setWeekOffset(prev => prev - 1)}
+                style={{ minWidth: 'auto', padding: '4px 8px' }}
+              >
+                &lt; Prev Week
+              </Button>
+              
+              <span style={{ padding: '8px 16px', backgroundColor: '#f5f5f5', border: '1px solid #ddd', borderRadius: '4px' }}>
+                {weekDates.weekLabel}: {formatDateToString(weekDates.start)} to {formatDateToString(weekDates.end)}
+              </span>
+              
+              <Button 
+                variant="contained"
+                onClick={() => setWeekOffset(prev => prev + 1)}
+                style={{ minWidth: 'auto', padding: '4px 8px' }}
+              >
+                Next Week &gt;
+              </Button>
+              
+              {weekOffset !== 0 && (
+                <Button 
+                  variant="outlined"
+                  onClick={() => setWeekOffset(0)}
+                  style={{ minWidth: 'auto', padding: '4px 8px', marginLeft: '8px' }}
+                >
+                  Current Week
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+
         <TableContainer
           sx={{ position: "relative", maxHeight: 500 }}
           component={Paper}
@@ -144,13 +211,13 @@ export default function UserRequests({ date }) {
                     <strong>Request ID</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Date of Request</strong>
+                    <strong>Date of Block Request</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Department</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Section</strong>
+                    <strong>Major Section</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Block Section</strong>
@@ -159,10 +226,10 @@ export default function UserRequests({ date }) {
                     <strong>Selected Block</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Work Description</strong>
+                    <strong>Work Type</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Work Type Selected</strong>
+                    <strong>Activity</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Line Selected</strong>
@@ -177,10 +244,10 @@ export default function UserRequests({ date }) {
                     <strong>Caution Speed</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Caution Location (From)</strong>
+                    <strong>Approximate Caution Location (From)</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Caution Location (To)</strong>
+                    <strong>Approximate Caution Location (To)</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Work Location (From)</strong>
@@ -204,7 +271,7 @@ export default function UserRequests({ date }) {
                     <strong>SIG Disconnection</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>OHE Disconnection</strong>
+                    <strong>Power Block Disconnection</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Elementary Section (From)</strong>
@@ -243,8 +310,8 @@ export default function UserRequests({ date }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {requests.length > 0 ? (
-                  requests.map((request) => (
+                {filteredRequests.length > 0 ? (
+                  filteredRequests.map((request) => (
                     <TableRow key={request.requestId}>
                       <TableCell>{request.requestId}</TableCell>
                       <TableCell>{request.date}</TableCell>
@@ -341,8 +408,8 @@ export default function UserRequests({ date }) {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={18} align="center">
-                      No requests found
+                    <TableCell colSpan={31} align="center">
+                      No requests found for {date ? `date ${date}` : 'this week'}
                     </TableCell>
                   </TableRow>
                 )}
@@ -352,8 +419,8 @@ export default function UserRequests({ date }) {
 
           {/* Mobile Table */}
           <div className="block md:hidden">
-            {requests.length > 0 ? (
-              requests.map((request) => (
+            {filteredRequests.length > 0 ? (
+              filteredRequests.map((request) => (
                 <div
                   key={request.requestId}
                   className="bg-white border border-gray-300 p-4 mb-4 rounded-lg"
@@ -605,7 +672,7 @@ export default function UserRequests({ date }) {
                 </div>
               ))
             ) : (
-              <div className="text-center p-4">No requests found</div>
+              <div className="text-center p-4">No requests found for {date ? `date ${date}` : 'this week'}</div>
             )}
           </div>
           <Button onClick={toggleFullscreen}>

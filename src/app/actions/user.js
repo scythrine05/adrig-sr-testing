@@ -139,3 +139,12 @@ export async function deleteUserData(email) {
   });
   return res;
 }
+
+export async function getUserByEmail(email) {
+  const user = await prisma.user.findFirst({
+    where: {
+      username: email,
+    },
+  });
+  return user;
+}

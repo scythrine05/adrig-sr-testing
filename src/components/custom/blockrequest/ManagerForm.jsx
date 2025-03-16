@@ -11,13 +11,15 @@ import { yardData } from "../../../lib/yard";
 import { useSession } from "next-auth/react";
 import { useFormState, handleKeyDown, formValidation, revertCategoryFormat, handleChange } from "../../../lib/utils";
 import FormLayout from "../FormLayout";
+import ConfirmationDialog from "../ConfirmationDialog";
 
-export default function ManagerForm() {
+export default function ManagerForm({ id }) {
   const maxDate = "2030-12-31";
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
   const [formData, setFormData] = useFormState();
   const { data: session, status } = useSession();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const inputRefs = useRef([]);
 
@@ -29,16 +31,18 @@ export default function ManagerForm() {
       }
   
       const mail = session.user.email;
-      console.log(mail);
+      console.log("Manager email:", mail);
+      console.log("Department ID from prop:", id);
   
       const res = await getManager(mail);
       if (!res) return;
   
-      formData.selectedDepartment = res.department.toUpperCase();
+      console.log("Manager data:", res);
+      formData.selectedDepartment = id ? id.toUpperCase() : res.department.toUpperCase();
     };
   
     fxn();
-  }, [session, formData, status]); // Ensure session is a dependency
+  }, [session, formData, status, id]); // Ensure session and id are dependencies
   
 
   const blockGenerator = () => {
@@ -294,18 +298,34 @@ export default function ManagerForm() {
   };
   
 
-  const formSubmitHandler = async () => {
-    const UserData = await getManager(session?.user?.email);
-    console.log(UserData);
-    if (UserData == null || UserData == undefined || UserData.id == null) {
+  const handleFormSubmit = () => {
+    if (formValidation(formData)) {
+      // Show confirmation dialog if validation passes
+      setShowConfirmation(true);
+    } else {
       toast({
-        title: "Invalid User",
-        description:
-          "Request Cannot Be Made Because Of Insufficent User Details",
+        title: "Submission Failed",
+        description: "Fill All The Details",
         variant: "destructive",
       });
-      return;
-    } else {
+    }
+  };
+
+  const formSubmitHandler = async () => {
+    try {
+      const UserData = await getManager(session?.user?.email);
+      console.log("Manager data:", UserData);
+      
+      if (UserData == null || UserData == undefined || UserData.id == null) {
+        toast({
+          title: "Invalid User",
+          description:
+            "Request Cannot Be Made Because Of Insufficient User Details",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       if (formValidation(formData) == true) {
         if (formData.workDescription === "others") {
           if (otherData === "") {
@@ -318,9 +338,18 @@ export default function ManagerForm() {
           }
           formData.workDescription = "Other Entry" + ":" + otherData;
         }
-        console.log(formData);
+        
+        // Ensure both field names are set for compatibility
+        if (formData.ohDisconnection) {
+          formData.oheDisconnection = formData.ohDisconnection;
+        } else if (formData.oheDisconnection) {
+          formData.ohDisconnection = formData.oheDisconnection;
+        }
+        
+        console.log("Submitting form data:", formData);
         const res = await postStagingManagerFormData(formData, UserData?.id);
-        console.log(res);
+        console.log("Form submission result:", res);
+        
         setFormData({
           date: "",
           selectedDepartment: "",
@@ -356,6 +385,7 @@ export default function ManagerForm() {
           requestremarks: "",
           selectedDepo: "",
         });
+        
         toast({
           title: "Success",
           description: "Request Submitted",
@@ -367,9 +397,15 @@ export default function ManagerForm() {
           variant: "destructive",
         });
       }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred while submitting the form",
+        variant: "destructive",
+      });
     }
   };
-
 
   const handleInputRefsChange = (idx) => {
     (el) => (inputRefs.current[idx] = el)
@@ -452,7 +488,7 @@ export default function ManagerForm() {
       onChange={handleChange}
       value={formData.workDescription}
     >
-      <option>Select work description </option>
+      <option>Activity</option>
       {formData.workType != "" &&
         workData[`${formData.selectedDepartment}`][
           `${revertCategoryFormat(formData.workType)}`
@@ -878,7 +914,7 @@ export default function ManagerForm() {
   }))}
 
   const getFormSubmitHandler = () => {
-    return formSubmitHandler;
+    return handleFormSubmit;
   }
 
 
@@ -950,30 +986,43 @@ export default function ManagerForm() {
   };
 
   return (
-    <FormLayout
-     handleInputRefsChange={handleInputRefsChange}
-     handleKeyDownChange={handleKeyDownChange}
-     getFormDate={getFormDate}
-     getHandleChange={getHandleChange}
-     maxDate={maxDate}
-     formSelectedDepartment={formSelectedDepartment}
-      formSelectedSection={formSelectedSection}
-      handleGetTheListForYard={handleGetTheListForYard}
-      formMissionBlock={formMissionBlock}
-      handleSetFormData={handleSetFormData}
-      formWorkType={formWorkType}
-      customOption1={customOption1}
-      customOption2={customOption2}
-      customOption3={customOption3}
-      handleGetMissionBlock1={handleGetMissionBlock1}
-      formConditionalRendering1={formConditionalRendering1}
-      formDemandTimeFrom={formDemandTimeFrom}
-      formDemandTimeTo={formDemandTimeTo}
-      formConditionalRendering2={formConditionalRendering2}
-      handleGetMissionBlock2 = {getHandleMissionBlock2}
-      formRequestRemarks={formRequestRemarks}
-      formSubmitHandler={getFormSubmitHandler}
-      formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
-    />
+    <>
+      <FormLayout
+       handleInputRefsChange={handleInputRefsChange}
+       handleKeyDownChange={handleKeyDownChange}
+       getFormDate={getFormDate}
+       getHandleChange={getHandleChange}
+       maxDate={maxDate}
+       formSelectedDepartment={formSelectedDepartment}
+        formSelectedSection={formSelectedSection}
+        handleGetTheListForYard={handleGetTheListForYard}
+        formMissionBlock={formMissionBlock}
+        handleSetFormData={handleSetFormData}
+        formWorkType={formWorkType}
+        customOption1={customOption1}
+        customOption2={customOption2}
+        customOption3={customOption3}
+        handleGetMissionBlock1={handleGetMissionBlock1}
+        formConditionalRendering1={formConditionalRendering1}
+        formDemandTimeFrom={formDemandTimeFrom}
+        formDemandTimeTo={formDemandTimeTo}
+        formConditionalRendering2={formConditionalRendering2}
+        handleGetMissionBlock2 = {getHandleMissionBlock2}
+        formRequestRemarks={formRequestRemarks}
+        formSubmitHandler={getFormSubmitHandler}
+        formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
+        disabled_option={true}
+      />
+      
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={() => {
+          setShowConfirmation(false);
+          formSubmitHandler();
+        }}
+        formData={formData}
+      />
+    </>
   );
 }

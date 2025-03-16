@@ -220,3 +220,38 @@ export const formatTime = (seconds) => {
 
 // ----------------------------------------------------------------------------------------------------------
 
+export const formatVisualizationData = (data) => {
+  if (!Array.isArray(data)) return [];
+  
+  return data.map(item => {
+    // Ensure date is in correct format
+    const date = new Date(item.date).toISOString().split('T')[0];
+    
+    // Format time strings to ensure they are in HH:mm format
+    const formatTime = (timeStr) => {
+      if (!timeStr) return '00:00';
+      // If time is in 12-hour format, convert to 24-hour
+      const [time, modifier] = timeStr.split(' ');
+      let [hours, minutes] = time.split(':');
+      
+      if (modifier) {
+        if (modifier.toLowerCase() === 'pm' && hours < 12) {
+          hours = parseInt(hours) + 12;
+        }
+        if (modifier.toLowerCase() === 'am' && hours === '12') {
+          hours = '00';
+        }
+      }
+      
+      return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    };
+
+    return {
+      ...item,
+      date,
+      demandTimeFrom: formatTime(item.demandTimeFrom),
+      demandTimeTo: formatTime(item.demandTimeTo),
+    };
+  });
+};
+

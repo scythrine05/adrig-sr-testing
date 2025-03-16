@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { yardData } from "../../../lib/yard";
 import { useFormState, handleKeyDown, formValidation, revertCategoryFormat } from "../../../lib/utils";
 import FormLayout from "../FormLayout";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 
 //TODO: Suggestions Given Below
@@ -17,12 +18,65 @@ import FormLayout from "../FormLayout";
 //3. Rename variables to more meaningful names
 
 export default function RequestForm2(props) {
-  const maxDate = "2030-12-31";
   const router = useRouter();
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
   const [formData, setFormData] = useFormState();
   const inputRefs = useRef([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [dateRange, setDateRange] = useState({ minDate: "", maxDate: "" });
+
+  useEffect(() => {
+    // Calculate allowed date range based on current date and time
+    const calculateDateRange = () => {
+      const now = new Date();
+      const currentDay = now.getDay(); // 0 = Sunday, 4 = Thursday
+      const currentHour = now.getHours();
+      
+      // Get the current week's Monday (for reference)
+      const currentWeekMonday = new Date(now);
+      const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
+      currentWeekMonday.setDate(now.getDate() - daysFromMonday);
+      currentWeekMonday.setHours(0, 0, 0, 0);
+      
+      // Calculate next week's Monday (week 2)
+      const nextWeekMonday = new Date(currentWeekMonday);
+      nextWeekMonday.setDate(currentWeekMonday.getDate() + 7);
+      
+      // Calculate week 3's Monday
+      const week3Monday = new Date(currentWeekMonday);
+      week3Monday.setDate(currentWeekMonday.getDate() + 14);
+      
+      // Set minimum date based on cutoff
+      let minDate;
+      
+      // Check if it's before Thursday 16:00 of the current week
+      // For Sunday, we need to check if it's before Thursday 16:00 of the PREVIOUS week
+      const isBeforeThursdayCutoff = currentDay !== 0 ? 
+        (currentDay < 4 || (currentDay === 4 && currentHour < 16)) :
+        false; // If it's Sunday, always consider it after Thursday 16:00
+      
+      if (isBeforeThursdayCutoff) {
+        // If before Thursday 16:00, allow requests from week 2 onwards
+        minDate = nextWeekMonday;
+      } else {
+        // If after Thursday 16:00, allow requests from week 3 onwards
+        minDate = week3Monday;
+      }
+      
+      // Format dates as YYYY-MM-DD for input[type="date"]
+      const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+      };
+      
+      setDateRange({
+        minDate: formatDate(minDate),
+        maxDate: "" // No maximum date limit
+      });
+    };
+    
+    calculateDateRange();
+  }, []);
 
   useEffect(() => {
     const fxn = async () => {
@@ -236,9 +290,13 @@ export default function RequestForm2(props) {
       formData.otherLinesAffected = "";
       setFormData({ ...formData, [name]: value });
     } else if (name === "date") {
-      if (value > maxDate) {
-        event.target.value = maxDate;
-        alert(`Date cannot be later than ${maxDate}`);
+      if (value < dateRange.minDate) {
+        event.target.value = dateRange.minDate;
+        toast({
+          title: "Invalid Date Selection",
+          description: `Date cannot be earlier than ${dateRange.minDate}. You can only request for dates starting from ${dateRange.minDate} onwards.`,
+          variant: "destructive",
+        });
         return;
       }
       setFormData({ ...formData, [name]: value });
@@ -297,6 +355,19 @@ export default function RequestForm2(props) {
     }
   };
   
+  const handleFormSubmit = () => {
+    if (formValidation(formData)) {
+      // Show confirmation dialog if validation passes
+      setShowConfirmation(true);
+    } else {
+      toast({
+        title: "Submission Failed",
+        description: "Fill All The Details",
+        variant: "destructive",
+      });
+    }
+  };
+
   const formSubmitHandler = async () => {
     if (props.user == undefined || props.user?.user == undefined) {
       return;
@@ -324,9 +395,17 @@ export default function RequestForm2(props) {
             }
             formData.workDescription = "Other Entry" + ":" + otherData;
           }
-          console.log(formData);
+          
+          // Ensure both field names are set for compatibility
+          if (formData.ohDisconnection) {
+            formData.oheDisconnection = formData.ohDisconnection;
+          } else if (formData.oheDisconnection) {
+            formData.ohDisconnection = formData.oheDisconnection;
+          }
+          
+          console.log("Submitting form data:", formData);
           const res = await postStagingFormData(formData, UserData?.id);
-          console.log(res);
+          console.log("Form submission result:", res);
           setFormData({
             date: "",
             selectedDepartment: "",
@@ -461,7 +540,7 @@ export default function RequestForm2(props) {
       onChange={handleChange}
       value={formData.workDescription}
     >
-      <option>Select work description </option>
+      <option>Activity</option>
       {formData.workType != "" &&
         workData[`${formData.selectedDepartment}`][
           `${revertCategoryFormat(formData.workType)}`
@@ -714,7 +793,7 @@ export default function RequestForm2(props) {
                 value={formData.cautionLocationFrom}
                 name="cautionLocationFrom"
                 className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="from"
+                placeholder="Approximately from"
                 onChange={handleChange}
               />
               <input
@@ -722,7 +801,7 @@ export default function RequestForm2(props) {
                 value={formData.cautionLocationTo}
                 name="cautionLocationTo"
                 className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="to"
+                placeholder="Approximately to"
                 onChange={handleChange}
               />
             </div>
@@ -895,7 +974,7 @@ export default function RequestForm2(props) {
   }))}
 
   const getFormSubmitHandler = () => {
-    return formSubmitHandler;
+    return handleFormSubmit;
   }
 
   const depotOptions = {
@@ -969,31 +1048,45 @@ export default function RequestForm2(props) {
 
   
   return (
-    <FormLayout
-      handleInputRefsChange={handleInputRefsChange}
-      handleKeyDownChange={handleKeyDownChange}
-      getFormDate={getFormDate}
-      getHandleChange={getHandleChange}
-      maxDate={maxDate}
-      formSelectedDepartment={formSelectedDepartment}
-      formSelectedSection={formSelectedSection}
-      handleGetTheListForYard={handleGetTheListForYard}
-      formMissionBlock={formMissionBlock}
-      handleSetFormData={handleSetFormData}
-      formWorkType={formWorkType}
-      customOption1={departmentSelect}
-      customOption2={workType}
-      customOption3={workDescription}
-      handleGetMissionBlock1={selectStream}
-      formConditionalRendering1={formConditionalRenderingSelectedDepartment}
-      formDemandTimeFrom={formDemandTimeFrom}
-      formDemandTimeTo={formDemandTimeTo}
-      formConditionalRendering2={formConditionalRenderingTRD}
-      handleGetMissionBlock2 = {getHandleMissionBlock2}
-      formRequestRemarks={formRequestRemarks}
-      formSubmitHandler={getFormSubmitHandler}
-      formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
-    />
+    <>
+      <FormLayout
+        handleInputRefsChange={handleInputRefsChange}
+        handleKeyDownChange={handleKeyDownChange}
+        getFormDate={getFormDate}
+        getHandleChange={getHandleChange}
+        maxDate={dateRange.maxDate}
+        minDate={dateRange.minDate}
+        formSelectedDepartment={formSelectedDepartment}
+        formSelectedSection={formSelectedSection}
+        handleGetTheListForYard={handleGetTheListForYard}
+        formMissionBlock={formMissionBlock}
+        handleSetFormData={handleSetFormData}
+        formWorkType={formWorkType}
+        customOption1={departmentSelect}
+        customOption2={workType}
+        customOption3={workDescription}
+        handleGetMissionBlock1={selectStream}
+        formConditionalRendering1={formConditionalRenderingSelectedDepartment}
+        formDemandTimeFrom={formDemandTimeFrom}
+        formDemandTimeTo={formDemandTimeTo}
+        formConditionalRendering2={formConditionalRenderingTRD}
+        handleGetMissionBlock2={getHandleMissionBlock2}
+        formRequestRemarks={formRequestRemarks}
+        formSubmitHandler={getFormSubmitHandler}
+        formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
+        disabled_option={true}
+      />
+      
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={() => {
+          setShowConfirmation(false);
+          formSubmitHandler();
+        }}
+        formData={formData}
+      />
+    </>
   )
 
 

@@ -17,6 +17,33 @@ import {
 } from "../../../app/actions/user";
 import { useSession } from "next-auth/react";
 
+// Helper function to get week dates
+const getWeekDates = (weekOffset = 0) => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 = Sunday, 6 = Saturday
+  
+  // Calculate the date of Monday (start of week)
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (currentDay === 0 ? 6 : currentDay - 1) + (weekOffset * 7));
+  monday.setHours(0, 0, 0, 0);
+  
+  // Calculate the date of Sunday (end of week)
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+  
+  return {
+    start: monday,
+    end: sunday,
+    weekLabel: `Week ${weekOffset === 0 ? '(Current)' : weekOffset > 0 ? '+' + weekOffset : weekOffset}`
+  };
+};
+
+// Format date as YYYY-MM-DD
+const formatDate = (date) => {
+  return date.toISOString().split('T')[0];
+};
+
 const RequestList = ({
   requests,
   onSelectRequest,
@@ -27,16 +54,56 @@ const RequestList = ({
   toggleRequestSelection,
   handleSubmitSelected,
   handleCancelSelected,
+  weekOffset,
+  setWeekOffset,
+  weekDates
 }) => {
-  const filteredRequests = selectedUser
-    ? requests.filter((request) => request.userId !== selectedUser)
-    : requests;
+  // Filter requests by user and week
+  const filteredRequests = requests.filter(request => {
+    const requestDate = new Date(request.date);
+    const isInSelectedWeek = requestDate >= weekDates.start && requestDate <= weekDates.end;
+    const isMatchingUser = !selectedUser || request.userId === selectedUser;
+    
+    return isInSelectedWeek && isMatchingUser;
+  });
 
   return (
     <div className="request-list h-screen p-4 md:p-6 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
         Request Table
       </h2>
+
+      {/* Week Selection */}
+      <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+        <div className="flex items-center space-x-2">
+          <button 
+            onClick={() => setWeekOffset(prev => prev - 1)}
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+          >
+            &lt; Prev Week
+          </button>
+          
+          <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
+            {weekDates.weekLabel}: {formatDate(weekDates.start)} to {formatDate(weekDates.end)}
+          </span>
+          
+          <button 
+            onClick={() => setWeekOffset(prev => prev + 1)}
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+          >
+            Next Week &gt;
+          </button>
+          
+          {weekOffset !== 0 && (
+            <button 
+              onClick={() => setWeekOffset(0)}
+              className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none ml-2"
+            >
+              Current Week
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* User Filter */}
       <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
@@ -61,7 +128,7 @@ const RequestList = ({
       {/* Request Table */}
       {filteredRequests.length === 0 ? (
   <h1 className="p-4 md:p-10 text-center w-full max-w-5xl mx-auto bg-white rounded-lg overflow-hidden shadow">
-    No Requests to Show
+    No Requests to Show for This Week
   </h1>
 ) : (
   <div className="w-full max-w-5xl mx-auto">
@@ -278,22 +345,55 @@ const ManagerRequests = ({ id }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedRequests, setSelectedRequests] = useState([]);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const weekDates = getWeekDates(weekOffset);
 
   const { data: session, status } = useSession();
   useEffect(() => {
     async function fetchData() {
       try {
+        console.log("Fetching data for department:", id.toUpperCase());
         const formDataResponse = await getStagingFormDataByDepartment(
           id.toUpperCase()
         );
+        console.log("Staging requests:", formDataResponse);
 
         const ManagerId = await getManagerId(session?.user?.email);
+        console.log("Manager ID:", ManagerId);
 
         const userIdUnderManager = await getUserUnderManager(ManagerId);
+        console.log("Users under manager:", userIdUnderManager);
 
-        const filteredRequests = formDataResponse?.filter(
-          (e) => userIdUnderManager?.includes(e?.userId) || e?.userId == null
-        );
+        // Log each request with detailed information
+        formDataResponse?.forEach((request, index) => {
+          console.log(`Request ${index + 1}:`, {
+            requestId: request.requestId,
+            userId: request.userId,
+            managerId: request.managerId,
+            department: request.selectedDepartment,
+            depot: request.selectedDepo,
+            userInfo: request.User,
+            managerInfo: request.Manager
+          });
+        });
+
+        // Enhanced filtering with detailed logging
+        const filteredRequests = formDataResponse?.filter((request) => {
+          const isUserUnderManager = request?.userId && userIdUnderManager?.includes(request?.userId);
+          const isManagerRequest = request?.managerId === ManagerId;
+          const isLegacyRequest = request?.userId == null && request?.managerId == null;
+          
+          console.log(`Request ${request.requestId} filtering:`, {
+            isUserUnderManager,
+            isManagerRequest,
+            isLegacyRequest,
+            result: isUserUnderManager || isManagerRequest || isLegacyRequest
+          });
+          
+          return isUserUnderManager || isManagerRequest || isLegacyRequest;
+        });
+        
+        console.log("Filtered requests:", filteredRequests);
 
         const userResponses = await Promise.all(
           userIdUnderManager.map((userId) => getUserById(userId))
@@ -310,8 +410,10 @@ const ManagerRequests = ({ id }) => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData();
-  }, [id, status]);
+    if (session?.user?.email) {
+      fetchData();
+    }
+  }, [id, session, status]);
 
   const toggleRequestSelection = (requestId) => {
     setSelectedRequests((prev) =>
@@ -411,6 +513,9 @@ const ManagerRequests = ({ id }) => {
           toggleRequestSelection={toggleRequestSelection}
           handleSubmitSelected={handleSubmitSelected}
           handleCancelSelected={handleCancelSelected}
+          weekOffset={weekOffset}
+          setWeekOffset={setWeekOffset}
+          weekDates={weekDates}
         />
       )}
       {selectedRequest && !isEditing && (

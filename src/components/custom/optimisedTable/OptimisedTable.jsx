@@ -72,18 +72,18 @@ export default function OptimisedTable() {
           <thead>
             <tr className="bg-gray-100">
               <th className="p-3 text-left">Request ID</th>
-              <th className="p-3 text-left">Date of Request</th>
+              <th className="p-3 text-left">Date of Block Request</th>
               <th className="p-3 text-left">Department</th>
-              <th className="p-3 text-left">Section</th>
+              <th className="p-3 text-left">Major Section</th>
               <th className="p-3 text-left">Block Section</th>
               <th className="p-3 text-left">Selected Block</th>
-              <th className="p-3 text-left">Work Description</th>
-              <th className="p-3 text-left">Work Type Selected</th>
+              <th className="p-3 text-left">Work Type</th>
+              <th className="p-3 text-left">Activity</th>
               <th className="p-3 text-left">Line Selected</th>
               <th className="p-3 text-left">Caution Required</th>
               <th className="p-3 text-left">Caution Speed</th>
-              <th className="p-3 text-left">Caution Location (From)</th>
-              <th className="p-3 text-left">Caution Location (To)</th>
+              <th className="p-3 text-left">Approximate Caution Location (From)</th>
+              <th className="p-3 text-left">Approximate Caution Location (To)</th>
               <th className="p-3 text-left">Work Location (From)</th>
               <th className="p-3 text-left">Work Location (To)</th>
               <th className="p-3 text-left">Demand Time (From)</th>
@@ -92,7 +92,7 @@ export default function OptimisedTable() {
               <th className="p-3 text-left">Optimised Time (To)</th>
               <th className="p-3 text-left">Optimization Details</th>
               <th className="p-3 text-left">SIG Disconnection</th>
-              <th className="p-3 text-left">OHE Disconnection</th>
+              <th className="p-3 text-left">Power Block Disconnection</th>
               <th className="p-3 text-left">Elementary Section (From)</th>
               <th className="p-3 text-left">Elementary Section (To)</th>
               <th className="p-3 text-left">SIG Elementary Section (From)</th>
@@ -187,7 +187,7 @@ export default function OptimisedTable() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Date of Request:
+                    Date of Block Request:
                   </strong>
                   <span className="pl-2">{request.date}</span>
                 </div>
@@ -199,7 +199,7 @@ export default function OptimisedTable() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Section:
+                    Major Section:
                   </strong>
                   <span className="pl-2">{request.selectedSection}</span>
                 </div>
@@ -217,13 +217,13 @@ export default function OptimisedTable() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Work Description:
+                    Work Type:
                   </strong>
                   <span className="pl-2">{request.workType}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Work Type Selected:
+                    Activity:
                   </strong>
                   <span className="pl-2">{request.workDescription}</span>
                 </div>
@@ -247,13 +247,13 @@ export default function OptimisedTable() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Caution Location (From):
+                    Approximate Caution Location (From):
                   </strong>
                   <span className="pl-2">{request.cautionLocationFrom}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Caution Location (To):
+                    Approximate Caution Location (To):
                   </strong>
                   <span className="pl-2">{request.cautionLocationTo}</span>
                 </div>
@@ -307,7 +307,7 @@ export default function OptimisedTable() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    OHE Disconnection:
+                    Power Block Disconnection:
                   </strong>
                   <span className="pl-2">{request.ohDisconnection}</span>
                 </div>
