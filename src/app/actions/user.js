@@ -55,7 +55,7 @@ export async function getManager(email) {
 }
 
 export async function getUserId(email) {
-  const res = await prisma.user.findUnique({ where: { username: email } });
+  const res = await prisma.user.findFirst({ where: { username: email } });
   return res;
 }
 

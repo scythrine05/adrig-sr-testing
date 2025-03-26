@@ -26,57 +26,58 @@ export default function RequestForm2(props) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [dateRange, setDateRange] = useState({ minDate: "", maxDate: "" });
 
-  useEffect(() => {
-    // Calculate allowed date range based on current date and time
-    const calculateDateRange = () => {
-      const now = new Date();
-      const currentDay = now.getDay(); // 0 = Sunday, 4 = Thursday
-      const currentHour = now.getHours();
+  // useEffect(() => {
+  //   // Calculate allowed date range based on current date and time
+  //   const calculateDateRange = () => {
+  //     const now = new Date();
+  //     const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, 4 = Thursday
+  //     const currentHour = now.getHours();
       
-      // Get the current week's Monday (for reference)
-      const currentWeekMonday = new Date(now);
-      const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
-      currentWeekMonday.setDate(now.getDate() - daysFromMonday);
-      currentWeekMonday.setHours(0, 0, 0, 0);
+  //     // Get the current week's Monday (for reference)
+  //     const currentWeekMonday = new Date(now);
+  //     const daysFromMonday = currentDay === 0 ? 6 : currentDay - 2;
+  //     currentWeekMonday.setDate(now.getDate() - daysFromMonday);
+  //     currentWeekMonday.setHours(0, 0, 0, 0);
       
-      // Calculate next week's Monday (week 2)
-      const nextWeekMonday = new Date(currentWeekMonday);
-      nextWeekMonday.setDate(currentWeekMonday.getDate() + 7);
+  //     // Calculate next week's Monday (week 2)
+  //     const nextWeekMonday = new Date(currentWeekMonday);
+  //     nextWeekMonday.setDate(currentWeekMonday.getDate() + 7);
       
-      // Calculate week 3's Monday
-      const week3Monday = new Date(currentWeekMonday);
-      week3Monday.setDate(currentWeekMonday.getDate() + 14);
+  //     // Calculate week 3's Monday
+  //     const week3Monday = new Date(currentWeekMonday);
+  //     week3Monday.setDate(currentWeekMonday.getDate() + 14);
       
-      // Set minimum date based on cutoff
-      let minDate;
+  //     // Set minimum date based on cutoff
+  //     let minDate;
       
-      // Check if it's before Thursday 16:00 of the current week
-      // For Sunday, we need to check if it's before Thursday 16:00 of the PREVIOUS week
-      const isBeforeThursdayCutoff = currentDay !== 0 ? 
-        (currentDay < 4 || (currentDay === 4 && currentHour < 16)) :
-        false; // If it's Sunday, always consider it after Thursday 16:00
+  //     // Check if it's before Thursday 16:00 of the current week
+  //     const isBeforeThursdayCutoff = 
+  //       (currentDay < 4) || // Monday, Tuesday, Wednesday
+  //       (currentDay === 4 && currentHour < 16); // Thursday before 16:00
       
-      if (isBeforeThursdayCutoff) {
-        // If before Thursday 16:00, allow requests from week 2 onwards
-        minDate = nextWeekMonday;
-      } else {
-        // If after Thursday 16:00, allow requests from week 3 onwards
-        minDate = week3Monday;
-      }
+  //     if (isBeforeThursdayCutoff) {
+  //       // If before Thursday 16:00, allow requests from next week's Monday onwards
+  //       minDate = nextWeekMonday;
+  //       console.log("Setting minimum date to next week's Monday:", nextWeekMonday);
+  //     } else {
+  //       // If after Thursday 16:00 (including Sunday), allow requests from week 3's Monday onwards
+  //       minDate = week3Monday;
+  //       console.log("Setting minimum date to week 3's Monday:", week3Monday);
+  //     }
       
-      // Format dates as YYYY-MM-DD for input[type="date"]
-      const formatDate = (date) => {
-        return date.toISOString().split('T')[0];
-      };
+  //     // Format dates as YYYY-MM-DD for input[type="date"]
+  //     const formatDate = (date) => {
+  //       return date.toISOString().split('T')[0];
+  //     };
       
-      setDateRange({
-        minDate: formatDate(minDate),
-        maxDate: "" // No maximum date limit
-      });
-    };
+  //     setDateRange({
+  //       minDate: formatDate(minDate),
+  //       maxDate: "" // No maximum date limit
+  //     });
+  //   };
     
-    calculateDateRange();
-  }, []);
+  //   calculateDateRange();
+  // }, []);
 
   useEffect(() => {
     const fxn = async () => {
@@ -290,6 +291,7 @@ export default function RequestForm2(props) {
       formData.otherLinesAffected = "";
       setFormData({ ...formData, [name]: value });
     } else if (name === "date") {
+      // Check if the selected date is less than the minimum allowed date
       if (value < dateRange.minDate) {
         event.target.value = dateRange.minDate;
         toast({
@@ -297,8 +299,11 @@ export default function RequestForm2(props) {
           description: `Date cannot be earlier than ${dateRange.minDate}. You can only request for dates starting from ${dateRange.minDate} onwards.`,
           variant: "destructive",
         });
+        setFormData({ ...formData, [name]: dateRange.minDate });
         return;
       }
+      
+      // If we get here, the date is valid (not earlier than minDate)
       setFormData({ ...formData, [name]: value });
     } else if (name === "selectedLine") {
       if (value.includes("YD")) {
@@ -440,6 +445,7 @@ export default function RequestForm2(props) {
             },
             requestremarks: "",
             selectedDepo: "",
+            corridorType: "",
           });
           toast({
             title: "Success",
@@ -738,7 +744,7 @@ export default function RequestForm2(props) {
 
   const formConditionalRenderingTRD = () => {
     return(formData.selectedDepartment === "TRD" ? (
-    <div className="bg-blue-200 p-4 rounded-lg mb-4">
+    <div className="p-4 rounded-lg mb-4" style={{ color: "#40E0D0" }}>
       <div className="mb-4">
         <label className="block text-sm font-medium">
           Coaching repercussions
@@ -753,10 +759,10 @@ export default function RequestForm2(props) {
       </div>
     </div>
   ) : (
-    <div className="bg-blue-200 p-4 rounded-lg mb-4">
+    <div className="p-4 rounded-lg mb-4" style={{ color: "#40E0D0" }}>
       <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Caution required <span style={{ color: "red" }}>*</span>
+        <label className="block text-sm font-medium text-black">
+          Whether Fresh Caution will be imposed after block<span style={{ color: "red" }}>*</span>
         </label>
         <div className="flex space-x-4">
           <label>
@@ -784,7 +790,7 @@ export default function RequestForm2(props) {
       {formData.cautionRequired === "Yes" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium">
+            <label className="block text-sm font-medium text-black">
               Caution location <span style={{ color: "red" }}>*</span>
             </label>
             <div className="flex space-x-2">
@@ -823,8 +829,8 @@ export default function RequestForm2(props) {
       )}
 
       <div className="mb-4">
-        <label className="block text-sm font-medium">
-          OHE Disconnection <span style={{ color: "red" }}>*</span>
+        <label className="block text-sm font-medium text-black">
+          Whether Power Block Disconnection Needed <span style={{ color: "red" }}>*</span>
         </label>
         <div className="flex space-x-4">
           <label>
@@ -852,7 +858,7 @@ export default function RequestForm2(props) {
       {formData.ohDisconnection === "Yes" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium">
+            <label className="block text-sm font-medium text-black">
               Elementary section <span style={{ color: "red" }}>*</span>
             </label>
             <div className="flex space-x-2">
@@ -860,7 +866,7 @@ export default function RequestForm2(props) {
                 type="text"
                 value={formData.elementarySectionFrom}
                 name="elementarySectionFrom"
-                className="mt-1 w-1/2 p-2 border rounded"
+                className="mt-1 w-1/2 p-2 border rounded "
                 placeholder="from"
                 onChange={handleChange}
               />
@@ -874,11 +880,60 @@ export default function RequestForm2(props) {
               />
             </div>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-black">
+              Disconnection Requirements <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="flex space-x-4 mt-1">
+              <label>
+                <input
+                  type="checkbox"
+                  name="trdDisconnectionRequirements"
+                  value="Gear"
+                  checked={formData.trdDisconnectionRequirements?.includes("Gear")}
+                  onChange={(e) => {
+                    const currentValue = formData.trdDisconnectionRequirements || "";
+                    const newValue = e.target.checked
+                      ? currentValue + (currentValue ? ",Gear" : "Gear")
+                      : currentValue.replace(/,?Gear/, "");
+                    handleChange({
+                      target: {
+                        name: "trdDisconnectionRequirements",
+                        value: newValue
+                      }
+                    });
+                  }}
+                />{" "}
+                Gears Required
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="trdDisconnectionRequirements"
+                  value="People"
+                  checked={formData.trdDisconnectionRequirements?.includes("People")}
+                  onChange={(e) => {
+                    const currentValue = formData.trdDisconnectionRequirements || "";
+                    const newValue = e.target.checked
+                      ? currentValue + (currentValue ? ",People" : "People")
+                      : currentValue.replace(/,?People/, "");
+                    handleChange({
+                      target: {
+                        name: "trdDisconnectionRequirements",
+                        value: newValue
+                      }
+                    });
+                  }}
+                />{" "}
+                Staff Required
+              </label>
+            </div>
+          </div>
         </div>
       )}
       <div className="mb-4">
-        <label className="block text-sm font-medium">
-          SIG Disconnection <span style={{ color: "red" }}>*</span>
+        <label className="block text-sm font-medium text-black">
+          Whether S&T Disconnection Required <span style={{ color: "red" }}>*</span>
         </label>
         <div className="flex space-x-4">
           <label>
@@ -941,6 +996,55 @@ export default function RequestForm2(props) {
                 />
               </div>
             )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium">
+              Disconnection Requirements <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="flex space-x-4 mt-1">
+              <label>
+                <input
+                  type="checkbox"
+                  name="sigDisconnectionRequirements"
+                  value="Gear"
+                  checked={formData.sigDisconnectionRequirements?.includes("Gear")}
+                  onChange={(e) => {
+                    const currentValue = formData.sigDisconnectionRequirements || "";
+                    const newValue = e.target.checked
+                      ? currentValue + (currentValue ? ",Gear" : "Gear")
+                      : currentValue.replace(/,?Gear/, "");
+                    handleChange({
+                      target: {
+                        name: "sigDisconnectionRequirements",
+                        value: newValue
+                      }
+                    });
+                  }}
+                />{" "}
+                Gears Required
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="sigDisconnectionRequirements"
+                  value="People"
+                  checked={formData.sigDisconnectionRequirements?.includes("People")}
+                  onChange={(e) => {
+                    const currentValue = formData.sigDisconnectionRequirements || "";
+                    const newValue = e.target.checked
+                      ? currentValue + (currentValue ? ",People" : "People")
+                      : currentValue.replace(/,?People/, "");
+                    handleChange({
+                      target: {
+                        name: "sigDisconnectionRequirements",
+                        value: newValue
+                      }
+                    });
+                  }}
+                />{" "}
+                Staff Required
+              </label>
+            </div>
           </div>
         </div>
       )}
@@ -1045,7 +1149,10 @@ export default function RequestForm2(props) {
   
   
 
-
+  const formCorridorType = () => {
+    return formData.corridorType || "";  // default to an empty string if undefined
+  };
+  
   
   return (
     <>
@@ -1075,6 +1182,7 @@ export default function RequestForm2(props) {
         formSubmitHandler={getFormSubmitHandler}
         formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
         disabled_option={true}
+        formCorridorType={formCorridorType} 
       />
       
       <ConfirmationDialog

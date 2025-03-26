@@ -12,6 +12,7 @@ export async function POST(request) {
       },
       data: {
         sigResponse: sigResponse,
+        sigActionsNeeded: "no"  // Set sigActionsNeeded to "no" when response is provided
       },
     });
 

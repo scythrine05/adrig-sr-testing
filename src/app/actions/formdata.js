@@ -40,7 +40,11 @@ export async function postFormData(formData) {
         otherLinesAffected: formData.otherLinesAffected,
         requestremarks: formData.requestremarks,
         selectedDepo: formData.selectedDepo,
+        corridorType: formData.corridorType,
+        sigDisconnectionRequirements: formData.sigDisconnectionRequirements,
+        trdDisconnectionRequirements: formData.trdDisconnectionRequirements,
         userId: formData.userId,
+        ManagerResponse: formData.ManagerResponse,
       },
       select: {
         requestId: true,
@@ -95,7 +99,11 @@ export async function postFormManagerData(formData) {
         otherLinesAffected: formData.otherLinesAffected,
         requestremarks: formData.requestremarks,
         selectedDepo: formData.selectedDepo,
+        corridorType: formData.corridorType,
+        sigDisconnectionRequirements: formData.sigDisconnectionRequirements,
+        trdDisconnectionRequirements: formData.trdDisconnectionRequirements,
         managerId: formData.managerId,
+        ManagerResponse: formData.ManagerResponse,
       },
       select: {
         requestId: true,
@@ -143,7 +151,11 @@ export async function updateFormData(formData, requestId) {
       repercussions: formData.repercussions,
       otherLinesAffected: formData.otherLinesAffected,
       selectedDepo: formData.selectedDepo,
+      corridorType: formData.corridorType,
       requestremarks: formData.requestremarks,
+      ManagerResponse: formData.ManagerResponse,
+      sigDisconnectionRequirements: formData.sigDisconnectionReqiurements,
+      trdDisconnectionRequirements: formData.trdDisconnectionReqiurements,
     },
   });
 

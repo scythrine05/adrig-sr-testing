@@ -4,7 +4,6 @@ import React from "react";
 const Page = () => {
   return (
     <div className="m-10 bg-secondary p-10 rounded-xl">
-      <h1 className="mt-3 mb-4 text-4xl font-bold ">Optimised Table</h1>
       <OptimisedTable />
     </div>
   );

@@ -18,62 +18,74 @@ export function formatDate(dateString) {
 
 export const formatData = (requestData) => {
   const newRequests = [];
-
-  // Iterate over the existing data array
   requestData.forEach((request) => {
     const selectedLineData = request.selectedLine;
 
+    // If selectedLine is not in the expected format, create a single request
+    if (!selectedLineData || (!selectedLineData.station && !selectedLineData.yard)) {
+      newRequests.push({
+        ...request,
+        selectedLine: request.selectedLine || "Not Specified",
+        selectedStream: "Not Applicable",
+        missionBlock: request.missionBlock || "Not Specified",
+        otherLinesAffected: request.otherLinesAffected || "None"
+      });
+      return;
+    }
+
     let subRequestCounter = 0;
 
-    selectedLineData.station.forEach((station) => {
-      const subRequest = { ...request };
+    // Process station data if it exists
+    if (selectedLineData.station && Array.isArray(selectedLineData.station)) {
+      selectedLineData.station.forEach((station) => {
+        const subRequest = { ...request };
 
-      subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
-      subRequest.selectedLine = station && station.split(":")[1];
-      subRequest.selectedStream = "Not Applicable";
-      subRequest.missionBlock = station && station.split(":")[0];
+        subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
+        subRequest.selectedLine = station && station.split(":")[1];
+        subRequest.selectedStream = "Not Applicable";
+        subRequest.missionBlock = station && station.split(":")[0];
 
-      const otherLines = request.otherLinesAffected?.station?.map((e) => {
-        const key = e?.split(":")[0];
-        if (key == subRequest.missionBlock) {
-          return e?.split(":")[1];
-        }
+        const otherLines = request.otherLinesAffected?.station?.map((e) => {
+          const key = e?.split(":")[0];
+          if (key == subRequest.missionBlock) {
+            return e?.split(":")[1];
+          }
+        });
+
+        subRequest.otherLinesAffected =
+          otherLines != undefined ? otherLines.join(", ") : otherLines;
+
+        newRequests.push(subRequest);
       });
+    }
 
-      subRequest.otherLinesAffected =
-        otherLines != undefined ? otherLines.join(", ") : otherLines;
+    // Process yard data if it exists
+    if (selectedLineData.yard && Array.isArray(selectedLineData.yard)) {
+      selectedLineData.yard.forEach((yard) => {
+        const subRequest = { ...request };
+        subRequest.missionBlock = yard.split(":")[0];
+        subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
+        subRequest.selectedLine = yard;
 
-      newRequests.push(subRequest);
-    });
+        const otherLines = request.otherLinesAffected?.yard?.map((e) => {
+          const key = e?.split(":")[0];
+          if (key == subRequest.missionBlock) {
+            return e?.split(":")[1];
+          }
+        });
 
-    selectedLineData.yard.forEach((yard) => {
-      const subRequest = { ...request };
-      subRequest.missionBlock = yard.split(":")[0];
-      subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
-      subRequest.selectedLine = yard;
+        subRequest.otherLinesAffected =
+          otherLines != undefined ? otherLines.join(", ") : otherLines;
 
-      const otherLines = request.otherLinesAffected?.yard?.map((e) => {
-        const key = e?.split(":")[0];
-        if (key == subRequest.missionBlock) {
-          return e?.split(":")[1];
-        }
+        newRequests.push(subRequest);
       });
-
-      subRequest.otherLinesAffected =
-        otherLines != undefined ? otherLines.join(", ") : otherLines;
-
-      newRequests.push(subRequest);
-    });
+    }
   });
 
   const updatedData = [...newRequests];
   return updatedData;
 };
 
-// to be reviewed ---------------------------------------------------------------------------------------------------------
-
-
-// For RequestForm and ManagerForm---------------------------------------------------------
 
 import validateForm from "../components/custom/blockrequest/formValidation";
 import { useState } from "react";
@@ -125,11 +137,10 @@ export const handleKeyDown = (e, index) => {
 
   if (isDropdown) {
     if (key === "ArrowUp" || key === "ArrowDown") {
-      return; // Let dropdown navigation work normally
+      return;
     }
   }
 
-  // Move focus between input fields & dropdowns
   if (key === "ArrowRight" || key === "ArrowLeft") {
     e.preventDefault();
     const nextIndex = index + (key === "ArrowRight" ? 1 : -1);

@@ -11,7 +11,7 @@ export async function postStagingFormData(formData, userId) {
     }
     
     console.log("Creating staging request with userId:", userId);
-    
+    //Create the staging request
     const res = await prisma.StagingRequests.create({
       data: {
         date: formData.date,
@@ -42,6 +42,9 @@ export async function postStagingFormData(formData, userId) {
         otherLinesAffected: formData.otherLinesAffected,
         requestremarks: formData.requestremarks,
         selectedDepo: formData.selectedDepo,
+        corridorType: formData.corridorType,
+        sigDisconnectionRequirements: formData.sigDisconnectionRequirements,
+        trdDisconnectionRequirements: formData.trdDisconnectionRequirements,
         userId: userId,
       },
     });
@@ -95,6 +98,9 @@ export async function postStagingManagerFormData(formData, userId) {
         otherLinesAffected: formData.otherLinesAffected,
         requestremarks: formData.requestremarks,
         selectedDepo: formData.selectedDepo,
+        corridorType: formData.corridorType,
+        sigDisconnectionRequirements: formData.sigDisconnectionRequirements,
+        trdDisconnectionRequirements: formData.trdDisconnectionRequirements,
         managerId: userId,
       },
     });
@@ -149,6 +155,10 @@ export async function updateStagingFormData(formData, requestId) {
         otherLinesAffected: formData.otherLinesAffected,
         requestremarks: formData.requestremarks,
         selectedDepo: formData.selectedDepo,
+        corridorType: formData.corridorType,
+        ManagerResponse: formData.ManagerResponse,
+        sigDisconnectionRequirements: formData.sigDisconnectionRequirements,
+        trdDisconnectionRequirements: formData.trdDisconnectionRequirements,
       },
     });
     
@@ -160,83 +170,66 @@ export async function updateStagingFormData(formData, requestId) {
   }
 }
 
-export async function getStagingFormData(id) {
-  const res = await prisma.StagingRequests.findMany({ where: { userId: id } });
+export async function getStagingFormData(id, includeArchived = false) {
+  const whereClause = { userId: id };
+  
+  // By default, exclude archived requests
+  if (!includeArchived) {
+    whereClause.archived = false;
+  }
+  
+  const res = await prisma.StagingRequests.findMany({ where: whereClause });
   return { requestData: res };
 }
 
-export async function getStagingFormDataByRequestId(id) {
+export async function getStagingFormDataByRequestId(id, includeArchived = false) {
+  const whereClause = { requestId: id };
+  
+  // By default, exclude archived requests
+  if (!includeArchived) {
+    whereClause.archived = false;
+  }
+  
   const res = await prisma.StagingRequests.findMany({
-    where: { requestId: id },
+    where: whereClause,
   });
   return { requestData: res };
 }
 
 export async function deleteStagingFormData(id) {
-  const res = await prisma.StagingRequests.delete({
+  // Instead of deleting, update the request with an 'archived' flag
+  const res = await prisma.StagingRequests.update({
     where: { requestId: id },
+    data: { archived: true }
   });
   return { requestData: res };
 }
 
-export async function getStagingFormDataByDepartment(dept) {
-  try {
-    console.log("Fetching staging requests for department:", dept);
-    
-    const res = await prisma.StagingRequests.findMany({
-      where: { selectedDepartment: dept },
-      include: {
-        User: {
-          select: {
-            id: true,
-            name: true,
-            department: true,
-            depot: true
-          }
-        },
-        Manager: {
-          select: {
-            id: true,
-            name: true,
-            department: true
-          }
-        }
-      }
-    });
-    
-    console.log("Fetched staging requests for department:", dept, "Count:", res.length);
-    
-    // Log detailed information about each request
-    res.forEach((request, index) => {
-      console.log(`Request ${index + 1} (${request.requestId}):`, {
-        userId: request.userId,
-        managerId: request.managerId,
-        department: request.selectedDepartment,
-        depot: request.selectedDepo,
-        date: request.date,
-        createdAt: request.createdAt,
-        user: request.User ? {
-          id: request.User.id,
-          name: request.User.name,
-          department: request.User.department,
-          depot: request.User.depot
-        } : null,
-        manager: request.Manager ? {
-          id: request.Manager.id,
-          name: request.Manager.name,
-          department: request.Manager.department
-        } : null
-      });
-    });
-    
-    return res;
-  } catch (error) {
-    console.error("Error fetching staging requests by department:", error);
-    throw new Error("Failed to fetch staging requests by department");
+export async function getStagingFormDataByDepartment(dept, includeArchived = false) {
+  const whereClause = {
+    selectedDepartment: dept
+  };
+  
+  // By default, exclude archived requests unless specifically requested
+  if (!includeArchived) {
+    whereClause.archived = false;
   }
+  
+  const res = await prisma.StagingRequests.findMany({
+    where: whereClause
+  });
+  
+  return res;
 }
 
-export async function getStagingFormDataAll() {
-  const res = await prisma.StagingRequests.findMany();
+export async function getStagingFormDataAll(includeArchived = false) {
+  const whereClause = {};
+  
+  // By default, exclude archived requests
+  if (!includeArchived) {
+    whereClause.archived = false;
+  }
+  
+  const res = await prisma.StagingRequests.findMany({ where: whereClause });
   return { requestData: res };
 }

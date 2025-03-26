@@ -75,9 +75,17 @@ model StagingRequests {
   managerId                String?
   status                   String?
   selectedDepo             String?
-  sigResponse              String? @default("no")
+  sigResponse              String? @default("yes")
+  oheResponse              String? @default("yes")
+  corridorType             String?
+  sigActionsNeeded         String?  @default("yes")
+  trdActionsNeeded         String?  @default("yes")
+  sigDisconnectionRequirements String?
+  trdDisconnectionRequirements String? 
+  ManagerResponse          String?
   Manager                  Manager? @relation(fields: [managerId], references: [id])
   User                     User?    @relation(fields: [userId], references: [id])
+  archived                 Boolean  @default(false)
 }
 
 model Requests {
@@ -113,7 +121,14 @@ model Requests {
   otherLinesAffected       Json
   managerId                String?
   selectedDepo             String?
-  sigResponse              String? @default("no")
+  sigResponse              String? @default("yes")
+  oheResponse              String? @default("yes")
+  corridorType             String?
+  sigActionsNeeded         String?  @default("yes")
+  trdActionsNeeded         String?  @default("yes")
+  sigDisconnectionRequirements String?
+  trdDisconnectionRequirements String?
+  ManagerResponse          String?
   Manager                  Manager? @relation(fields: [managerId], references: [id])
   User                     User?    @relation(fields: [userId], references: [id])
 }
@@ -157,6 +172,19 @@ model Sanctiontable {
   otherLinesAffected       Json?
   managerId                String?
   selectedDepo             String?
-  sigResponse              String? @default("no")
+  sigResponse              String?
+  oheResponse              String?
   status                   String   @default("in progress")
+  corridorType             String?
+  ManagerResponse          String?
+  sigDisconnectionRequirements String?
+  trdDisconnectionRequirements String?
+  availed                  Json?    @default("{\"status\":\"pending\",\"reason\":\"\"}")
+  adSaved                  String?
+}
+
+model SuperAdmin {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
 }

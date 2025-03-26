@@ -167,8 +167,9 @@ const StationGantt = ({ station, stationData }) => {
   );
 };
 
-export const GanttChartModern = ({ data, stationData, section, date }) => {
+export const GanttChartModern = ({ data, stationData, section, date, scale = 1 }) => {
   const groupedData = groupDataByStations(stationData, data, section, date);
+  console.log("GanttChartModern received scale:", scale);
   return (
     <Card className="rounded-lg">
       <CardHeader>
@@ -179,7 +180,7 @@ export const GanttChartModern = ({ data, stationData, section, date }) => {
           {/* {data.map((station, index) => (
             <StationGantt key={index} station={station} />
           ))} */}
-          <GanttGraph data={groupedData}></GanttGraph>
+          <GanttGraph data={groupedData} scale={scale}></GanttGraph>
         </div>
       </CardContent>
     </Card>

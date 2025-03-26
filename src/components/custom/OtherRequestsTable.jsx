@@ -54,6 +54,7 @@ export default function OtherRequestsTable({ user }) {
           return;
         }
 
+        // Log each request for debugging
         data.forEach((req, index) => {
           console.log(`Request ${index + 1}:`, {
             requestId: req.requestId,
@@ -61,14 +62,27 @@ export default function OtherRequestsTable({ user }) {
             depo: req.selectedDepo,
             sigDisconnection: req.sigDisconnection,
             oheDisconnection: req.oheDisconnection,
-            ohDisconnection: req.ohDisconnection
+            ohDisconnection: req.ohDisconnection,
+            sigActionsNeeded: req.sigActionsNeeded,
+            trdActionsNeeded: req.trdActionsNeeded,
+            sigResponse: req.sigResponse,
+            oheResponse: req.oheResponse
           });
         });
-        
-        setRequests(data);
+
+        // Set default values for any missing fields
+        const processedData = data.map(req => ({
+          ...req,
+          sigActionsNeeded: req.sigActionsNeeded || "no",
+          trdActionsNeeded: req.trdActionsNeeded || "no",
+          sigResponse: req.sigResponse || "no",
+          oheResponse: req.oheResponse || "no"
+        }));
+
+        setRequests(processedData);
       } catch (error) {
         console.error("Error fetching other requests:", error);
-        setError("Failed to fetch requests");
+        setError(error.message || "Failed to fetch requests");
       } finally {
         setLoading(false);
       }
@@ -87,7 +101,7 @@ export default function OtherRequestsTable({ user }) {
       setRequests(
         requests.map((req) =>
           req.requestId === requestId
-            ? { ...req, sigResponse: response }
+            ? { ...req, sigResponse: response, sigActionsNeeded: "no" }
             : req
         )
       );
@@ -106,7 +120,7 @@ export default function OtherRequestsTable({ user }) {
       setRequests(
         requests.map((req) =>
           req.requestId === requestId
-            ? { ...req, oheResponse: response }
+            ? { ...req, oheResponse: response, trdActionsNeeded: "no" }
             : req
         )
       );
@@ -165,6 +179,26 @@ export default function OtherRequestsTable({ user }) {
       <div className="p-4 bg-red-100 text-red-700 rounded-lg">
         <h3 className="font-bold">Error</h3>
         <p>{error}</p>
+        <div className="mt-4">
+          <button
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              fetchOtherRequests();
+            }}
+          >
+            Retry
+          </button>
+        </div>
+        <div className="mt-4 text-sm">
+          <p>If the error persists, please check:</p>
+          <ul className="list-disc list-inside mt-2">
+            <li>Your department and depot settings are correct</li>
+            <li>You have the necessary permissions</li>
+            <li>The server is running properly</li>
+          </ul>
+        </div>
       </div>
     );
   }
@@ -201,7 +235,7 @@ export default function OtherRequestsTable({ user }) {
               <TableCell><strong>OHE Disconnection</strong></TableCell>
               <TableCell><strong>Depo</strong></TableCell>
               <TableCell><strong>SIG Response</strong></TableCell>
-              <TableCell><strong>OHE Response</strong></TableCell>
+              <TableCell><strong>Power Block Response</strong></TableCell>
               {user.department === "SIG" && (
                 <TableCell><strong>SIG Actions</strong></TableCell>
               )}
@@ -213,23 +247,22 @@ export default function OtherRequestsTable({ user }) {
           <TableBody>
             {requests.length > 0 ? (
               requests.map((request) => {
-                const needsTrdApproval = request.oheDisconnection?.toLowerCase() === "yes" || request.ohDisconnection?.toLowerCase() === "yes";
-                const needsSigApproval = request.sigDisconnection?.toLowerCase() === "yes";
+                const needsAction = (user.department === "TRD" && request.trdActionsNeeded === "yes") ||
+                                  (user.department === "SIG" && request.sigActionsNeeded === "yes");
+                const hasResponded = (user.department === "TRD" && request.trdActionsNeeded === "no") ||
+                                   (user.department === "SIG" && request.sigActionsNeeded === "no");
                 
                 return (
                   <TableRow 
                     key={request.requestId}
                     sx={{ 
-                      backgroundColor: 
-                        (user.department === "TRD" && needsTrdApproval && !request.oheResponse) ? 
-                          "rgba(255, 244, 229, 0.5)" :  // Needs TRD attention
-                        (user.department === "SIG" && needsSigApproval && !request.sigResponse) ? 
-                          "rgba(229, 246, 253, 0.5)" :  // Needs SIG attention
-                        (user.department === "TRD" && needsTrdApproval && request.oheResponse) ?
-                          "rgba(236, 253, 245, 0.4)" :  // TRD responded
-                        (user.department === "SIG" && needsSigApproval && request.sigResponse) ?
-                          "rgba(236, 253, 245, 0.4)" :  // SIG responded
-                          "inherit" 
+                      backgroundColor: needsAction
+                        ? (user.department === "TRD" 
+                            ? "rgba(255, 244, 229, 0.5)"  // Needs TRD attention
+                            : "rgba(229, 246, 253, 0.5)") // Needs SIG attention
+                        : hasResponded
+                            ? "rgba(240, 253, 244, 0.2)"  // Soft green for responded requests
+                            : "inherit"
                     }}
                   >
                     <TableCell>{request.requestId}</TableCell>
@@ -242,55 +275,57 @@ export default function OtherRequestsTable({ user }) {
                     <TableCell>{request.oheDisconnection || request.ohDisconnection || "No"}</TableCell>
                     <TableCell>{request.selectedDepo}</TableCell>
                     <TableCell>
-                      {request.sigResponse ? (
+                      {user.department === "SIG" ? (
+                        request.sigActionsNeeded === "yes" ? (
+                          <span className="text-amber-600 font-medium">Action Required</span>
+                        ) : (
+                          <span className={`font-medium ${request.sigResponse === "yes" ? "text-green-600" : "text-red-600"}`}>
+                            {request.sigResponse === "yes" ? "Accepted" : "Rejected"}
+                          </span>
+                        )
+                      ) : (
                         <span className={`font-medium ${request.sigResponse === "yes" ? "text-green-600" : "text-red-600"}`}>
                           {request.sigResponse === "yes" ? "Accepted" : "Rejected"}
                         </span>
-                      ) : (
-                        needsSigApproval ? (
-                          <span className="text-amber-600">Pending</span>
-                        ) : (
-                          <span className="text-gray-500">N/A</span>
-                        )
                       )}
                     </TableCell>
                     <TableCell>
-                      {request.oheResponse ? (
+                      {user.department === "TRD" ? (
+                        request.trdActionsNeeded === "yes" ? (
+                          <span className="text-amber-600 font-medium">Action Required</span>
+                        ) : (
+                          <span className={`font-medium ${request.oheResponse === "yes" ? "text-green-600" : "text-red-600"}`}>
+                            {request.oheResponse === "yes" ? "Accepted" : "Rejected"}
+                          </span>
+                        )
+                      ) : (
                         <span className={`font-medium ${request.oheResponse === "yes" ? "text-green-600" : "text-red-600"}`}>
                           {request.oheResponse === "yes" ? "Accepted" : "Rejected"}
                         </span>
-                      ) : (
-                        needsTrdApproval ? (
-                          <span className="text-amber-600">Pending</span>
-                        ) : (
-                          <span className="text-gray-500">N/A</span>
-                        )
                       )}
                     </TableCell>
                     {user.department === "SIG" && (
                       <TableCell>
                         <div className="flex space-x-2">
-                          {request.sigResponse ? (
-                            <span className="text-blue-600 font-medium">
-                              Response: {request.sigResponse === "yes" ? "Accepted" : "Rejected"}
-                            </span>
-                          ) : (
+                          {request.sigActionsNeeded === "yes" ? (
                             <>
                               <button
                                 className="bg-green-500 text-white px-3 py-1 rounded"
                                 onClick={() => openConfirmDialog(request.requestId, "yes", "sig")}
-                                disabled={!needsSigApproval}
                               >
                                 Accept
                               </button>
                               <button
                                 className="bg-red-500 text-white px-3 py-1 rounded"
                                 onClick={() => openConfirmDialog(request.requestId, "no", "sig")}
-                                disabled={!needsSigApproval}
                               >
                                 Reject
                               </button>
                             </>
+                          ) : (
+                            <span className="text-blue-600 font-medium">
+                              Response: {request.sigResponse === "yes" ? "Accepted" : "Rejected"}
+                            </span>
                           )}
                         </div>
                       </TableCell>
@@ -298,31 +333,25 @@ export default function OtherRequestsTable({ user }) {
                     {user.department === "TRD" && (
                       <TableCell>
                         <div className="flex space-x-2">
-                          {request.oheResponse ? (
+                          {request.trdActionsNeeded === "yes" ? (
+                            <>
+                              <button
+                                className="bg-green-500 text-white px-3 py-1 rounded"
+                                onClick={() => openConfirmDialog(request.requestId, "yes", "ohe")}
+                              >
+                                Accept
+                              </button>
+                              <button
+                                className="bg-red-500 text-white px-3 py-1 rounded"
+                                onClick={() => openConfirmDialog(request.requestId, "no", "ohe")}
+                              >
+                                Reject
+                              </button>
+                            </>
+                          ) : (
                             <span className="text-blue-600 font-medium">
                               Response: {request.oheResponse === "yes" ? "Accepted" : "Rejected"}
                             </span>
-                          ) : (
-                            <>
-                              {needsTrdApproval ? (
-                                <>
-                                  <button
-                                    className="bg-green-500 text-white px-3 py-1 rounded"
-                                    onClick={() => openConfirmDialog(request.requestId, "yes", "ohe")}
-                                  >
-                                    Accept
-                                  </button>
-                                  <button
-                                    className="bg-red-500 text-white px-3 py-1 rounded"
-                                    onClick={() => openConfirmDialog(request.requestId, "no", "ohe")}
-                                  >
-                                    Reject
-                                  </button>
-                                </>
-                              ) : (
-                                <span className="text-gray-500">No action needed</span>
-                              )}
-                            </>
                           )}
                         </div>
                       </TableCell>

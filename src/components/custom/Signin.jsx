@@ -211,77 +211,6 @@ export function Signin() {
       </div>
     );
   } else if (!view && !loading) {
-    // return (
-    //   <div>
-    //     <div className="m-4 absolute top-4 right-4">
-    //       <Link
-    //         href="/signup"
-    //         className="mt-8 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-    //       >
-    //         Sign Up
-    //       </Link>
-    //       <Link
-    //         href="/admin"
-    //         className="mt-8 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-    //       >
-    //         Admin
-    //       </Link>
-    //     </div>
-
-    //     <div className="h-screen flex justify-center flex-col">
-    //       <div className="flex justify-center">
-    //         <div className="block w-80 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
-    //           <div>
-    //             <div className="px-10">
-    //               <div className="text-3xl font-extrabold flex justify-center">
-    //                 Login
-    //               </div>
-    //             </div>
-    //             <div className="pt-2">
-    //               <div className="mb-4">
-    //                 <label className="block mb-2 text-sm text-black font-semibold">
-    //                   Username
-    //                 </label>
-    //                 <input
-    //                   name="username"
-    //                   type="text"
-    //                   placeholder="jhondoe@gmail.com"
-    //                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-    //                   value={formValues.username}
-    //                   onChange={handleChange}
-    //                   required
-    //                 />
-    //               </div>
-    //               <div className="mb-4">
-    //                 <label className="block mb-2 text-sm text-black font-semibold">
-    //                   Password
-    //                 </label>
-    //                 <input
-    //                   name="password"
-    //                   type="password"
-    //                   placeholder="123456"
-    //                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-    //                   value={formValues.password}
-    //                   onChange={handleChange}
-    //                   required
-    //                 />
-    //               </div>
-    //               {error && <p className="text-red-500">{error}</p>}
-    //               <button
-    //                 type="submit"
-    //                 onClick={initialButtonClickHandler}
-    //                 className="mt-8 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-    //                 disabled={loading}
-    //               >
-    //                 {loading ? "Signing in..." : "Log in"}
-    //               </button>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
     return (
       <div className="h-screen flex ml-16">
         <div className="flex flex-col justify-center mt-28    items-center w-full border h-2/3 rounded-lg border-gray-200 hover:bg-gray-100 bg-white p-8">
@@ -352,6 +281,10 @@ export function Signin() {
                 <a href="/admin" className="text-blue-600 hover:underline">
                   Admin
                 </a>{" "}
+                | Are You A Super Admin?{" "}
+                <a href="/super-admin-login" className="text-blue-600 hover:underline">
+                  Super Admin
+                </a>
               </p>
             </div>
           </div>

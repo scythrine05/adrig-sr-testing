@@ -814,6 +814,33 @@ export default function ManagerForm({ id }) {
               />
             </div>
           </div>
+          <div>
+            <label className="block text-sm font-medium">
+              Disconnection Requirements <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="flex space-x-4 mt-1">
+              <label>
+                <input
+                  type="radio"
+                  name="trdDisconnectionRequirements"
+                  value="Gear"
+                  checked={formData.trdDisconnectionRequirements === "Gear"}
+                  onChange={handleChange}
+                />{" "}
+                Gear
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="trdDisconnectionRequirements"
+                  value="People"
+                  checked={formData.trdDisconnectionRequirements === "People"}
+                  onChange={handleChange}
+                />{" "}
+                People
+              </label>
+            </div>
+          </div>
         </div>
       )}
       <div className="mb-4">
@@ -881,6 +908,33 @@ export default function ManagerForm({ id }) {
                 />
               </div>
             )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium">
+              Disconnection Requirements <span style={{ color: "red" }}>*</span>
+            </label>
+            <div className="flex space-x-4 mt-1">
+              <label>
+                <input
+                  type="radio"
+                  name="sigDisconnectionRequirements"
+                  value="Gear"
+                  checked={formData.sigDisconnectionRequirements === "Gear"}
+                  onChange={handleChange}
+                />{" "}
+                Gear
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="sigDisconnectionRequirements"
+                  value="People"
+                  checked={formData.sigDisconnectionRequirements === "People"}
+                  onChange={handleChange}
+                />{" "}
+                People
+              </label>
+            </div>
           </div>
         </div>
       )}
@@ -984,6 +1038,9 @@ export default function ManagerForm({ id }) {
       </div>
     );
   };
+  const formCorridorType = () => {
+    return formData.corridorType || "";  // default to an empty string if undefined
+  };
 
   return (
     <>
@@ -1012,6 +1069,7 @@ export default function ManagerForm({ id }) {
         formSubmitHandler={getFormSubmitHandler}
         formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
         disabled_option={true}
+        formCorridorType={formCorridorType} 
       />
       
       <ConfirmationDialog

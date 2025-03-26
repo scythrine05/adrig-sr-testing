@@ -231,18 +231,17 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
             </div>
           ) : (
             <div className="mb-4">
-              <h3 className="font-semibold">Safety Information</h3>
-              <table className="w-full text-sm">
+              <h3 className="font-semibold mb-1">Safety Information</h3>
+              <table className="w-full text-sm border-collapse">
                 <tbody>
                   <tr>
-                    <td className="font-medium pr-2">Caution Required:</td>
+                    <td className="font-medium w-40">Caution Required:</td>
                     <td>{safeGet('cautionRequired') || "No"}</td>
                   </tr>
-                  
                   {safeGet('cautionRequired') === "Yes" && (
                     <>
                       <tr>
-                        <td className="font-medium pr-2">Caution Location:</td>
+                        <td className="font-medium w-40">Caution Location:</td>
                         <td>
                           {safeGet('cautionLocationFrom') && safeGet('cautionLocationTo') 
                             ? `From ${safeGet('cautionLocationFrom')} to ${safeGet('cautionLocationTo')}`
@@ -250,20 +249,18 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                         </td>
                       </tr>
                       <tr>
-                        <td className="font-medium pr-2">Caution Speed:</td>
+                        <td className="font-medium w-40">Caution Speed:</td>
                         <td>{safeGet('cautionSpeed') || "Not specified"}</td>
                       </tr>
                     </>
                   )}
-                  
                   <tr>
-                    <td className="font-medium pr-2">OHE Disconnection:</td>
+                    <td className="font-medium w-40">OHE Disconnection:</td>
                     <td>{safeGet('ohDisconnection') || "No"}</td>
                   </tr>
-                  
                   {safeGet('ohDisconnection') === "Yes" && (
                     <tr>
-                      <td className="font-medium pr-2">Elementary Section:</td>
+                      <td className="font-medium w-40">Elementary Section:</td>
                       <td>
                         {safeGet('elementarySectionFrom') && safeGet('elementarySectionTo') 
                           ? `From ${safeGet('elementarySectionFrom')} to ${safeGet('elementarySectionTo')}`
@@ -271,26 +268,40 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                       </td>
                     </tr>
                   )}
-                  
                   <tr>
-                    <td className="font-medium pr-2">SIG Disconnection:</td>
+                    <td className="font-medium w-40">SIG Disconnection:</td>
                     <td>{safeGet('sigDisconnection') || "No"}</td>
                   </tr>
-                  
                   {safeGet('sigDisconnection') === "Yes" && (
+                    <>
+                      <tr>
+                        <td className="font-medium w-40">
+                          {safeGet('selectedDepartment') === "SIG" || safeGet('selectedDepartment') === "ENGG"
+                            ? "Line:"
+                            : "Elementary Section:"}
+                        </td>
+                        <td>
+                          {safeGet('selectedDepartment') === "SIG" 
+                            ? safeGet('sigElementarySectionFrom')
+                            : safeGet('sigElementarySectionFrom') && safeGet('sigElementarySectionTo') 
+                              ? `From ${safeGet('sigElementarySectionFrom')} to ${safeGet('sigElementarySectionTo')}`
+                              : "Not specified"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-medium w-40">Requirements:</td>
+                        <td>{safeGet('sigDisconnectionRequirements') || "None specified"}</td>
+                      </tr>
+                    </>
+                  )}
+                  <tr>
+                    <td className="font-medium w-40">TRD Disconnection:</td>
+                    <td>{safeGet('trdDisconnection') || "No"}</td>
+                  </tr>
+                  {safeGet('trdDisconnection') === "Yes" && (
                     <tr>
-                      <td className="font-medium pr-2">
-                        {safeGet('selectedDepartment') === "SIG" || safeGet('selectedDepartment') === "ENGG"
-                          ? "Line:"
-                          : "Elementary Section:"}
-                      </td>
-                      <td>
-                        {safeGet('selectedDepartment') === "SIG" 
-                          ? safeGet('sigElementarySectionFrom')
-                          : safeGet('sigElementarySectionFrom') && safeGet('sigElementarySectionTo') 
-                            ? `From ${safeGet('sigElementarySectionFrom')} to ${safeGet('sigElementarySectionTo')}`
-                            : "Not specified"}
-                      </td>
+                      <td className="font-medium w-40">Requirements:</td>
+                      <td>{safeGet('trdDisconnectionRequirements') || "None specified"}</td>
                     </tr>
                   )}
                 </tbody>

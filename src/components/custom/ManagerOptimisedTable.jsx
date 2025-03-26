@@ -14,13 +14,43 @@ import {
   postDataOptimised,
 } from "../../app/actions/optimisetable";
 
+// Helper function to get week dates
+const getWeekDates = (weekOffset = 0) => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 = Sunday, 6 = Saturday
+  
+  // Calculate the date of Monday (start of week)
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (currentDay === 0 ? 6 : currentDay - 1) + (weekOffset * 7));
+  monday.setHours(0, 0, 0, 0);
+  
+  // Calculate the date of Sunday (end of week)
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+  
+  return {
+    start: monday,
+    end: sunday,
+    weekLabel: `Week ${weekOffset === 0 ? '(Current)' : weekOffset > 0 ? '+' + weekOffset : weekOffset}`
+  };
+};
+
+// Format date as YYYY-MM-DD
+const formatDate = (date) => {
+  return date.toISOString().split('T')[0];
+};
+
 const ManagerOptmisedTable = ({ id }) => {
   const [filteredRequests, setFilteredRequests] = useState([]);
+  const [allRequests, setAllRequests] = useState([]);
   const [user, setUser] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [error, setError] = useState("");
   const [currentRequest, setCurrentRequest] = useState(null);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const weekDates = getWeekDates(weekOffset);
 
   useEffect(() => {
     async function fxn() {
@@ -29,13 +59,58 @@ const ManagerOptmisedTable = ({ id }) => {
         const result = res.result.filter(
           (e) => e.selectedDepartment === id.toUpperCase()
         );
-        setFilteredRequests(result);
+        setAllRequests(result);
+        
+        // Filter requests for the selected week
+        filterRequestsByWeek(result);
       } catch (e) {
         console.log(e);
       }
     }
     fxn();
-  }, [currentRequest]);
+  }, [currentRequest, weekOffset, id]);
+
+  // Filter requests by week
+  const filterRequestsByWeek = (requestData) => {
+    if (!requestData) return;
+    
+    const filtered = requestData.filter(request => {
+      let requestDate;
+      try {
+        // Try to parse the date in various formats
+        if (request.date) {
+          if (request.date.includes('-')) {
+            // Format: YYYY-MM-DD
+            const [year, month, day] = request.date.split('-').map(Number);
+            requestDate = new Date(year, month - 1, day);
+          } else if (request.date.includes('/')) {
+            // Format: MM/DD/YYYY or DD/MM/YYYY
+            const parts = request.date.split('/').map(Number);
+            if (parts[2] > 1000) {
+              // MM/DD/YYYY
+              requestDate = new Date(parts[2], parts[0] - 1, parts[1]);
+            } else {
+              // DD/MM/YYYY
+              requestDate = new Date(parts[2], parts[1] - 1, parts[0]);
+            }
+          } else {
+            // Try default parsing
+            requestDate = new Date(request.date);
+          }
+        } else {
+          // If no date, consider it outside the range
+          return false;
+        }
+      } catch (e) {
+        console.error(`Error parsing date ${request.date}:`, e);
+        return false;
+      }
+      
+      return requestDate >= weekDates.start && requestDate <= weekDates.end;
+    });
+    
+    setFilteredRequests(filtered);
+  };
 
   const optimisedYesHandler = async (requestdata) => {
     const res = await postDataOptimised(requestdata, "Accepted", "");
@@ -63,19 +138,49 @@ const ManagerOptmisedTable = ({ id }) => {
 
   return (
     <div className="container min-w-full p-4">
+      {/* Week Selection */}
+      <div className="mb-6 flex items-center justify-center space-x-4">
+        <button 
+          onClick={() => setWeekOffset(prev => prev - 1)}
+          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+        >
+          &lt; Prev Week
+        </button>
+        
+        <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
+          {weekDates.weekLabel}: {formatDate(weekDates.start)} to {formatDate(weekDates.end)}
+        </span>
+        
+        <button 
+          onClick={() => setWeekOffset(prev => prev + 1)}
+          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+        >
+          Next Week &gt;
+        </button>
+        
+        {weekOffset !== 0 && (
+          <button 
+            onClick={() => setWeekOffset(0)}
+            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none"
+          >
+            Current Week
+          </button>
+        )}
+      </div>
+
     {/* Table for Desktop */}
     <div className="hidden md:block overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
             <th className="p-3 text-left">Request ID</th>
-            <th className="p-3 text-left">Date of Request</th>
+            <th className="p-3 text-left">Date of Block Request</th>
             <th className="p-3 text-left">Department</th>
-            <th className="p-3 text-left">Section</th>
+            <th className="p-3 text-left">MajorSection</th>
             <th className="p-3 text-left">Block Section</th>
             <th className="p-3 text-left">Selected Block</th>
-            <th className="p-3 text-left">Work Description</th>
-            <th className="p-3 text-left">Work Type Selected</th>
+            <th className="p-3 text-left">Work Type</th>
+            <th className="p-3 text-left">Activity</th>
             <th className="p-3 text-left">Line Selected</th>
             <th className="p-3 text-left">Caution Required</th>
             <th className="p-3 text-left">Caution Speed</th>
@@ -89,7 +194,7 @@ const ManagerOptmisedTable = ({ id }) => {
             <th className="p-3 text-left">Optimised Time (To)</th>
             <th className="p-3 text-left">Optimization Details</th>
             <th className="p-3 text-left">SIG Disconnection</th>
-            <th className="p-3 text-left">OHE Disconnection</th>
+            <th className="p-3 text-left">Power Block Disconnection</th>
             <th className="p-3 text-left">Elementary Section (From)</th>
             <th className="p-3 text-left">Elementary Section (To)</th>
             <th className="p-3 text-left">SIG Elementary Section (From)</th>
@@ -97,6 +202,7 @@ const ManagerOptmisedTable = ({ id }) => {
             <th className="p-3 text-left">Other Lines Affected</th>
             <th className="p-3 text-left">Depot/SSE</th>
             <th className="p-3 text-left">Accept The Optimised Requests</th>
+            <th className="p-3 text-left">Availed</th>
           </tr>
         </thead>
         <tbody>
@@ -142,12 +248,41 @@ const ManagerOptmisedTable = ({ id }) => {
                     <span>Rejected❌ {request.remarks}</span>
                   )}
                 </td>
+                <td className="p-3">
+                  {request.availed ? (
+                    (() => {
+                      let availedData;
+                      try {
+                        availedData = typeof request.availed === 'string' 
+                          ? JSON.parse(request.availed) 
+                          : request.availed;
+                      } catch (e) {
+                        availedData = { status: "pending", reason: "" };
+                      }
+                      
+                      if (availedData.status === "yes") {
+                        return <span className="text-green-600 font-medium">Availed ✅</span>;
+                      } else if (availedData.status === "no") {
+                        return (
+                          <div>
+                            <span className="text-red-600 font-medium">Not Availed ❌</span>
+                            <p className="text-sm text-gray-600 mt-1">Reason: {availedData.reason}</p>
+                          </div>
+                        );
+                      } else {
+                        return <span className="text-gray-600">Pending</span>;
+                      }
+                    })()
+                  ) : (
+                    <span className="text-gray-600">Pending</span>
+                  )}
+                </td>
               </tr>
             ))
           ) : (
             <tr>
               <td colSpan={29} className="p-3 text-center">
-                No requests found
+                No requests found for this week
               </td>
             </tr>
           )}
@@ -335,17 +470,55 @@ const ManagerOptmisedTable = ({ id }) => {
                 </strong>
                 <span className="pl-2">{request.selectedDepo}</span>
               </div>
-              <div className="pt-2">
-                <strong>Accept The Optimised Requests:</strong>
-                {request.action === "none" ? (
-                  <div className="flex justify-around mt-2">
+              <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                <strong className="text-right pr-2 border-r border-gray-200">
+                  Accept The Optimised Requests:
+                </strong>
+                <span className="pl-2">
+                  {request.action === "none" ? (
+                    <div className="flex justify-around mt-2">
                       "No action taken"
-                  </div>
-                ) : request.action === "Accepted" ? (
-                  <span>Accepted ✅</span>
-                ) : (
-                  <span>Rejected❌ {request.remarks}</span>
-                )}
+                    </div>
+                  ) : request.action === "Accepted" ? (
+                    <span>Accepted ✅</span>
+                  ) : (
+                    <span>Rejected❌ {request.remarks}</span>
+                  )}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                <strong className="text-right pr-2 border-r border-gray-200">
+                  Availed:
+                </strong>
+                <span className="pl-2">
+                  {request.availed ? (
+                    (() => {
+                      let availedData;
+                      try {
+                        availedData = typeof request.availed === 'string' 
+                          ? JSON.parse(request.availed) 
+                          : request.availed;
+                      } catch (e) {
+                        availedData = { status: "pending", reason: "" };
+                      }
+                      
+                      if (availedData.status === "yes") {
+                        return <span className="text-green-600 font-medium">Availed ✅</span>;
+                      } else if (availedData.status === "no") {
+                        return (
+                          <div>
+                            <span className="text-red-600 font-medium">Not Availed ❌</span>
+                            <p className="text-sm text-gray-600 mt-1">Reason: {availedData.reason}</p>
+                          </div>
+                        );
+                      } else {
+                        return <span className="text-gray-600">Pending</span>;
+                      }
+                    })()
+                  ) : (
+                    <span className="text-gray-600">Pending</span>
+                  )}
+                </span>
               </div>
             </div>
           </div>
