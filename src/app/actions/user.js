@@ -148,3 +148,5 @@ export async function getUserByEmail(email) {
   });
   return user;
 }
+
+export {getUser}
