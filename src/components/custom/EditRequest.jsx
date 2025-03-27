@@ -1243,10 +1243,10 @@ export default function EditRequest(props) {
         </div>
       )}
       {/* Other Affected Lines */}
-      {getMissionBlock().map((ele) => {
+      {getMissionBlock().map((ele, index) => {
         const arr = ele?.split("-").map((name) => name.trim());
         return (
-          <div className="mb-4">
+          <div className="mb-4" key={index}>
             <label className="block text-sm font-medium">
               Other affected
               {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}

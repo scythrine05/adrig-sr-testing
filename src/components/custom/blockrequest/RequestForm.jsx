@@ -596,7 +596,7 @@ export default function RequestForm2(props) {
             (e) => e.direction === formData.selectedStream
           );
     return (
-      <div>
+      <div key={index}>
         {ele.split("-")[1] === "YD" && (
           <div key={index}>
             <label className="block text-sm font-medium">
