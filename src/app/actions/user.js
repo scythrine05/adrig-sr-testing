@@ -149,4 +149,4 @@ export async function getUserByEmail(email) {
   return user;
 }
 
-export {getUser}
+export {getUser,currentUser}
