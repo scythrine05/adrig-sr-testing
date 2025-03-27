@@ -13,13 +13,13 @@ export default function SuperAdminLayout({ children }) {
 
   useEffect(() => {
     // Only check once the status is settled
-    if (status === 'loading') return;
-    
-    if (status === 'unauthenticated') {
-      window.location.href = '/super-admin-login';
+    if (status === "loading") return;
+
+    if (status === "unauthenticated") {
+      window.location.href = "/super-admin-login";
       return;
     }
-    
+
     // Temporarily bypass the role check - just check if authenticated
     // if (session?.user?.role !== 'super-admin') {
     //   console.log("Unauthorized access, role:", session?.user?.role);
@@ -30,7 +30,7 @@ export default function SuperAdminLayout({ children }) {
     //   }, 1000);
     //   return;
     // }
-    
+
     setLoading(false);
   }, [status, session]);
 
@@ -52,9 +52,11 @@ export default function SuperAdminLayout({ children }) {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="text-red-500 text-xl mb-4">Unauthorized Access</div>
-          <p className="text-gray-600 mb-4">You don't have permission to access this page.</p>
+          <p className="text-gray-600 mb-4">
+            {"You don't have permission to access this page."}
+          </p>
           <button
-            onClick={() => window.location.href = '/super-admin-login'}
+            onClick={() => (window.location.href = "/super-admin-login")}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Back to Login
@@ -80,7 +82,9 @@ export default function SuperAdminLayout({ children }) {
           <Link
             href="/super-admin/staging-requests"
             className={`block p-2 rounded ${
-              pathname === "/super-admin/staging-requests" ? "bg-blue-600" : "hover:bg-gray-700"
+              pathname === "/super-admin/staging-requests"
+                ? "bg-blue-600"
+                : "hover:bg-gray-700"
             }`}
           >
             Staging Requests
@@ -88,7 +92,9 @@ export default function SuperAdminLayout({ children }) {
           <Link
             href="/super-admin/request-table"
             className={`block p-2 rounded ${
-              pathname === "/super-admin/request-table" ? "bg-blue-600" : "hover:bg-gray-700"
+              pathname === "/super-admin/request-table"
+                ? "bg-blue-600"
+                : "hover:bg-gray-700"
             }`}
           >
             Request Table
@@ -96,13 +102,15 @@ export default function SuperAdminLayout({ children }) {
           <Link
             href="/super-admin/sanctioned-requests"
             className={`block p-2 rounded ${
-              pathname === "/super-admin/sanctioned-requests" ? "bg-blue-600" : "hover:bg-gray-700"
+              pathname === "/super-admin/sanctioned-requests"
+                ? "bg-blue-600"
+                : "hover:bg-gray-700"
             }`}
           >
             Sanctioned Requests
           </Link>
           <button
-            onClick={() => signOut({ callbackUrl: '/super-admin-login' })}
+            onClick={() => signOut({ callbackUrl: "/super-admin-login" })}
             className="block w-full text-left p-2 rounded mt-8 text-red-400 hover:bg-gray-700"
           >
             Logout
@@ -112,4 +120,4 @@ export default function SuperAdminLayout({ children }) {
       <div className="flex-1 p-6">{children}</div>
     </div>
   );
-} 
+}

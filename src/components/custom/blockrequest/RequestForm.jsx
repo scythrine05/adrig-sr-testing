@@ -586,7 +586,7 @@ export default function RequestForm2(props) {
 
   const selectStream = () => {
     return(
-    getMissionBlock().map((ele) => {
+    getMissionBlock().map((ele, index) => {
     const arr = ele?.split("-").map((name) => name.trim());
     const value = getLineSectionValue(ele, arr);
     const filteredData =
@@ -598,7 +598,7 @@ export default function RequestForm2(props) {
     return (
       <div>
         {ele.split("-")[1] === "YD" && (
-          <div>
+          <div key={index}>
             <label className="block text-sm font-medium">
               Stream for {ele}
               <span style={{ color: "red" }}>*</span>
@@ -1056,10 +1056,10 @@ export default function RequestForm2(props) {
   }
 
   const getHandleMissionBlock2 = () =>           {
-    return(getMissionBlock().map((ele) => {
+    return(getMissionBlock().map((ele, index) => {
     const arr = ele?.split("-").map((name) => name.trim());
     return (
-      <div className="mb-4">
+      <div className="mb-4" key={index}>
         <label className="block text-sm font-medium">
           Other affected
           {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}

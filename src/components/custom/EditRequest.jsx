@@ -86,7 +86,10 @@ export default function EditRequest(props) {
     if (props.flag) {
       setFormData(props.request);
       // Check if the request has a manager response
-      if (props.request.ManagerResponse === "yes" || props.request.ManagerResponse === "no") {
+      if (
+        props.request.ManagerResponse === "yes" ||
+        props.request.ManagerResponse === "no"
+      ) {
         setHasManagerResponse(true);
         setManagerResponseValue(props.request.ManagerResponse);
       }
@@ -99,7 +102,10 @@ export default function EditRequest(props) {
           const request = oldRequestResult.requestData[0];
           setFormData(request);
           // Check if the request has a manager response
-          if (request.ManagerResponse === "yes" || request.ManagerResponse === "no") {
+          if (
+            request.ManagerResponse === "yes" ||
+            request.ManagerResponse === "no"
+          ) {
             setHasManagerResponse(true);
             setManagerResponseValue(request.ManagerResponse);
           }
@@ -107,7 +113,10 @@ export default function EditRequest(props) {
           const request = data.requestData[0];
           setFormData(request);
           // Check if the request has a manager response
-          if (request.ManagerResponse === "yes" || request.ManagerResponse === "no") {
+          if (
+            request.ManagerResponse === "yes" ||
+            request.ManagerResponse === "no"
+          ) {
             setHasManagerResponse(true);
             setManagerResponseValue(request.ManagerResponse);
           }
@@ -135,30 +144,31 @@ export default function EditRequest(props) {
       const now = new Date();
       const currentDay = now.getDay(); // 0 = Sunday, 4 = Thursday
       const currentHour = now.getHours();
-      
+
       // Get the current week's Monday (for reference)
       const currentWeekMonday = new Date(now);
       const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
       currentWeekMonday.setDate(now.getDate() - daysFromMonday);
       currentWeekMonday.setHours(0, 0, 0, 0);
-      
+
       // Calculate next week's Monday (week 2)
       const nextWeekMonday = new Date(currentWeekMonday);
       nextWeekMonday.setDate(currentWeekMonday.getDate() + 7);
-      
+
       // Calculate week 3's Monday
       const week3Monday = new Date(currentWeekMonday);
       week3Monday.setDate(currentWeekMonday.getDate() + 14);
-      
+
       // Set minimum date based on cutoff
       let minDate;
-      
+
       // Check if it's before Thursday 16:00 of the current week
       // For Sunday, we need to check if it's before Thursday 16:00 of the PREVIOUS week
-      const isBeforeThursdayCutoff = currentDay !== 0 ? 
-        (currentDay < 4 || (currentDay === 4 && currentHour < 16)) :
-        false; // If it's Sunday, always consider it after Thursday 16:00
-      
+      const isBeforeThursdayCutoff =
+        currentDay !== 0
+          ? currentDay < 4 || (currentDay === 4 && currentHour < 16)
+          : false; // If it's Sunday, always consider it after Thursday 16:00
+
       if (isBeforeThursdayCutoff) {
         // If before Thursday 16:00, allow requests from week 2 onwards
         minDate = nextWeekMonday;
@@ -166,18 +176,18 @@ export default function EditRequest(props) {
         // If after Thursday 16:00, allow requests from week 3 onwards
         minDate = week3Monday;
       }
-      
+
       // Format dates as YYYY-MM-DD for input[type="date"]
       const formatDate = (date) => {
-        return date.toISOString().split('T')[0];
+        return date.toISOString().split("T")[0];
       };
-      
+
       setDateRange({
         minDate: formatDate(minDate),
-        maxDate: "" // No maximum date limit
+        maxDate: "", // No maximum date limit
       });
     };
-    
+
     calculateDateRange();
   }, []);
 
@@ -468,7 +478,9 @@ export default function EditRequest(props) {
       if (hasManagerResponse) {
         toast({
           title: "Editing not allowed",
-          description: `This request cannot be edited because it has been ${managerResponseValue === "yes" ? "approved" : "rejected"} by a manager.`,
+          description: `This request cannot be edited because it has been ${
+            managerResponseValue === "yes" ? "approved" : "rejected"
+          } by a manager.`,
           variant: "destructive",
         });
         return;
@@ -545,7 +557,9 @@ export default function EditRequest(props) {
       if (hasManagerResponse) {
         toast({
           title: "Deletion not allowed",
-          description: `This request cannot be deleted because it has been ${managerResponseValue === "yes" ? "approved" : "rejected"} by a manager.`,
+          description: `This request cannot be deleted because it has been ${
+            managerResponseValue === "yes" ? "approved" : "rejected"
+          } by a manager.`,
           variant: "destructive",
         });
         return;
@@ -566,7 +580,7 @@ export default function EditRequest(props) {
           title: "Confirm deletion",
           description: "Click the delete button again to confirm deletion",
         });
-        
+
         // Reset confirmation after 5 seconds
         setTimeout(() => {
           setConfirmDelete(false);
@@ -589,18 +603,28 @@ export default function EditRequest(props) {
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              <svg
+                className="h-5 w-5 text-yellow-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
               </svg>
             </div>
             <div className="ml-3">
               <p className="text-sm text-yellow-700">
-                This request cannot be edited because it has been {managerResponseValue === "yes" ? "approved" : "rejected"} by a manager.
+                This request cannot be edited because it has been{" "}
+                {managerResponseValue === "yes" ? "approved" : "rejected"} by a
+                manager.
               </p>
             </div>
           </div>
         </div>
-        
+
         <h2 className="text-2xl font-bold mb-4">Request Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-3 bg-gray-50 rounded">
@@ -625,7 +649,13 @@ export default function EditRequest(props) {
           </div>
           <div className="p-3 bg-gray-50 rounded">
             <p className="font-semibold">Status:</p>
-            <p className={managerResponseValue === "yes" ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
+            <p
+              className={
+                managerResponseValue === "yes"
+                  ? "text-green-600 font-bold"
+                  : "text-red-600 font-bold"
+              }
+            >
               {managerResponseValue === "yes" ? "Approved" : "Rejected"}
             </p>
           </div>
@@ -834,12 +864,12 @@ export default function EditRequest(props) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
-        {getMissionBlock().map((ele) => {
+        {getMissionBlock().map((ele, index) => {
           const arr = ele?.split("-").map((name) => name.trim());
           const value = getLineSectionValue(ele, arr);
 
           return (
-            <div>
+            <div key={index}>
               {ele.split("-")[1] === "YD" && (
                 <div>
                   <label className="block text-sm font-medium">
@@ -878,20 +908,16 @@ export default function EditRequest(props) {
                   if (e.road_no) {
                     if (e.direction === formData.selectedStream) {
                       return (
-                        <>
-                          <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                            {e.road_no}
-                          </option>
-                        </>
+                        <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                          {e.road_no}
+                        </option>
                       );
                     }
                   } else {
                     return (
-                      <>
-                        <option value={`${ele}:${e}`} key={e}>
-                          {e}
-                        </option>
-                      </>
+                      <option value={`${ele}:${e}`} key={e}>
+                        {e}
+                      </option>
                     );
                   }
                 })}
@@ -1260,14 +1286,14 @@ export default function EditRequest(props) {
         </button>
         <button
           className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300 mr-6"
-          style={{ backgroundColor: confirmDelete ? '#ff3333' : '#ff5555' }}
+          style={{ backgroundColor: confirmDelete ? "#ff3333" : "#ff5555" }}
           onClick={deleteRequest}
         >
           {confirmDelete ? "Confirm Delete" : "Delete"}
         </button>
         <button
           className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300"
-          style={{ backgroundColor: '#3b82f6' }}
+          style={{ backgroundColor: "#3b82f6" }}
           onClick={formSubmitHandler}
         >
           Update

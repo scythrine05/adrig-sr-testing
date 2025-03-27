@@ -64,8 +64,9 @@ const Crousel = () => {
             </h2>
 
             <p className="text-gray-500 text-center">
-              We couldn't find any data to display at the moment. Please check
-              back later or try refreshing the page.
+              {
+                " We couldn't find any data to display at the moment. Please check back later or try refreshing the page."
+              }
             </p>
 
             <button

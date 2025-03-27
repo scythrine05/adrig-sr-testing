@@ -240,7 +240,7 @@ const ManagerOptmisedTable = ({ id }) => {
                 <td className="p-3">
                   {request.action === "none" ? (
                     <div className="flex justify-around">
-                      "No action taken"
+                      {'"No action taken"'}
                     </div>
                   ) : request.action === "Accepted" ? (
                     <span>Accepted ✅</span>
@@ -477,7 +477,7 @@ const ManagerOptmisedTable = ({ id }) => {
                 <span className="pl-2">
                   {request.action === "none" ? (
                     <div className="flex justify-around mt-2">
-                      "No action taken"
+                      {'"No action taken"'}
                     </div>
                   ) : request.action === "Accepted" ? (
                     <span>Accepted ✅</span>

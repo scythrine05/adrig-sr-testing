@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import {
   currentUserDetails,
@@ -193,9 +194,11 @@ export default function UserProfile() {
           <div className="border-b pb-6 mb-6">
             <div className="flex justify-between border-b p-5 items-center mb-4">
               <div className="flex items-center">
-                <img
+                <Image
                   src="https://via.placeholder.com/40"
                   alt="Profile Avatar"
+                  width={40}
+                  height={40}
                   className="rounded-full w-10 h-10 mr-4"
                 />
                 <span className="font-medium">{user}</span>
@@ -452,7 +455,7 @@ export default function UserProfile() {
                 <div className="pb-12">
                   <div className="mt-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">
-                      Type "Delete account" below to continue.
+                      {`Type "Delete account" below to continue.`}
                     </label>
                     <div className="mt-2">
                       <input

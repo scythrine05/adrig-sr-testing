@@ -528,7 +528,7 @@ export default function ManagerForm({ id }) {
 
   const handleGetMissionBlock1 = () => {
     return(
-    getMissionBlock().map((ele) => {
+    getMissionBlock().map((ele, index) => {
     const arr = ele?.split("-").map((name) => name.trim());
     const value = getLineSectionValue(ele, arr);
     const filteredData =
@@ -538,7 +538,7 @@ export default function ManagerForm({ id }) {
             (e) => e.direction === formData.selectedStream
           );
     return (
-      <div>
+      <div key={index}>
         {ele.split("-")[1] === "YD" && (
           <div>
             <label className="block text-sm font-medium">
@@ -946,10 +946,10 @@ export default function ManagerForm({ id }) {
   }
 
   const getHandleMissionBlock2 = () =>           {
-    return(getMissionBlock().map((ele) => {
+    return(getMissionBlock().map((ele, index) => {
     const arr = ele?.split("-").map((name) => name.trim());
     return (
-      <div className="mb-4">
+      <div className="mb-4" key={index}>
         <label className="block text-sm font-medium">
           Other affected
           {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
