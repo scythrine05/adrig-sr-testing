@@ -51,14 +51,14 @@ const parseRequestDate = (dateString) => {
       const [year, month, day] = dateString.split("-").map(Number);
       return new Date(year, month - 1, day);
     }
-    
+
     if (dateString.includes("/")) {
       const parts = dateString.split("/").map(Number);
-      return parts[2] > 1000 
+      return parts[2] > 1000
         ? new Date(parts[2], parts[0] - 1, parts[1])
         : new Date(parts[2], parts[1] - 1, parts[0]);
     }
-    
+
     return new Date(dateString);
   } catch (e) {
     console.error(`Error parsing date ${dateString}:`, e);
@@ -74,8 +74,8 @@ function calculateMinutesBetween(startTime, endTime) {
   }
 
   // Split times into hours and minutes
-  const [startHours, startMinutes] = startTime.split(':').map(Number);
-  const [endHours, endMinutes] = endTime.split(':').map(Number);
+  const [startHours, startMinutes] = startTime.split(":").map(Number);
+  const [endHours, endMinutes] = endTime.split(":").map(Number);
 
   // Calculate total minutes for both times
   const startTotalMinutes = startHours * 60 + startMinutes;
@@ -106,8 +106,11 @@ const SearchForm = () => {
   });
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [currentFilterColumn, setCurrentFilterColumn] = useState("");
-  const [aggregatedRequestsCorridor, setAggregatedRequestsCorridor] = useState([]);
-  const [aggregatedRequestsNonCorridor, setAggregatedRequestsNonCorridor] = useState([]);
+  const [aggregatedRequestsCorridor, setAggregatedRequestsCorridor] = useState(
+    []
+  );
+  const [aggregatedRequestsNonCorridor, setAggregatedRequestsNonCorridor] =
+    useState([]);
 
   // Fetch and Filter Data
   useEffect(() => {
@@ -118,7 +121,7 @@ const SearchForm = () => {
         result = calculateDemandedHours(result);
         result = calculateOptimisedHours(result);
         result = calculateAvailedHours(result);
-        console.log(result)
+        console.log(result);
 
         // res.result is an array of objects that will have "corridorType" that will either have values "non-corridor" or "corridor"
         // now based on this value i need to aggregate into two arrays, one corridor and one non-corridor with demanded,optimised, availed values summed and grouped based on section value
@@ -128,11 +131,10 @@ const SearchForm = () => {
         const nonCorridorData = result.filter(
           (item) => item.corridorType === "non-corridor"
         );
-    
-        
+
         const corridorAggregated = corridorData.reduce((acc, curr) => {
           const key = `${curr.selectedDepartment}-${curr.selectedSection}`;
-          
+
           if (!acc[key]) {
             acc[key] = {
               corridorType: curr.corridorType,
@@ -152,10 +154,10 @@ const SearchForm = () => {
           }
           return acc;
         }, {});
-        
+
         const nonCorridorAggregated = nonCorridorData.reduce((acc, curr) => {
           const key = `${curr.selectedDepartment}-${curr.selectedSection}`;
-          
+
           if (!acc[key]) {
             acc[key] = {
               corridorType: curr.corridorType,
@@ -178,16 +180,19 @@ const SearchForm = () => {
 
         console.log("Corridor Data:", corridorAggregated);
         console.log("Non-Corridor Data:", corridorAggregated);
-        
+
         // Convert the aggregated objects back to arrays
         const corridorAggregatedArray = Object.values(corridorAggregated);
         const nonCorridorAggregatedArray = Object.values(nonCorridorAggregated);
         // Set the state with the aggregated data
         console.log("Corridor Aggregated Data:", corridorAggregatedArray);
-        console.log("Non-Corridor Aggregated Data:", nonCorridorAggregatedArray);
-        
+        console.log(
+          "Non-Corridor Aggregated Data:",
+          nonCorridorAggregatedArray
+        );
+
         setAllRequests(result);
-        filterRequestsByWeek(result);
+        filterRequestsByWeek(corridorAggregatedArray);
         setAggregatedRequestsCorridor(corridorAggregatedArray);
         setAggregatedRequestsNonCorridor(nonCorridorAggregatedArray);
       } catch (e) {
@@ -212,7 +217,7 @@ const SearchForm = () => {
     });
 
     return updatedData;
-  }
+  };
 
   const calculateOptimisedHours = (requestData) => {
     if (!requestData) return;
@@ -223,17 +228,17 @@ const SearchForm = () => {
 
       if (fromTime && toTime) {
         const minutes = calculateMinutesBetween(fromTime, toTime);
-        return { ...request, optimisedMinutes:minutes };
+        return { ...request, optimisedMinutes: minutes };
       }
       return request;
     });
 
     return updatedData;
-  }
-  
+  };
+
   const calculateAvailedHours = (requestData) => {
     if (!requestData) return;
-    
+
     const updatedData = requestData.map((request) => {
       const availedData = request.availed;
       if (availedData) {
@@ -241,13 +246,13 @@ const SearchForm = () => {
         const toTime = availedData.toTime;
         if (fromTime && toTime) {
           const minutes = calculateMinutesBetween(fromTime, toTime);
-          return { ...request, availedMinutes:minutes };
+          return { ...request, availedMinutes: minutes };
         }
       }
       return request;
     });
     return updatedData;
-  }
+  };
 
   // Week Filtering
   const filterRequestsByWeek = (requestData) => {
@@ -255,7 +260,11 @@ const SearchForm = () => {
 
     const filtered = requestData.filter((request) => {
       const requestDate = parseRequestDate(request.date);
-      return requestDate && requestDate >= weekDates.start && requestDate <= weekDates.end;
+      return (
+        requestDate &&
+        requestDate >= weekDates.start &&
+        requestDate <= weekDates.end
+      );
     });
 
     setFilteredRequests(filtered);
@@ -279,6 +288,8 @@ const SearchForm = () => {
     }
 
     setFilters(newFilters);
+    // Close the popover after selection to improve UX
+    // handleFilterClose();
   };
 
   // Filter Click Handlers
@@ -307,15 +318,15 @@ const SearchForm = () => {
       .sort();
   };
 
-  // Filtered and Sorted Requests
+  // Fix the useMemo to properly apply filters
   const filteredAndSortedRequests = useMemo(() => {
-    let result = [...filteredRequests];
+    let result = [...aggregatedRequestsCorridor];
 
     // Apply filters
     Object.keys(filters).forEach((key) => {
       if (filters[key] && filters[key].length > 0) {
         result = result.filter((item) =>
-          filters[key].includes(item[key] || "")
+          filters[key].includes(String(item[key] || ""))
         );
       }
     });
@@ -323,8 +334,8 @@ const SearchForm = () => {
     // Apply sorting
     if (sortConfig.key) {
       result.sort((a, b) => {
-        const valueA = (a[sortConfig.key] || "").toString().toLowerCase();
-        const valueB = (b[sortConfig.key] || "").toString().toLowerCase();
+        const valueA = String(a[sortConfig.key] || "").toLowerCase();
+        const valueB = String(b[sortConfig.key] || "").toLowerCase();
 
         if (valueA < valueB) {
           return sortConfig.direction === "ascending" ? -1 : 1;
@@ -337,7 +348,12 @@ const SearchForm = () => {
     }
 
     return result;
-  }, [filteredRequests, filters, sortConfig]);
+  }, [aggregatedRequestsCorridor, filters, sortConfig]);
+
+  // Then update the original filtered requests
+  useEffect(() => {
+    setFilteredRequests(filteredAndSortedRequests);
+  }, [filteredAndSortedRequests]);
 
   // Popover and Rendering Preparations
   const isOpen = Boolean(filterAnchorEl);
@@ -367,29 +383,30 @@ const SearchForm = () => {
             Filter by {currentFilterColumn}
           </h4>
           {currentFilterColumn &&
-            getUniqueValues(aggregatedRequestsCorridor, currentFilterColumn).map(
-              (value) => (
-                <div key={value} className="my-1">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={
-                          filters[currentFilterColumn]?.includes(value) || false
-                        }
-                        onChange={() => handleFilterChange(value)}
-                      />
-                    }
-                    label={value}
-                  />
-                </div>
-              )
-            )}
+            getUniqueValues(
+              aggregatedRequestsCorridor,
+              currentFilterColumn
+            ).map((value) => (
+              <div key={value} className="my-1">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={
+                        filters[currentFilterColumn]?.includes(value) || false
+                      }
+                      onChange={() => handleFilterChange(value)}
+                    />
+                  }
+                  label={value}
+                />
+              </div>
+            ))}
         </div>
       </Popover>
 
       <div className="p-4 m-10 bg-secondary rounded-xl">
         <div className="flex justify-between ">
-          <h1 className="mt-10 text-4xl font-bold">Sanctioned Table</h1>
+          <h1 className="mt-10 text-4xl font-bold">MIS Report</h1>
         </div>
 
         {/* Week Selection */}
@@ -434,18 +451,16 @@ const SearchForm = () => {
         >
           <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
             <TableHead>
-            <TableRow>
-            <TableCell>
-            
-            </TableCell>
-            <TableCell colSpan={4} align="center">
-                Corridor
-              </TableCell>
-              <TableCell colSpan={4} align="center">
-              Non - Corridor
-            </TableCell>
-            </TableRow>
-            
+              <TableRow>
+                <TableCell style={{borderRight:"1px solid gray"}} colSpan={2} ></TableCell>
+                <TableCell style={{borderRight:"1px solid gray"}} colSpan={4} align="center">
+                  Corridor
+                </TableCell>
+                <TableCell style={{borderRight:"1px solid gray"}} colSpan={4} align="center">
+                  Outside Corridor
+                </TableCell>
+              </TableRow>
+
               <TableRow>
                 {[
                   {
@@ -457,10 +472,32 @@ const SearchForm = () => {
                     id: "section",
                     label: "Section",
                     filterable: true,
+                    style:{borderRight:"1px solid gray"}
                   },
                   {
                     id: "minutes",
-                    label: "Total Block Hours Demanded",  
+                    label: "Total Block Hours Demanded",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Total Block Hours Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Percentage of Blocks Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "availedMinutes",
+                    label: "Total Block Hours Availed",
+                    filterable: false,
+                    style:{borderRight:"1px solid gray"}
+                  },
+                  {
+                    id: "minutes",
+                    label: "Total Block Hours Demanded",
                     filterable: false,
                   },
                   {
@@ -478,28 +515,8 @@ const SearchForm = () => {
                     label: "Total Block Hours Availed",
                     filterable: false,
                   },
-                  {
-                    id: "minutes",
-                    label: "Total Block Hours Demanded",  
-                    filterable: false,
-                  },
-                  {
-                    id: "optimisedMinutes",
-                    label: "Total Block Hours Sanctioned",
-                    filterable: false,
-                  },
-                  {
-                    id: "optimisedMinutes",
-                    label: "Percentage of Blocks Sanctioned",
-                    filterable: false,
-                  },
-                  {
-                    id: "availedMinutes",
-                    label: "Total Block Hours Availed",
-                    filterable: false,
-                  }                  
                 ].map((column) => (
-                  <TableCell key={column.id}>
+                  <TableCell key={column.id} style={column.style} align="center">
                     <div className="flex items-center justify-between">
                       <strong>{column.label}</strong>
                       {column.filterable && (
@@ -527,30 +544,72 @@ const SearchForm = () => {
                 ))}
               </TableRow>
             </TableHead>
+            
             <TableBody>
-              {aggregatedRequestsCorridor.length > 0 ? (
-                aggregatedRequestsCorridor.map((request) => (
-                  <TableRow key={request.requestId}>
+            {filteredAndSortedRequests.length > 0 ? (
+              filteredAndSortedRequests.map((request) => (
+                <TableRow key={request.requestId || `${request.department}-${request.section}`}>
                     <TableCell>{request.department}</TableCell>
-                    <TableCell>{request.section}</TableCell>
-                    <TableCell>{request.minutes}</TableCell>
-                    <TableCell>{request.optimisedMinutes}</TableCell>
+                    <TableCell style={{borderRight:"1px solid gray"}}>{request.section}</TableCell>
+                    <TableCell>{(request.minutes / 60).toFixed(2)}</TableCell>
+                    <TableCell>{(request.optimisedMinutes / 60).toFixed(2)}</TableCell>
                     <TableCell>
                       {request.minutes > 0
-                        ? ((request.optimisedMinutes / request.minutes) * 100).toFixed(2)
+                        ? (
+                            (request.optimisedMinutes / request.minutes) *
+                            100
+                          ).toFixed(2)
                         : 0}
                       %
                     </TableCell>
-                    <TableCell>{request.availedMinutes}</TableCell>
-                    <TableCell>{aggregatedRequestsNonCorridor.find(d=>d.department==request.department && d.section==request.section)?.minutes}</TableCell>
-                    <TableCell>{aggregatedRequestsNonCorridor.find(d=>d.department==request.department && d.section==request.section)?.optimisedMinutes}</TableCell>
+                    <TableCell style={{borderRight:"1px solid gray"}}>{request.availedMinutes}</TableCell>
                     <TableCell>
-                      {aggregatedRequestsNonCorridor.find(d=>d.department==request.department && d.section==request.section)?.minutes > 0
-                        ? ((aggregatedRequestsNonCorridor.find(d=>d.department==request.department && d.section==request.section)?.optimisedMinutes / aggregatedRequestsNonCorridor.find(d=>d.department==request.department).minutes) * 100).toFixed(2)
+                      {
+                        ((aggregatedRequestsNonCorridor.find(
+                          (d) =>
+                            d.department == request.department &&
+                            d.section == request.section
+                        )?.minutes||0)/60).toFixed(2) 
+                      }
+                    </TableCell>
+                    <TableCell>
+                      {
+                        ((aggregatedRequestsNonCorridor.find(
+                          (d) =>
+                            d.department == request.department &&
+                            d.section == request.section
+                        )?.optimisedMinutes||0)/60).toFixed(2)
+                      }
+                    </TableCell>
+                    <TableCell>
+                      {aggregatedRequestsNonCorridor.find(
+                        (d) =>
+                          d.department == request.department &&
+                          d.section == request.section
+                      )?.minutes > 0
+                        ? (
+                            (aggregatedRequestsNonCorridor.find(
+                              (d) =>
+                                d.department == request.department &&
+                                d.section == request.section
+                            )?.optimisedMinutes /
+                              aggregatedRequestsNonCorridor.find(
+                                (d) => d.department == request.department
+                              ).minutes) *
+                            100
+                          ).toFixed(2)
                         : 0}
                       %
                     </TableCell>
-                    <TableCell>{aggregatedRequestsNonCorridor.find(d=>d.department==request.department && d.section==request.section)?.availedMinutes}</TableCell>
+                    <TableCell>
+                      {
+                        (aggregatedRequestsNonCorridor.find(
+                          (d) =>
+                            d.department == request.department &&
+                            d.section == request.section
+                        )?.availedMinutes||0/60).toFixed(2)
+                      }
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -568,4 +627,4 @@ const SearchForm = () => {
   );
 };
 
-export default SearchForm; 
+export default SearchForm;
