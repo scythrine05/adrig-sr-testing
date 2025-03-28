@@ -39,7 +39,7 @@ export default function SuperAdminLayout({ children }) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-16 h-16 mx-auto border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
@@ -51,13 +51,13 @@ export default function SuperAdminLayout({ children }) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">Unauthorized Access</div>
-          <p className="text-gray-600 mb-4">
+          <div className="mb-4 text-xl text-red-500">Unauthorized Access</div>
+          <p className="mb-4 text-gray-600">
             {"You don't have permission to access this page."}
           </p>
           <button
             onClick={() => (window.location.href = "/super-admin-login")}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
           >
             Back to Login
           </button>
@@ -68,8 +68,8 @@ export default function SuperAdminLayout({ children }) {
 
   return (
     <div className="flex flex-row min-h-screen">
-      <div className="w-64 bg-gray-800 text-white p-4">
-        <h1 className="text-xl font-bold mb-6">Super Admin Panel</h1>
+      <div className="w-64 p-4 text-white bg-gray-800">
+        <h1 className="mb-6 text-xl font-bold">Super Admin Panel</h1>
         <nav className="space-y-2">
           <Link
             href="/super-admin"
@@ -79,7 +79,7 @@ export default function SuperAdminLayout({ children }) {
           >
             Home
           </Link>
-          <Link
+          {/* <Link
             href="/super-admin/staging-requests"
             className={`block p-2 rounded ${
               pathname === "/super-admin/staging-requests"
@@ -108,10 +108,21 @@ export default function SuperAdminLayout({ children }) {
             }`}
           >
             Sanctioned Requests
+          </Link> */}
+          
+          <Link
+            href="/super-admin/mis-report"
+            className={`block p-2 rounded ${
+              pathname === "/super-admin/mis-report"
+                ? "bg-blue-600"
+                : "hover:bg-gray-700"
+            }`}
+          >
+           MIS Report
           </Link>
           <button
             onClick={() => signOut({ callbackUrl: "/super-admin-login" })}
-            className="block w-full text-left p-2 rounded mt-8 text-red-400 hover:bg-gray-700"
+            className="block w-full p-2 mt-8 text-left text-red-400 rounded hover:bg-gray-700"
           >
             Logout
           </button>
