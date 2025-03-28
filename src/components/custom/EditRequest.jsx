@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import validateForm from "./blockrequest/formValidation";
 import { yardData } from "../../lib/yard";
 
-import { getFormDataByRequestId } from "../../app/actions/formdata";
+import { getFormDataByRequestId, deleteFormData } from "../../app/actions/formdata";
 
 export default function EditRequest(props) {
   const router = useRouter();
@@ -552,9 +552,9 @@ export default function EditRequest(props) {
     }
   };
 
-  const deleteRequest = async () => {
+  const deleteRequest = async (overrideDelete = false) => {
     try {
-      if (hasManagerResponse) {
+      if (hasManagerResponse && !overrideDelete) {
         toast({
           title: "Deletion not allowed",
           description: `This request cannot be deleted because it has been ${
@@ -566,7 +566,9 @@ export default function EditRequest(props) {
       }
 
       if (confirmDelete) {
-        const res = await deleteStagingFormData(formData.requestId);
+        const res = overrideDelete
+          ? await deleteFormData(formData.requestId) // Use deleteFormData when overrideDelete is true
+          : await deleteStagingFormData(formData.requestId); // Default to deleteStagingFormData
         toast({
           title: "Success",
           description: "Request deleted successfully",
@@ -662,6 +664,15 @@ export default function EditRequest(props) {
         </div>
 
         <div className="mt-6 flex justify-end">
+          {/* Override Delete Button */}
+          <button
+            className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300 mr-6"
+            style={{ backgroundColor: confirmDelete ? "#ff3333" : "#ff5555" }}
+            onClick={() => deleteRequest(true)}
+          >
+            {confirmDelete ? "Confirm Delete" : "Delete"}
+          </button>
+
           <button
             onClick={() => props.setShowPopup(false)}
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"

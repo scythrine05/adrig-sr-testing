@@ -9,7 +9,7 @@ export async function postFormData(formData) {
     } else if (formData.oheDisconnection) {
       formData.ohDisconnection = formData.oheDisconnection;
     }
-    
+
     const res = await prisma.requests.create({
       data: {
         date: formData.date,
@@ -51,7 +51,7 @@ export async function postFormData(formData) {
         userId: true,
       },
     });
-    
+
     console.log("Created request:", res);
     return res;
   } catch (error) {
@@ -68,7 +68,7 @@ export async function postFormManagerData(formData) {
     } else if (formData.oheDisconnection) {
       formData.ohDisconnection = formData.oheDisconnection;
     }
-    
+
     const res = await prisma.requests.create({
       data: {
         date: formData.date,
@@ -110,7 +110,7 @@ export async function postFormManagerData(formData) {
         managerId: true,
       },
     });
-    
+
     console.log("Created manager request:", res);
     return res;
   } catch (error) {
@@ -211,5 +211,19 @@ export async function getAdminFormData(
   } catch (e) {
     console.log(e);
     return { error: "failed" };
+  }
+}
+
+//Delete Approved Request Form Data
+
+export async function deleteFormData(id) {
+  try {
+    const res = await prisma.requests.delete({
+      where: { requestId: id },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to delete request");
   }
 }
