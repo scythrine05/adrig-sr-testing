@@ -31,9 +31,9 @@ const FormLayout = ({
   formCorridorType,
 }) => {
   return (
-    <div className="p-4 mt-10 rounded-lg shadow-lg min-w-full overflow-hidden" style={{ backgroundColor: 'rgba(64, 224, 208, 0.15)' }}>
+    <div className="p-4 mt-10 rounded-lg shadow-lg min-w-full overflow-hidden" style={{ backgroundColor: '#0A83D3' }}>
       <h1 className="text-center text-xl font-bold mb-4">
-        Block Requestion form
+        Block Requestion Form
       </h1>
 
       {/* Grid for Date, Department, and Section */}
@@ -153,7 +153,7 @@ const FormLayout = ({
                 borderColor: '#40E0D0'
               }}
             />
-            Non Corridor
+            Outside Corridor
           </label>
           <label className="inline-flex items-center text-2xl cursor-pointer">
             <input
@@ -168,7 +168,7 @@ const FormLayout = ({
                 borderColor: '#40E0D0'
               }}
             />
-            Emergency Block
+            Urgent Block
           </label>
         </div>
       </div>

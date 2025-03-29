@@ -99,11 +99,11 @@ export default function OptimisedTable() {
         
         if (hasAdSavedYes) {
           console.log("Setting title to Final Optimised Allocated");
-          setTitle("Final Optimised Allocated");
+          setTitle("Final Optimised Allocation");
           setShowAvailedColumn(true);
         } else {
           console.log("Setting title to Draft Optimised Allocated");
-          setTitle("Draft Optimised Allocated");
+          setTitle("Draft Optimised Allocation");
           setShowAvailedColumn(false);
         }
         
@@ -301,7 +301,7 @@ export default function OptimisedTable() {
             <tr className="bg-gray-100">
               <th className="p-3 text-left">Request ID</th>
               <th className="p-3 text-left">Date of Block Request</th>
-              <th className="p-3 text-left">Department</th>
+              {/* <th className="p-3 text-left">Department</th> */}
               <th className="p-3 text-left">Major Section</th>
               <th className="p-3 text-left">Block Section</th>
               <th className="p-3 text-left">Selected Block</th>
@@ -337,7 +337,7 @@ export default function OptimisedTable() {
                 <tr key={request.requestId} className="border-b">
                   <td className="p-3">{request.requestId}</td>
                   <td className="p-3">{request.date}</td>
-                  <td className="p-3">{request.selectedDepartment}</td>
+                  {/* <td className="p-3">{request.selectedDepartment}</td> */}
                   <td className="p-3">{request.selectedSection}</td>
                   <td className="p-3">{request.stationID}</td>
                   <td className="p-3">{request.missionBlock}</td>
