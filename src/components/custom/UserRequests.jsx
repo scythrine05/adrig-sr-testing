@@ -301,7 +301,9 @@ export default function UserRequests({ date }) {
 
         const finalData =
           formDataResponse.requestData.concat(filteredStagingData);
-        const formattedData = formatData(finalData);
+        const formattedData = Array.isArray(await formatData(finalData))
+          ? await formatData(finalData)
+          : [];
         setRequests(formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
