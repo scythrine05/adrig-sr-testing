@@ -112,3 +112,24 @@ export async function updateOheResponse(requestId, oheResponse) {
     throw new Error("Failed to update OHE response");
   }
 } 
+
+
+// Function to check if a requestId exists in the sanction table
+export async function isRequestIdInSanctionTable(requestId) {
+  try {
+    console.log(`Checking if requestId ${requestId} exists in sanctiontable`);
+
+    const record = await prisma.sanctiontable.findUnique({
+      where: {
+        requestId: requestId,
+      },
+    });
+
+    const exists = record !== null;
+    console.log(`RequestId ${requestId} exists:`, exists);
+    return exists;
+  } catch (error) {
+    console.error("Error checking requestId in sanctiontable:", error);
+    throw new Error("Failed to check requestId in sanctiontable");
+  }
+}
