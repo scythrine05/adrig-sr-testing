@@ -350,6 +350,29 @@ const SearchForm = () => {
     return result;
   }, [aggregatedRequestsCorridor, filters, sortConfig]);
 
+  // Group data by department
+  const groupByDepartment = (data) => {
+    const grouped = data.reduce((acc, item) => {
+      if (!acc[item.department]) {
+        acc[item.department] = {
+          sections: [],
+          totalMinutes: 0,
+          totalOptimisedMinutes: 0,
+          totalAvailedMinutes: 0,
+        };
+      }
+
+      acc[item.department].sections.push(item);
+      acc[item.department].totalMinutes += item.minutes;
+      acc[item.department].totalOptimisedMinutes += item.optimisedMinutes;
+      acc[item.department].totalAvailedMinutes += item.availedMinutes || 0;
+
+      return acc;
+    }, {});
+
+    return grouped;
+  };
+
   // Then update the original filtered requests
   useEffect(() => {
     setFilteredRequests(filteredAndSortedRequests);
@@ -452,11 +475,28 @@ const SearchForm = () => {
           <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell style={{borderRight:"1px solid gray"}} colSpan={2} ></TableCell>
-                <TableCell style={{borderRight:"1px solid gray"}} colSpan={4} align="center">
+                <TableCell
+                  style={{ borderRight: "1px solid gray" }}
+                  colSpan={2}
+                ></TableCell>
+                <TableCell
+                  style={{
+                    borderRight: "1px solid gray",
+                    backgroundColor: "#FDD9EE",
+                  }}
+                  colSpan={4}
+                  align="center"
+                >
                   Corridor
                 </TableCell>
-                <TableCell style={{borderRight:"1px solid gray"}} colSpan={4} align="center">
+                <TableCell
+                  style={{
+                    borderRight: "1px solid gray",
+                    backgroundColor: "#FDE8D9",
+                  }}
+                  colSpan={4}
+                  align="center"
+                >
                   Outside Corridor
                 </TableCell>
               </TableRow>
@@ -472,7 +512,7 @@ const SearchForm = () => {
                     id: "section",
                     label: "Section",
                     filterable: true,
-                    style:{borderRight:"1px solid gray"}
+                    style: { borderRight: "1px solid gray" },
                   },
                   {
                     id: "minutes",
@@ -493,7 +533,7 @@ const SearchForm = () => {
                     id: "availedMinutes",
                     label: "Total Block Hours Availed",
                     filterable: false,
-                    style:{borderRight:"1px solid gray"}
+                    style: { borderRight: "1px solid gray" },
                   },
                   {
                     id: "minutes",
@@ -516,7 +556,11 @@ const SearchForm = () => {
                     filterable: false,
                   },
                 ].map((column) => (
-                  <TableCell key={column.id} style={column.style} align="center">
+                  <TableCell
+                    key={column.id}
+                    style={{ backgroundColor: "#FDE8D9", ...column.style }}
+                    align="center"
+                  >
                     <div className="flex items-center justify-between">
                       <strong>{column.label}</strong>
                       {column.filterable && (
@@ -544,74 +588,269 @@ const SearchForm = () => {
                 ))}
               </TableRow>
             </TableHead>
-            
             <TableBody>
-            {filteredAndSortedRequests.length > 0 ? (
-              filteredAndSortedRequests.map((request) => (
-                <TableRow key={request.requestId || `${request.department}-${request.section}`}>
-                    <TableCell>{request.department}</TableCell>
-                    <TableCell style={{borderRight:"1px solid gray"}}>{request.section}</TableCell>
-                    <TableCell>{(request.minutes / 60).toFixed(2)}</TableCell>
-                    <TableCell>{(request.optimisedMinutes / 60).toFixed(2)}</TableCell>
-                    <TableCell>
-                      {request.minutes > 0
-                        ? (
-                            (request.optimisedMinutes / request.minutes) *
-                            100
-                          ).toFixed(2)
-                        : 0}
-                      %
-                    </TableCell>
-                    <TableCell style={{borderRight:"1px solid gray"}}>{request.availedMinutes}</TableCell>
-                    <TableCell>
-                      {
-                        ((aggregatedRequestsNonCorridor.find(
-                          (d) =>
-                            d.department == request.department &&
-                            d.section == request.section
-                        )?.minutes||0)/60).toFixed(2) 
-                      }
-                    </TableCell>
-                    <TableCell>
-                      {
-                        ((aggregatedRequestsNonCorridor.find(
-                          (d) =>
-                            d.department == request.department &&
-                            d.section == request.section
-                        )?.optimisedMinutes||0)/60).toFixed(2)
-                      }
-                    </TableCell>
-                    <TableCell>
-                      {aggregatedRequestsNonCorridor.find(
-                        (d) =>
-                          d.department == request.department &&
-                          d.section == request.section
-                      )?.minutes > 0
-                        ? (
-                            (aggregatedRequestsNonCorridor.find(
+              {filteredAndSortedRequests.length > 0 ? (
+                <>
+                  {/* Department Rows */}
+                  {Object.entries(
+                    groupByDepartment(filteredAndSortedRequests)
+                  ).map(([department, deptData]) => {
+                    // Calculate non-corridor totals for the department
+                    const nonCorridorTotals = aggregatedRequestsNonCorridor
+                      .filter((d) => d.department === department)
+                      .reduce(
+                        (acc, item) => ({
+                          minutes: acc.minutes + (item.minutes || 0),
+                          optimisedMinutes:
+                            acc.optimisedMinutes + (item.optimisedMinutes || 0),
+                          availedMinutes:
+                            acc.availedMinutes + (item.availedMinutes || 0),
+                        }),
+                        { minutes: 0, optimisedMinutes: 0, availedMinutes: 0 }
+                      );
+
+                    return (
+                      <React.Fragment key={department}>
+                        {/* Section Rows */}
+                        {deptData.sections.map((request) => {
+                          const nonCorridorData =
+                            aggregatedRequestsNonCorridor.find(
                               (d) =>
-                                d.department == request.department &&
-                                d.section == request.section
-                            )?.optimisedMinutes /
-                              aggregatedRequestsNonCorridor.find(
-                                (d) => d.department == request.department
-                              ).minutes) *
+                                d.department === department &&
+                                d.section === request.section
+                            ) || {};
+
+                          return (
+                            <TableRow
+                              key={`${request.department}-${request.section}`}
+                            >
+                              <TableCell>{department}</TableCell>
+                              <TableCell
+                                style={{ borderRight: "1px solid gray" }}
+                              >
+                                {request.section}
+                              </TableCell>
+
+                              {/* Corridor Data */}
+                              <TableCell>
+                                {(request.minutes / 60).toFixed(2)}
+                              </TableCell>
+                              <TableCell>
+                                {(request.optimisedMinutes / 60).toFixed(2)}
+                              </TableCell>
+                              <TableCell>
+                                {request.minutes > 0
+                                  ? (
+                                      (request.optimisedMinutes /
+                                        request.minutes) *
+                                      100
+                                    ).toFixed(2)
+                                  : 0}
+                                %
+                              </TableCell>
+                              <TableCell
+                                style={{ borderRight: "1px solid gray" }}
+                              >
+                                {(request.availedMinutes / 60).toFixed(2)}
+                              </TableCell>
+
+                              {/* Non-Corridor Data */}
+                              <TableCell>
+                                {((nonCorridorData.minutes || 0) / 60).toFixed(
+                                  2
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {(
+                                  (nonCorridorData.optimisedMinutes || 0) / 60
+                                ).toFixed(2)}
+                              </TableCell>
+                              <TableCell>
+                                {(nonCorridorData.minutes || 0) > 0
+                                  ? (
+                                      ((nonCorridorData.optimisedMinutes || 0) /
+                                        (nonCorridorData.minutes || 1)) *
+                                      100
+                                    ).toFixed(2)
+                                  : 0}
+                                %
+                              </TableCell>
+                              <TableCell>
+                                {(
+                                  (nonCorridorData.availedMinutes || 0) / 60
+                                ).toFixed(2)}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+
+                        {/* Department Total Row */}
+                        <TableRow style={{ backgroundColor: "#BFF5BF" }}>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Total
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              fontWeight: "bold",
+                              borderRight: "1px solid gray",
+                            }}
+                          ></TableCell>
+
+                          {/* Corridor Totals */}
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {(deptData.totalMinutes / 60).toFixed(2)}
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {(deptData.totalOptimisedMinutes / 60).toFixed(2)}
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {deptData.totalMinutes > 0
+                              ? (
+                                  (deptData.totalOptimisedMinutes /
+                                    deptData.totalMinutes) *
+                                  100
+                                ).toFixed(2)
+                              : 0}
+                            %
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              fontWeight: "bold",
+                              borderRight: "1px solid gray",
+                            }}
+                          >
+                            {(deptData.totalAvailedMinutes / 60).toFixed(2)}
+                          </TableCell>
+
+                          {/* Non-Corridor Totals */}
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {(nonCorridorTotals.minutes / 60).toFixed(2)}
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {(nonCorridorTotals.optimisedMinutes / 60).toFixed(
+                              2
+                            )}
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {nonCorridorTotals.minutes > 0
+                              ? (
+                                  (nonCorridorTotals.optimisedMinutes /
+                                    nonCorridorTotals.minutes) *
+                                  100
+                                ).toFixed(2)
+                              : 0}
+                            %
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            {(nonCorridorTotals.availedMinutes / 60).toFixed(2)}
+                          </TableCell>
+                        </TableRow>
+                      </React.Fragment>
+                    );
+                  })}
+
+                  {/* Grand Total Row */}
+                  <TableRow style={{ backgroundColor: "#40F740" }}>
+                    <TableCell style={{ fontWeight: "bold" }} colSpan={2}>
+                      Grand Total
+                    </TableCell>
+
+                    {/* Corridor Grand Totals */}
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {(
+                        filteredAndSortedRequests.reduce(
+                          (sum, item) => sum + (item.minutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {(
+                        filteredAndSortedRequests.reduce(
+                          (sum, item) => sum + (item.optimisedMinutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {filteredAndSortedRequests.reduce(
+                        (sum, item) => sum + (item.minutes || 0),
+                        0
+                      ) > 0
+                        ? (
+                            (filteredAndSortedRequests.reduce(
+                              (sum, item) => sum + (item.optimisedMinutes || 0),
+                              0
+                            ) /
+                              filteredAndSortedRequests.reduce(
+                                (sum, item) => sum + (item.minutes || 1),
+                                0
+                              )) *
                             100
                           ).toFixed(2)
                         : 0}
                       %
                     </TableCell>
-                    <TableCell>
-                      {
-                        (aggregatedRequestsNonCorridor.find(
-                          (d) =>
-                            d.department == request.department &&
-                            d.section == request.section
-                        )?.availedMinutes||0/60).toFixed(2)
-                      }
+                    <TableCell
+                      style={{
+                        fontWeight: "bold",
+                        borderRight: "1px solid gray",
+                      }}
+                    >
+                      {(
+                        filteredAndSortedRequests.reduce(
+                          (sum, item) => sum + (item.availedMinutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </TableCell>
+
+                    {/* Non-Corridor Grand Totals */}
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {(
+                        aggregatedRequestsNonCorridor.reduce(
+                          (sum, item) => sum + (item.minutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {(
+                        aggregatedRequestsNonCorridor.reduce(
+                          (sum, item) => sum + (item.optimisedMinutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {aggregatedRequestsNonCorridor.reduce(
+                        (sum, item) => sum + (item.minutes || 0),
+                        0
+                      ) > 0
+                        ? (
+                            (aggregatedRequestsNonCorridor.reduce(
+                              (sum, item) => sum + (item.optimisedMinutes || 0),
+                              0
+                            ) /
+                              aggregatedRequestsNonCorridor.reduce(
+                                (sum, item) => sum + (item.minutes || 1),
+                                0
+                              )) *
+                            100
+                          ).toFixed(2)
+                        : 0}
+                      %
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bold" }}>
+                      {(
+                        aggregatedRequestsNonCorridor.reduce(
+                          (sum, item) => sum + (item.availedMinutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
                     </TableCell>
                   </TableRow>
-                ))
+                </>
               ) : (
                 <TableRow>
                   <TableCell colSpan={21} align="center">
