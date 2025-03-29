@@ -598,10 +598,22 @@ export default function UserRequests({ date }) {
                       right: "80px",
                       top: 0,
                       zIndex: 1200,
-                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                     }}
                   >
                     <strong>Manager Response</strong>
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      backgroundColor: "#F3E8FF",
+                      position: "sticky",
+                      right: "80px",
+                      top: 0,
+                      zIndex: 1200,
+                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <strong>Sanctioned Status</strong>
                   </TableCell>
                   <TableCell
                     sx={{
@@ -610,7 +622,7 @@ export default function UserRequests({ date }) {
                       right: 0,
                       top: 0,
                       zIndex: 1201,
-                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                     }}
                   >
                     <strong>Edit The Request</strong>
@@ -628,32 +640,38 @@ export default function UserRequests({ date }) {
                       {/* <TableCell>{request.stationID}</TableCell> */}
                       <TableCell>{request.missionBlock}</TableCell>
                       <TableCell>
-                        {typeof request.selectedLine === 'string' && request.selectedLine.startsWith('{') 
-                          ? (() => {
-                              try {
-                                const lineData = JSON.parse(request.selectedLine);
-                                const stationLines = lineData.station || [];
-                                const yardLines = lineData.yard || [];
-                                
-                                return (
-                                  <div>
-                                    {stationLines.length > 0 && (
-                                      <div>
-                                        <strong>Station:</strong> {stationLines.join(", ")}
-                                      </div>
-                                    )}
-                                    {yardLines.length > 0 && (
-                                      <div>
-                                        <strong>Yard:</strong> {yardLines.join(", ")}
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              } catch (e) {
-                                return request.selectedLine; // Fallback to original value if JSON parsing fails
-                              }
-                            })()
-                          : request.selectedLine // Display as is if not JSON
+                        {
+                          typeof request.selectedLine === "string" &&
+                          request.selectedLine.startsWith("{")
+                            ? (() => {
+                                try {
+                                  const lineData = JSON.parse(
+                                    request.selectedLine
+                                  );
+                                  const stationLines = lineData.station || [];
+                                  const yardLines = lineData.yard || [];
+
+                                  return (
+                                    <div>
+                                      {stationLines.length > 0 && (
+                                        <div>
+                                          <strong>Station:</strong>{" "}
+                                          {stationLines.join(", ")}
+                                        </div>
+                                      )}
+                                      {yardLines.length > 0 && (
+                                        <div>
+                                          <strong>Yard:</strong>{" "}
+                                          {yardLines.join(", ")}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                } catch (e) {
+                                  return request.selectedLine; // Fallback to original value if JSON parsing fails
+                                }
+                              })()
+                            : request.selectedLine // Display as is if not JSON
                         }
                       </TableCell>
                       <TableCell>{request.demandTimeFrom}</TableCell>
@@ -701,10 +719,23 @@ export default function UserRequests({ date }) {
                           position: "sticky",
                           right: "80px",
                           zIndex: 8,
-                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                         }}
                       >
                         {request.ManagerResponse || "Pending"}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          backgroundColor: "#F3E8FF",
+                          position: "sticky",
+                          right: "80px",
+                          zIndex: 8,
+                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                          color: request.sanctionedStatus ? "green" : "red",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {request.sanctionedStatus ? "A" : "UP"}
                       </TableCell>
                       <TableCell
                         sx={{
@@ -712,7 +743,7 @@ export default function UserRequests({ date }) {
                           position: "sticky",
                           right: 0,
                           zIndex: 8,
-                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                         }}
                       >
                         <button
@@ -805,32 +836,38 @@ export default function UserRequests({ date }) {
                         Line Selected:
                       </strong>
                       <span className="pl-2">
-                        {typeof request.selectedLine === 'string' && request.selectedLine.startsWith('{') 
-                          ? (() => {
-                              try {
-                                const lineData = JSON.parse(request.selectedLine);
-                                const stationLines = lineData.station || [];
-                                const yardLines = lineData.yard || [];
-                                
-                                return (
-                                  <div>
-                                    {stationLines.length > 0 && (
-                                      <div>
-                                        <strong>Station:</strong> {stationLines.join(", ")}
-                                      </div>
-                                    )}
-                                    {yardLines.length > 0 && (
-                                      <div>
-                                        <strong>Yard:</strong> {yardLines.join(", ")}
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              } catch (e) {
-                                return request.selectedLine; // Fallback to original value if JSON parsing fails
-                              }
-                            })()
-                          : request.selectedLine // Display as is if not JSON
+                        {
+                          typeof request.selectedLine === "string" &&
+                          request.selectedLine.startsWith("{")
+                            ? (() => {
+                                try {
+                                  const lineData = JSON.parse(
+                                    request.selectedLine
+                                  );
+                                  const stationLines = lineData.station || [];
+                                  const yardLines = lineData.yard || [];
+
+                                  return (
+                                    <div>
+                                      {stationLines.length > 0 && (
+                                        <div>
+                                          <strong>Station:</strong>{" "}
+                                          {stationLines.join(", ")}
+                                        </div>
+                                      )}
+                                      {yardLines.length > 0 && (
+                                        <div>
+                                          <strong>Yard:</strong>{" "}
+                                          {yardLines.join(", ")}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                } catch (e) {
+                                  return request.selectedLine; // Fallback to original value if JSON parsing fails
+                                }
+                              })()
+                            : request.selectedLine // Display as is if not JSON
                         }
                       </span>
                     </div>

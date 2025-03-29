@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import { split } from "postcss/lib/list";
 import { twMerge } from "tailwind-merge";
+import { isRequestIdInSanctionTable } from "../app/actions/otherRequests";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -16,10 +17,13 @@ export function formatDate(dateString) {
   return `${day} ${month} ${year} (${weekday})`;
 }
 
-export const formatData = (requestData) => {
+export const formatData = async (requestData) => {
   const newRequests = [];
-  requestData.forEach((request) => {
+  for (const request of requestData) {
     const selectedLineData = request.selectedLine;
+
+    // Check if the request is sanctioned
+    const isSanctioned = await isRequestIdInSanctionTable(request.requestId);
 
     // If selectedLine is not in the expected format, create a single request
     if (!selectedLineData || (!selectedLineData.station && !selectedLineData.yard)) {
@@ -28,16 +32,17 @@ export const formatData = (requestData) => {
         selectedLine: request.selectedLine || "Not Specified",
         selectedStream: "Not Applicable",
         missionBlock: request.missionBlock || "Not Specified",
-        otherLinesAffected: request.otherLinesAffected || "None"
+        otherLinesAffected: request.otherLinesAffected || "None",
+        sanctionedStatus: isSanctioned, // Added sanctioned status
       });
-      return;
+      continue;
     }
 
     let subRequestCounter = 0;
 
     // Process station data if it exists
     if (selectedLineData.station && Array.isArray(selectedLineData.station)) {
-      selectedLineData.station.forEach((station) => {
+      for (const station of selectedLineData.station) {
         const subRequest = { ...request };
 
         subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
@@ -55,13 +60,14 @@ export const formatData = (requestData) => {
         subRequest.otherLinesAffected =
           otherLines != undefined ? otherLines.join(", ") : otherLines;
 
+        subRequest.sanctionedStatus = isSanctioned; // Add sanctioned status
         newRequests.push(subRequest);
-      });
+      }
     }
 
     // Process yard data if it exists
     if (selectedLineData.yard && Array.isArray(selectedLineData.yard)) {
-      selectedLineData.yard.forEach((yard) => {
+      for (const yard of selectedLineData.yard) {
         const subRequest = { ...request };
         subRequest.missionBlock = yard.split(":")[0];
         subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
@@ -77,10 +83,11 @@ export const formatData = (requestData) => {
         subRequest.otherLinesAffected =
           otherLines != undefined ? otherLines.join(", ") : otherLines;
 
+        subRequest.sanctionedStatus = isSanctioned; // Add sanctioned status
         newRequests.push(subRequest);
-      });
+      }
     }
-  });
+  }
 
   const updatedData = [...newRequests];
   return updatedData;
