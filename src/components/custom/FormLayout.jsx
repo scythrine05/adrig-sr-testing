@@ -31,7 +31,7 @@ const FormLayout = ({
   formCorridorType,
 }) => {
   return (
-    <div className="p-4 mt-10 rounded-lg shadow-lg min-w-full overflow-hidden" style={{ backgroundColor: '#0A83D3' }}>
+    <div className="p-4 mt-10 rounded-lg shadow-lg min-w-full overflow-hidden" style={{ backgroundColor: '#39C3EA' }}>
       <h1 className="text-center text-xl font-bold mb-4">
         Block Requestion Form
       </h1>
@@ -272,7 +272,7 @@ const FormLayout = ({
       <div className="text-center">
         <button
           className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300"
-          style={{ backgroundColor: '#40E0D0' }}
+          style={{ backgroundColor: '#8E1402' }}
           onClick={formSubmitHandler()}
         >
           Submit
