@@ -61,7 +61,7 @@ const FormLayout = ({
             // min={minDate}
             // max={maxDate}
           />
-          <p className="text-xs mt-1" style={{ color: '#40E0D0' }}>
+          <p className="text-xs mt-1 text-black">
             Temporarily, you can only select dates from tomorrow onwards.
           </p>
           {/* {minDate && (
