@@ -428,30 +428,31 @@ const SearchForm = () => {
       </Popover>
 
       <div className="p-4 m-10 bg-secondary rounded-xl">
-        <div className="flex justify-between ">
-          <h1 className="mt-10 text-4xl font-bold">MIS Report</h1>
+        <div className="flex justify-center">
+          <h1 className="mt-10 text-4xl font-bold">MIS Report for DRM/SrDOM</h1>
         </div>
 
         {/* Week Selection */}
         <div className="flex flex-wrap items-center justify-center mt-4 mb-6 space-x-4">
-          <button
+          {/* <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
             className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
           >
             &lt; Prev Week
-          </button>
+          </button> */}
 
-          <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
-            {weekDates.weekLabel}: {formatDate(weekDates.start)} to{" "}
-            {formatDate(weekDates.end)}
+          <span className="p-5 bg-white border border-gray-300 rounded shadow">
+            {"For a period from"}{" "}
+            <u> {formatDate(weekDates.start)}</u> {"and to "}
+            <u>{formatDate(weekDates.end)}</u>
           </span>
 
-          <button
+          {/* <button
             onClick={() => setWeekOffset((prev) => prev + 1)}
             className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
           >
             Next Week &gt;
-          </button>
+          </button> */}
 
           {weekOffset !== 0 && (
             <button

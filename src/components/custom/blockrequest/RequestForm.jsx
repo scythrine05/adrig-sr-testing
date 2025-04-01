@@ -765,7 +765,7 @@ export default function RequestForm2(props) {
           Whether Fresh Caution will be imposed after block<span style={{ color: "red" }}>*</span>
         </label>
         <div className="flex space-x-4">
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               name="cautionRequired"
@@ -775,7 +775,7 @@ export default function RequestForm2(props) {
             />
             Yes
           </label>
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               name="cautionRequired"
@@ -833,7 +833,7 @@ export default function RequestForm2(props) {
           Whether Power Block Disconnection Needed <span style={{ color: "red" }}>*</span>
         </label>
         <div className="flex space-x-4">
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               name="ohDisconnection"
@@ -843,7 +843,7 @@ export default function RequestForm2(props) {
             />{" "}
             Yes
           </label>
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               name="ohDisconnection"
@@ -936,7 +936,7 @@ export default function RequestForm2(props) {
           Whether S&T Disconnection Required <span style={{ color: "red" }}>*</span>
         </label>
         <div className="flex space-x-4">
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               name="sigDisconnection"
@@ -946,7 +946,7 @@ export default function RequestForm2(props) {
             />{" "}
             Yes
           </label>
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               name="sigDisconnection"
