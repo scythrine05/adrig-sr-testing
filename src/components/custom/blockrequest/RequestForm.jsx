@@ -829,7 +829,7 @@ export default function RequestForm2(props) {
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-black">
-            Whether Power Block Disconnection Needed{" "}
+            Whether Power Block Needed{" "}
             <span style={{ color: "red" }}>*</span>
           </label>
           <div className="flex space-x-4">
@@ -882,7 +882,7 @@ export default function RequestForm2(props) {
             </div>
             <div>
               <label className="block text-sm font-medium text-black">
-                Disconnection Requirements{" "}
+                Power Block Requirements{" "}
                 <span style={{ color: "red" }}>*</span>
               </label>
               <div className="flex space-x-4 mt-1">

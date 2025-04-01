@@ -621,7 +621,7 @@ const SearchForm = () => {
                           ].map((column) => (
                             <TableCell key={column.id}>
                               <div className="flex items-center justify-between">
-                              <strong>{column.label}</strong>
+                                <strong>{column.label}</strong>
                                 {column.filterable && (
                                   <>
                                     <span
@@ -692,6 +692,21 @@ const SearchForm = () => {
                               </TableCell>
                               <TableCell>{request.action}</TableCell>
                               <TableCell>{request.remarks}</TableCell>
+                              <TableCell>
+                                {(request.final === "" ||
+                                  request.final !== "set") && (
+                                  <div className="pt-2">
+                                    <button
+                                      className="w-full bg-blue-500 text-white p-2 rounded-lg"
+                                      onClick={() =>
+                                        editRequestHandler(request)
+                                      }
+                                    >
+                                      Edit Request
+                                    </button>
+                                  </div>
+                                )}
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (
