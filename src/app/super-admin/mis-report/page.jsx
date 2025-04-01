@@ -17,6 +17,8 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { getDataOptimised } from "../../actions/optimisetable";
 import { useSession } from "next-auth/react";
 import Hq from "./hq";
+import BOIForm from "./boi";
+import AllMonths from "./all-months"
 // Utility Functions for Date Handling
 const getWeekDates = (weekOffset = 0) => {
   const now = new Date();
@@ -428,7 +430,7 @@ const SearchForm = () => {
             ))}
         </div>
       </Popover>
-      {val !== "drm@gmail.com" && (
+      {val === "drm@gmail.com" && (
         <div className="p-4 m-10 bg-secondary rounded-xl">
           <div className="flex justify-center">
             <h1 className="mt-10 text-4xl font-bold">
@@ -878,9 +880,9 @@ const SearchForm = () => {
           </TableContainer>
         </div>
       )}
-      {val !== "hq@gmail.com" && <Hq />}
-      {/* {val=="bo@gmail.com"} */}
-      {/* 12month table  its common for all table*/}
+      {val === "hq@gmail.com" && <Hq />}
+      {val == "bo@gmail.com" && <BOIForm />}
+      <AllMonths />
     </>
   );
 };

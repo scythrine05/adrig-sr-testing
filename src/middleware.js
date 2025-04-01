@@ -32,8 +32,8 @@ export async function middleware(request) {
   }
 
   // Check for authentication
-  const sessionToken = request.cookies.get("__Secure-next-auth.session-token");
-  //const sessionToken = request.cookies.get("next-auth.session-token");
+  //const sessionToken = request.cookies.get("__Secure-next-auth.session-token");
+  const sessionToken = request.cookies.get("next-auth.session-token");
   if (!sessionToken) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
@@ -69,7 +69,7 @@ export async function middleware(request) {
       return NextResponse.next();
     }
   }
-
+  
   // Admin routes protection
   if (pathname.startsWith("/ad/")) {
     if (userRole !== "admin") {
