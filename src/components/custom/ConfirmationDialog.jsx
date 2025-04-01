@@ -136,7 +136,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
           
           <div className="bg-blue-50 p-4 rounded-lg mb-4">
             <p className="text-lg font-semibold mb-2">
-              Your request for {safeGet('missionBlock')} on {formatDate(safeGet('date'))} from {formatTime(safeGet('demandTimeFrom'))} to {formatTime(safeGet('demandTimeTo'))} in section {safeGet('selectedSection')} is ready to be submitted.
+              Your request for traffic block {safeGet('missionBlock')} on {formatDate(safeGet('date'))} from {formatTime(safeGet('demandTimeFrom'))} to {formatTime(safeGet('demandTimeTo'))} in section {safeGet('selectedSection')} is ready to be submitted.
             </p>
             <p className="text-sm text-gray-600">
               Please review all details below before final submission.
