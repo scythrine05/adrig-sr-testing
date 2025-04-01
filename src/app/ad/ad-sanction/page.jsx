@@ -443,7 +443,7 @@ const SearchForm = () => {
                     <TableCell>{request.date}</TableCell>
                     <TableCell>{request.selectedDepartment}</TableCell>
                     <TableCell>{request.selectedSection}</TableCell>
-                    <TableCell>{request.stationID}</TableCell>
+                    {/* <TableCell>{request.stationID}</TableCell> */}
                     <TableCell>{request.missionBlock}</TableCell>
                     <TableCell>{request.workDescription}</TableCell>
                     <TableCell>{request.workType}</TableCell>
