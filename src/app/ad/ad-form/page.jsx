@@ -72,7 +72,7 @@ const SearchForm = () => {
       try {
         const res = await getFormDataAll();
         // setFilteredRequests(res.requestData);
-        const formattedData = formatData(res.requestData);
+        const formattedData = await formatData(res.requestData);
         const finalData = formattedData.map((e) => {
           return {
             ...e,
@@ -546,7 +546,7 @@ const SearchForm = () => {
                 <tr className="">
                   {[
                     { id: "requestId", label: "Request ID" },
-                    { id: "corridorType", label: "Corridor Type" },
+                    // { id: "corridorType", label: "Corridor Type" },
                     { id: "date", label: "Date of Block Request" },
                     { id: "selectedDepartment", label: "Department" },
                     { id: "selectedSection", label: "MajorSection" },
@@ -620,9 +620,9 @@ const SearchForm = () => {
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.requestId}
                       </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.corridorType}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.date}
                       </td>
