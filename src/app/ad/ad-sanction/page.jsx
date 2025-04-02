@@ -314,7 +314,7 @@ const SearchForm = () => {
                   },
                   {
                     id: "missionBlock",
-                    label: "Block Section",
+                    label: "Block Section/Yard",
                     filterable: false,
                   },
                   { id: "workType", label: "Work Type", filterable: true },

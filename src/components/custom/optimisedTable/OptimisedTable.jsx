@@ -303,7 +303,7 @@ export default function OptimisedTable() {
               <th className="p-3 text-left">Date of Block Request</th>
               {/* <th className="p-3 text-left">Department</th> */}
               <th className="p-3 text-left">Major Section</th>
-              <th className="p-3 text-left">Block Section</th>
+              <th className="p-3 text-left">Block Sectio/Yard</th>
               <th className="p-3 text-left">Selected Block</th>
               <th className="p-3 text-left">Work Type</th>
               <th className="p-3 text-left">Activity</th>
@@ -508,7 +508,7 @@ export default function OptimisedTable() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                   <strong className="text-right pr-2 border-r border-gray-200">
-                    Block Section:
+                    Block Section/Yard:
                   </strong>
                   <span className="pl-2">{request.stationID}</span>
                 </div>

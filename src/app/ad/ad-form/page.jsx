@@ -552,7 +552,7 @@ const SearchForm = () => {
                     { id: "selectedSection", label: "MajorSection" },
                     { id: "selectedDepo", label: "Depo/SSE" },
                     // { id: 'stationID', label: 'Block Section' },
-                    { id: "missionBlock", label: "Block Section" },
+                    { id: "missionBlock", label: "Block Section/Yard" },
 
                     { id: "workType", label: "Work Type" },
                     { id: "workDescription", label: "Activity" },
@@ -717,7 +717,7 @@ const SearchForm = () => {
                     { id: "selectedSection", label: "MajorSection" },
                     { id: "selectedDepo", label: "Depo/SSE" },
                     // { id: 'stationID', label: 'Block Section' },
-                    { id: "missionBlock", label: "Block Section" },
+                    { id: "missionBlock", label: "Block Section/Yard" },
                     { id: "corridorType", label: "Corridor Type" },
                     { id: "workType", label: "Work Type" },
                     { id: "workDescription", label: "Activity" },
@@ -885,7 +885,7 @@ const SearchForm = () => {
                         { id: "selectedSection", label: "MajorSection" },
                         { id: "selectedDepo", label: "Depo/SSE" },
                         // { id: 'stationID', label: 'Block Section' },
-                        { id: "missionBlock", label: "Block Section" },
+                        { id: "missionBlock", label: "Block Section/Yard" },
                         { id: "corridorType", label: "Corridor Type" },
                         { id: "workType", label: "Work Type" },
                         { id: "workDescription", label: "Activity" },
@@ -1157,7 +1157,7 @@ const SearchForm = () => {
                     {request.selectedDepo}
                   </div>
                   <div className="border border-gray-300 p-2">
-                    <strong>Block Section:</strong>
+                    <strong>Block Section/Yard:</strong>
                   </div>
                   <div className="border border-gray-300 p-2">
                     {request.stationID}
@@ -1319,7 +1319,7 @@ const SearchForm = () => {
                     {request.selectedDepo}
                   </div>
                   <div className="border border-gray-300 p-2">
-                    <strong>Block Section:</strong>
+                    <strong>Block Section/Yard:</strong>
                   </div>
                   <div className="border border-gray-300 p-2">
                     {request.stationID}
@@ -1484,7 +1484,7 @@ const SearchForm = () => {
                       {request.selectedDepo}
                     </div>
                     <div className="border border-gray-300 p-2">
-                      <strong>Block Section:</strong>
+                      <strong>Block Section/Yard:</strong>
                     </div>
                     <div className="border border-gray-300 p-2">
                       {request.stationID}

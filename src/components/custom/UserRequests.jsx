@@ -537,7 +537,7 @@ export default function UserRequests({ date }) {
                     <strong>Block Section</strong>
                   </TableCell> */}
                   <TableCell>
-                    <strong>Block Section</strong>
+                    <strong>Block Section/Yard</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Line Selected</strong>
@@ -811,7 +811,7 @@ export default function UserRequests({ date }) {
                     </div>
                     <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                       <strong className="text-right pr-2 border-r border-gray-200">
-                        Block Section:
+                        Block Section/Yard:
                       </strong>
                       <span className="pl-2">{request.stationID}</span>
                     </div>

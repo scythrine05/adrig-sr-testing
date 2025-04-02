@@ -176,7 +176,7 @@ const FormLayout = ({
       {/* Mission Block Dropdown */}
       <div className="mb-4">
         <label className="block text-sm font-medium">
-          Block Section <span className="text-black">*</span>
+          Block Section/Yard <span className="text-black">*</span>
         </label>
         <MultipleSelect
           items={handleGetTheListForYard()}
