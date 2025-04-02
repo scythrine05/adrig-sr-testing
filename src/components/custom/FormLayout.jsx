@@ -41,7 +41,7 @@ const FormLayout = ({
         {/* Date Input */}
         <div>
           <label className="block text-sm font-medium">
-            Date of Block<span className="text-black">*</span>
+            Date of Block<span style={{ color: "red" }}>*</span>
           </label>
           <input
             ref={handleInputRefsChange(0)}
@@ -74,7 +74,7 @@ const FormLayout = ({
         {/* Department Dropdown */}
         <div>
           <label className="block text-sm font-medium">
-            Department <span className="text-black">*</span>
+            Department <span style={{ color: "red" }}>*</span>
           </label>
           <select
             ref={handleInputRefsChange(1)}
@@ -96,7 +96,7 @@ const FormLayout = ({
         {/* Major Section Dropdown */}
         <div>
           <label className="block text-sm font-medium">
-            Major Section <span className="text-black">*</span>
+            Major Section <span style={{ color: "red" }}>*</span>
           </label>
           <select
             ref={handleInputRefsChange(2)}
@@ -176,7 +176,7 @@ const FormLayout = ({
       {/* Mission Block Dropdown */}
       <div className="mb-4">
         <label className="block text-sm font-medium">
-          Block Section/Yard <span className="text-black">*</span>
+          Block Section/Yard <span className="red">*</span>
         </label>
         <MultipleSelect
           items={handleGetTheListForYard()}
@@ -222,7 +222,7 @@ const FormLayout = ({
         <div>
           <label className="block text-sm font-medium">
             Preferred Time (Click On the Clock To Select){" "}
-            <span className="text-black">*</span>
+            <span style={{ color: "red" }}>*</span>
           </label>
           <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 my-2">
             <div className="font-semibold p-2">From (Hrs)</div>

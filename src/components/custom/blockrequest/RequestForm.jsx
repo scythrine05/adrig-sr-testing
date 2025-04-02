@@ -413,8 +413,6 @@ export default function RequestForm2(props) {
           } else if (formData.oheDisconnection) {
             formData.ohDisconnection = formData.oheDisconnection;
           }
-
-          //RequestId Generator
           const currentDate = new Date()
             .toLocaleDateString("en-IN", {
               month: "2-digit",
@@ -432,7 +430,6 @@ export default function RequestForm2(props) {
             sequence,
           });
           formData.requestId = requestId;
-
           console.log("Submitting form data:", formData);
           const res = await postStagingFormData(formData, UserData?.id);
           console.log("Form submission result:", res);
@@ -713,6 +710,7 @@ export default function RequestForm2(props) {
           ))}
         {formData.selectedDepartment === "SIG" && (
           <div className="flex space-x-2">
+
             <input
               type="text"
               value={formData.workLocationFrom}
@@ -835,7 +833,8 @@ export default function RequestForm2(props) {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium">
+
+              <label className="block text-sm font-medium text-black">
                 Caution speed <span style={{ color: "red" }}>*</span>
               </label>
               <input
@@ -852,7 +851,7 @@ export default function RequestForm2(props) {
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-black">
-            Whether Power Block Disconnection Needed{" "}
+            Whether Power Block Needed{" "}
             <span style={{ color: "red" }}>*</span>
           </label>
           <div className="flex space-x-4">
@@ -905,11 +904,11 @@ export default function RequestForm2(props) {
             </div>
             <div>
               <label className="block text-sm font-medium text-black">
-                Disconnection Requirements{" "}
+                Power Block Requirements{" "}
                 <span style={{ color: "red" }}>*</span>
               </label>
               <div className="flex space-x-4 mt-1">
-                <label>
+                <label className="text-black">
                   <input
                     type="checkbox"
                     name="trdDisconnectionRequirements"
@@ -933,7 +932,7 @@ export default function RequestForm2(props) {
                   />{" "}
                   Gears Required
                 </label>
-                <label>
+                <label className="text-black">
                   <input
                     type="checkbox"
                     name="trdDisconnectionRequirements"
@@ -1029,12 +1028,12 @@ export default function RequestForm2(props) {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">
+              <label className="block text-sm font-medium text-black">
                 Disconnection Requirements{" "}
                 <span style={{ color: "red" }}>*</span>
               </label>
               <div className="flex space-x-4 mt-1">
-                <label>
+                <label className="text-black">
                   <input
                     type="checkbox"
                     name="sigDisconnectionRequirements"
@@ -1058,7 +1057,7 @@ export default function RequestForm2(props) {
                   />{" "}
                   Gears Required
                 </label>
-                <label>
+                <label className="text-black">
                   <input
                     type="checkbox"
                     name="sigDisconnectionRequirements"

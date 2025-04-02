@@ -335,7 +335,7 @@ const SearchForm = () => {
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="text-center sm:text-left">
                   <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    Optimised Table
+                    Traffic Admin Optimised Table
                   </h1>
                   <p className="text-sm sm:text-base text-gray-600">
                     View and manage optimised requests
@@ -621,7 +621,7 @@ const SearchForm = () => {
                           ].map((column) => (
                             <TableCell key={column.id}>
                               <div className="flex items-center justify-between">
-                              <strong>{column.label}</strong>
+                                <strong>{column.label}</strong>
                                 {column.filterable && (
                                   <>
                                     <span
@@ -692,6 +692,21 @@ const SearchForm = () => {
                               </TableCell>
                               <TableCell>{request.action}</TableCell>
                               <TableCell>{request.remarks}</TableCell>
+                              <TableCell>
+                                {(request.final === "" ||
+                                  request.final !== "set") && (
+                                  <div className="pt-2">
+                                    <button
+                                      className="w-full bg-blue-500 text-white p-2 rounded-lg"
+                                      onClick={() =>
+                                        editRequestHandler(request)
+                                      }
+                                    >
+                                      Edit Request
+                                    </button>
+                                  </div>
+                                )}
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (

@@ -174,12 +174,15 @@ const SearchForm = () => {
       title: "Optimization In progress",
       description: "Your Request Is Under Process! Please Wait",
     });
+    const filteredRequestsWithoutSanctionedStatus = filteredRequests.map(
+      ({ sanctionedStatus, ...rest }) => rest
+    );
     try {
       if (currentReq != null) {
         const res = await axios.post(
           `https://sr-optimization.vercel.app/backend/optimize`,
           {
-            requestData: filteredRequests,
+            requestData: filteredRequestsWithoutSanctionedStatus,
           }
         );
 
@@ -545,8 +548,8 @@ const SearchForm = () => {
               <thead>
                 <tr className="">
                   {[
-                    { id: "requestId", label: "Request ID" },
-                    { id: "corridorType", label: "Corridor Type" },
+                    // { id: "requestId", label: "Request ID" },
+                    // { id: "corridorType", label: "Corridor Type" },
                     { id: "date", label: "Date of Block Request" },
                     { id: "selectedDepartment", label: "Department" },
                     { id: "selectedSection", label: "MajorSection" },
@@ -617,12 +620,12 @@ const SearchForm = () => {
                 {filteredCorridorRequests.length > 0 ? (
                   filteredCorridorRequests.map((request) => (
                     <tr key={request.requestId} className="hover:bg-gray-50">
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.requestId}
                       </td>
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.corridorType}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.date}
                       </td>
@@ -711,7 +714,7 @@ const SearchForm = () => {
               <thead>
                 <tr className="">
                   {[
-                    { id: "requestId", label: "Request ID" },
+                    // { id: "requestId", label: "Request ID" },
                     { id: "date", label: "Date of Block Request" },
                     { id: "selectedDepartment", label: "Department" },
                     { id: "selectedSection", label: "MajorSection" },
@@ -784,9 +787,9 @@ const SearchForm = () => {
                 {filteredNonCorridorRequests.length > 0 ? (
                   filteredNonCorridorRequests.map((request) => (
                     <tr key={request.requestId} className="hover:bg-gray-50">
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.requestId}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.date}
                       </td>

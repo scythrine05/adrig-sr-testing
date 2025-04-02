@@ -304,7 +304,7 @@ export default function OptimisedTable() {
               {/* <th className="p-3 text-left">Department</th> */}
               <th className="p-3 text-left">Major Section</th>
               <th className="p-3 text-left">Block Sectio/Yard</th>
-              <th className="p-3 text-left">Selected Block</th>
+              {/* <th className="p-3 text-left">Selected Block</th> */}
               <th className="p-3 text-left">Work Type</th>
               <th className="p-3 text-left">Activity</th>
               <th className="p-3 text-left">Line Selected</th>
@@ -339,7 +339,7 @@ export default function OptimisedTable() {
                   <td className="p-3">{request.date}</td>
                   {/* <td className="p-3">{request.selectedDepartment}</td> */}
                   <td className="p-3">{request.selectedSection}</td>
-                  <td className="p-3">{request.stationID}</td>
+                  {/* <td className="p-3">{request.stationID}</td> */}
                   <td className="p-3">{request.missionBlock}</td>
                   <td className="p-3">{request.workType}</td>
                   <td className="p-3">{request.workDescription}</td>
