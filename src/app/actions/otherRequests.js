@@ -117,7 +117,7 @@ export async function updateOheResponse(requestId, oheResponse) {
 // Function to check if a requestId exists in the sanction table
 export async function isRequestIdInSanctionTable(requestId) {
   try {
-    console.log(`Checking if requestId ${requestId} exists in sanctiontable`);
+    //console.log(`Checking if requestId ${requestId} exists in sanctiontable`);
 
     const record = await prisma.sanctiontable.findUnique({
       where: {
@@ -126,7 +126,7 @@ export async function isRequestIdInSanctionTable(requestId) {
     });
 
     const exists = record !== null;
-    console.log(`RequestId ${requestId} exists:`, exists);
+    //console.log(`RequestId ${requestId} exists:`, exists);
     return exists;
   } catch (error) {
     console.error("Error checking requestId in sanctiontable:", error);

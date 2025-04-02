@@ -22,11 +22,13 @@ export const formatData = async (requestData) => {
   for (const request of requestData) {
     const selectedLineData = request.selectedLine;
 
-    // Check if the request is sanctioned
-    const isSanctioned = await isRequestIdInSanctionTable(request.requestId);
-
     // If selectedLine is not in the expected format, create a single request
-    if (!selectedLineData || (!selectedLineData.station && !selectedLineData.yard)) {
+    if (
+      !selectedLineData ||
+      (!selectedLineData.station && !selectedLineData.yard)
+    ) {
+      // Check if the request is sanctioned
+      const isSanctioned = await isRequestIdInSanctionTable(request.requestId);
       newRequests.push({
         ...request,
         selectedLine: request.selectedLine || "Not Specified",
@@ -49,6 +51,11 @@ export const formatData = async (requestData) => {
         subRequest.selectedLine = station && station.split(":")[1];
         subRequest.selectedStream = "Not Applicable";
         subRequest.missionBlock = station && station.split(":")[0];
+
+        // Check if the request is sanctioned
+        const isSanctioned = await isRequestIdInSanctionTable(
+          subRequest.requestId
+        );
 
         const otherLines = request.otherLinesAffected?.station?.map((e) => {
           const key = e?.split(":")[0];
@@ -73,6 +80,11 @@ export const formatData = async (requestData) => {
         subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
         subRequest.selectedLine = yard;
 
+        // Check if the request is sanctioned
+        const isSanctioned = await isRequestIdInSanctionTable(
+          subRequest.requestId
+        );
+
         const otherLines = request.otherLinesAffected?.yard?.map((e) => {
           const key = e?.split(":")[0];
           if (key == subRequest.missionBlock) {
@@ -93,12 +105,10 @@ export const formatData = async (requestData) => {
   return updatedData;
 };
 
-
 import validateForm from "../components/custom/blockrequest/formValidation";
 import { useState } from "react";
 
-
-export const useFormState = () =>{
+export const useFormState = () => {
   const [formData, setFormData] = useState({
     date: "",
     selectedDepartment: "",
@@ -110,7 +120,7 @@ export const useFormState = () =>{
       station: [],
       yard: [],
     },
-    selectedStream: "", 
+    selectedStream: "",
     missionBlock: "",
     cautionRequired: "",
     cautionSpeed: "",
@@ -135,8 +145,7 @@ export const useFormState = () =>{
     selectedDepo: "",
   });
   return [formData, setFormData];
-}
-
+};
 
 export const handleKeyDown = (e, index) => {
   const { key, target } = e;
@@ -156,9 +165,6 @@ export const handleKeyDown = (e, index) => {
     }
   }
 };
-
-
-
 
 export const formValidation = (value) => {
   let res = validateForm(value);
@@ -194,14 +200,11 @@ export const formValidation = (value) => {
 };
 
 export function revertCategoryFormat(formattedCategory) {
-if (formattedCategory === "Gear") {
-  return formattedCategory;
+  if (formattedCategory === "Gear") {
+    return formattedCategory;
+  }
+  return formattedCategory.split(" ").join("_");
 }
-return formattedCategory.split(" ").join("_");
-}
-
-
-
 
 export const handleMoveToNext = (index) => (e) => {
   if (e.target.value.length > 0 && inputRefs.current[index + 1]) {
@@ -209,59 +212,54 @@ export const handleMoveToNext = (index) => (e) => {
   }
 };
 
-
-
 //------------------------------------------------------------------------------------------
 
 // SignIn and SignUp
 // fn list -> handleVerifyOtp, formatTime
 
-
 export const handleVerifyOtp = async () => {
-    const res = await verifyHandler(formValues.username, otp, code);
-    if (res.success != true) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-
+  const res = await verifyHandler(formValues.username, otp, code);
+  if (res.success != true) {
+    return false;
+  } else {
+    return true;
+  }
+};
 
 export const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
-      .toString()
-      .padStart(2, "0")}`;
-  };
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+    .toString()
+    .padStart(2, "0")}`;
+};
 
 // ----------------------------------------------------------------------------------------------------------
 
 export const formatVisualizationData = (data) => {
   if (!Array.isArray(data)) return [];
-  
-  return data.map(item => {
+
+  return data.map((item) => {
     // Ensure date is in correct format
-    const date = new Date(item.date).toISOString().split('T')[0];
-    
+    const date = new Date(item.date).toISOString().split("T")[0];
+
     // Format time strings to ensure they are in HH:mm format
     const formatTime = (timeStr) => {
-      if (!timeStr) return '00:00';
+      if (!timeStr) return "00:00";
       // If time is in 12-hour format, convert to 24-hour
-      const [time, modifier] = timeStr.split(' ');
-      let [hours, minutes] = time.split(':');
-      
+      const [time, modifier] = timeStr.split(" ");
+      let [hours, minutes] = time.split(":");
+
       if (modifier) {
-        if (modifier.toLowerCase() === 'pm' && hours < 12) {
+        if (modifier.toLowerCase() === "pm" && hours < 12) {
           hours = parseInt(hours) + 12;
         }
-        if (modifier.toLowerCase() === 'am' && hours === '12') {
-          hours = '00';
+        if (modifier.toLowerCase() === "am" && hours === "12") {
+          hours = "00";
         }
       }
-      
-      return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+
+      return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
     };
 
     return {
@@ -272,4 +270,3 @@ export const formatVisualizationData = (data) => {
     };
   });
 };
-

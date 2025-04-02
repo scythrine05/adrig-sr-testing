@@ -737,7 +737,7 @@ export default function UserRequests({ date }) {
                           fontWeight: "bold",
                         }}
                       >
-                        {request.sanctionedStatus ? "A" : "UP"}
+                        {request.sanctionedStatus ? "S" : "UP"}
                       </TableCell>
                       <TableCell
                         sx={{
