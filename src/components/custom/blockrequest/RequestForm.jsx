@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { postStagingFormData } from "../../../app/actions/stagingform";
+import {
+  postStagingFormData,
+  getRequestCount,
+} from "../../../app/actions/stagingform";
 import { getUserId } from "../../../app/actions/user";
 import { data, workData } from "../../../lib/store";
 import MultipleSelectOld from "./MultipleSelectOld";
@@ -412,14 +415,20 @@ export default function RequestForm2(props) {
           }
 
           //RequestId Generator
-          const currentDate = new Date().toISOString().split("T")[0];
-          const requestCount = Math.floor(Math.random() * 1000) + 1
-          const sequence = requestCount;
+          const currentDate = new Date()
+            .toLocaleDateString("en-IN", {
+              month: "2-digit",
+              year: "2-digit",
+            })
+            .replace("/", "-");
+          const requestCount = await getRequestCount();
+          const sequence = requestCount + 1;
+
           const requestId = generateRequestId({
             date: currentDate,
-            division: formData.selectedDepo || "UNKNOWN",
+            division: "1",
             department: formData.selectedDepartment,
-            section: formData.selectedSection,
+            section: formData.selectedDepo,
             sequence,
           });
           formData.requestId = requestId;

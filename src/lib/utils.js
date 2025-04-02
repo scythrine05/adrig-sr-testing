@@ -273,17 +273,30 @@ export const formatVisualizationData = (data) => {
 
 //RequestId Generator
 
-export const  generateRequestId = ({ date, division, department, section, sequence }) => {
+export const generateRequestId = ({
+  date,
+  division,
+  department,
+  section,
+  sequence,
+}) => {
   if (!date || !division || !department || !section || sequence == null) {
     throw new Error(
       "All parameters (date, division, department, section, sequence) are required."
     );
   }
 
+  const departmentAbbreviation = {
+    ENGG: "C",
+    TRD: "E",
+    SIG: "S",
+  };
+
+  const departmentCode = departmentAbbreviation[department] || department;
+
   // Format the sequence to always be 4 digits (e.g., 0001, 0002)
   const formattedSequence = sequence.toString().padStart(4, "0");
 
   // Combine the parts into the desired format
-  return `${date}/${division}/${department}/${section}/${formattedSequence}`;
-}
-
+  return `${date}/${division}/${departmentCode}/${section}/${formattedSequence}`;
+};

@@ -72,7 +72,7 @@ const SearchForm = () => {
       try {
         const res = await getFormDataAll();
         // setFilteredRequests(res.requestData);
-        const formattedData = formatData(res.requestData);
+        const formattedData = await formatData(res.requestData);
         const finalData = formattedData.map((e) => {
           return {
             ...e,
@@ -149,7 +149,7 @@ const SearchForm = () => {
       dateRange
     );
 
-    const formattedData = formatData(requests.res);
+    const formattedData = await formatData(requests.res);
     setFilteredRequests(formattedData);
 
     // Separate search results by corridor type
@@ -718,7 +718,7 @@ const SearchForm = () => {
                     { id: "selectedDepo", label: "Depo/SSE" },
                     // { id: 'stationID', label: 'Block Section' },
                     { id: "missionBlock", label: "Block Section/Yard" },
-                    { id: "corridorType", label: "Corridor Type" },
+                    // { id: "corridorType", label: "Corridor Type" },
                     { id: "workType", label: "Work Type" },
                     { id: "workDescription", label: "Activity" },
                     { id: "demandTimeFrom", label: "Demand Time (From)" },
@@ -803,9 +803,9 @@ const SearchForm = () => {
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.missionBlock}
                       </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.corridorType}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.workType}
                       </td>

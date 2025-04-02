@@ -9,7 +9,7 @@ export async function postStagingFormData(formData, userId) {
     } else if (formData.oheDisconnection) {
       formData.ohDisconnection = formData.oheDisconnection;
     }
-    
+
     console.log("Creating staging request with userId:", userId);
     //Create the staging request
     const res = await prisma.StagingRequests.create({
@@ -49,7 +49,7 @@ export async function postStagingFormData(formData, userId) {
         userId: userId,
       },
     });
-    
+
     console.log("Created staging request:", res);
     return res;
   } catch (error) {
@@ -66,9 +66,9 @@ export async function postStagingManagerFormData(formData, userId) {
     } else if (formData.oheDisconnection) {
       formData.ohDisconnection = formData.oheDisconnection;
     }
-    
+
     console.log("Creating manager staging request with managerId:", userId);
-    
+
     const res = await prisma.StagingRequests.create({
       data: {
         date: formData.date,
@@ -105,7 +105,7 @@ export async function postStagingManagerFormData(formData, userId) {
         managerId: userId,
       },
     });
-    
+
     console.log("Created manager staging request:", res);
     return res;
   } catch (error) {
@@ -122,7 +122,7 @@ export async function updateStagingFormData(formData, requestId) {
     } else if (formData.oheDisconnection) {
       formData.ohDisconnection = formData.oheDisconnection;
     }
-    
+
     const res = await prisma.StagingRequests.update({
       where: {
         requestId: requestId,
@@ -162,7 +162,7 @@ export async function updateStagingFormData(formData, requestId) {
         trdDisconnectionRequirements: formData.trdDisconnectionRequirements,
       },
     });
-    
+
     console.log("Updated staging request:", res);
     return res;
   } catch (error) {
@@ -173,24 +173,27 @@ export async function updateStagingFormData(formData, requestId) {
 
 export async function getStagingFormData(id, includeArchived = false) {
   const whereClause = { userId: id };
-  
+
   // By default, exclude archived requests
   if (!includeArchived) {
     whereClause.archived = false;
   }
-  
+
   const res = await prisma.StagingRequests.findMany({ where: whereClause });
   return { requestData: res };
 }
 
-export async function getStagingFormDataByRequestId(id, includeArchived = false) {
+export async function getStagingFormDataByRequestId(
+  id,
+  includeArchived = false
+) {
   const whereClause = { requestId: id };
-  
+
   // By default, exclude archived requests
   if (!includeArchived) {
     whereClause.archived = false;
   }
-  
+
   const res = await prisma.StagingRequests.findMany({
     where: whereClause,
   });
@@ -201,36 +204,51 @@ export async function deleteStagingFormData(id) {
   // Instead of deleting, update the request with an 'archived' flag
   const res = await prisma.StagingRequests.update({
     where: { requestId: id },
-    data: { archived: true }
+    data: { archived: true },
   });
   return { requestData: res };
 }
 
-export async function getStagingFormDataByDepartment(dept, includeArchived = false) {
+export async function getStagingFormDataByDepartment(
+  dept,
+  includeArchived = false
+) {
   const whereClause = {
-    selectedDepartment: dept
+    selectedDepartment: dept,
   };
-  
+
   // By default, exclude archived requests unless specifically requested
   if (!includeArchived) {
     whereClause.archived = false;
   }
-  
+
   const res = await prisma.StagingRequests.findMany({
-    where: whereClause
+    where: whereClause,
   });
-  
+
   return res;
 }
 
 export async function getStagingFormDataAll(includeArchived = false) {
   const whereClause = {};
-  
+
   // By default, exclude archived requests
   if (!includeArchived) {
     whereClause.archived = false;
   }
-  
+
   const res = await prisma.StagingRequests.findMany({ where: whereClause });
   return { requestData: res };
+}
+
+//Request Count from StagingRequests table
+
+export async function getRequestCount() {
+  try {
+    const count = await prisma.StagingRequests.count();
+    return count;
+  } catch (error) {
+    console.error("Error fetching request count:", error);
+    throw new Error("Failed to fetch request count");
+  }
 }
