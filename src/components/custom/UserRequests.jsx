@@ -727,16 +727,16 @@ export default function UserRequests({ date }) {
                       >
                         {request.ManagerResponse || "Pending"}
                       </TableCell>
+                      {/* Display abbreviation */}
                       <Tooltip
                         title={
-                          request.sanctionedStatus
-                            ? "Yes"
-                            : "Under Progress"
+                          request.sanctionedStatus ? (
+                            <span className="text-sm">Sanctioned</span>
+                          ) : (
+                            <span className="text-sm">Under Progress</span>
+                          )
                         }
-                        arrow 
-                        sx={{
-                         backgroundColor: 'red',
-                        }}
+                        arrow
                       >
                         <TableCell
                           sx={{
@@ -751,7 +751,6 @@ export default function UserRequests({ date }) {
                           }}
                         >
                           <span>{request.sanctionedStatus ? "Y" : "UP"}</span>{" "}
-                          {/* Display abbreviation */}
                         </TableCell>
                       </Tooltip>
                       <TableCell

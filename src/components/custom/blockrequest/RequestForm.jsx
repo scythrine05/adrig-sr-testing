@@ -818,7 +818,7 @@ export default function RequestForm2(props) {
                   type="text"
                   value={formData.cautionLocationFrom}
                   name="cautionLocationFrom"
-                  className="mt-1 w-1/2 p-2 border rounded"
+                  className="mt-1 w-1/2 p-2 border rounded text-black"
                   placeholder="Approximately from"
                   onChange={handleChange}
                 />
@@ -826,7 +826,7 @@ export default function RequestForm2(props) {
                   type="text"
                   value={formData.cautionLocationTo}
                   name="cautionLocationTo"
-                  className="mt-1 w-1/2 p-2 border rounded"
+                  className="mt-1 w-1/2 p-2 border rounded text-black"
                   placeholder="Approximately to"
                   onChange={handleChange}
                 />
@@ -841,7 +841,7 @@ export default function RequestForm2(props) {
                 type="text"
                 value={formData.cautionSpeed}
                 name="cautionSpeed"
-                className="mt-1 w-full p-2 border rounded"
+                className="mt-1 w-full p-2 border rounded text-black"
                 placeholder="In format km/h"
                 onChange={handleChange}
               />
@@ -888,7 +888,7 @@ export default function RequestForm2(props) {
                   type="text"
                   value={formData.elementarySectionFrom}
                   name="elementarySectionFrom"
-                  className="mt-1 w-1/2 p-2 border rounded "
+                  className="mt-1 w-1/2 p-2 border rounded text-black"
                   placeholder="from"
                   onChange={handleChange}
                 />
@@ -896,7 +896,7 @@ export default function RequestForm2(props) {
                   type="text"
                   value={formData.elementarySectionTo}
                   name="elementarySectionTo"
-                  className="mt-1 w-1/2 p-2 border rounded"
+                  className="mt-1 w-1/2 p-2 border rounded text-black"
                   placeholder="to"
                   onChange={handleChange}
                 />
@@ -991,7 +991,7 @@ export default function RequestForm2(props) {
         {formData.sigDisconnection === "Yes" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium">
+              <label className="block text-sm font-medium text-black">
                 {formData.selectedDepartment === "SIG" ||
                 formData.selectedDepartment === "ENGG"
                   ? "Line"
@@ -1003,7 +1003,7 @@ export default function RequestForm2(props) {
                   type="text"
                   value={formData.sigElementarySectionFrom}
                   name="sigElementarySectionFrom"
-                  className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
+                  className="mt-1 w-1/2 p-2 border border-slate-900 rounded text-black"
                   onChange={handleChange}
                 />
               ) : (
@@ -1012,7 +1012,7 @@ export default function RequestForm2(props) {
                     type="text"
                     value={formData.sigElementarySectionFrom}
                     name="sigElementarySectionFrom"
-                    className="mt-1 w-1/2 p-2 border rounded"
+                    className="mt-1 w-1/2 p-2 border rounded text-black"
                     placeholder="from"
                     onChange={handleChange}
                   />
@@ -1020,7 +1020,7 @@ export default function RequestForm2(props) {
                     type="text"
                     value={formData.sigElementarySectionTo}
                     name="sigElementarySectionTo"
-                    className="mt-1 w-1/2 p-2 border rounded"
+                    className="mt-1 w-1/2 p-2 border rounded text-black"
                     placeholder="to"
                     onChange={handleChange}
                   />

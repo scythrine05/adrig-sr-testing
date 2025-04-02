@@ -708,7 +708,7 @@ const SearchForm = () => {
 
             {/* Non-Corridor Requests Table */}
             <h2 className="text-2xl font-bold text-green-700 my-5">
-              Non-Corridor Requests
+              Outside Corridor Requests
             </h2>
             <table className="w-full border-collapse border border-gray-300 mb-10">
               <thead>
