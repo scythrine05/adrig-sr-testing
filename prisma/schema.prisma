@@ -42,7 +42,7 @@ model Manager {
 }
 
 model StagingRequests {
-  requestId                String   @id @default(dbgenerated("((to_char(CURRENT_TIMESTAMP, 'YYYYMMDD'::text) || '-'::text) || lpad((nextval('request_id_seq'::regclass))::text, 6, '0'::text))"))
+  requestId                String   @id
   date                     String
   selectedDepartment       String
   selectedSection          String
