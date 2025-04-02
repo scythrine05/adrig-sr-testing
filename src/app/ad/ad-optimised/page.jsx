@@ -510,7 +510,7 @@ const SearchForm = () => {
                             },
                             {
                               id: "missionBlock",
-                              label: "Block Section",
+                              label: "Block Section/Yard",
                               filterable: false,
                             },
                             {
@@ -761,7 +761,7 @@ const SearchForm = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                           <strong className="text-right pr-2 border-r border-gray-200">
-                            Block Section:
+                            Block Section/Yard:
                           </strong>
                           <span className="pl-2">{request.stationID}</span>
                         </div>

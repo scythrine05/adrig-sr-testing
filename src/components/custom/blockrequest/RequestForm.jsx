@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { postStagingFormData } from "../../../app/actions/stagingform";
+import {
+  postStagingFormData,
+  getRequestCount,
+} from "../../../app/actions/stagingform";
 import { getUserId } from "../../../app/actions/user";
 import { data, workData } from "../../../lib/store";
 import MultipleSelectOld from "./MultipleSelectOld";
@@ -12,6 +15,7 @@ import {
   handleKeyDown,
   formValidation,
   revertCategoryFormat,
+  generateRequestId,
 } from "../../../lib/utils";
 import FormLayout from "../FormLayout";
 import ConfirmationDialog from "../ConfirmationDialog";
@@ -409,7 +413,23 @@ export default function RequestForm2(props) {
           } else if (formData.oheDisconnection) {
             formData.ohDisconnection = formData.oheDisconnection;
           }
+          const currentDate = new Date()
+            .toLocaleDateString("en-IN", {
+              month: "2-digit",
+              year: "2-digit",
+            })
+            .replace("/", "-");
+          const requestCount = await getRequestCount();
+          const sequence = requestCount + 1;
 
+          const requestId = generateRequestId({
+            date: currentDate,
+            division: "1",
+            department: formData.selectedDepartment,
+            section: formData.selectedDepo,
+            sequence,
+          });
+          formData.requestId = requestId;
           console.log("Submitting form data:", formData);
           const res = await postStagingFormData(formData, UserData?.id);
           console.log("Form submission result:", res);
@@ -690,6 +710,7 @@ export default function RequestForm2(props) {
           ))}
         {formData.selectedDepartment === "SIG" && (
           <div className="flex space-x-2">
+
             <input
               type="text"
               value={formData.workLocationFrom}
@@ -812,6 +833,7 @@ export default function RequestForm2(props) {
               </div>
             </div>
             <div>
+
               <label className="block text-sm font-medium text-black">
                 Caution speed <span style={{ color: "red" }}>*</span>
               </label>

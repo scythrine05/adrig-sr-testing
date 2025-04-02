@@ -9,6 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
 import { getFormData } from "../../app/actions/formdata";
 import EditRequest from "../custom/EditRequest";
@@ -537,7 +538,7 @@ export default function UserRequests({ date }) {
                     <strong>Block Section</strong>
                   </TableCell> */}
                   <TableCell>
-                    <strong>Block Section</strong>
+                    <strong>Block Section/Yard</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Line Selected</strong>
@@ -726,19 +727,33 @@ export default function UserRequests({ date }) {
                       >
                         {request.ManagerResponse || "Pending"}
                       </TableCell>
-                      <TableCell
+                      <Tooltip
+                        title={
+                          request.sanctionedStatus
+                            ? "Yes"
+                            : "Under Progress"
+                        }
+                        arrow 
                         sx={{
-                          backgroundColor: "#F3E8FF",
-                          position: "sticky",
-                          right: "80px",
-                          zIndex: 8,
-                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                          color: request.sanctionedStatus ? "green" : "red",
-                          fontWeight: "bold",
+                         backgroundColor: 'red',
                         }}
                       >
-                        {request.sanctionedStatus ? "A" : "UP"}
-                      </TableCell>
+                        <TableCell
+                          sx={{
+                            backgroundColor: "#F3E8FF",
+                            position: "sticky",
+                            right: "80px",
+                            zIndex: 8,
+                            boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                            color: request.sanctionedStatus ? "green" : "red",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <span>{request.sanctionedStatus ? "Y" : "UP"}</span>{" "}
+                          {/* Display abbreviation */}
+                        </TableCell>
+                      </Tooltip>
                       <TableCell
                         sx={{
                           backgroundColor: "#FFEFF4",
@@ -811,7 +826,7 @@ export default function UserRequests({ date }) {
                     </div>
                     <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                       <strong className="text-right pr-2 border-r border-gray-200">
-                        Block Section:
+                        Block Section/Yard:
                       </strong>
                       <span className="pl-2">{request.stationID}</span>
                     </div>
