@@ -9,6 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
 import { getFormData } from "../../app/actions/formdata";
 import EditRequest from "../custom/EditRequest";
@@ -735,9 +736,22 @@ export default function UserRequests({ date }) {
                           boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                           color: request.sanctionedStatus ? "green" : "red",
                           fontWeight: "bold",
+                          cursor: "pointer",
                         }}
                       >
-                        {request.sanctionedStatus ? "S" : "UP"}
+                        <Tooltip
+                          title={
+                            request.sanctionedStatus ? (
+                              <span className="text-sm">Sanctioned</span>
+                            ) : (
+                              <span className="text-sm">Under Progress</span>
+                            )
+                          }
+                          arrow
+                        >
+                          <span>{request.sanctionedStatus ? "S" : "UP"}</span>{" "}
+                          {/* Display abbreviation */}
+                        </Tooltip>
                       </TableCell>
                       <TableCell
                         sx={{
