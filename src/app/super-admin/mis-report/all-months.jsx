@@ -189,7 +189,6 @@ const AllMonths = () => {
           )
         )
       : allRequests;
-    console.log("Grouped Data:", grouped);
     return groupByMonth(filteredData);
   }, [allRequests, filters]);
 
