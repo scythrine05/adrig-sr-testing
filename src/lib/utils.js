@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
 import { split } from "postcss/lib/list";
 import { twMerge } from "tailwind-merge";
-import { isRequestIdInSanctionTable } from "../app/actions/otherRequests";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -27,15 +26,12 @@ export const formatData = async (requestData) => {
       !selectedLineData ||
       (!selectedLineData.station && !selectedLineData.yard)
     ) {
-      // Check if the request is sanctioned
-      const isSanctioned = await isRequestIdInSanctionTable(request.requestId);
       newRequests.push({
         ...request,
         selectedLine: request.selectedLine || "Not Specified",
         selectedStream: "Not Applicable",
         missionBlock: request.missionBlock || "Not Specified",
         otherLinesAffected: request.otherLinesAffected || "None",
-        sanctionedStatus: isSanctioned, // Added sanctioned status
       });
       continue;
     }
@@ -52,11 +48,6 @@ export const formatData = async (requestData) => {
         subRequest.selectedStream = "Not Applicable";
         subRequest.missionBlock = station && station.split(":")[0];
 
-        // Check if the request is sanctioned
-        const isSanctioned = await isRequestIdInSanctionTable(
-          subRequest.requestId
-        );
-
         const otherLines = request.otherLinesAffected?.station?.map((e) => {
           const key = e?.split(":")[0];
           if (key == subRequest.missionBlock) {
@@ -66,8 +57,6 @@ export const formatData = async (requestData) => {
 
         subRequest.otherLinesAffected =
           otherLines != undefined ? otherLines.join(", ") : otherLines;
-
-        subRequest.sanctionedStatus = isSanctioned; // Add sanctioned status
         newRequests.push(subRequest);
       }
     }
@@ -80,11 +69,6 @@ export const formatData = async (requestData) => {
         subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
         subRequest.selectedLine = yard;
 
-        // Check if the request is sanctioned
-        const isSanctioned = await isRequestIdInSanctionTable(
-          subRequest.requestId
-        );
-
         const otherLines = request.otherLinesAffected?.yard?.map((e) => {
           const key = e?.split(":")[0];
           if (key == subRequest.missionBlock) {
@@ -94,8 +78,6 @@ export const formatData = async (requestData) => {
 
         subRequest.otherLinesAffected =
           otherLines != undefined ? otherLines.join(", ") : otherLines;
-
-        subRequest.sanctionedStatus = isSanctioned; // Add sanctioned status
         newRequests.push(subRequest);
       }
     }
