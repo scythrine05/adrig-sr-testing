@@ -23,7 +23,10 @@ import {
   getDataOptimised,
   updateFinalStatus,
   updateAdSavedStatus,
+  deleteOptimizedDataByRequestId,
 } from "../../actions/optimisetable";
+
+import { updateRequestsSanctionedStatus } from "../../actions/formdata";
 
 // Helper function to get week dates
 const getWeekDates = (weekOffset = 0) => {
@@ -71,6 +74,8 @@ const SearchForm = () => {
   const [weekOffset, setWeekOffset] = useState(0);
   const weekDates = getWeekDates(weekOffset);
   const [showAvailedColumn, setShowAvailedColumn] = useState(false);
+
+  const [rejectedRequests, setRejectedRequests] = useState([]);
 
   //Filtering states
   const [filters, setFilters] = useState({});
@@ -244,9 +249,52 @@ const SearchForm = () => {
 
   const saveButtonHandler = async () => {
     try {
+      // Normalize rejectedRequests by removing '-0' from the end of each requestId
+      const normalizedRejectedRequests = rejectedRequests.map((requestId) => {
+        const parts = requestId.split("-");
+        if (parts[parts.length - 1] === "0") {
+          parts.pop(); // Remove the last part if it's '0'
+        }
+        return parts.join("-"); // Rejoin the remaining parts
+      });
+
+      console.log(
+        "Updating SanctionedStatus to 'R' for normalized rejected requests:",
+        normalizedRejectedRequests
+      );
+
+      // Update SanctionedStatus to "R" for rejected requests
+      if (normalizedRejectedRequests.length > 0) {
+        const updateRejectedStatusResult = await updateRequestsSanctionedStatus(
+          normalizedRejectedRequests,
+          "R"
+        );
+        if (!updateRejectedStatusResult.success) {
+          console.error(
+            "Failed to update SanctionedStatus for rejected requests:",
+            updateRejectedStatusResult.message
+          );
+          alert(
+            "Failed to update SanctionedStatus for rejected requests. Please try again."
+          );
+          return;
+        }
+      }
+
+      // Delete requests that are in the rejectedRequests array
+      for (const requestId of rejectedRequests) {
+        console.log(`Deleting request with ID: ${requestId}`);
+        await deleteOptimizedDataByRequestId(requestId);
+      }
+
       // Update final status for each request
       for (const request of filteredRequests) {
-        await updateFinalStatus(request.requestId);
+        if (!rejectedRequests.includes(request.requestId)) {
+          console.log(
+            `Updating final status for request ID: ${request.requestId}`
+          );
+          await updateFinalStatus(request.requestId);
+        }
       }
 
       // Update adSaved status to "yes"
@@ -273,6 +321,9 @@ const SearchForm = () => {
         );
       }
 
+      // Clear rejectedRequests after processing
+      setRejectedRequests([]);
+
       localStorage.setItem("sanctionTableVisible", "true");
       setUpdate(!update);
     } catch (error) {
@@ -281,8 +332,21 @@ const SearchForm = () => {
     }
   };
 
+  const handleRejectRequest = (requestId, isRejected) => {
+    setRejectedRequests((prev) =>
+      isRejected ? [...prev, requestId] : prev.filter((id) => id !== requestId)
+    );
+  };
+
   if (showPopup) {
-    return <EditOptimised request={currentReq} setShowPopup={setShowPopup} />;
+    return (
+      <EditOptimised
+        request={currentReq}
+        setShowPopup={setShowPopup}
+        handleRejectRequest={handleRejectRequest}
+        rejectedRequests={rejectedRequests}
+      />
+    );
   } else {
     return (
       <>

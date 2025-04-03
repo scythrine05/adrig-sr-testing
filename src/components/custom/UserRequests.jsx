@@ -730,8 +730,10 @@ export default function UserRequests({ date }) {
                       {/* Display abbreviation */}
                       <Tooltip
                         title={
-                          request.sanctionedStatus ? (
-                            <span className="text-sm">Sanctioned</span>
+                          request.SanctionedStatus === "Y" ? (
+                            <span className="text-sm">Yes</span>
+                          ) : request.SanctionedStatus === "R" ? (
+                            <span className="text-sm">Rejected</span>
                           ) : (
                             <span className="text-sm">Under Progress</span>
                           )
@@ -740,17 +742,33 @@ export default function UserRequests({ date }) {
                       >
                         <TableCell
                           sx={{
-                            backgroundColor: "#F3E8FF",
+                            backgroundColor:
+                              request.SanctionedStatus === "Y"
+                                ? "lightgreen"
+                                : request.SanctionedStatus === "R"
+                                ? "lightcoral"
+                                : "lightpink",
                             position: "sticky",
                             right: "80px",
                             zIndex: 8,
                             boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                            color: request.sanctionedStatus ? "green" : "red",
+                            color:
+                              request.SanctionedStatus === "Y"
+                                ? "green"
+                                : request.SanctionedStatus === "R"
+                                ? "red"
+                                : "darkred",
                             fontWeight: "bold",
                             cursor: "pointer",
                           }}
                         >
-                          <span>{request.sanctionedStatus ? "Y" : "UP"}</span>{" "}
+                          <span>
+                            {request.SanctionedStatus === "Y"
+                              ? "Y"
+                              : request.SanctionedStatus === "R"
+                              ? "R"
+                              : "UP"}
+                          </span>
                         </TableCell>
                       </Tooltip>
                       <TableCell
