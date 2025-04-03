@@ -15,52 +15,91 @@ import {
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { getDataOptimised } from "../../actions/optimisetable";
-//const formatDate = (date) => date.toISOString().split("T")[0];
+import { useSession } from "next-auth/react";
+import Hq from "./hq";
+// Utility Functions for Date Handling
+const getWeekDates = (weekOffset = 0) => {
+  const now = new Date();
+  const currentDay = now.getDay();
+  const monday = new Date(now);
+  monday.setDate(
+    now.getDate() - (currentDay === 0 ? 6 : currentDay - 1) + weekOffset * 7
+  );
+  monday.setHours(0, 0, 0, 0);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+
+  return {
+    start: monday,
+    end: sunday,
+    weekLabel: `Week ${
+      weekOffset === 0
+        ? "(Current)"
+        : weekOffset > 0
+        ? "+" + weekOffset
+        : weekOffset
+    }`,
+  };
+};
+
+const formatDate = (date) => date.toISOString().split("T")[0];
 
 const parseRequestDate = (dateString) => {
   try {
+    // If the input is already a Date object, return it
+    if (dateString instanceof Date) {
+      return dateString;
+    }
+
+    // If the input is a valid ISO string, parse it
+    if (!isNaN(Date.parse(dateString))) {
+      return new Date(dateString);
+    }
+
+    // Handle "YYYY-MM-DD" format
     const [year, month, day] = dateString.split("-").map(Number);
     return new Date(year, month - 1, day);
   } catch (e) {
     console.error(`Error parsing date ${dateString}:`, e);
-    return null;
+    return null; // Return null if parsing fails
   }
 };
 
-const calculateTotals = (groupedData) => {
-  const totals = {
-    corridor: {
-      totalMinutes: 0,
-      totalOptimisedMinutes: 0,
-      totalAvailedMinutes: 0,
-    },
-    nonCorridor: {
-      totalMinutes: 0,
-      totalOptimisedMinutes: 0,
-      totalAvailedMinutes: 0,
-    },
-  };
+function calculateMinutesBetween(startTime, endTime) {
+  // Validate input format
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  if (!timeRegex.test(startTime) || !timeRegex.test(endTime)) {
+    throw new Error("Invalid time format. Use HH:MM (24-hour format)");
+  }
 
-  Object.values(groupedData).forEach((data) => {
-    totals.corridor.totalMinutes += data.corridor.totalMinutes;
-    totals.corridor.totalOptimisedMinutes +=
-      data.corridor.totalOptimisedMinutes;
-    totals.corridor.totalAvailedMinutes += data.corridor.totalAvailedMinutes;
+  // Split times into hours and minutes
+  const [startHours, startMinutes] = startTime.split(":").map(Number);
+  const [endHours, endMinutes] = endTime.split(":").map(Number);
 
-    totals.nonCorridor.totalMinutes += data.nonCorridor.totalMinutes;
-    totals.nonCorridor.totalOptimisedMinutes +=
-      data.nonCorridor.totalOptimisedMinutes;
-    totals.nonCorridor.totalAvailedMinutes +=
-      data.nonCorridor.totalAvailedMinutes;
-  });
+  // Calculate total minutes for both times
+  const startTotalMinutes = startHours * 60 + startMinutes;
+  const endTotalMinutes = endHours * 60 + endMinutes;
 
-  return totals;
-};
+  // Calculate difference, handling cases that cross midnight
+  let minuteDifference = endTotalMinutes - startTotalMinutes;
+
+  // If the result is negative, it means the end time is on the next day
+  if (minuteDifference < 0) {
+    minuteDifference += 24 * 60; // Add 24 hours worth of minutes
+  }
+
+  return minuteDifference;
+}
 
 const AllMonths = () => {
   // State Management
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const weekDates = getWeekDates(weekOffset);
+
   const [filters, setFilters] = useState({});
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -68,24 +107,175 @@ const AllMonths = () => {
   });
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   const [currentFilterColumn, setCurrentFilterColumn] = useState("");
-
-  // Fetch and Aggregate Data
+  const [aggregatedRequestsCorridor, setAggregatedRequestsCorridor] = useState(
+    []
+  );
+  const [aggregatedRequestsNonCorridor, setAggregatedRequestsNonCorridor] =
+    useState([]);
+  // Fetch and Filter Data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await getDataOptimised();
-        const result = res.result.map((item) => ({
+        let result = res.result.map((item) => ({
           ...item,
           date: parseRequestDate(item.date),
         }));
+        result = calculateDemandedHours(result);
+        result = calculateOptimisedHours(result);
+        result = calculateAvailedHours(result);
+        console.log("12 months : ", result);
+
+        // res.result is an array of objects that will have "corridorType" that will either have values "non-corridor" or "corridor"
+        // now based on this value i need to aggregate into two arrays, one corridor and one non-corridor with demanded,optimised, availed values summed and grouped based on section value
+        const corridorData = result.filter(
+          (item) => item.corridorType === "corridor"
+        );
+        const nonCorridorData = result.filter(
+          (item) => item.corridorType === "non-corridor"
+        );
+
+        const corridorAggregated = corridorData.reduce((acc, curr) => {
+          const key = `${curr.selectedDepartment}-${curr.selectedSection}`;
+
+          if (!acc[key]) {
+            acc[key] = {
+              corridorType: curr.corridorType,
+              department: curr.selectedDepartment,
+              section: curr.selectedSection,
+              minutes: curr.minutes,
+              optimisedMinutes: curr.optimisedMinutes,
+              availedMinutes: curr.availedMinutes || 0,
+              date: curr.date,
+            };
+          } else {
+            acc[key].corridorType = curr.corridorType;
+            acc[key].department = curr.selectedDepartment;
+            acc[key].section = curr.selectedSection;
+            acc[key].minutes += curr.minutes;
+            acc[key].optimisedMinutes += curr.optimisedMinutes;
+            acc[key].availedMinutes += curr.availedMinutes || 0;
+            acc[key].date = curr.date || acc[key].date;
+          }
+          return acc;
+        }, {});
+
+        const nonCorridorAggregated = nonCorridorData.reduce((acc, curr) => {
+          const key = `${curr.selectedDepartment}-${curr.selectedSection}`;
+
+          if (!acc[key]) {
+            acc[key] = {
+              corridorType: curr.corridorType,
+              department: curr.selectedDepartment,
+              section: curr.selectedSection,
+              minutes: curr.minutes,
+              optimisedMinutes: curr.optimisedMinutes,
+              availedMinutes: curr.availedMinutes || 0,
+              date: curr.date,
+            };
+          } else {
+            acc[key].corridorType = curr.corridorType;
+            acc[key].department = curr.selectedDepartment;
+            acc[key].section = curr.selectedSection;
+            acc[key].minutes += curr.minutes;
+            acc[key].optimisedMinutes += curr.optimisedMinutes;
+            acc[key].availedMinutes += curr.availedMinutes || 0;
+            acc[key].date = curr.date || acc[key].date;
+          }
+          return acc;
+        }, {});
+
+        console.log("Corridor Data:", corridorAggregated);
+        console.log("Non-Corridor Data:", corridorAggregated);
+
+        // Convert the aggregated objects back to arrays
+        const corridorAggregatedArray = Object.values(corridorAggregated);
+        const nonCorridorAggregatedArray = Object.values(nonCorridorAggregated);
+        // Set the state with the aggregated data
+        console.log("Corridor Aggregated Data:", corridorAggregatedArray);
+        console.log(
+          "Non-Corridor Aggregated Data:",
+          nonCorridorAggregatedArray
+        );
+
         setAllRequests(result);
-        setFilteredRequests(result);
+        filterRequestsByWeek(corridorAggregatedArray);
+        setAggregatedRequestsCorridor(corridorAggregatedArray);
+        setAggregatedRequestsNonCorridor(nonCorridorAggregatedArray);
       } catch (e) {
         console.error("Data fetch error:", e);
       }
     };
     fetchData();
-  }, []);
+  }, [weekOffset]);
+
+  const calculateDemandedHours = (requestData) => {
+    if (!requestData) return;
+
+    const updatedData = requestData.map((request) => {
+      const fromTime = request.demandTimeFrom;
+      const toTime = request.demandTimeTo;
+
+      if (fromTime && toTime) {
+        const minutes = calculateMinutesBetween(fromTime, toTime);
+        return { ...request, minutes, date: request.date };
+      }
+      return { ...request, date: request.date };
+    });
+
+    return updatedData;
+  };
+
+  const calculateOptimisedHours = (requestData) => {
+    if (!requestData) return;
+
+    const updatedData = requestData.map((request) => {
+      const fromTime = request.Optimisedtimefrom;
+      const toTime = request.Optimisedtimeto;
+
+      if (fromTime && toTime) {
+        const minutes = calculateMinutesBetween(fromTime, toTime);
+        return { ...request, optimisedMinutes: minutes };
+      }
+      return { ...request, date: request.date };
+    });
+
+    return updatedData;
+  };
+
+  const calculateAvailedHours = (requestData) => {
+    if (!requestData) return;
+
+    const updatedData = requestData.map((request) => {
+      const availedData = request.availed;
+      if (availedData) {
+        const fromTime = availedData.fromTime;
+        const toTime = availedData.toTime;
+        if (fromTime && toTime) {
+          const minutes = calculateMinutesBetween(fromTime, toTime);
+          return { ...request, availedMinutes: minutes };
+        }
+      }
+      return { ...request, date: request.date };
+    });
+    return updatedData;
+  };
+
+  // Week Filtering
+  const filterRequestsByWeek = (requestData) => {
+    if (!requestData) return;
+
+    const filtered = requestData.filter((request) => {
+      const requestDate = parseRequestDate(request.date);
+      return (
+        requestDate &&
+        requestDate >= weekDates.start &&
+        requestDate <= weekDates.end
+      );
+    });
+
+    setFilteredRequests(filtered);
+  };
 
   // Filter Handling
   const handleFilterChange = (value) => {
@@ -109,6 +299,7 @@ const AllMonths = () => {
     // handleFilterClose();
   };
 
+  // Filter Click Handlers
   const handleFilterClick = (event, columnName) => {
     setFilterAnchorEl(event.currentTarget);
     setCurrentFilterColumn(columnName);
@@ -118,6 +309,7 @@ const AllMonths = () => {
     setFilterAnchorEl(null);
   };
 
+  // Sorting Handler
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -126,77 +318,127 @@ const AllMonths = () => {
     setSortConfig({ key, direction });
   };
 
+  // Unique Values for Filtering
   const getUniqueValues = (data, key) => {
-    if (key === "Month") {
-      return [
-        ...new Set(
-          data.map((item) =>
-            item.date.toLocaleString("en-US", { month: "long" })
-          )
-        ),
-      ]
+    if (key === "month") {
+      // Extract unique month names from the date field
+      return [...new Set(data.map((item) => getMonthName(item.date)))]
         .filter(Boolean)
         .sort();
     }
+
+    // Default behavior for other keys
     return [...new Set(data.map((item) => item[key] || ""))]
       .filter(Boolean)
       .sort();
   };
 
-  // Group Data by Month
-  const groupByMonth = (data) => {
-    return data.reduce((acc, item) => {
-      if (!item.date || isNaN(item.date)) {
-        console.warn("Invalid or missing date:", item);
-        return acc; // Skip items with invalid dates
+  const getMonthName = (dateString) => {
+    const date = parseRequestDate(dateString);
+    if (!date || isNaN(date.getTime())) {
+      return "Unknown";
+    }
+    return date.toLocaleString("default", { month: "long" });
+  };
+
+  // Fix the useMemo to properly apply filters
+  const filteredAndSortedRequests = useMemo(() => {
+    let result = [...aggregatedRequestsCorridor];
+
+    // Apply filters
+    Object.keys(filters).forEach((key) => {
+      if (filters[key] && filters[key].length > 0) {
+        result = result.filter((item) => {
+          if (key === "month") {
+            // Handle month filtering by deriving the month name from the date
+            const monthName = getMonthName(item.date);
+            return filters[key].includes(monthName);
+          }
+          // Default filtering for other keys
+          return filters[key].includes(String(item[key] || ""));
+        });
       }
+    });
 
-      const month = item.date.toLocaleString("en-IN", { month: "long" });
+    // Apply sorting
+    if (sortConfig.key) {
+      result.sort((a, b) => {
+        const valueA = String(a[sortConfig.key] || "").toLowerCase();
+        const valueB = String(b[sortConfig.key] || "").toLowerCase();
 
-      if (!acc[month]) {
-        acc[month] = {
-          corridor: {
-            totalMinutes: 0,
-            totalOptimisedMinutes: 0,
-            totalAvailedMinutes: 0,
-          },
-          nonCorridor: {
-            totalMinutes: 0,
-            totalOptimisedMinutes: 0,
-            totalAvailedMinutes: 0,
-          },
+        if (valueA < valueB) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (valueA > valueB) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    console.log("Filtered and Sorted Requests with Filters Applied:", result); // Debugging
+    return result;
+  }, [aggregatedRequestsCorridor, filters, sortConfig]);
+
+  // Group data by department
+  const groupByDepartment = (data) => {
+    const grouped = data.reduce((acc, item) => {
+      if (!acc[item.department]) {
+        acc[item.department] = {
+          sections: [],
+          totalMinutes: 0,
+          totalOptimisedMinutes: 0,
+          totalAvailedMinutes: 0,
         };
       }
 
-      const target =
-        item.corridorType === "corridor"
-          ? acc[month].corridor
-          : acc[month].nonCorridor;
-
-      target.totalMinutes += item.minutes || 0;
-      target.totalOptimisedMinutes += item.optimisedMinutes || 0;
-      target.totalAvailedMinutes += item.availedMinutes || 0;
+      acc[item.department].sections.push(item);
+      acc[item.department].totalMinutes += item.minutes;
+      acc[item.department].totalOptimisedMinutes += item.optimisedMinutes;
+      acc[item.department].totalAvailedMinutes += item.availedMinutes || 0;
 
       return acc;
     }, {});
+
+    return grouped;
   };
 
-  const groupedData = useMemo(() => {
-    const filteredData = filters.Month
-      ? allRequests.filter((item) =>
-          filters.Month.includes(
-            item.date.toLocaleString("en-IN", { month: "long" })
-          )
-        )
-      : allRequests;
-    return groupByMonth(filteredData);
-  }, [allRequests, filters]);
+  // Group data by month
+  const groupByMonth = (data) => {
+    const grouped = data.reduce((acc, item) => {
+      const month = getMonthName(item.date);
+      if (!acc[month]) {
+        acc[month] = {
+          totalMinutes: 0,
+          totalOptimisedMinutes: 0,
+          totalAvailedMinutes: 0,
+        };
+      }
+
+      acc[month].totalMinutes += item.minutes || 0;
+      acc[month].totalOptimisedMinutes += item.optimisedMinutes || 0;
+      acc[month].totalAvailedMinutes += item.availedMinutes || 0;
+
+      return acc;
+    }, {});
+
+    return grouped;
+  };
+
+  // Then update the original filtered requests
+  useEffect(() => {
+    setFilteredRequests(filteredAndSortedRequests);
+  }, [filteredAndSortedRequests]);
+
+  // Popover and Rendering Preparations
+  const isOpen = Boolean(filterAnchorEl);
+  const filterId = isOpen ? "filter-popover" : undefined;
 
   return (
     <>
       <Popover
-        id="filter-popover"
-        open={Boolean(filterAnchorEl)}
+        id={filterId}
+        open={isOpen}
         anchorEl={filterAnchorEl}
         onClose={handleFilterClose}
         anchorOrigin={{
@@ -216,7 +458,10 @@ const AllMonths = () => {
             Filter by {currentFilterColumn}
           </h4>
           {currentFilterColumn &&
-            getUniqueValues(allRequests, currentFilterColumn).map((value) => (
+            getUniqueValues(
+              aggregatedRequestsCorridor,
+              currentFilterColumn
+            ).map((value) => (
               <div key={value} className="my-1">
                 <FormControlLabel
                   control={
@@ -233,12 +478,41 @@ const AllMonths = () => {
             ))}
         </div>
       </Popover>
-
       <div className="p-4 m-10 bg-secondary rounded-xl">
         <div className="flex justify-center">
-          <h1 className="mt-10 text-4xl font-bold">
-            MIS for DRM for 12 months of Blocks
-          </h1>
+          <h1 className="mt-10 text-4xl font-bold">MIS for DRM for 12 months of Blocks</h1>
+        </div>
+
+        {/* Week Selection */}
+        <div className="flex flex-wrap items-center justify-center mt-4 mb-6 space-x-4">
+          {/* <button
+            onClick={() => setWeekOffset((prev) => prev - 1)}
+            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
+          >
+            &lt; Prev Week
+          </button> */}
+
+          <span className="p-5 bg-white border border-gray-300 rounded shadow">
+            {"For a period from"} <u> {formatDate(weekDates.start)}</u>{" "}
+            {"and to "}
+            <u>{formatDate(weekDates.end)}</u>
+          </span>
+
+          {/* <button
+            onClick={() => setWeekOffset((prev) => prev + 1)}
+            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
+          >
+            Next Week &gt;
+          </button> */}
+
+          {weekOffset !== 0 && (
+            <button
+              onClick={() => setWeekOffset(0)}
+              className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none"
+            >
+              Current Week
+            </button>
+          )}
         </div>
 
         <TableContainer
@@ -250,189 +524,289 @@ const AllMonths = () => {
             border: "solid 1px #ddd",
           }}
         >
-          <Table sx={{ minWidth: 800 }} aria-label="monthly table" stickyHeader>
+          <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell
-                  align="center"
-                  rowSpan={2}
-                  style={{ fontWeight: "bold", backgroundColor: "#FDE8D9" }}
-                >
-                  <div className="flex items-center justify-between">
-                    <strong>Month</strong>
-                    <IconButton
-                      size="small"
-                      onClick={(e) => handleFilterClick(e, "Month")}
-                    >
-                      <FilterListIcon />
-                    </IconButton>
-                  </div>
-                </TableCell>
+                  style={{ borderRight: "1px solid gray" }}
+                  colSpan={2}
+                ></TableCell>
                 <TableCell
-                  align="center"
+                  style={{
+                    borderRight: "1px solid gray",
+                    backgroundColor: "#FDD9EE",
+                  }}
                   colSpan={4}
-                  style={{ backgroundColor: "#FDD9EE", fontWeight: "bold" }}
+                  align="center"
                 >
                   Corridor
                 </TableCell>
                 <TableCell
-                  align="center"
+                  style={{
+                    borderRight: "1px solid gray",
+                    backgroundColor: "#FDE8D9",
+                  }}
                   colSpan={4}
-                  style={{ backgroundColor: "#FDE8D9", fontWeight: "bold" }}
+                  align="center"
                 >
                   Outside Corridor
                 </TableCell>
               </TableRow>
+
               <TableRow>
                 {[
-                  "Total Block Hours Demanded",
-                  "Total Block Hours Sanctioned",
-                  "Percentage of Blocks Sanctioned",
-                  "Total Block Hours Availed",
-                ].map((label, index) => (
+                  {
+                    id: "month",
+                    label: "Month",
+                    filterable: true,
+                  },
+                  {
+                    id: "minutes",
+                    label: "Total Block Hours Demanded",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Total Block Hours Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Percentage of Blocks Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "availedMinutes",
+                    label: "Total Block Hours Availed",
+                    filterable: false,
+                    style: { borderRight: "1px solid gray" },
+                  },
+                  {
+                    id: "minutes",
+                    label: "Total Block Hours Demanded",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Total Block Hours Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Percentage of Blocks Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "availedMinutes",
+                    label: "Total Block Hours Availed",
+                    filterable: false,
+                  },
+                ].map((column) => (
                   <TableCell
-                    key={index}
+                    key={column.id}
+                    style={{ backgroundColor: "#FDE8D9", ...column.style }}
                     align="center"
-                    style={{ fontWeight: "bold", backgroundColor: "#FDE8D9" }}
                   >
-                    {label}
-                  </TableCell>
-                ))}
-                {[
-                  "Total Block Hours Demanded",
-                  "Total Block Hours Sanctioned",
-                  "Percentage of Blocks Sanctioned",
-                  "Total Block Hours Availed",
-                ].map((label, index) => (
-                  <TableCell
-                    key={`non-${index}`}
-                    align="center"
-                    style={{ fontWeight: "bold", backgroundColor: "#FDE8D9" }}
-                  >
-                    {label}
+                    <div className="flex items-center justify-between">
+                      <strong>{column.label}</strong>
+                      {column.filterable && (
+                        <>
+                          <span
+                            onClick={() => handleSort(column.id)}
+                            className="cursor-pointer"
+                          >
+                            {sortConfig.key === column.id
+                              ? sortConfig.direction === "ascending"
+                                ? "▲"
+                                : "▼"
+                              : ""}
+                          </span>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => handleFilterClick(e, column.id)}
+                          >
+                            <FilterListIcon />
+                          </IconButton>
+                        </>
+                      )}
+                    </div>
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.entries(groupedData).length > 0 ? (
+              {filteredAndSortedRequests.length > 0 ? (
                 <>
-                  {Object.entries(groupedData).map(([month, data]) => (
-                    <TableRow key={month}>
-                      <TableCell>{month}</TableCell>
+                  {/* Month Rows */}
+                  {Object.entries(groupByMonth(filteredAndSortedRequests)).map(
+                    ([month, monthData]) => (
+                      <TableRow key={month}>
+                        <TableCell>{month}</TableCell>
 
-                      {/* Corridor Data */}
-                      <TableCell>
-                        {(data.corridor.totalMinutes / 60).toFixed(2)}
-                      </TableCell>
-                      <TableCell>
-                        {(data.corridor.totalOptimisedMinutes / 60).toFixed(2)}
-                      </TableCell>
-                      <TableCell>
-                        {data.corridor.totalMinutes > 0
-                          ? (
-                              (data.corridor.totalOptimisedMinutes /
-                                data.corridor.totalMinutes) *
-                              100
-                            ).toFixed(2)
-                          : 0}
-                        %
-                      </TableCell>
-                      <TableCell>
-                        {(data.corridor.totalAvailedMinutes / 60).toFixed(2)}
-                      </TableCell>
-
-                      {/* Non-Corridor Data */}
-                      <TableCell>
-                        {(data.nonCorridor.totalMinutes / 60).toFixed(2)}
-                      </TableCell>
-                      <TableCell>
-                        {(data.nonCorridor.totalOptimisedMinutes / 60).toFixed(
-                          2
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {data.nonCorridor.totalMinutes > 0
-                          ? (
-                              (data.nonCorridor.totalOptimisedMinutes /
-                                data.nonCorridor.totalMinutes) *
-                              100
-                            ).toFixed(2)
-                          : 0}
-                        %
-                      </TableCell>
-                      <TableCell>
-                        {(data.nonCorridor.totalAvailedMinutes / 60).toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-
-                  {/* Total Row */}
-                  {(() => {
-                    const totals = calculateTotals(groupedData);
-                    return (
-                      <TableRow style={{ backgroundColor: "#BFF5BF" }}>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          Total
+                        {/* Corridor Data */}
+                        <TableCell>
+                          {(monthData.totalMinutes / 60).toFixed(2)}
                         </TableCell>
-
-                        {/* Corridor Totals */}
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {(totals.corridor.totalMinutes / 60).toFixed(2)}
+                        <TableCell>
+                          {(monthData.totalOptimisedMinutes / 60).toFixed(2)}
                         </TableCell>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {(totals.corridor.totalOptimisedMinutes / 60).toFixed(
-                            2
-                          )}
-                        </TableCell>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {totals.corridor.totalMinutes > 0
+                        <TableCell>
+                          {monthData.totalMinutes > 0
                             ? (
-                                (totals.corridor.totalOptimisedMinutes /
-                                  totals.corridor.totalMinutes) *
+                                (monthData.totalOptimisedMinutes /
+                                  monthData.totalMinutes) *
                                 100
                               ).toFixed(2)
                             : 0}
                           %
                         </TableCell>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {(totals.corridor.totalAvailedMinutes / 60).toFixed(
-                            2
-                          )}
+                        <TableCell>
+                          {(monthData.totalAvailedMinutes / 60).toFixed(2)}
                         </TableCell>
 
-                        {/* Non-Corridor Totals */}
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {(totals.nonCorridor.totalMinutes / 60).toFixed(2)}
+                        {/* Non-Corridor Data */}
+                        <TableCell>
+                          {(monthData.totalMinutes / 60).toFixed(2)}
                         </TableCell>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {(
-                            totals.nonCorridor.totalOptimisedMinutes / 60
-                          ).toFixed(2)}
+                        <TableCell>
+                          {(monthData.totalOptimisedMinutes / 60).toFixed(2)}
                         </TableCell>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {totals.nonCorridor.totalMinutes > 0
+                        <TableCell>
+                          {monthData.totalMinutes > 0
                             ? (
-                                (totals.nonCorridor.totalOptimisedMinutes /
-                                  totals.nonCorridor.totalMinutes) *
+                                (monthData.totalOptimisedMinutes /
+                                  monthData.totalMinutes) *
                                 100
                               ).toFixed(2)
                             : 0}
                           %
                         </TableCell>
-                        <TableCell style={{ fontWeight: "bold" }}>
-                          {(
-                            totals.nonCorridor.totalAvailedMinutes / 60
-                          ).toFixed(2)}
+                        <TableCell>
+                          {(monthData.totalAvailedMinutes / 60).toFixed(2)}
                         </TableCell>
                       </TableRow>
-                    );
-                  })()}
+                    )
+                  )}
+
+                  {/* Total Row */}
+                  <TableRow style={{ backgroundColor: "#BFF5BF" }}>
+                    <TableCell>
+                      <strong>Total</strong>
+                    </TableCell>
+
+                    {/* Corridor Total */}
+                    <TableCell>
+                      <strong>
+                        {(
+                          filteredAndSortedRequests.reduce(
+                            (sum, item) => sum + (item.minutes || 0),
+                            0
+                          ) / 60
+                        ).toFixed(2)}
+                      </strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>
+                        {(
+                          filteredAndSortedRequests.reduce(
+                            (sum, item) => sum + (item.optimisedMinutes || 0),
+                            0
+                          ) / 60
+                        ).toFixed(2)}
+                      </strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>
+                        {filteredAndSortedRequests.reduce(
+                          (sum, item) => sum + (item.minutes || 0),
+                          0
+                        ) > 0
+                          ? (
+                              (filteredAndSortedRequests.reduce(
+                                (sum, item) =>
+                                  sum + (item.optimisedMinutes || 0),
+                                0
+                              ) /
+                                filteredAndSortedRequests.reduce(
+                                  (sum, item) => sum + (item.minutes || 0),
+                                  0
+                                )) *
+                              100
+                            ).toFixed(2)
+                          : 0}
+                        %
+                      </strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>
+                        {(
+                          filteredAndSortedRequests.reduce(
+                            (sum, item) => sum + (item.availedMinutes || 0),
+                            0
+                          ) / 60
+                        ).toFixed(2)}
+                      </strong>
+                    </TableCell>
+
+                    {/* Non-Corridor Total */}
+                    <TableCell>
+                      <strong>
+                        {(
+                          filteredAndSortedRequests.reduce(
+                            (sum, item) => sum + (item.minutes || 0),
+                            0
+                          ) / 60
+                        ).toFixed(2)}
+                      </strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>
+                        {(
+                          filteredAndSortedRequests.reduce(
+                            (sum, item) => sum + (item.optimisedMinutes || 0),
+                            0
+                          ) / 60
+                        ).toFixed(2)}
+                      </strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>
+                        {filteredAndSortedRequests.reduce(
+                          (sum, item) => sum + (item.minutes || 0),
+                          0
+                        ) > 0
+                          ? (
+                              (filteredAndSortedRequests.reduce(
+                                (sum, item) =>
+                                  sum + (item.optimisedMinutes || 0),
+                                0
+                              ) /
+                                filteredAndSortedRequests.reduce(
+                                  (sum, item) => sum + (item.minutes || 0),
+                                  0
+                                )) *
+                              100
+                            ).toFixed(2)
+                          : 0}
+                        %
+                      </strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>
+                        {(
+                          filteredAndSortedRequests.reduce(
+                            (sum, item) => sum + (item.availedMinutes || 0),
+                            0
+                          ) / 60
+                        ).toFixed(2)}
+                      </strong>
+                    </TableCell>
+                  </TableRow>
                 </>
               ) : (
                 <TableRow>
                   <TableCell colSpan={9} align="center">
-                    No requests found for this month
+                    No requests found for this week
                   </TableCell>
                 </TableRow>
               )}
