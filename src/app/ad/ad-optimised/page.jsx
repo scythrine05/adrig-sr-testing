@@ -23,7 +23,10 @@ import {
   getDataOptimised,
   updateFinalStatus,
   updateAdSavedStatus,
+  deleteOptimizedDataByRequestId,
 } from "../../actions/optimisetable";
+
+import { updateRequestsSanctionedStatus } from "../../actions/formdata";
 
 // Helper function to get week dates
 const getWeekDates = (weekOffset = 0) => {
@@ -71,6 +74,8 @@ const SearchForm = () => {
   const [weekOffset, setWeekOffset] = useState(0);
   const weekDates = getWeekDates(weekOffset);
   const [showAvailedColumn, setShowAvailedColumn] = useState(false);
+
+  const [rejectedRequests, setRejectedRequests] = useState([]);
 
   //Filtering states
   const [filters, setFilters] = useState({});
@@ -244,9 +249,52 @@ const SearchForm = () => {
 
   const saveButtonHandler = async () => {
     try {
+      // Normalize rejectedRequests by removing '-0' from the end of each requestId
+      const normalizedRejectedRequests = rejectedRequests.map((requestId) => {
+        const parts = requestId.split("-");
+        if (parts[parts.length - 1] === "0") {
+          parts.pop(); // Remove the last part if it's '0'
+        }
+        return parts.join("-"); // Rejoin the remaining parts
+      });
+
+      console.log(
+        "Updating SanctionedStatus to 'R' for normalized rejected requests:",
+        normalizedRejectedRequests
+      );
+
+      // Update SanctionedStatus to "R" for rejected requests
+      if (normalizedRejectedRequests.length > 0) {
+        const updateRejectedStatusResult = await updateRequestsSanctionedStatus(
+          normalizedRejectedRequests,
+          "R"
+        );
+        if (!updateRejectedStatusResult.success) {
+          console.error(
+            "Failed to update SanctionedStatus for rejected requests:",
+            updateRejectedStatusResult.message
+          );
+          alert(
+            "Failed to update SanctionedStatus for rejected requests. Please try again."
+          );
+          return;
+        }
+      }
+
+      // Delete requests that are in the rejectedRequests array
+      for (const requestId of rejectedRequests) {
+        console.log(`Deleting request with ID: ${requestId}`);
+        await deleteOptimizedDataByRequestId(requestId);
+      }
+
       // Update final status for each request
       for (const request of filteredRequests) {
-        await updateFinalStatus(request.requestId);
+        if (!rejectedRequests.includes(request.requestId)) {
+          console.log(
+            `Updating final status for request ID: ${request.requestId}`
+          );
+          await updateFinalStatus(request.requestId);
+        }
       }
 
       // Update adSaved status to "yes"
@@ -273,6 +321,9 @@ const SearchForm = () => {
         );
       }
 
+      // Clear rejectedRequests after processing
+      setRejectedRequests([]);
+
       localStorage.setItem("sanctionTableVisible", "true");
       setUpdate(!update);
     } catch (error) {
@@ -281,8 +332,21 @@ const SearchForm = () => {
     }
   };
 
+  const handleRejectRequest = (requestId, isRejected) => {
+    setRejectedRequests((prev) =>
+      isRejected ? [...prev, requestId] : prev.filter((id) => id !== requestId)
+    );
+  };
+
   if (showPopup) {
-    return <EditOptimised request={currentReq} setShowPopup={setShowPopup} />;
+    return (
+      <EditOptimised
+        request={currentReq}
+        setShowPopup={setShowPopup}
+        handleRejectRequest={handleRejectRequest}
+        rejectedRequests={rejectedRequests}
+      />
+    );
   } else {
     return (
       <>
@@ -335,7 +399,7 @@ const SearchForm = () => {
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="text-center sm:text-left">
                   <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    Optimised Table
+                    Traffic Admin Optimised Table
                   </h1>
                   <p className="text-sm sm:text-base text-gray-600">
                     View and manage optimised requests
@@ -510,7 +574,7 @@ const SearchForm = () => {
                             },
                             {
                               id: "missionBlock",
-                              label: "Block Section",
+                              label: "Block Section/Yard",
                               filterable: false,
                             },
                             {
@@ -621,7 +685,7 @@ const SearchForm = () => {
                           ].map((column) => (
                             <TableCell key={column.id}>
                               <div className="flex items-center justify-between">
-                              <strong>{column.label}</strong>
+                                <strong>{column.label}</strong>
                                 {column.filterable && (
                                   <>
                                     <span
@@ -692,6 +756,21 @@ const SearchForm = () => {
                               </TableCell>
                               <TableCell>{request.action}</TableCell>
                               <TableCell>{request.remarks}</TableCell>
+                              <TableCell>
+                                {(request.final === "" ||
+                                  request.final !== "set") && (
+                                  <div className="pt-2">
+                                    <button
+                                      className="w-full bg-blue-500 text-white p-2 rounded-lg"
+                                      onClick={() =>
+                                        editRequestHandler(request)
+                                      }
+                                    >
+                                      Edit Request
+                                    </button>
+                                  </div>
+                                )}
+                              </TableCell>
                             </TableRow>
                           ))
                         ) : (
@@ -746,7 +825,7 @@ const SearchForm = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
                           <strong className="text-right pr-2 border-r border-gray-200">
-                            Block Section:
+                            Block Section/Yard:
                           </strong>
                           <span className="pl-2">{request.stationID}</span>
                         </div>

@@ -41,7 +41,7 @@ const FormLayout = ({
         {/* Date Input */}
         <div>
           <label className="block text-sm font-medium">
-            Date of Block<span style={{ color: "#40E0D0" }}>*</span>
+            Date of Block<span style={{ color: "red" }}>*</span>
           </label>
           <input
             ref={handleInputRefsChange(0)}
@@ -61,7 +61,7 @@ const FormLayout = ({
             // min={minDate}
             // max={maxDate}
           />
-          <p className="text-xs mt-1" style={{ color: '#40E0D0' }}>
+          <p className="text-xs mt-1 text-black">
             Temporarily, you can only select dates from tomorrow onwards.
           </p>
           {/* {minDate && (
@@ -74,7 +74,7 @@ const FormLayout = ({
         {/* Department Dropdown */}
         <div>
           <label className="block text-sm font-medium">
-            Department <span style={{ color: "#40E0D0" }}>*</span>
+            Department <span style={{ color: "red" }}>*</span>
           </label>
           <select
             ref={handleInputRefsChange(1)}
@@ -96,7 +96,7 @@ const FormLayout = ({
         {/* Major Section Dropdown */}
         <div>
           <label className="block text-sm font-medium">
-            Major Section <span style={{ color: "#40E0D0" }}>*</span>
+            Major Section <span style={{ color: "red" }}>*</span>
           </label>
           <select
             ref={handleInputRefsChange(2)}
@@ -176,7 +176,7 @@ const FormLayout = ({
       {/* Mission Block Dropdown */}
       <div className="mb-4">
         <label className="block text-sm font-medium">
-          Block Section <span style={{ color: "#40E0D0" }}>*</span>
+          Block Section/Yard <span className="red">*</span>
         </label>
         <MultipleSelect
           items={handleGetTheListForYard()}
@@ -222,7 +222,7 @@ const FormLayout = ({
         <div>
           <label className="block text-sm font-medium">
             Preferred Time (Click On the Clock To Select){" "}
-            <span style={{ color: "#40E0D0" }}>*</span>
+            <span style={{ color: "red" }}>*</span>
           </label>
           <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 my-2">
             <div className="font-semibold p-2">From (Hrs)</div>

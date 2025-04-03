@@ -249,7 +249,7 @@ const SearchForm = () => {
 
       <div className="bg-secondary p-4 rounded-xl m-10">
         <div className="flex justify-between ">
-          <h1 className="font-bold text-4xl mt-10">Sanctioned Table</h1>
+          <h1 className="font-bold text-4xl mt-10">Traffic Admin Sanctioned Table</h1>
         </div>
 
         {/* Week Selection */}
@@ -314,7 +314,7 @@ const SearchForm = () => {
                   },
                   {
                     id: "missionBlock",
-                    label: "Block Section",
+                    label: "Block Section/Yard",
                     filterable: false,
                   },
                   { id: "workType", label: "Work Type", filterable: true },
@@ -443,7 +443,7 @@ const SearchForm = () => {
                     <TableCell>{request.date}</TableCell>
                     <TableCell>{request.selectedDepartment}</TableCell>
                     <TableCell>{request.selectedSection}</TableCell>
-                    <TableCell>{request.stationID}</TableCell>
+                    {/* <TableCell>{request.stationID}</TableCell> */}
                     <TableCell>{request.missionBlock}</TableCell>
                     <TableCell>{request.workDescription}</TableCell>
                     <TableCell>{request.workType}</TableCell>

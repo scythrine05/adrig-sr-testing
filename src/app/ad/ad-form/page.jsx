@@ -72,7 +72,7 @@ const SearchForm = () => {
       try {
         const res = await getFormDataAll();
         // setFilteredRequests(res.requestData);
-        const formattedData = formatData(res.requestData);
+        const formattedData = await formatData(res.requestData);
         const finalData = formattedData.map((e) => {
           return {
             ...e,
@@ -149,7 +149,7 @@ const SearchForm = () => {
       dateRange
     );
 
-    const formattedData = formatData(requests.res);
+    const formattedData = await formatData(requests.res);
     setFilteredRequests(formattedData);
 
     // Separate search results by corridor type
@@ -174,12 +174,15 @@ const SearchForm = () => {
       title: "Optimization In progress",
       description: "Your Request Is Under Process! Please Wait",
     });
+    const filteredRequestsWithoutSanctionedStatus = filteredRequests.map(
+      ({ sanctionedStatus, ...rest }) => rest
+    );
     try {
       if (currentReq != null) {
         const res = await axios.post(
           `https://sr-optimization.vercel.app/backend/optimize`,
           {
-            requestData: filteredRequests,
+            requestData: filteredRequestsWithoutSanctionedStatus,
           }
         );
 
@@ -545,14 +548,14 @@ const SearchForm = () => {
               <thead>
                 <tr className="">
                   {[
-                    { id: "requestId", label: "Request ID" },
-                    { id: "corridorType", label: "Corridor Type" },
+                    // { id: "requestId", label: "Request ID" },
+                    // { id: "corridorType", label: "Corridor Type" },
                     { id: "date", label: "Date of Block Request" },
                     { id: "selectedDepartment", label: "Department" },
                     { id: "selectedSection", label: "MajorSection" },
                     { id: "selectedDepo", label: "Depo/SSE" },
                     // { id: 'stationID', label: 'Block Section' },
-                    { id: "missionBlock", label: "Block Section" },
+                    { id: "missionBlock", label: "Block Section/Yard" },
 
                     { id: "workType", label: "Work Type" },
                     { id: "workDescription", label: "Activity" },
@@ -617,12 +620,12 @@ const SearchForm = () => {
                 {filteredCorridorRequests.length > 0 ? (
                   filteredCorridorRequests.map((request) => (
                     <tr key={request.requestId} className="hover:bg-gray-50">
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.requestId}
                       </td>
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.corridorType}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.date}
                       </td>
@@ -705,20 +708,20 @@ const SearchForm = () => {
 
             {/* Non-Corridor Requests Table */}
             <h2 className="text-2xl font-bold text-green-700 my-5">
-              Non-Corridor Requests
+              Outside Corridor Requests
             </h2>
             <table className="w-full border-collapse border border-gray-300 mb-10">
               <thead>
                 <tr className="">
                   {[
-                    { id: "requestId", label: "Request ID" },
+                    // { id: "requestId", label: "Request ID" },
                     { id: "date", label: "Date of Block Request" },
                     { id: "selectedDepartment", label: "Department" },
                     { id: "selectedSection", label: "MajorSection" },
                     { id: "selectedDepo", label: "Depo/SSE" },
                     // { id: 'stationID', label: 'Block Section' },
-                    { id: "missionBlock", label: "Block Section" },
-                    { id: "corridorType", label: "Corridor Type" },
+                    { id: "missionBlock", label: "Block Section/Yard" },
+                    // { id: "corridorType", label: "Corridor Type" },
                     { id: "workType", label: "Work Type" },
                     { id: "workDescription", label: "Activity" },
                     { id: "demandTimeFrom", label: "Demand Time (From)" },
@@ -784,9 +787,9 @@ const SearchForm = () => {
                 {filteredNonCorridorRequests.length > 0 ? (
                   filteredNonCorridorRequests.map((request) => (
                     <tr key={request.requestId} className="hover:bg-gray-50">
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.requestId}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.date}
                       </td>
@@ -803,9 +806,9 @@ const SearchForm = () => {
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.missionBlock}
                       </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.corridorType}
-                      </td>
+                      </td> */}
                       <td className="border border-gray-300 p-3 whitespace-nowrap">
                         {request.workType}
                       </td>
@@ -885,7 +888,7 @@ const SearchForm = () => {
                         { id: "selectedSection", label: "MajorSection" },
                         { id: "selectedDepo", label: "Depo/SSE" },
                         // { id: 'stationID', label: 'Block Section' },
-                        { id: "missionBlock", label: "Block Section" },
+                        { id: "missionBlock", label: "Block Section/Yard" },
                         { id: "corridorType", label: "Corridor Type" },
                         { id: "workType", label: "Work Type" },
                         { id: "workDescription", label: "Activity" },
@@ -1157,7 +1160,7 @@ const SearchForm = () => {
                     {request.selectedDepo}
                   </div>
                   <div className="border border-gray-300 p-2">
-                    <strong>Block Section:</strong>
+                    <strong>Block Section/Yard:</strong>
                   </div>
                   <div className="border border-gray-300 p-2">
                     {request.stationID}
@@ -1319,7 +1322,7 @@ const SearchForm = () => {
                     {request.selectedDepo}
                   </div>
                   <div className="border border-gray-300 p-2">
-                    <strong>Block Section:</strong>
+                    <strong>Block Section/Yard:</strong>
                   </div>
                   <div className="border border-gray-300 p-2">
                     {request.stationID}
@@ -1484,7 +1487,7 @@ const SearchForm = () => {
                       {request.selectedDepo}
                     </div>
                     <div className="border border-gray-300 p-2">
-                      <strong>Block Section:</strong>
+                      <strong>Block Section/Yard:</strong>
                     </div>
                     <div className="border border-gray-300 p-2">
                       {request.stationID}

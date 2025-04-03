@@ -12,6 +12,7 @@ export async function postFormData(formData) {
 
     const res = await prisma.requests.create({
       data: {
+        requestId: formData.requestId,
         date: formData.date,
         selectedDepartment: formData.selectedDepartment,
         selectedSection: formData.selectedSection,
@@ -160,6 +161,37 @@ export async function updateFormData(formData, requestId) {
   });
 
   return res;
+}
+
+export async function updateRequestsSanctionedStatus(requestIds, status) {
+  try {
+    const res = await prisma.requests.updateMany({
+      where: {
+        requestId: {
+          in: requestIds, // Match all request IDs in the array
+        },
+      },
+      data: {
+        SanctionedStatus: status, // Update the SanctionedStatus
+      },
+    });
+    console.log(
+      `SanctionedStatus updated to '${status}' for requests:`,
+      requestIds
+    );
+    return {
+      success: true,
+      message: "SanctionedStatus updated successfully",
+      data: res,
+    };
+  } catch (error) {
+    console.error("Error updating SanctionedStatus in Requests table:", error);
+    return {
+      success: false,
+      message: "Error updating SanctionedStatus",
+      error: error.message,
+    };
+  }
 }
 
 export async function getFormData(id) {

@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import { updateOptimizedData } from "../../actions/optimisetable";
 import { useToast } from "../../../components/ui/use-toast";
 
-function EditOptimised({ request, setShowPopup }) {
+function EditOptimised({
+  request,
+  setShowPopup,
+  handleRejectRequest,
+  rejectedRequests,
+}) {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -20,6 +25,9 @@ function EditOptimised({ request, setShowPopup }) {
     action: request.action,
     remarks: request.remarks,
   });
+  const [reject, setReject] = useState(
+    rejectedRequests.includes(request.requestId)
+  );
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -45,6 +53,12 @@ function EditOptimised({ request, setShowPopup }) {
       });
       setShowPopup(false);
     }
+  };
+
+  const toggleReject = () => {
+    const newRejectState = !reject;
+    setReject(newRejectState);
+    handleRejectRequest(request.requestId, newRejectState); // Notify parent about the change
   };
 
   return (
@@ -197,9 +211,16 @@ function EditOptimised({ request, setShowPopup }) {
             className="bg-red-500 text-white py-2 px-4 mr-3 rounded-lg hover:bg-red-600 transition-colors"
             onClick={() => {
               setShowPopup(false);
-            }}  
+            }}
           >
             Cancel
+          </button>
+          <button
+            className="text-white px-4 py-2 rounded-lg hover:opacity-90 transition duration-300 mr-6"
+            style={{ backgroundColor: reject ? "#ff3333" : "#db2542" }}
+            onClick={toggleReject}
+          >
+            {reject ? "Cancel Reject" : "Reject"}
           </button>
           <button
             className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
