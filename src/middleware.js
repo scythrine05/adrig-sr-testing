@@ -69,7 +69,7 @@ export async function middleware(request) {
       return NextResponse.next();
     }
   }
-
+  
   // Admin routes protection
   if (pathname.startsWith("/ad/")) {
     if (userRole !== "admin") {

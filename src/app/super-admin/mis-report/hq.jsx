@@ -16,9 +16,7 @@ import {
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { getDataOptimised } from "../../actions/optimisetable";
 import { useSession } from "next-auth/react";
-import Hq from "./hq";
-import BOIForm from "./boi";
-import AllMonths from "./all-months"
+
 // Utility Functions for Date Handling
 const getWeekDates = (weekOffset = 0) => {
   const now = new Date();
@@ -36,12 +34,8 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Week ${
-      weekOffset === 0
-        ? "(Current)"
-        : weekOffset > 0
-        ? "+" + weekOffset
-        : weekOffset
+    weekLabel: `For a period from ${
+      weekOffset === 0 ? "" : weekOffset > 0 ? "+" + weekOffset : weekOffset
     }`,
   };
 };
@@ -95,7 +89,9 @@ function calculateMinutesBetween(startTime, endTime) {
   return minuteDifference;
 }
 
-const SearchForm = () => {
+const Hq = () => {
+  const { data: session } = useSession();
+  const val = session?.user.email;
   // State Management
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
@@ -114,8 +110,7 @@ const SearchForm = () => {
   );
   const [aggregatedRequestsNonCorridor, setAggregatedRequestsNonCorridor] =
     useState([]);
-  const { data: session } = useSession();
-  const val = session?.user.email;
+
   // Fetch and Filter Data
   useEffect(() => {
     const fetchData = async () => {
@@ -127,8 +122,6 @@ const SearchForm = () => {
         result = calculateAvailedHours(result);
         console.log(result);
 
-        // res.result is an array of objects that will have "corridorType" that will either have values "non-corridor" or "corridor"
-        // now based on this value i need to aggregate into two arrays, one corridor and one non-corridor with demanded,optimised, availed values summed and grouped based on section value
         const corridorData = result.filter(
           (item) => item.corridorType === "corridor"
         );
@@ -182,18 +175,9 @@ const SearchForm = () => {
           return acc;
         }, {});
 
-        console.log("Corridor Data:", corridorAggregated);
-        console.log("Non-Corridor Data:", corridorAggregated);
-
         // Convert the aggregated objects back to arrays
         const corridorAggregatedArray = Object.values(corridorAggregated);
         const nonCorridorAggregatedArray = Object.values(nonCorridorAggregated);
-        // Set the state with the aggregated data
-        console.log("Corridor Aggregated Data:", corridorAggregatedArray);
-        console.log(
-          "Non-Corridor Aggregated Data:",
-          nonCorridorAggregatedArray
-        );
 
         setAllRequests(result);
         filterRequestsByWeek(corridorAggregatedArray);
@@ -292,8 +276,6 @@ const SearchForm = () => {
     }
 
     setFilters(newFilters);
-    // Close the popover after selection to improve UX
-    // handleFilterClose();
   };
 
   // Filter Click Handlers
@@ -430,48 +412,36 @@ const SearchForm = () => {
             ))}
         </div>
       </Popover>
-      {val === "drm@gmail.com" && (
-        <div className="p-4 m-10 bg-secondary rounded-xl">
-          <div className="flex justify-center">
-            <h1 className="mt-10 text-4xl font-bold">
-              MIS Report for DRM/SrDOM
-            </h1>
-          </div>
 
-          {/* Week Selection */}
-          <div className="flex flex-wrap items-center justify-center mt-4 mb-6 space-x-4">
-            {/* <button
+      <div className="p-4 m-10 bg-secondary rounded-xl">
+        <div className="flex justify-center">
+          {" "}
+          {/* Changed justify-between to justify-center */}
+          <h1 className="mt-9 text-4xl font-bold">MIS Report for HQ</h1>
+        </div>
 
-            onClick={() => setWeekOffset((prev) => prev - 1)}
-            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
-          >
-            &lt; Prev Week
-          </button> */}
-
-            <span className="p-5 bg-white border border-gray-300 rounded shadow">
-              {"For a period from"} <u> {formatDate(weekDates.start)}</u>{" "}
-              {"and to "}
-              <u>{formatDate(weekDates.end)}</u>
+        <div className="flex flex-wrap items-center justify-center mt-4 mb-6 space-x-4">
+          <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
+            {weekDates.weekLabel}:{" "}
+            <span style={{ textDecoration: "underline" }}>
+              {formatDate(weekDates.start)}
+            </span>{" "}
+            to{" "}
+            <span style={{ textDecoration: "underline" }}>
+              {formatDate(weekDates.end)}
             </span>
+          </span>
 
-            {/* <button
-
-            onClick={() => setWeekOffset((prev) => prev + 1)}
-            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
-          >
-            Next Week &gt;
-          </button> */}
-
-            {weekOffset !== 0 && (
-              <button
-                onClick={() => setWeekOffset(0)}
-                className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none"
-              >
-                Current Week
-              </button>
-            )}
-          </div>
-
+          {weekOffset !== 0 && (
+            <button
+              onClick={() => setWeekOffset(0)}
+              className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none"
+            >
+              Current Week
+            </button>
+          )}
+        </div>
+        {val !== "drm@gmail.com" && (
           <TableContainer
             component={Paper}
             sx={{
@@ -485,7 +455,6 @@ const SearchForm = () => {
               sx={{ minWidth: 800 }}
               aria-label="request table"
               stickyHeader
-
             >
               <TableHead>
                 <TableRow>
@@ -518,15 +487,14 @@ const SearchForm = () => {
                 <TableRow>
                   {[
                     {
+                      id: "division",
+                      label: "Division",
+                      filterable: false,
+                    },
+                    {
                       id: "department",
                       label: "Department",
                       filterable: true,
-                    },
-                    {
-                      id: "section",
-                      label: "Section",
-                      filterable: true,
-                      style: { borderRight: "1px solid gray" },
                     },
                     {
                       id: "minutes",
@@ -626,91 +594,14 @@ const SearchForm = () => {
 
                       return (
                         <React.Fragment key={department}>
-                          {/* Section Rows */}
-                          {deptData.sections.map((request) => {
-                            const nonCorridorData =
-                              aggregatedRequestsNonCorridor.find(
-                                (d) =>
-                                  d.department === department &&
-                                  d.section === request.section
-                              ) || {};
-
-                            return (
-                              <TableRow
-                                key={`${request.department}-${request.section}`}
-                              >
-                                <TableCell>{department}</TableCell>
-                                <TableCell
-                                  style={{ borderRight: "1px solid gray" }}
-                                >
-                                  {request.section}
-                                </TableCell>
-
-                                {/* Corridor Data */}
-                                <TableCell>
-                                  {(request.minutes / 60).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
-                                  {(request.optimisedMinutes / 60).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
-                                  {request.minutes > 0
-                                    ? (
-                                        (request.optimisedMinutes /
-                                          request.minutes) *
-                                        100
-                                      ).toFixed(2)
-                                    : 0}
-                                  %
-                                </TableCell>
-                                <TableCell
-                                  style={{ borderRight: "1px solid gray" }}
-                                >
-                                  {(request.availedMinutes / 60).toFixed(2)}
-                                </TableCell>
-
-                                {/* Non-Corridor Data */}
-                                <TableCell>
-                                  {(
-                                    (nonCorridorData.minutes || 0) / 60
-                                  ).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
-                                  {(
-                                    (nonCorridorData.optimisedMinutes || 0) / 60
-                                  ).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
-                                  {(nonCorridorData.minutes || 0) > 0
-                                    ? (
-                                        ((nonCorridorData.optimisedMinutes ||
-                                          0) /
-                                          (nonCorridorData.minutes || 1)) *
-                                        100
-                                      ).toFixed(2)
-                                    : 0}
-                                  %
-                                </TableCell>
-                                <TableCell>
-                                  {(
-                                    (nonCorridorData.availedMinutes || 0) / 60
-                                  ).toFixed(2)}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-
                           {/* Department Total Row */}
-                          <TableRow style={{ backgroundColor: "#BFF5BF" }}>
+                          <TableRow>
                             <TableCell style={{ fontWeight: "bold" }}>
-                              Total
+                              MAS
                             </TableCell>
-                            <TableCell
-                              style={{
-                                fontWeight: "bold",
-                                borderRight: "1px solid gray",
-                              }}
-                            ></TableCell>
+                            <TableCell style={{ fontWeight: "bold" }}>
+                              {department}
+                            </TableCell>
 
                             {/* Corridor Totals */}
                             <TableCell style={{ fontWeight: "bold" }}>
@@ -768,41 +659,45 @@ const SearchForm = () => {
                     })}
 
                     {/* Grand Total Row */}
-                    <TableRow style={{ backgroundColor: "#40F740" }}>
+                    <TableRow style={{ backgroundColor: "#BFF5BF" }}>
                       <TableCell style={{ fontWeight: "bold" }} colSpan={2}>
-                        Grand Total
+                        Total
                       </TableCell>
 
                       {/* Corridor Grand Totals */}
                       <TableCell style={{ fontWeight: "bold" }}>
                         {(
-                          filteredAndSortedRequests.reduce(
-                            (sum, item) => sum + (item.minutes || 0),
-                            0
-                          ) / 60
+                          Object.values(
+                            groupByDepartment(filteredAndSortedRequests)
+                          ).reduce((sum, dept) => sum + dept.totalMinutes, 0) /
+                          60
                         ).toFixed(2)}
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
                         {(
-                          filteredAndSortedRequests.reduce(
-                            (sum, item) => sum + (item.optimisedMinutes || 0),
+                          Object.values(
+                            groupByDepartment(filteredAndSortedRequests)
+                          ).reduce(
+                            (sum, dept) => sum + dept.totalOptimisedMinutes,
                             0
                           ) / 60
                         ).toFixed(2)}
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
-                        {filteredAndSortedRequests.reduce(
-                          (sum, item) => sum + (item.minutes || 0),
-                          0
-                        ) > 0
+                        {Object.values(
+                          groupByDepartment(filteredAndSortedRequests)
+                        ).reduce((sum, dept) => sum + dept.totalMinutes, 0) > 0
                           ? (
-                              (filteredAndSortedRequests.reduce(
-                                (sum, item) =>
-                                  sum + (item.optimisedMinutes || 0),
+                              (Object.values(
+                                groupByDepartment(filteredAndSortedRequests)
+                              ).reduce(
+                                (sum, dept) => sum + dept.totalOptimisedMinutes,
                                 0
                               ) /
-                                filteredAndSortedRequests.reduce(
-                                  (sum, item) => sum + (item.minutes || 1),
+                                Object.values(
+                                  groupByDepartment(filteredAndSortedRequests)
+                                ).reduce(
+                                  (sum, dept) => sum + dept.totalMinutes,
                                   0
                                 )) *
                               100
@@ -817,8 +712,10 @@ const SearchForm = () => {
                         }}
                       >
                         {(
-                          filteredAndSortedRequests.reduce(
-                            (sum, item) => sum + (item.availedMinutes || 0),
+                          Object.values(
+                            groupByDepartment(filteredAndSortedRequests)
+                          ).reduce(
+                            (sum, dept) => sum + dept.totalAvailedMinutes,
                             0
                           ) / 60
                         ).toFixed(2)}
@@ -853,7 +750,7 @@ const SearchForm = () => {
                                 0
                               ) /
                                 aggregatedRequestsNonCorridor.reduce(
-                                  (sum, item) => sum + (item.minutes || 1),
+                                  (sum, item) => sum + (item.minutes || 0),
                                   0
                                 )) *
                               100
@@ -881,13 +778,10 @@ const SearchForm = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        </div>
-      )}
-      {val === "hq@gmail.com" && <Hq />}
-      {val == "bo@gmail.com" && <BOIForm />}
-      <AllMonths />
+        )}
+      </div>
     </>
   );
 };
 
-export default SearchForm;
+export default Hq;
