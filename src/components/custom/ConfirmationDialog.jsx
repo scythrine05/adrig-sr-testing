@@ -255,7 +255,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                     </>
                   )}
                   <tr>
-                    <td className="font-medium w-40">OHE Disconnection:</td>
+                    <td className="font-medium w-40">Power Block:</td>
                     <td>{safeGet('ohDisconnection') || "No"}</td>
                   </tr>
                   {safeGet('ohDisconnection') === "Yes" && (
@@ -269,7 +269,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                     </tr>
                   )}
                   <tr>
-                    <td className="font-medium w-40">SIG Disconnection:</td>
+                    <td className="font-medium w-40">S&T Disconnection:</td>
                     <td>{safeGet('sigDisconnection') || "No"}</td>
                   </tr>
                   {safeGet('sigDisconnection') === "Yes" && (
@@ -294,10 +294,10 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                       </tr>
                     </>
                   )}
-                  <tr>
+                  {/* <tr>
                     <td className="font-medium w-40">TRD Disconnection:</td>
                     <td>{safeGet('trdDisconnection') || "No"}</td>
-                  </tr>
+                  </tr> */}
                   {safeGet('trdDisconnection') === "Yes" && (
                     <tr>
                       <td className="font-medium w-40">Requirements:</td>

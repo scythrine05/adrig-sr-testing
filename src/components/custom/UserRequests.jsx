@@ -11,7 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
-import { getFormData } from "../../app/actions/formdata";
+import { getFormData, deleteFormData } from "../../app/actions/formdata";
 import EditRequest from "../custom/EditRequest";
 import currentUser, {
   getUserId,
@@ -19,7 +19,10 @@ import currentUser, {
   setOptimised,
 } from "../../app/actions/user";
 import { formatData } from "../../lib/utils";
-import { getStagingFormData } from "../../app/actions/stagingform";
+import {
+  getStagingFormData,
+  deleteStagingFormData,
+} from "../../app/actions/stagingform";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -29,6 +32,8 @@ import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Popover from "@mui/material/Popover";
+import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 // Helper function to get week dates
 const getWeekDates = (weekOffset = 0) => {
@@ -258,6 +263,115 @@ const DisconnectionDetails = ({ request }) => {
   );
 };
 
+const EditOptions = ({ request, editRequestHandler, removeRequest }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
+
+  function removeAfterLastDash(input) {
+    return input.includes("-") ? input.slice(0, input.lastIndexOf("-")) : input;
+  }
+
+  const deleteRequest = async (request) => {
+    const requestId = removeAfterLastDash(request.requestId);
+    try {
+      if (request.ManagerResponse) {
+        toast({
+          title: "Deletion not allowed",
+          description: `This request cannot be deleted because it has been ${
+            request.ManagerResponse === "yes" ? "approved" : "rejected"
+          } by a manager.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (confirmDelete) {
+        const res = await deleteStagingFormData(requestId);
+        toast({
+          title: "Success",
+          description: "Request deleted successfully",
+        });
+        removeRequest(request.requestId);
+        router.refresh();
+      } else {
+        setConfirmDelete(true);
+        toast({
+          title: "Confirm deletion",
+          description: "Click the delete button again to confirm deletion",
+        });
+        setTimeout(() => {
+          setConfirmDelete(false);
+        }, 5000);
+      }
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: "Error",
+        description: "Failed to delete request",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleModify = () => {
+    editRequestHandler(request);
+    handleClose();
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "edit-options-popover" : undefined;
+
+  return (
+    <div>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleClick}
+        size="small"
+      >
+        Edit
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+          <Button variant="contained" color="primary" onClick={handleModify}>
+            Modify
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => deleteRequest(request)}
+          >
+            {confirmDelete ? "Confirm" : "Delete"}
+          </Button>
+        </Box>
+      </Popover>
+    </div>
+  );
+};
+
 export default function UserRequests({ date }) {
   const [requests, setRequests] = useState([]);
   const [user, setUser] = useState(null);
@@ -313,6 +427,12 @@ export default function UserRequests({ date }) {
 
     fetchData();
   }, [currentoptvalue, showPopup, date]);
+
+  const removeRequest = (requestId) => {
+    setRequests((prevRequests) =>
+      prevRequests.filter((request) => request.requestId !== requestId)
+    );
+  };
 
   const filterByRecentDates = (requestData) => {
     const today = new Date();
@@ -780,12 +900,17 @@ export default function UserRequests({ date }) {
                           boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                         }}
                       >
-                        <button
+                        {/* <button
                           className="bg-blue-500 text-white p-2 rounded-lg"
                           onClick={() => editRequestHandler(request)}
                         >
                           Edit
-                        </button>
+                        </button> */}
+                        <EditOptions
+                          request={request}
+                          editRequestHandler={editRequestHandler}
+                          removeRequest={removeRequest}
+                        />
                       </TableCell>
                     </TableRow>
                   ))

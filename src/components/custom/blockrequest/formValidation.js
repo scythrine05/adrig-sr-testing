@@ -13,6 +13,10 @@ export default function validateForm(values) {
     errors.selectedSection = "Section is required";
   }
 
+  if(!values.selectedDepo || values.selectedDepo === "Select Depot/SSE") {
+    errors.selectedDepo = "Depot is required";
+  }
+
   if (!values.stationID) {
     errors.stationID = "Station ID is required";
   }
