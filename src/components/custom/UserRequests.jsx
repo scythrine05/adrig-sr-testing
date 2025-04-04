@@ -55,9 +55,9 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Week ${
+    weekLabel: `Current${
       weekOffset === 0
-        ? "(Current)"
+        ? "(Week)"
         : weekOffset > 0
         ? "+" + weekOffset
         : weekOffset
@@ -199,19 +199,15 @@ const DisconnectionDetails = ({ request }) => {
                   <div className="text-sm">
                     {request.sigDisconnectionRequirements || "None specified"}
                   </div>
-                  <div className="text-sm text-gray-600">SIG Response:</div>
+                  <div className="text-sm text-gray-600">S&T Response:</div>
                   <div className="text-sm">
                     {request.sigResponse || "No response yet"}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    Elementary Section (From):
-                  </div>
+                  <div className="text-sm text-gray-600">Line (From):</div>
                   <div className="text-sm">
                     {request.sigElementarySectionFrom || "Not specified"}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    Elementary Section (To):
-                  </div>
+                  <div className="text-sm text-gray-600">Line (To):</div>
                   <div className="text-sm">
                     {request.sigElementarySectionTo || "Not specified"}
                   </div>
@@ -221,7 +217,7 @@ const DisconnectionDetails = ({ request }) => {
 
             {hasPowerBlockDisconnection && (
               <div>
-                <h5 className="font-medium mt-2">Power Block Disconnection</h5>
+                <h5 className="font-medium mt-2">Power Block</h5>
                 <div className="grid grid-cols-2 gap-1 ml-2">
                   <div className="text-sm text-gray-600">Status:</div>
                   <div className="text-sm">
@@ -663,11 +659,14 @@ export default function UserRequests({ date }) {
                   <TableCell>
                     <strong>Line Selected</strong>
                   </TableCell>
-                  <TableCell>
-                    <strong>Demand Time (From)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Demand Time (To)</strong>
+                  <TableCell colSpan={2} align="center">
+                    <div>
+                      <strong>Demand Time</strong>
+                      <div className="flex flex-row justify-between mt-5 font-semibold">
+                        <span>From</span>
+                        <span className="pr-2">To</span>
+                      </div>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <strong>Work Type</strong>

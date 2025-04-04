@@ -136,7 +136,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
           
           <div className="bg-blue-50 p-4 rounded-lg mb-4">
             <p className="text-lg font-semibold mb-2">
-              Your request for traffic block {safeGet('missionBlock')} on {formatDate(safeGet('date'))} from {formatTime(safeGet('demandTimeFrom'))} to {formatTime(safeGet('demandTimeTo'))} in section {safeGet('selectedSection')} is ready to be submitted.
+              Your request for traffic block in {safeGet('missionBlock')} Block Section on {formatDate(safeGet('date'))} from {formatTime(safeGet('demandTimeFrom'))} hrs to {formatTime(safeGet('demandTimeTo'))} hrs and is ready to be submitted.
             </p>
             <p className="text-sm text-gray-600">
               Please review all details below before final submission.
@@ -157,7 +157,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                     <td>{safeGet('selectedDepartment')}</td>
                   </tr>
                   <tr>
-                    <td className="font-medium pr-2">Section:</td>
+                    <td className="font-medium pr-2">Major Section:</td>
                     <td>{safeGet('selectedSection')}</td>
                   </tr>
                   {safeGet('selectedDepo') && (
@@ -235,7 +235,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
               <table className="w-full text-sm border-collapse">
                 <tbody>
                   <tr>
-                    <td className="font-medium w-40">Caution Required:</td>
+                    <td className="font-medium w-44">Fresh Caution Imposed:</td>
                     <td>{safeGet('cautionRequired') || "No"}</td>
                   </tr>
                   {safeGet('cautionRequired') === "Yes" && (
@@ -322,7 +322,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
               onClick={onClose}
               className="bg-gray-300 hover:bg-gray-400 text-black px-6 py-2 rounded transition duration-300"
             >
-              Continue Editing
+              Go Back to Editing
             </button>
             <button
               onClick={onConfirm}

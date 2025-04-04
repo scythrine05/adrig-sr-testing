@@ -399,7 +399,7 @@ export default function RequestForm2(props) {
             if (otherData === "") {
               toast({
                 title: "Invalid Format",
-                description: "Fill the section in the format xxx/yy",
+                description: "Please specify the other work description",
                 variant: "destructive",
               });
               return;
@@ -710,7 +710,6 @@ export default function RequestForm2(props) {
           ))}
         {formData.selectedDepartment === "SIG" && (
           <div className="flex space-x-2">
-
             <input
               type="text"
               value={formData.workLocationFrom}
@@ -833,7 +832,6 @@ export default function RequestForm2(props) {
               </div>
             </div>
             <div>
-
               <label className="block text-sm font-medium text-black">
                 Caution speed <span style={{ color: "red" }}>*</span>
               </label>
@@ -851,8 +849,7 @@ export default function RequestForm2(props) {
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-black">
-            Whether Power Block Needed{" "}
-            <span style={{ color: "red" }}>*</span>
+            Whether Power Block Needed <span style={{ color: "red" }}>*</span>
           </label>
           <div className="flex space-x-4">
             <label className="text-black">
@@ -904,8 +901,7 @@ export default function RequestForm2(props) {
             </div>
             <div>
               <label className="block text-sm font-medium text-black">
-                Power Block Requirements{" "}
-                <span style={{ color: "red" }}>*</span>
+                Power Block Requirements <span style={{ color: "red" }}>*</span>
               </label>
               <div className="flex space-x-4 mt-1">
                 <label className="text-black">

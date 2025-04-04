@@ -150,7 +150,6 @@ export const handleKeyDown = (e, index) => {
 
 export const formValidation = (value) => {
   let res = validateForm(value);
-  console.log(validateForm(value));
   if (
     res.date ||
     res.selectedDepartment ||
