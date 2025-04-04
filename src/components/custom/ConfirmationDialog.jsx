@@ -167,7 +167,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                     </tr>
                   )}
                   <tr>
-                    <td className="font-medium pr-2">Mission Block:</td>
+                    <td className="font-medium pr-2">Block Section/Yard:</td>
                     <td>{safeGet('missionBlock')}</td>
                   </tr>
                   <tr>

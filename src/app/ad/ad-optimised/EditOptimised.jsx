@@ -104,7 +104,7 @@ function EditOptimised({
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Mission Block</label>
+            <label className="block text-sm font-medium">Block Section/Yard</label>
             <div>
               <input
                 type="text"

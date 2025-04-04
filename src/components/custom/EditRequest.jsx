@@ -16,7 +16,10 @@ import { useRouter } from "next/navigation";
 import validateForm from "./blockrequest/formValidation";
 import { yardData } from "../../lib/yard";
 
-import { getFormDataByRequestId, deleteFormData } from "../../app/actions/formdata";
+import {
+  getFormDataByRequestId,
+  deleteFormData,
+} from "../../app/actions/formdata";
 
 export default function EditRequest(props) {
   const router = useRouter();
@@ -840,6 +843,10 @@ export default function EditRequest(props) {
           >
             <option>Select work description </option>
             {formData.workType != "" &&
+              workData[`${formData.selectedDepartment}`] &&
+              workData[`${formData.selectedDepartment}`][
+                `${revertCategoryFormat(formData.workType)}`
+              ] &&
               workData[`${formData.selectedDepartment}`][
                 `${revertCategoryFormat(formData.workType)}`
               ].map((e) => {
