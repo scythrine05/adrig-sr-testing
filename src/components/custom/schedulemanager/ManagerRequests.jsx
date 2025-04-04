@@ -206,7 +206,7 @@ const RequestList = ({
             </th>
             <th className="px-4 py-3">Date</th>
             <th className="px-4 py-3">Depo/SSE</th>
-            <th className="px-4 py-3">Mission Block</th>
+            <th className="px-4 py-3">Block Section/Yard</th>
             <th className="px-4 py-3">DemandTime From</th>
             <th className="px-4 py-3">DemandTime To</th>
             <th className="px-4 py-3">Action</th>
@@ -294,7 +294,7 @@ const RequestList = ({
               <span className="font-medium">Depo/SSE:</span> {request.selectedDepo}
             </div>
             <div>
-              <span className="font-medium">Mission Block:</span> {request.missionBlock}
+              <span className="font-medium">Block Section/Yard:</span> {request.missionBlock}
             </div>
             <div>
               <span className="font-medium">DemandTime From:</span> {request.demandTimeFrom}

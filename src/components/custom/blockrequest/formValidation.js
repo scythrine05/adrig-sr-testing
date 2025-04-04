@@ -18,7 +18,7 @@ export default function validateForm(values) {
   }
 
   if (!values.missionBlock) {
-    errors.missionBlock = "Mission Block is required";
+    errors.missionBlock = "Block Section/Yard is required";
   }
 
   if (!values.workType || values.workType === "") {
