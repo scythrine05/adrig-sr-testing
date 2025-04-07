@@ -595,10 +595,10 @@ const SearchForm = () => {
                         { id: "workLocationTo", label: "To" },
                       ],
                     },
-                    { id: "sigDisconnection", label: "SIG Disconnection" },
+                    { id: "sigDisconnection", label: "S&T Disconnection" },
                     {
                       id: "ohDisconnection",
-                      label: "Power Block Disconnection",
+                      label: "Power Block",
                     },
                     {
                       id: "elementarySection",
@@ -847,10 +847,10 @@ const SearchForm = () => {
                         { id: "workLocationTo", label: "To" },
                       ],
                     },
-                    { id: "sigDisconnection", label: "SIG Disconnection" },
+                    { id: "sigDisconnection", label: "S&T Disconnection" },
                     {
                       id: "ohDisconnection",
-                      label: "Power Block Disconnection",
+                      label: "Power Block",
                     },
                     {
                       id: "elementarySection",

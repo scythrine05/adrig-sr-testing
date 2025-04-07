@@ -626,11 +626,11 @@ const SearchForm = () => {
                             },
                             {
                               id: "sigDisconnection",
-                              label: "SIG Disconnection",
+                              label: "S&T Disconnection",
                             },
                             {
                               id: "ohDisconnection",
-                              label: "Power Block Disconnection",
+                              label: "Power Block",
                             },
                             {
                               id: "elementarySection",

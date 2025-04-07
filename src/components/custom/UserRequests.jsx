@@ -147,7 +147,7 @@ const DisconnectionDetails = ({ request }) => {
         )}
         {hasSigDisconnection && (
           <Chip
-            label="SIG"
+            label="S&T"
             size="small"
             color={getSigChipColor()}
             variant="outlined"

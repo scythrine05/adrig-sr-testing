@@ -408,8 +408,8 @@ export default function OptimisedTable() {
                     { id: "workLocationTo", label: "To" },
                   ],
                 },
-                { id: "sigDisconnection", label: "SIG Disconnection" },
-                { id: "ohDisconnection", label: "Power Block Disconnection" },
+                { id: "sigDisconnection", label: "S&T Disconnection" },
+                { id: "ohDisconnection", label: "Power Block" },
                 {
                   id: "elementarySection",
                   label: "Elementary Section",

@@ -36,13 +36,12 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Week ${
-      weekOffset === 0
+    weekLabel: `Week ${weekOffset === 0
         ? "(Current)"
         : weekOffset > 0
-        ? "+" + weekOffset
-        : weekOffset
-    }`,
+          ? "+" + weekOffset
+          : weekOffset
+      }`,
   };
 };
 
@@ -361,8 +360,8 @@ const SearchForm = () => {
                       { id: "Optimisedtimeto", label: "To" },
                     ],
                   },
-                  { id: "sigDisconnection", label: "SIG Disconnection" },
-                  { id: "ohDisconnection", label: "Power Block Disconnection" },
+                  { id: "sigDisconnection", label: "S&T Disconnection" },
+                  { id: "ohDisconnection", label: "Power Block" },
                   {
                     id: "elementarySection",
                     label: "Elementary Section",
@@ -479,10 +478,10 @@ const SearchForm = () => {
                       {request.missionBlock}
                     </td>
                     <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.workDescription}
+                      {request.workType}
                     </td>
                     <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.workType}
+                      {request.workDescription}
                     </td>
                     <td className="border border-gray-300 p-3 whitespace-nowrap">
                       {request.selectedLine}
@@ -567,11 +566,11 @@ const SearchForm = () => {
                                 </span>
                                 {(availedData.fromTime ||
                                   availedData.toTime) && (
-                                  <p className="text-sm text-gray-600 mt-1">
-                                    From: {availedData.fromTime || "N/A"} - To:{" "}
-                                    {availedData.toTime || "N/A"}
-                                  </p>
-                                )}
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      From: {availedData.fromTime || "N/A"} - To:{" "}
+                                      {availedData.toTime || "N/A"}
+                                    </p>
+                                  )}
                               </div>
                             );
                           } else if (availedData.status === "no") {
