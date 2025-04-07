@@ -3,13 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Select,
   MenuItem,
   Menu,
@@ -19,7 +12,6 @@ import {
   Checkbox,
   FormControlLabel,
   IconButton,
-  Divider,
 } from "@mui/material";
 import { CSVLink } from "react-csv";
 import { getAdminFormData, getFormDataAll } from "../../actions/formdata";
@@ -28,8 +20,6 @@ import axios from "axios";
 import {
   deleteOptimizedData,
   postBulkOptimised,
-  postDataOptimised,
-  postDataOptimisedFirst,
 } from "../../actions/optimisetable";
 import { Oval } from "react-loader-spinner";
 import { useToast } from "../../../components/ui/use-toast";
@@ -546,76 +536,161 @@ const SearchForm = () => {
             </h2>
             <table className="w-full border-collapse border border-gray-300 mb-10">
               <thead>
-                <tr className="">
+                {/* First Row */}
+                <tr>
                   {[
-                    // { id: "requestId", label: "Request ID" },
-                    // { id: "corridorType", label: "Corridor Type" },
-                    { id: "date", label: "Date of Block Request" },
-                    { id: "selectedDepartment", label: "Department" },
-                    { id: "selectedSection", label: "MajorSection" },
-                    { id: "selectedDepo", label: "Depo/SSE" },
-                    // { id: 'stationID', label: 'Block Section' },
-                    { id: "missionBlock", label: "Block Section/Yard" },
-
-                    { id: "workType", label: "Work Type" },
+                    {
+                      id: "date",
+                      label: "Date of Block Request",
+                      filterable: true,
+                    },
+                    {
+                      id: "selectedDepartment",
+                      label: "Department",
+                      filterable: true,
+                    },
+                    {
+                      id: "selectedSection",
+                      label: "Major Section",
+                      filterable: true,
+                    },
+                    { id: "selectedDepo", label: "Depo/SSE", filterable: true },
+                    {
+                      id: "missionBlock",
+                      label: "Block Section/Yard",
+                      filterable: true,
+                    },
+                    { id: "workType", label: "Work Type", filterable: true },
                     { id: "workDescription", label: "Activity" },
-                    { id: "demandTimeFrom", label: "Demand Time (From)" },
-                    { id: "demandTimeTo", label: "Demand Time (To)" },
-                    { id: "selectedLine", label: "Line Selected" },
+                    {
+                      id: "demandTime",
+                      label: "Demand Time",
+                      split: true,
+                      children: [
+                        { id: "demandTimeFrom", label: "From" },
+                        { id: "demandTimeTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "selectedLine",
+                      label: "Line Selected",
+                    },
                     { id: "cautionRequired", label: "Caution Required" },
                     { id: "cautionSpeed", label: "Caution Speed" },
                     {
-                      id: "cautionLocationFrom",
-                      label: "Caution Location (From)",
+                      id: "cautionLocation",
+                      label: "Caution Location",
+                      split: true,
+                      children: [
+                        { id: "cautionLocationFrom", label: "From" },
+                        { id: "cautionLocationTo", label: "To" },
+                      ],
                     },
-                    { id: "cautionLocationTo", label: "Caution Location (To)" },
-                    { id: "workLocationFrom", label: "Work Location (From)" },
-                    { id: "workLocationTo", label: "Work Location (To)" },
+                    {
+                      id: "workLocation",
+                      label: "Work Location",
+                      split: true,
+                      children: [
+                        { id: "workLocationFrom", label: "From" },
+                        { id: "workLocationTo", label: "To" },
+                      ],
+                    },
                     { id: "sigDisconnection", label: "SIG Disconnection" },
                     {
                       id: "ohDisconnection",
                       label: "Power Block Disconnection",
                     },
                     {
-                      id: "elementarySectionFrom",
-                      label: "Elementary Section (From)",
-                    },
-                    {
-                      id: "elementarySectionTo",
-                      label: "Elementary Section (To)",
+                      id: "elementarySection",
+                      label: "Elementary Section",
+                      split: true,
+                      children: [
+                        { id: "elementarySectionFrom", label: "From" },
+                        { id: "elementarySectionTo", label: "To" },
+                      ],
                     },
                     { id: "otherLinesAffected", label: "Other Lines Affected" },
-                  ].map((column) => (
-                    <th
-                      key={column.id}
-                      className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-1 justify-between">
-                        <div
-                          className="flex-grow"
-                          onClick={() => handleSort(column.id)}
-                        >
-                          {column.label} {getFilterIcon(column.id)}
+                  ].map((column) =>
+                    column.split ? (
+                      <th
+                        key={column.id}
+                        colSpan={column.children.length}
+                        className="border border-gray-300 bg-gray-50 text-center p-2"
+                      >
+                        {column.label}
+                      </th>
+                    ) : (
+                      <th
+                        key={column.id}
+                        rowSpan={2}
+                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top"
+                      >
+                        <div className="flex items-center gap-1 justify-between">
+                          <div
+                            className="flex-grow"
+                            onClick={() => handleSort(column.id)}
+                          >
+                            {column.label} {getFilterIcon(column.id)}
+                          </div>
+                          {column.filterable && (
+                            <IconButton
+                              size="small"
+                              onClick={(e) => handleFilterClick(e, column.id)}
+                              className="p-0.5"
+                            >
+                              <FilterListIcon />
+                            </IconButton>
+                          )}
                         </div>
-                        <IconButton
-                          size="small"
-                          onClick={(e) =>
-                            handleFilterClick(e, column.id, "corridor")
-                          }
-                          className="p-0.5"
-                        >
-                          <FilterListIcon
-                            fontSize="small"
-                            color={
-                              corridorFilters[column.id] ? "primary" : "inherit"
-                            }
-                          />
-                        </IconButton>
-                      </div>
-                    </th>
-                  ))}
+                      </th>
+                    )
+                  )}
+                </tr>
+
+                {/* Second Row - only for split columns */}
+                <tr>
+                  {[
+                    {
+                      id: "demandTime",
+                      children: [
+                        { id: "demandTimeFrom", label: "From" },
+                        { id: "demandTimeTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "cautionLocation",
+                      children: [
+                        { id: "cautionLocationFrom", label: "From" },
+                        { id: "cautionLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "workLocation",
+                      children: [
+                        { id: "workLocationFrom", label: "From" },
+                        { id: "workLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "elementarySection",
+                      children: [
+                        { id: "elementarySectionFrom", label: "From" },
+                        { id: "elementarySectionTo", label: "To" },
+                      ],
+                    },
+                  ].flatMap((column) =>
+                    column.children.map((child) => (
+                      <th
+                        key={child.id}
+                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
+                      >
+                        {child.label}
+                      </th>
+                    ))
+                  )}
                 </tr>
               </thead>
+
               <tbody>
                 {filteredCorridorRequests.length > 0 ? (
                   filteredCorridorRequests.map((request) => (
@@ -697,7 +772,7 @@ const SearchForm = () => {
                   <tr>
                     <td
                       colSpan={23}
-                      className="border border-gray-300 p-3 text-center"
+                      className="border border-gray-300 p-3"
                     >
                       No corridor requests found
                     </td>
@@ -712,75 +787,168 @@ const SearchForm = () => {
             </h2>
             <table className="w-full border-collapse border border-gray-300 mb-10">
               <thead>
-                <tr className="">
+                {/* First Row */}
+                <tr>
                   {[
-                    // { id: "requestId", label: "Request ID" },
-                    { id: "date", label: "Date of Block Request" },
-                    { id: "selectedDepartment", label: "Department" },
-                    { id: "selectedSection", label: "MajorSection" },
-                    { id: "selectedDepo", label: "Depo/SSE" },
-                    // { id: 'stationID', label: 'Block Section' },
-                    { id: "missionBlock", label: "Block Section/Yard" },
-                    // { id: "corridorType", label: "Corridor Type" },
-                    { id: "workType", label: "Work Type" },
+                    {
+                      id: "date",
+                      label: "Date of Block Request",
+                      filterable: true,
+                    },
+                    {
+                      id: "selectedDepartment",
+                      label: "Department",
+                      filterable: true,
+                    },
+                    {
+                      id: "selectedSection",
+                      label: "Major Section",
+                      filterable: true,
+                    },
+                    { id: "selectedDepo", label: "Depo/SSE", filterable: true },
+                    {
+                      id: "missionBlock",
+                      label: "Block Section/Yard",
+                      filterable: true,
+                    },
+                    { id: "workType", label: "Work Type", filterable: true },
                     { id: "workDescription", label: "Activity" },
-                    { id: "demandTimeFrom", label: "Demand Time (From)" },
-                    { id: "demandTimeTo", label: "Demand Time (To)" },
-                    { id: "selectedLine", label: "Line Selected" },
+                    {
+                      id: "demandTime",
+                      label: "Demand Time",
+                      split: true,
+                      children: [
+                        { id: "demandTimeFrom", label: "From" },
+                        { id: "demandTimeTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "selectedLine",
+                      label: "Line Selected",
+                      filterable: true,
+                    },
                     { id: "cautionRequired", label: "Caution Required" },
                     { id: "cautionSpeed", label: "Caution Speed" },
                     {
-                      id: "cautionLocationFrom",
-                      label: "Caution Location (From)",
+                      id: "cautionLocation",
+                      label: "Caution Location",
+                      split: true,
+                      children: [
+                        { id: "cautionLocationFrom", label: "From" },
+                        { id: "cautionLocationTo", label: "To" },
+                      ],
                     },
-                    { id: "cautionLocationTo", label: "Caution Location (To)" },
-                    { id: "workLocationFrom", label: "Work Location (From)" },
-                    { id: "workLocationTo", label: "Work Location (To)" },
+                    {
+                      id: "workLocation",
+                      label: "Work Location",
+                      split: true,
+                      children: [
+                        { id: "workLocationFrom", label: "From" },
+                        { id: "workLocationTo", label: "To" },
+                      ],
+                    },
                     { id: "sigDisconnection", label: "SIG Disconnection" },
                     {
                       id: "ohDisconnection",
                       label: "Power Block Disconnection",
                     },
                     {
-                      id: "elementarySectionFrom",
-                      label: "Elementary Section (From)",
-                    },
-                    {
-                      id: "elementarySectionTo",
-                      label: "Elementary Section (To)",
+                      id: "elementarySection",
+                      label: "Elementary Section",
+                      split: true,
+                      children: [
+                        { id: "elementarySectionFrom", label: "From" },
+                        { id: "elementarySectionTo", label: "To" },
+                      ],
                     },
                     { id: "otherLinesAffected", label: "Other Lines Affected" },
-                  ].map((column) => (
-                    <th
-                      key={column.id}
-                      className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-1 justify-between">
-                        <div
-                          className="flex-grow"
-                          onClick={() => handleSort(column.id)}
-                        >
-                          {column.label} {getFilterIcon(column.id)}
+                  ].map((column) =>
+                    column.split ? (
+                      <th
+                        key={column.id}
+                        colSpan={column.children.length}
+                        className="border border-gray-300 bg-gray-50 text-center p-2"
+                      >
+                        {column.label}
+                      </th>
+                    ) : (
+                      <th
+                        key={column.id}
+                        rowSpan={2}
+                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top"
+                      >
+                        <div className="flex items-center gap-1 justify-between">
+                          <div
+                            className="flex-grow"
+                            onClick={() => handleSort(column.id)}
+                          >
+                            {column.label} {getFilterIcon(column.id)}
+                          </div>
+                          {column.filterable && (
+                            <IconButton
+                              size="small"
+                              onClick={(e) =>
+                                handleFilterClick(e, column.id, "nonCorridor")
+                              }
+                              className="p-0.5"
+                            >
+                              <FilterListIcon
+                                fontSize="small"
+                                color={
+                                  nonCorridorFilters[column.id]
+                                    ? "primary"
+                                    : "inherit"
+                                }
+                              />
+                            </IconButton>
+                          )}
                         </div>
-                        <IconButton
-                          size="small"
-                          onClick={(e) =>
-                            handleFilterClick(e, column.id, "nonCorridor")
-                          }
-                          className="p-0.5"
-                        >
-                          <FilterListIcon
-                            fontSize="small"
-                            color={
-                              nonCorridorFilters[column.id]
-                                ? "primary"
-                                : "inherit"
-                            }
-                          />
-                        </IconButton>
-                      </div>
-                    </th>
-                  ))}
+                      </th>
+                    )
+                  )}
+                </tr>
+
+                {/* Second Row - only for split columns */}
+                <tr>
+                  {[
+                    {
+                      id: "demandTime",
+                      children: [
+                        { id: "demandTimeFrom", label: "From" },
+                        { id: "demandTimeTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "cautionLocation",
+                      children: [
+                        { id: "cautionLocationFrom", label: "From" },
+                        { id: "cautionLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "workLocation",
+                      children: [
+                        { id: "workLocationFrom", label: "From" },
+                        { id: "workLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "elementarySection",
+                      children: [
+                        { id: "elementarySectionFrom", label: "From" },
+                        { id: "elementarySectionTo", label: "To" },
+                      ],
+                    },
+                  ].flatMap((column) =>
+                    column.children.map((child) => (
+                      <th
+                        key={child.id}
+                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
+                      >
+                        {child.label}
+                      </th>
+                    ))
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -863,7 +1031,7 @@ const SearchForm = () => {
                   <tr>
                     <td
                       colSpan={23}
-                      className="border border-gray-300 p-3 text-center"
+                      className="border border-gray-300 p-3"
                     >
                       No non-corridor requests found
                     </td>

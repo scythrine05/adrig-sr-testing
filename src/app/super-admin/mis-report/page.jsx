@@ -1,15 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Popover,
-  IconButton,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
@@ -18,7 +10,7 @@ import { getDataOptimised } from "../../actions/optimisetable";
 import { useSession } from "next-auth/react";
 import Hq from "./hq";
 import BOIForm from "./boi";
-import AllMonths from "./all-months"
+import AllMonths from "./all-months";
 // Utility Functions for Date Handling
 const getWeekDates = (weekOffset = 0) => {
   const now = new Date();
@@ -440,28 +432,10 @@ const SearchForm = () => {
 
           {/* Week Selection */}
           <div className="flex flex-wrap items-center justify-center mt-4 mb-6 space-x-4">
-            {/* <button
-
-            onClick={() => setWeekOffset((prev) => prev - 1)}
-            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
-          >
-            &lt; Prev Week
-          </button> */}
-
             <span className="p-5 bg-white border border-gray-300 rounded shadow">
-              {"For a period from"} <u> {formatDate(weekDates.start)}</u>{" "}
-              {"and to "}
+              {"For a period from"} <u>{formatDate(weekDates.start)}</u> {"to "}
               <u>{formatDate(weekDates.end)}</u>
             </span>
-
-            {/* <button
-
-            onClick={() => setWeekOffset((prev) => prev + 1)}
-            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
-          >
-            Next Week &gt;
-          </button> */}
-
             {weekOffset !== 0 && (
               <button
                 onClick={() => setWeekOffset(0)}
@@ -472,108 +446,63 @@ const SearchForm = () => {
             )}
           </div>
 
-          <TableContainer
-            component={Paper}
-            sx={{
-              marginTop: 4,
-              position: "relative",
-              maxHeight: 560,
-              border: "solid 1px #ddd",
-            }}
-          >
-            <Table
-              sx={{ minWidth: 800 }}
-              aria-label="request table"
-              stickyHeader
-
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    style={{ borderRight: "1px solid gray" }}
+          {/* Table */}
+          <div className="overflow-auto rounded-lg shadow-md relative  max-h-screen">
+            <table className="w-full border-collapse border border-gray-300">
+              {/* Table Header */}
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
                     colSpan={2}
-                  ></TableCell>
-                  <TableCell
-                    style={{
-                      borderRight: "1px solid gray",
-                      backgroundColor: "#FDD9EE",
-                    }}
+                    className="border border-gray-300 bg-gray-100 text-center p-2 font-medium"
+                  ></th>
+                  <th
                     colSpan={4}
-                    align="center"
+                    className="border border-gray-300 bg-pink-200 text-center p-2 font-medium"
                   >
                     Corridor
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderRight: "1px solid gray",
-                      backgroundColor: "#FDE8D9",
-                    }}
+                  </th>
+                  <th
                     colSpan={4}
-                    align="center"
+                    className="border border-gray-300 bg-orange-300 text-center p-2 font-medium"
                   >
                     Outside Corridor
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
+                  </th>
+                </tr>
+                <tr className="bg-orange-100">
                   {[
-                    {
-                      id: "department",
-                      label: "Department",
-                      filterable: true,
-                    },
-                    {
-                      id: "section",
-                      label: "Section",
-                      filterable: true,
-                      style: { borderRight: "1px solid gray" },
-                    },
-                    {
-                      id: "minutes",
-                      label: "Total Block Hours Demanded",
-                      filterable: false,
-                    },
+                    { id: "department", label: "Department", filterable: true },
+                    { id: "section", label: "Section", filterable: true },
+                    { id: "minutes", label: "Total Block Hours Demanded" },
                     {
                       id: "optimisedMinutes",
                       label: "Total Block Hours Sanctioned",
-                      filterable: false,
                     },
                     {
                       id: "optimisedMinutes",
                       label: "Percentage of Blocks Sanctioned",
-                      filterable: false,
                     },
                     {
                       id: "availedMinutes",
                       label: "Total Block Hours Availed",
-                      filterable: false,
-                      style: { borderRight: "1px solid gray" },
                     },
-                    {
-                      id: "minutes",
-                      label: "Total Block Hours Demanded",
-                      filterable: false,
-                    },
+                    { id: "minutes", label: "Total Block Hours Demanded" },
                     {
                       id: "optimisedMinutes",
                       label: "Total Block Hours Sanctioned",
-                      filterable: false,
                     },
                     {
                       id: "optimisedMinutes",
                       label: "Percentage of Blocks Sanctioned",
-                      filterable: false,
                     },
                     {
                       id: "availedMinutes",
                       label: "Total Block Hours Availed",
-                      filterable: false,
                     },
                   ].map((column) => (
-                    <TableCell
+                    <th
                       key={column.id}
-                      style={{ backgroundColor: "#FDE8D9", ...column.style }}
-                      align="center"
+                      className="border border-gray-300 p-3 text-center font-medium"
                     >
                       <div className="flex items-center justify-between">
                         <strong>{column.label}</strong>
@@ -589,27 +518,28 @@ const SearchForm = () => {
                                   : "▼"
                                 : ""}
                             </span>
-                            <IconButton
-                              size="small"
+                            <button
                               onClick={(e) => handleFilterClick(e, column.id)}
+                              className="ml-2 text-gray-500 hover:text-gray-700"
                             >
-                              <FilterListIcon />
-                            </IconButton>
+                              <FilterListIcon fontSize="small" />
+                            </button>
                           </>
                         )}
                       </div>
-                    </TableCell>
+                    </th>
                   ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
+                </tr>
+              </thead>
+
+              {/* Table Body */}
+              <tbody>
                 {filteredAndSortedRequests.length > 0 ? (
                   <>
                     {/* Department Rows */}
                     {Object.entries(
                       groupByDepartment(filteredAndSortedRequests)
                     ).map(([department, deptData]) => {
-                      // Calculate non-corridor totals for the department
                       const nonCorridorTotals = aggregatedRequestsNonCorridor
                         .filter((d) => d.department === department)
                         .reduce(
@@ -636,24 +566,24 @@ const SearchForm = () => {
                               ) || {};
 
                             return (
-                              <TableRow
+                              <tr
                                 key={`${request.department}-${request.section}`}
                               >
-                                <TableCell>{department}</TableCell>
-                                <TableCell
-                                  style={{ borderRight: "1px solid gray" }}
-                                >
+                                <td className="border border-gray-300 p-3">
+                                  {department}
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {request.section}
-                                </TableCell>
+                                </td>
 
                                 {/* Corridor Data */}
-                                <TableCell>
+                                <td className="border border-gray-300 p-3">
                                   {(request.minutes / 60).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {(request.optimisedMinutes / 60).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {request.minutes > 0
                                     ? (
                                         (request.optimisedMinutes /
@@ -662,25 +592,23 @@ const SearchForm = () => {
                                       ).toFixed(2)
                                     : 0}
                                   %
-                                </TableCell>
-                                <TableCell
-                                  style={{ borderRight: "1px solid gray" }}
-                                >
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {(request.availedMinutes / 60).toFixed(2)}
-                                </TableCell>
+                                </td>
 
                                 {/* Non-Corridor Data */}
-                                <TableCell>
+                                <td className="border border-gray-300 p-3">
                                   {(
                                     (nonCorridorData.minutes || 0) / 60
                                   ).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {(
                                     (nonCorridorData.optimisedMinutes || 0) / 60
                                   ).toFixed(2)}
-                                </TableCell>
-                                <TableCell>
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {(nonCorridorData.minutes || 0) > 0
                                     ? (
                                         ((nonCorridorData.optimisedMinutes ||
@@ -690,36 +618,31 @@ const SearchForm = () => {
                                       ).toFixed(2)
                                     : 0}
                                   %
-                                </TableCell>
-                                <TableCell>
+                                </td>
+                                <td className="border border-gray-300 p-3">
                                   {(
                                     (nonCorridorData.availedMinutes || 0) / 60
                                   ).toFixed(2)}
-                                </TableCell>
-                              </TableRow>
+                                </td>
+                              </tr>
                             );
                           })}
 
                           {/* Department Total Row */}
-                          <TableRow style={{ backgroundColor: "#BFF5BF" }}>
-                            <TableCell style={{ fontWeight: "bold" }}>
+                          <tr className="bg-green-100">
+                            <td className="border border-gray-300 p-3 font-bold">
                               Total
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                fontWeight: "bold",
-                                borderRight: "1px solid gray",
-                              }}
-                            ></TableCell>
+                            </td>
+                            <td className="border border-gray-300 p-3"></td>
 
                             {/* Corridor Totals */}
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {(deptData.totalMinutes / 60).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            </td>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {(deptData.totalOptimisedMinutes / 60).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            </td>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {deptData.totalMinutes > 0
                                 ? (
                                     (deptData.totalOptimisedMinutes /
@@ -728,26 +651,21 @@ const SearchForm = () => {
                                   ).toFixed(2)
                                 : 0}
                               %
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                fontWeight: "bold",
-                                borderRight: "1px solid gray",
-                              }}
-                            >
+                            </td>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {(deptData.totalAvailedMinutes / 60).toFixed(2)}
-                            </TableCell>
+                            </td>
 
                             {/* Non-Corridor Totals */}
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {(nonCorridorTotals.minutes / 60).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            </td>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {(
                                 nonCorridorTotals.optimisedMinutes / 60
                               ).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            </td>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {nonCorridorTotals.minutes > 0
                                 ? (
                                     (nonCorridorTotals.optimisedMinutes /
@@ -756,41 +674,44 @@ const SearchForm = () => {
                                   ).toFixed(2)
                                 : 0}
                               %
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
+                            </td>
+                            <td className="border border-gray-300 p-3 font-bold">
                               {(nonCorridorTotals.availedMinutes / 60).toFixed(
                                 2
                               )}
-                            </TableCell>
-                          </TableRow>
+                            </td>
+                          </tr>
                         </React.Fragment>
                       );
                     })}
 
                     {/* Grand Total Row */}
-                    <TableRow style={{ backgroundColor: "#40F740" }}>
-                      <TableCell style={{ fontWeight: "bold" }} colSpan={2}>
+                    <tr className="bg-green-200">
+                      <td
+                        colSpan={2}
+                        className="border border-gray-300 p-3 font-bold"
+                      >
                         Grand Total
-                      </TableCell>
+                      </td>
 
                       {/* Corridor Grand Totals */}
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {(
                           filteredAndSortedRequests.reduce(
                             (sum, item) => sum + (item.minutes || 0),
                             0
                           ) / 60
                         ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      </td>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {(
                           filteredAndSortedRequests.reduce(
                             (sum, item) => sum + (item.optimisedMinutes || 0),
                             0
                           ) / 60
                         ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      </td>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {filteredAndSortedRequests.reduce(
                           (sum, item) => sum + (item.minutes || 0),
                           0
@@ -809,39 +730,34 @@ const SearchForm = () => {
                             ).toFixed(2)
                           : 0}
                         %
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          fontWeight: "bold",
-                          borderRight: "1px solid gray",
-                        }}
-                      >
+                      </td>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {(
                           filteredAndSortedRequests.reduce(
                             (sum, item) => sum + (item.availedMinutes || 0),
                             0
                           ) / 60
                         ).toFixed(2)}
-                      </TableCell>
+                      </td>
 
                       {/* Non-Corridor Grand Totals */}
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {(
                           aggregatedRequestsNonCorridor.reduce(
                             (sum, item) => sum + (item.minutes || 0),
                             0
                           ) / 60
                         ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      </td>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {(
                           aggregatedRequestsNonCorridor.reduce(
                             (sum, item) => sum + (item.optimisedMinutes || 0),
                             0
                           ) / 60
                         ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      </td>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {aggregatedRequestsNonCorridor.reduce(
                           (sum, item) => sum + (item.minutes || 0),
                           0
@@ -860,27 +776,30 @@ const SearchForm = () => {
                             ).toFixed(2)
                           : 0}
                         %
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
+                      </td>
+                      <td className="border border-gray-300 p-3 font-bold">
                         {(
                           aggregatedRequestsNonCorridor.reduce(
                             (sum, item) => sum + (item.availedMinutes || 0),
                             0
                           ) / 60
                         ).toFixed(2)}
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   </>
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan={21} align="center">
+                  <tr>
+                    <td
+                      colSpan={10}
+                      className="border border-gray-300 p-5 text-center"
+                    >
                       No requests found for this week
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
       {val === "hq@gmail.com" && <Hq />}

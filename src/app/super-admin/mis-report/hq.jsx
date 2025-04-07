@@ -34,9 +34,8 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `For a period from ${
-      weekOffset === 0 ? "" : weekOffset > 0 ? "+" + weekOffset : weekOffset
-    }`,
+    weekLabel: `For a period from ${weekOffset === 0 ? "" : weekOffset > 0 ? "+" + weekOffset : weekOffset
+      }`,
   };
 };
 
@@ -441,344 +440,316 @@ const Hq = () => {
             </button>
           )}
         </div>
-        {val !== "drm@gmail.com" && (
-          <TableContainer
-            component={Paper}
-            sx={{
-              marginTop: 4,
-              position: "relative",
-              maxHeight: 560,
-              border: "solid 1px #ddd",
-            }}
-          >
-            <Table
-              sx={{ minWidth: 800 }}
-              aria-label="request table"
-              stickyHeader
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    style={{ borderRight: "1px solid gray" }}
-                    colSpan={2}
-                  ></TableCell>
-                  <TableCell
-                    style={{
-                      borderRight: "1px solid gray",
-                      backgroundColor: "#FDD9EE",
-                    }}
-                    colSpan={4}
-                    align="center"
+
+        <div className="overflow-auto rounded-lg shadow-md relative  max-h-screen">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  colSpan={2}
+                  className="border border-gray-300 bg-gray-100 text-center p-2 font-medium"
+                ></th>
+                <th
+                  colSpan={4}
+                  className="border border-gray-300 bg-pink-200 text-center p-2 font-medium"
+                >
+                  Corridor
+                </th>
+                <th
+                  colSpan={4}
+                  className="border border-gray-300 bg-orange-300 text-center p-2 font-medium"
+                >
+                  Outside Corridor
+                </th>
+              </tr>
+
+              <tr className="bg-orange-100">
+                {[
+                  {
+                    id: "division",
+                    label: "Division",
+                    filterable: false,
+                  },
+                  {
+                    id: "department",
+                    label: "Department",
+                    filterable: true,
+                  },
+                  {
+                    id: "minutes",
+                    label: "Total Block Hours Demanded",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Total Block Hours Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Percentage of Blocks Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "availedMinutes",
+                    label: "Total Block Hours Availed",
+                    filterable: false,
+                    style: { borderRight: "1px solid gray" },
+                  },
+                  {
+                    id: "minutes",
+                    label: "Total Block Hours Demanded",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Total Block Hours Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "optimisedMinutes",
+                    label: "Percentage of Blocks Sanctioned",
+                    filterable: false,
+                  },
+                  {
+                    id: "availedMinutes",
+                    label: "Total Block Hours Availed",
+                    filterable: false,
+                  },
+                ].map((column) => (
+                  <th
+                    key={column.id}
+                    className="border border-gray-300 p-3 text-center font-medium"
                   >
-                    Corridor
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderRight: "1px solid gray",
-                      backgroundColor: "#FDE8D9",
-                    }}
-                    colSpan={4}
-                    align="center"
-                  >
-                    Outside Corridor
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  {[
-                    {
-                      id: "division",
-                      label: "Division",
-                      filterable: false,
-                    },
-                    {
-                      id: "department",
-                      label: "Department",
-                      filterable: true,
-                    },
-                    {
-                      id: "minutes",
-                      label: "Total Block Hours Demanded",
-                      filterable: false,
-                    },
-                    {
-                      id: "optimisedMinutes",
-                      label: "Total Block Hours Sanctioned",
-                      filterable: false,
-                    },
-                    {
-                      id: "optimisedMinutes",
-                      label: "Percentage of Blocks Sanctioned",
-                      filterable: false,
-                    },
-                    {
-                      id: "availedMinutes",
-                      label: "Total Block Hours Availed",
-                      filterable: false,
-                      style: { borderRight: "1px solid gray" },
-                    },
-                    {
-                      id: "minutes",
-                      label: "Total Block Hours Demanded",
-                      filterable: false,
-                    },
-                    {
-                      id: "optimisedMinutes",
-                      label: "Total Block Hours Sanctioned",
-                      filterable: false,
-                    },
-                    {
-                      id: "optimisedMinutes",
-                      label: "Percentage of Blocks Sanctioned",
-                      filterable: false,
-                    },
-                    {
-                      id: "availedMinutes",
-                      label: "Total Block Hours Availed",
-                      filterable: false,
-                    },
-                  ].map((column) => (
-                    <TableCell
-                      key={column.id}
-                      style={{ backgroundColor: "#FDE8D9", ...column.style }}
-                      align="center"
-                    >
-                      <div className="flex items-center justify-between">
-                        <strong>{column.label}</strong>
-                        {column.filterable && (
-                          <>
-                            <span
-                              onClick={() => handleSort(column.id)}
-                              className="cursor-pointer"
-                            >
-                              {sortConfig.key === column.id
-                                ? sortConfig.direction === "ascending"
-                                  ? "▲"
-                                  : "▼"
-                                : ""}
-                            </span>
-                            <IconButton
-                              size="small"
-                              onClick={(e) => handleFilterClick(e, column.id)}
-                            >
-                              <FilterListIcon />
-                            </IconButton>
-                          </>
-                        )}
-                      </div>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredAndSortedRequests.length > 0 ? (
-                  <>
-                    {/* Department Rows */}
-                    {Object.entries(
-                      groupByDepartment(filteredAndSortedRequests)
-                    ).map(([department, deptData]) => {
-                      // Calculate non-corridor totals for the department
-                      const nonCorridorTotals = aggregatedRequestsNonCorridor
-                        .filter((d) => d.department === department)
-                        .reduce(
-                          (acc, item) => ({
-                            minutes: acc.minutes + (item.minutes || 0),
-                            optimisedMinutes:
-                              acc.optimisedMinutes +
-                              (item.optimisedMinutes || 0),
-                            availedMinutes:
-                              acc.availedMinutes + (item.availedMinutes || 0),
-                          }),
-                          { minutes: 0, optimisedMinutes: 0, availedMinutes: 0 }
-                        );
-
-                      return (
-                        <React.Fragment key={department}>
-                          {/* Department Total Row */}
-                          <TableRow>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              MAS
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {department}
-                            </TableCell>
-
-                            {/* Corridor Totals */}
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {(deptData.totalMinutes / 60).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {(deptData.totalOptimisedMinutes / 60).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {deptData.totalMinutes > 0
-                                ? (
-                                    (deptData.totalOptimisedMinutes /
-                                      deptData.totalMinutes) *
-                                    100
-                                  ).toFixed(2)
-                                : 0}
-                              %
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                fontWeight: "bold",
-                                borderRight: "1px solid gray",
-                              }}
-                            >
-                              {(deptData.totalAvailedMinutes / 60).toFixed(2)}
-                            </TableCell>
-
-                            {/* Non-Corridor Totals */}
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {(nonCorridorTotals.minutes / 60).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {(
-                                nonCorridorTotals.optimisedMinutes / 60
-                              ).toFixed(2)}
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {nonCorridorTotals.minutes > 0
-                                ? (
-                                    (nonCorridorTotals.optimisedMinutes /
-                                      nonCorridorTotals.minutes) *
-                                    100
-                                  ).toFixed(2)
-                                : 0}
-                              %
-                            </TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>
-                              {(nonCorridorTotals.availedMinutes / 60).toFixed(
-                                2
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        </React.Fragment>
+                    <div className="flex items-center justify-between">
+                      <strong>{column.label}</strong>
+                      {column.filterable && (
+                        <>
+                          <span
+                            onClick={() => handleSort(column.id)}
+                            className="cursor-pointer"
+                          >
+                            {sortConfig.key === column.id
+                              ? sortConfig.direction === "ascending"
+                                ? "▲"
+                                : "▼"
+                              : ""}
+                          </span>
+                          <button
+                            onClick={(e) => handleFilterClick(e, column.id)}
+                            className="ml-2 text-gray-500 hover:text-gray-700"
+                          >
+                            <FilterListIcon fontSize="small" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <TableBody>
+              {filteredAndSortedRequests.length > 0 ? (
+                <>
+                  {/* Department Rows */}
+                  {Object.entries(
+                    groupByDepartment(filteredAndSortedRequests)
+                  ).map(([department, deptData]) => {
+                    // Calculate non-corridor totals for the department
+                    const nonCorridorTotals = aggregatedRequestsNonCorridor
+                      .filter((d) => d.department === department)
+                      .reduce(
+                        (acc, item) => ({
+                          minutes: acc.minutes + (item.minutes || 0),
+                          optimisedMinutes:
+                            acc.optimisedMinutes +
+                            (item.optimisedMinutes || 0),
+                          availedMinutes:
+                            acc.availedMinutes + (item.availedMinutes || 0),
+                        }),
+                        { minutes: 0, optimisedMinutes: 0, availedMinutes: 0 }
                       );
-                    })}
 
-                    {/* Grand Total Row */}
-                    <TableRow style={{ backgroundColor: "#BFF5BF" }}>
-                      <TableCell style={{ fontWeight: "bold" }} colSpan={2}>
-                        Total
-                      </TableCell>
+                    return (
+                      <React.Fragment key={department}>
+                        {/* Department Total Row */}
+                        <tr>
+                          <td className="border border-gray-300 p-3">
+                            MAS
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {department}
+                          </td>
 
-                      {/* Corridor Grand Totals */}
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {(
-                          Object.values(
-                            groupByDepartment(filteredAndSortedRequests)
-                          ).reduce((sum, dept) => sum + dept.totalMinutes, 0) /
-                          60
-                        ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {(
-                          Object.values(
+                          {/* Corridor Totals */}
+                          <td className="border border-gray-300 p-3">
+                            {(deptData.totalMinutes / 60).toFixed(2)}
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {(deptData.totalOptimisedMinutes / 60).toFixed(2)}
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {deptData.totalMinutes > 0
+                              ? (
+                                (deptData.totalOptimisedMinutes /
+                                  deptData.totalMinutes) *
+                                100
+                              ).toFixed(2)
+                              : 0}
+                            %
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {(deptData.totalAvailedMinutes / 60).toFixed(2)}
+                          </td>
+
+                          {/* Non-Corridor Totals */}
+                          <td className="border border-gray-300 p-3">
+                            {(nonCorridorTotals.minutes / 60).toFixed(2)}
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {(
+                              nonCorridorTotals.optimisedMinutes / 60
+                            ).toFixed(2)}
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {nonCorridorTotals.minutes > 0
+                              ? (
+                                (nonCorridorTotals.optimisedMinutes /
+                                  nonCorridorTotals.minutes) *
+                                100
+                              ).toFixed(2)
+                              : 0}
+                            %
+                          </td>
+                          <td className="border border-gray-300 p-3">
+                            {(nonCorridorTotals.availedMinutes / 60).toFixed(
+                              2
+                            )}
+                          </td>
+                        </tr>
+                      </React.Fragment>
+                    );
+                  })}
+
+                  {/* Grand Total Row */}
+                  <tr className="bg-green-100">
+                    <td className="border border-gray-300 p-3 font-bold" colSpan={2}>
+                      Total
+                    </td>
+
+                    {/* Corridor Grand Totals */}
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {(
+                        Object.values(
+                          groupByDepartment(filteredAndSortedRequests)
+                        ).reduce((sum, dept) => sum + dept.totalMinutes, 0) /
+                        60
+                      ).toFixed(2)}
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {(
+                        Object.values(
+                          groupByDepartment(filteredAndSortedRequests)
+                        ).reduce(
+                          (sum, dept) => sum + dept.totalOptimisedMinutes,
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {Object.values(
+                        groupByDepartment(filteredAndSortedRequests)
+                      ).reduce((sum, dept) => sum + dept.totalMinutes, 0) > 0
+                        ? (
+                          (Object.values(
                             groupByDepartment(filteredAndSortedRequests)
                           ).reduce(
                             (sum, dept) => sum + dept.totalOptimisedMinutes,
                             0
-                          ) / 60
-                        ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {Object.values(
+                          ) /
+                            Object.values(
+                              groupByDepartment(filteredAndSortedRequests)
+                            ).reduce(
+                              (sum, dept) => sum + dept.totalMinutes,
+                              0
+                            )) *
+                          100
+                        ).toFixed(2)
+                        : 0}
+                      %
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {(
+                        Object.values(
                           groupByDepartment(filteredAndSortedRequests)
-                        ).reduce((sum, dept) => sum + dept.totalMinutes, 0) > 0
-                          ? (
-                              (Object.values(
-                                groupByDepartment(filteredAndSortedRequests)
-                              ).reduce(
-                                (sum, dept) => sum + dept.totalOptimisedMinutes,
-                                0
-                              ) /
-                                Object.values(
-                                  groupByDepartment(filteredAndSortedRequests)
-                                ).reduce(
-                                  (sum, dept) => sum + dept.totalMinutes,
-                                  0
-                                )) *
-                              100
-                            ).toFixed(2)
-                          : 0}
-                        %
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          fontWeight: "bold",
-                          borderRight: "1px solid gray",
-                        }}
-                      >
-                        {(
-                          Object.values(
-                            groupByDepartment(filteredAndSortedRequests)
-                          ).reduce(
-                            (sum, dept) => sum + dept.totalAvailedMinutes,
-                            0
-                          ) / 60
-                        ).toFixed(2)}
-                      </TableCell>
+                        ).reduce(
+                          (sum, dept) => sum + dept.totalAvailedMinutes,
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </td>
 
-                      {/* Non-Corridor Grand Totals */}
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {(
-                          aggregatedRequestsNonCorridor.reduce(
-                            (sum, item) => sum + (item.minutes || 0),
-                            0
-                          ) / 60
-                        ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {(
-                          aggregatedRequestsNonCorridor.reduce(
-                            (sum, item) => sum + (item.optimisedMinutes || 0),
-                            0
-                          ) / 60
-                        ).toFixed(2)}
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {aggregatedRequestsNonCorridor.reduce(
+                    {/* Non-Corridor Grand Totals */}
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {(
+                        aggregatedRequestsNonCorridor.reduce(
                           (sum, item) => sum + (item.minutes || 0),
                           0
-                        ) > 0
-                          ? (
-                              (aggregatedRequestsNonCorridor.reduce(
-                                (sum, item) =>
-                                  sum + (item.optimisedMinutes || 0),
-                                0
-                              ) /
-                                aggregatedRequestsNonCorridor.reduce(
-                                  (sum, item) => sum + (item.minutes || 0),
-                                  0
-                                )) *
-                              100
-                            ).toFixed(2)
-                          : 0}
-                        %
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        {(
-                          aggregatedRequestsNonCorridor.reduce(
-                            (sum, item) => sum + (item.availedMinutes || 0),
+                        ) / 60
+                      ).toFixed(2)}
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {(
+                        aggregatedRequestsNonCorridor.reduce(
+                          (sum, item) => sum + (item.optimisedMinutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {aggregatedRequestsNonCorridor.reduce(
+                        (sum, item) => sum + (item.minutes || 0),
+                        0
+                      ) > 0
+                        ? (
+                          (aggregatedRequestsNonCorridor.reduce(
+                            (sum, item) =>
+                              sum + (item.optimisedMinutes || 0),
                             0
-                          ) / 60
-                        ).toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  </>
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={21} align="center">
-                      No requests found for this week
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+                          ) /
+                            aggregatedRequestsNonCorridor.reduce(
+                              (sum, item) => sum + (item.minutes || 0),
+                              0
+                            )) *
+                          100
+                        ).toFixed(2)
+                        : 0}
+                      %
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
+                      {(
+                        aggregatedRequestsNonCorridor.reduce(
+                          (sum, item) => sum + (item.availedMinutes || 0),
+                          0
+                        ) / 60
+                      ).toFixed(2)}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <tr>
+                  <td
+                    colSpan={10}
+                    className="border border-gray-300 p-5 text-center"
+                  >
+                    No requests found for this week
+                  </td>
+                </tr>
+              )}
+            </TableBody>
+          </table>
+        </div>
+
       </div>
     </>
   );

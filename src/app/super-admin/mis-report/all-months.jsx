@@ -1,15 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Popover,
-  IconButton,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
@@ -34,13 +26,12 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Week ${
-      weekOffset === 0
-        ? "(Current)"
-        : weekOffset > 0
+    weekLabel: `Week ${weekOffset === 0
+      ? "(Current)"
+      : weekOffset > 0
         ? "+" + weekOffset
         : weekOffset
-    }`,
+      }`,
   };
 };
 
@@ -514,46 +505,29 @@ const AllMonths = () => {
             </button>
           )}
         </div>
-
-        <TableContainer
-          component={Paper}
-          sx={{
-            marginTop: 4,
-            position: "relative",
-            maxHeight: 560,
-            border: "solid 1px #ddd",
-          }}
-        >
-          <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  style={{ borderRight: "1px solid gray" }}
+        <div className="overflow-auto rounded-lg shadow-md relative  max-h-screen">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
                   colSpan={2}
-                ></TableCell>
-                <TableCell
-                  style={{
-                    borderRight: "1px solid gray",
-                    backgroundColor: "#FDD9EE",
-                  }}
+                  className="border border-gray-300 bg-gray-100 text-center p-2 font-medium"
+                ></th>
+                <th
                   colSpan={4}
-                  align="center"
+                  className="border border-gray-300 bg-pink-200 text-center p-2 font-medium"
                 >
                   Corridor
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderRight: "1px solid gray",
-                    backgroundColor: "#FDE8D9",
-                  }}
+                </th>
+                <th
                   colSpan={4}
-                  align="center"
+                  className="border border-gray-300 bg-orange-300 text-center p-2 font-medium"
                 >
                   Outside Corridor
-                </TableCell>
-              </TableRow>
+                </th>
+              </tr>
 
-              <TableRow>
+              <tr className="bg-orange-100">
                 {[
                   {
                     id: "month",
@@ -602,10 +576,9 @@ const AllMonths = () => {
                     filterable: false,
                   },
                 ].map((column) => (
-                  <TableCell
+                  <th
                     key={column.id}
-                    style={{ backgroundColor: "#FDE8D9", ...column.style }}
-                    align="center"
+                    className="border border-gray-300 p-3 text-center font-medium"
                   >
                     <div className="flex items-center justify-between">
                       <strong>{column.label}</strong>
@@ -621,81 +594,80 @@ const AllMonths = () => {
                                 : "▼"
                               : ""}
                           </span>
-                          <IconButton
-                            size="small"
+                          <button
                             onClick={(e) => handleFilterClick(e, column.id)}
+                            className="ml-2 text-gray-500 hover:text-gray-700"
                           >
-                            <FilterListIcon />
-                          </IconButton>
+                            <FilterListIcon fontSize="small" />
+                          </button>
                         </>
                       )}
                     </div>
-                  </TableCell>
+                  </th>
                 ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
+              </tr>
+            </thead>
+            <tbody>
               {filteredAndSortedRequests.length > 0 ? (
                 <>
                   {/* Month Rows */}
                   {Object.entries(groupByMonth(filteredAndSortedRequests)).map(
                     ([month, monthData]) => (
-                      <TableRow key={month}>
-                        <TableCell>{month}</TableCell>
-
+                      <tr key={month}>
+                        <td className="border border-gray-300 p-3">{month}</td>
                         {/* Corridor Data */}
-                        <TableCell>
+                        <td className="border border-gray-300 p-3">
                           {(monthData.totalMinutes / 60).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
+                        </td>
+                        <td className="border border-gray-300 p-3">
                           {(monthData.totalOptimisedMinutes / 60).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
+                        </td>
+                        <td className="border border-gray-300 p-3">
                           {monthData.totalMinutes > 0
                             ? (
-                                (monthData.totalOptimisedMinutes /
-                                  monthData.totalMinutes) *
-                                100
-                              ).toFixed(2)
+                              (monthData.totalOptimisedMinutes /
+                                monthData.totalMinutes) *
+                              100
+                            ).toFixed(2)
                             : 0}
                           %
-                        </TableCell>
-                        <TableCell>
+                        </td>
+                        <td className="border border-gray-300 p-3">
                           {(monthData.totalAvailedMinutes / 60).toFixed(2)}
-                        </TableCell>
+                        </td>
 
                         {/* Non-Corridor Data */}
-                        <TableCell>
+                        <td className="border border-gray-300 p-3">
                           {(monthData.totalMinutes / 60).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
+                        </td>
+                        <td className="border border-gray-300 p-3">
                           {(monthData.totalOptimisedMinutes / 60).toFixed(2)}
-                        </TableCell>
-                        <TableCell>
+                        </td>
+                        <td className="border border-gray-300 p-3">
                           {monthData.totalMinutes > 0
                             ? (
-                                (monthData.totalOptimisedMinutes /
-                                  monthData.totalMinutes) *
-                                100
-                              ).toFixed(2)
+                              (monthData.totalOptimisedMinutes /
+                                monthData.totalMinutes) *
+                              100
+                            ).toFixed(2)
                             : 0}
                           %
-                        </TableCell>
-                        <TableCell>
+                        </td>
+                        <td className="border border-gray-300 p-3">
                           {(monthData.totalAvailedMinutes / 60).toFixed(2)}
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )}
+                        </td>
+
+                      </tr>
+                    ))}
 
                   {/* Total Row */}
-                  <TableRow style={{ backgroundColor: "#BFF5BF" }}>
-                    <TableCell>
+                  <tr className="bg-green-100">
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>Total</strong>
-                    </TableCell>
+                    </td>
 
                     {/* Corridor Total */}
-                    <TableCell>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {(
                           filteredAndSortedRequests.reduce(
@@ -704,8 +676,8 @@ const AllMonths = () => {
                           ) / 60
                         ).toFixed(2)}
                       </strong>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {(
                           filteredAndSortedRequests.reduce(
@@ -714,30 +686,30 @@ const AllMonths = () => {
                           ) / 60
                         ).toFixed(2)}
                       </strong>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {filteredAndSortedRequests.reduce(
                           (sum, item) => sum + (item.minutes || 0),
                           0
                         ) > 0
                           ? (
-                              (filteredAndSortedRequests.reduce(
-                                (sum, item) =>
-                                  sum + (item.optimisedMinutes || 0),
+                            (filteredAndSortedRequests.reduce(
+                              (sum, item) =>
+                                sum + (item.optimisedMinutes || 0),
+                              0
+                            ) /
+                              filteredAndSortedRequests.reduce(
+                                (sum, item) => sum + (item.minutes || 0),
                                 0
-                              ) /
-                                filteredAndSortedRequests.reduce(
-                                  (sum, item) => sum + (item.minutes || 0),
-                                  0
-                                )) *
-                              100
-                            ).toFixed(2)
+                              )) *
+                            100
+                          ).toFixed(2)
                           : 0}
                         %
                       </strong>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {(
                           filteredAndSortedRequests.reduce(
@@ -746,10 +718,10 @@ const AllMonths = () => {
                           ) / 60
                         ).toFixed(2)}
                       </strong>
-                    </TableCell>
+                    </td>
 
                     {/* Non-Corridor Total */}
-                    <TableCell>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {(
                           filteredAndSortedRequests.reduce(
@@ -758,8 +730,8 @@ const AllMonths = () => {
                           ) / 60
                         ).toFixed(2)}
                       </strong>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {(
                           filteredAndSortedRequests.reduce(
@@ -768,30 +740,30 @@ const AllMonths = () => {
                           ) / 60
                         ).toFixed(2)}
                       </strong>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {filteredAndSortedRequests.reduce(
                           (sum, item) => sum + (item.minutes || 0),
                           0
                         ) > 0
                           ? (
-                              (filteredAndSortedRequests.reduce(
-                                (sum, item) =>
-                                  sum + (item.optimisedMinutes || 0),
+                            (filteredAndSortedRequests.reduce(
+                              (sum, item) =>
+                                sum + (item.optimisedMinutes || 0),
+                              0
+                            ) /
+                              filteredAndSortedRequests.reduce(
+                                (sum, item) => sum + (item.minutes || 0),
                                 0
-                              ) /
-                                filteredAndSortedRequests.reduce(
-                                  (sum, item) => sum + (item.minutes || 0),
-                                  0
-                                )) *
-                              100
-                            ).toFixed(2)
+                              )) *
+                            100
+                          ).toFixed(2)
                           : 0}
                         %
                       </strong>
-                    </TableCell>
-                    <TableCell>
+                    </td>
+                    <td className="border border-gray-300 p-3 font-bold">
                       <strong>
                         {(
                           filteredAndSortedRequests.reduce(
@@ -800,19 +772,22 @@ const AllMonths = () => {
                           ) / 60
                         ).toFixed(2)}
                       </strong>
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 </>
               ) : (
-                <TableRow>
-                  <TableCell colSpan={9} align="center">
+                <tr>
+                  <td
+                    colSpan={10}
+                    className="border border-gray-300 p-5 text-center"
+                  >
                     No requests found for this week
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

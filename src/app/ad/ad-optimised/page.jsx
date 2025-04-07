@@ -27,6 +27,7 @@ import {
 } from "../../actions/optimisetable";
 
 import { updateRequestsSanctionedStatus } from "../../actions/formdata";
+import { capitalizeFirstLetter } from "../../../lib/utils";
 
 // Helper function to get week dates
 const getWeekDates = (weekOffset = 0) => {
@@ -338,6 +339,17 @@ const SearchForm = () => {
     );
   };
 
+  const getFilterIcon = (columnName) => {
+    if (sortConfig.key === columnName) {
+      return sortConfig.direction === "ascending" ? (
+        <ArrowUpwardIcon fontSize="small" />
+      ) : (
+        <ArrowDownwardIcon fontSize="small" />
+      );
+    }
+    return null;
+  };
+
   if (showPopup) {
     return (
       <EditOptimised
@@ -460,8 +472,8 @@ const SearchForm = () => {
           </div>
 
           {/* Main Content */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+          <div className="bg-secondary m-2 md:m-10 rounded-xl p-3 md:p-5 w-full md:w-[97%]">
+            <div className="rounded-xl shadow-sm p-4 sm:p-6">
               {/* Week Selection */}
               <div className="mb-6 flex flex-wrap items-center justify-center space-x-4">
                 <button
@@ -494,68 +506,55 @@ const SearchForm = () => {
               </div>
 
               {/* Desktop Table */}
-              <div
-                className={`hidden md:block ${
-                  isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
-                }`}
-              >
-                {isFullScreen && (
-                  <div className="flex justify-end mb-4">
-                    <button
-                      onClick={() => setIsFullScreen(false)}
-                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 9L4 4m0 0l5-5M4 4h16m0 0l-5 5m5-5v16m0 0l-5-5m5 5l-5-5"
-                        />
-                      </svg>
-                      Exit Full Screen
-                    </button>
-                  </div>
-                )}
+              <div className="overflow-x-auto relative">
                 <div
-                  className={`${
-                    isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
+                  className={`hidden md:block ${
+                    isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
                   }`}
                 >
-                  <TableContainer
-                    component={Paper}
-                    sx={{
-                      marginTop: isFullScreen ? 0 : 2,
-                      position: "relative",
-                      maxHeight: isFullScreen ? "none" : 600,
-                      border: "solid 1px #e5e7eb",
-                      borderRadius: "0.5rem",
-                      boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-                    }}
+                  {isFullScreen && (
+                    <div className="flex justify-end mb-4">
+                      <button
+                        onClick={() => setIsFullScreen(false)}
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 9L4 4m0 0l5-5M4 4h16m0 0l-5 5m5-5v16m0 0l-5-5m5 5l-5-5"
+                          />
+                        </svg>
+                        Exit Full Screen
+                      </button>
+                    </div>
+                  )}
+                  <div
+                    className={`${
+                      isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
+                    }`}
                   >
-                    <Table
-                      sx={{ minWidth: 800 }}
-                      aria-label="request table"
-                      stickyHeader
-                    >
-                      <TableHead>
-                        <TableRow>
+                    <table className="w-full border-collapse border border-gray-300 mb-10">
+                      <thead>
+                        {/* First Row */}
+                        <tr>
                           {[
                             {
                               id: "requestId",
                               label: "Request ID",
-                              filterable: false,
+                              filterable: true,
                             },
                             {
                               id: "corridorType",
                               label: "Corridor Type",
-                              filterable: false,
+                              filterable: true,
                             },
                             {
                               id: "date",
@@ -572,217 +571,283 @@ const SearchForm = () => {
                               label: "Major Section",
                               filterable: true,
                             },
-                            {
-                              id: "missionBlock",
-                              label: "Block Section/Yard",
-                              filterable: false,
-                            },
+                            { id: "missionBlock", label: "Block Section/Yard" },
                             {
                               id: "workType",
                               label: "Work Type Selected",
                               filterable: true,
                             },
+                            { id: "workDescription", label: "Activity" },
                             {
-                              id: "workDescription",
-                              label: "Activity",
-                              filterable: false,
+                              id: "demandTime",
+                              label: "Demand Time",
+                              split: true,
+                              children: [
+                                { id: "demandTimeFrom", label: "From" },
+                                { id: "demandTimeTo", label: "To" },
+                              ],
                             },
                             {
-                              id: "demandTimeFrom",
-                              label: "Demand Time (From)",
-                              filterable: false,
+                              id: "optimisedTime",
+                              label: "Optimised Time",
+                              split: true,
+                              children: [
+                                { id: "Optimisedtimefrom", label: "From" },
+                                { id: "Optimisedtimeto", label: "To" },
+                              ],
                             },
-                            {
-                              id: "demandTimeTo",
-                              label: "Demand Time (To)",
-                              filterable: false,
-                            },
-                            {
-                              id: "Optimisedtimefrom",
-                              label: "Optimised Time (From)",
-                              filterable: false,
-                            },
-                            {
-                              id: "Optimisedtimeto",
-                              label: "Optimised Time (To)",
-                              filterable: false,
-                            },
-                            {
-                              id: "selectedLine",
-                              label: "Line Selected",
-                              filterable: false,
-                            },
+                            { id: "selectedLine", label: "Line Selected" },
                             {
                               id: "cautionRequired",
                               label: "Caution Required",
-                              filterable: false,
+                            },
+                            { id: "cautionSpeed", label: "Caution Speed" },
+                            {
+                              id: "cautionLocation",
+                              label: "Caution Location",
+                              split: true,
+                              children: [
+                                { id: "cautionLocationFrom", label: "From" },
+                                { id: "cautionLocationTo", label: "To" },
+                              ],
                             },
                             {
-                              id: "cautionSpeed",
-                              label: "Caution Speed",
-                              filterable: false,
-                            },
-                            {
-                              id: "cautionLocationFrom",
-                              label: "Caution Location (From)",
-                              filterable: false,
-                            },
-                            {
-                              id: "cautionLocationTo",
-                              label: "Caution Location (To)",
-                              filterable: false,
-                            },
-                            {
-                              id: "workLocationFrom",
-                              label: "Work Location (From)",
-                              filterable: false,
-                            },
-                            {
-                              id: "workLocationTo",
-                              label: "Work Location (To)",
-                              filterable: false,
+                              id: "workLocation",
+                              label: "Work Location",
+                              split: true,
+                              children: [
+                                { id: "workLocationFrom", label: "From" },
+                                { id: "workLocationTo", label: "To" },
+                              ],
                             },
                             {
                               id: "optimization_details",
                               label: "Optimization Details",
-                              filterable: false,
                             },
                             {
                               id: "sigDisconnection",
                               label: "SIG Disconnection",
-                              filterable: false,
                             },
                             {
                               id: "ohDisconnection",
                               label: "Power Block Disconnection",
-                              filterable: false,
                             },
                             {
-                              id: "elementarySectionFrom",
-                              label: "Elementary Section (From)",
-                              filterable: false,
-                            },
-                            {
-                              id: "elementarySectionTo",
-                              label: "Elementary Section (To)",
-                              filterable: false,
+                              id: "elementarySection",
+                              label: "Elementary Section",
+                              split: true,
+                              children: [
+                                { id: "elementarySectionFrom", label: "From" },
+                                { id: "elementarySectionTo", label: "To" },
+                              ],
                             },
                             {
                               id: "otherLinesAffected",
                               label: "Other Lines Affected",
-                              filterable: false,
                             },
-                            {
-                              id: "action",
-                              label: "Action",
-                              filterable: false,
-                            },
-                            {
-                              id: "remarks",
-                              label: "Remarks",
-                              filterable: false,
-                            },
-                          ].map((column) => (
-                            <TableCell key={column.id}>
-                              <div className="flex items-center justify-between">
-                                <strong>{column.label}</strong>
-                                {column.filterable && (
-                                  <>
-                                    <span
-                                      onClick={() => handleSort(column.id)}
-                                      className="cursor-pointer"
-                                    >
-                                      {sortConfig.key === column.id
-                                        ? sortConfig.direction === "ascending"
-                                          ? "▲"
-                                          : "▼"
-                                        : ""}
-                                    </span>
+                            { id: "action", label: "Action", filterable: true },
+                            { id: "remarks", label: "Remarks" },
+                          ].map((column) =>
+                            column.split ? (
+                              <th
+                                key={column.id}
+                                colSpan={column.children.length}
+                                className="border border-gray-300 bg-gray-50 text-center p-2"
+                              >
+                                {column.label}
+                              </th>
+                            ) : (
+                              <th
+                                key={column.id}
+                                rowSpan={2}
+                                className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top"
+                              >
+                                <div className="flex items-center gap-1 justify-between">
+                                  <div
+                                    className="flex-grow"
+                                    onClick={() => handleSort(column.id)}
+                                  >
+                                    {column.label}{" "}
+                                    {getFilterIcon && getFilterIcon(column.id)}
+                                  </div>
+                                  {column.filterable && (
                                     <IconButton
                                       size="small"
                                       onClick={(e) =>
                                         handleFilterClick(e, column.id)
                                       }
+                                      className="p-0.5"
                                     >
                                       <FilterListIcon />
                                     </IconButton>
-                                  </>
-                                )}
-                              </div>
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
+                                  )}
+                                </div>
+                              </th>
+                            )
+                          )}
+                        </tr>
+
+                        {/* Second Row - only for split columns */}
+                        <tr>
+                          {[
+                            {
+                              id: "demandTime",
+                              children: [
+                                { id: "demandTimeFrom", label: "From" },
+                                { id: "demandTimeTo", label: "To" },
+                              ],
+                            },
+                            {
+                              id: "optimisedTime",
+                              children: [
+                                { id: "Optimisedtimefrom", label: "From" },
+                                { id: "Optimisedtimeto", label: "To" },
+                              ],
+                            },
+                            {
+                              id: "cautionLocation",
+                              children: [
+                                { id: "cautionLocationFrom", label: "From" },
+                                { id: "cautionLocationTo", label: "To" },
+                              ],
+                            },
+                            {
+                              id: "workLocation",
+                              children: [
+                                { id: "workLocationFrom", label: "From" },
+                                { id: "workLocationTo", label: "To" },
+                              ],
+                            },
+                            {
+                              id: "elementarySection",
+                              children: [
+                                { id: "elementarySectionFrom", label: "From" },
+                                { id: "elementarySectionTo", label: "To" },
+                              ],
+                            },
+                          ].flatMap((column) =>
+                            column.children.map((child) => (
+                              <th
+                                key={child.id}
+                                className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
+                              >
+                                {child.label}
+                              </th>
+                            ))
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody>
                         {filteredAndSortedRequests.length > 0 ? (
                           filteredAndSortedRequests.map((request) => (
-                            <TableRow key={request.requestId}>
-                              <TableCell>{request.requestId}</TableCell>
-                              <TableCell>{request.corridorType}</TableCell>
-                              <TableCell>{request.date}</TableCell>
-                              <TableCell>
+                            <tr
+                              key={request.requestId}
+                              className="hover:bg-gray-50"
+                            >
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.requestId}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {capitalizeFirstLetter(request.corridorType)}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.date}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
                                 {request.selectedDepartment}
-                              </TableCell>
-                              <TableCell>{request.selectedSection}</TableCell>
-                              <TableCell>{request.missionBlock}</TableCell>
-                              <TableCell>{request.workType}</TableCell>
-                              <TableCell>{request.workDescription}</TableCell>
-                              <TableCell>{request.demandTimeFrom}</TableCell>
-                              <TableCell>{request.demandTimeTo}</TableCell>
-                              <TableCell>{request.Optimisedtimefrom}</TableCell>
-                              <TableCell>{request.Optimisedtimeto}</TableCell>
-                              <TableCell>{request.selectedLine}</TableCell>
-                              <TableCell>{request.cautionRequired}</TableCell>
-                              <TableCell>{request.cautionSpeed}</TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.selectedSection}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.missionBlock}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.workType}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.workDescription}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.demandTimeFrom}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.demandTimeTo}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.Optimisedtimefrom}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.Optimisedtimeto}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.selectedLine}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.cautionRequired}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.cautionSpeed}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
                                 {request.cautionLocationFrom}
-                              </TableCell>
-                              <TableCell>{request.cautionLocationTo}</TableCell>
-                              <TableCell>{request.workLocationFrom}</TableCell>
-                              <TableCell>{request.workLocationTo}</TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.cautionLocationTo}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.workLocationFrom}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.workLocationTo}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
                                 {request.optimization_details}
-                              </TableCell>
-                              <TableCell>{request.sigDisconnection}</TableCell>
-                              <TableCell>{request.ohDisconnection}</TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.sigDisconnection}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.ohDisconnection}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
                                 {request.elementarySectionFrom}
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
                                 {request.elementarySectionTo}
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
                                 {request.otherLinesAffected}
-                              </TableCell>
-                              <TableCell>{request.action}</TableCell>
-                              <TableCell>{request.remarks}</TableCell>
-                              <TableCell>
-                                {(request.final === "" ||
-                                  request.final !== "set") && (
-                                  <div className="pt-2">
-                                    <button
-                                      className="w-full bg-blue-500 text-white p-2 rounded-lg"
-                                      onClick={() =>
-                                        editRequestHandler(request)
-                                      }
-                                    >
-                                      Edit Request
-                                    </button>
-                                  </div>
-                                )}
-                              </TableCell>
-                            </TableRow>
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.action}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                {request.remarks}
+                              </td>
+                              <td className="border border-gray-300 p-3 whitespace-nowrap">
+                                <button
+                                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                  onClick={() => editRequestHandler(request)}
+                                >
+                                  Edit Request
+                                </button>
+                              </td>
+                            </tr>
                           ))
                         ) : (
-                          <TableRow>
-                            <TableCell colSpan={27} align="center">
+                          <tr>
+                            <td
+                              colSpan={27}
+                              className="border border-gray-300 p-3"
+                            >
                               No requests found for this week
-                            </TableCell>
-                          </TableRow>
+                            </td>
+                          </tr>
                         )}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 

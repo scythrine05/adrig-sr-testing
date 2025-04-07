@@ -1,15 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Popover,
-  IconButton,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
@@ -34,13 +26,12 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Week ${
-      weekOffset === 0
-        ? "(Current)"
-        : weekOffset > 0
+    weekLabel: `Week ${weekOffset === 0
+      ? "(Current)"
+      : weekOffset > 0
         ? "+" + weekOffset
         : weekOffset
-    }`,
+      }`,
   };
 };
 
@@ -463,45 +454,29 @@ const BOIForm = () => {
           )}
         </div>
 
-        <TableContainer
-          component={Paper}
-          sx={{
-            marginTop: 4,
-            position: "relative",
-            maxHeight: 560,
-            border: "solid 1px #ddd",
-          }}
-        >
-          <Table sx={{ minWidth: 800 }} aria-label="request table" stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  style={{ borderRight: "1px solid gray" }}
+        <div className="overflow-auto rounded-lg shadow-md relative  max-h-screen">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
                   colSpan={2}
-                ></TableCell>
-                <TableCell
-                  style={{
-                    borderRight: "1px solid gray",
-                    backgroundColor: "#FDD9EE",
-                  }}
+                  className="border border-gray-300 bg-gray-100 text-center p-2 font-medium"
+                ></th>
+                <th
                   colSpan={4}
-                  align="center"
+                  className="border border-gray-300 bg-pink-200 text-center p-2 font-medium"
                 >
                   Corridor
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderRight: "1px solid gray",
-                    backgroundColor: "#FDE8D9",
-                  }}
+                </th>
+                <th
                   colSpan={4}
-                  align="center"
+                  className="border border-gray-300 bg-orange-300 text-center p-2 font-medium"
                 >
                   Outside Corridor
-                </TableCell>
-              </TableRow>
+                </th>
+              </tr>
 
-              <TableRow>
+              <tr className="bg-orange-100">
                 {[
                   {
                     id: "department",
@@ -546,7 +521,7 @@ const BOIForm = () => {
                     filterable: false,
                   },
                   {
-                    id: "optimisedMinutes",
+                    id: "percentageBlocksSanctioned",
                     label: "Percentage of Blocks Sanctioned",
                     filterable: false,
                   },
@@ -556,10 +531,9 @@ const BOIForm = () => {
                     filterable: false,
                   },
                 ].map((column) => (
-                  <TableCell
+                  <th
                     key={column.id}
-                    style={{ backgroundColor: "#FDE8D9", ...column.style }}
-                    align="center"
+                    className="border border-gray-300 p-3 text-center font-medium"
                   >
                     <div className="flex items-center justify-between">
                       <strong>{column.label}</strong>
@@ -575,20 +549,20 @@ const BOIForm = () => {
                                 : "▼"
                               : ""}
                           </span>
-                          <IconButton
-                            size="small"
+                          <button
                             onClick={(e) => handleFilterClick(e, column.id)}
+                            className="ml-2 text-gray-500 hover:text-gray-700"
                           >
-                            <FilterListIcon />
-                          </IconButton>
+                            <FilterListIcon fontSize="small" />
+                          </button>
                         </>
                       )}
                     </div>
-                  </TableCell>
+                  </th>
                 ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
+              </tr>
+            </thead>
+            <tbody>
               {filteredAndSortedRequests.length > 0 ? (
                 <>
                   {/* Department Rows */}
@@ -621,144 +595,135 @@ const BOIForm = () => {
                             ) || {};
 
                           return (
-                            <TableRow
+                            <tr
                               key={`${request.department}-${request.section}`}
                             >
-                              <TableCell>{department}</TableCell>
-                              <TableCell
-                                style={{ borderRight: "1px solid gray" }}
-                              >
+                              <td className="border border-gray-300 p-3">{department}</td>
+                              <td className="border border-gray-300 p-3">
                                 {request.section}
-                              </TableCell>
+                              </td>
 
                               {/* Corridor Data */}
-                              <TableCell>
+                              <td className="border border-gray-300 p-3">
                                 {(request.minutes / 60).toFixed(2)}
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3">
                                 {(request.optimisedMinutes / 60).toFixed(2)}
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3">
                                 {request.minutes > 0
                                   ? (
-                                      (request.optimisedMinutes /
-                                        request.minutes) *
-                                      100
-                                    ).toFixed(2)
+                                    (request.optimisedMinutes /
+                                      request.minutes) *
+                                    100
+                                  ).toFixed(2)
                                   : 0}
                                 %
-                              </TableCell>
-                              <TableCell
-                                style={{ borderRight: "1px solid gray" }}
-                              >
+                              </td>
+                              <td className="border border-gray-300 p-3">
                                 {(request.availedMinutes / 60).toFixed(2)}
-                              </TableCell>
+                              </td>
 
                               {/* Non-Corridor Data */}
-                              <TableCell>
+                              <td className="border border-gray-300 p-3">
                                 {((nonCorridorData.minutes || 0) / 60).toFixed(
                                   2
                                 )}
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3">
                                 {(
                                   (nonCorridorData.optimisedMinutes || 0) / 60
                                 ).toFixed(2)}
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3">
                                 {(nonCorridorData.minutes || 0) > 0
                                   ? (
-                                      ((nonCorridorData.optimisedMinutes || 0) /
-                                        (nonCorridorData.minutes || 1)) *
-                                      100
-                                    ).toFixed(2)
+                                    ((nonCorridorData.optimisedMinutes || 0) /
+                                      (nonCorridorData.minutes || 1)) *
+                                    100
+                                  ).toFixed(2)
                                   : 0}
                                 %
-                              </TableCell>
-                              <TableCell>
+                              </td>
+                              <td className="border border-gray-300 p-3">
                                 {(
                                   (nonCorridorData.availedMinutes || 0) / 60
                                 ).toFixed(2)}
-                              </TableCell>
-                            </TableRow>
+                              </td>
+                            </tr>
                           );
                         })}
 
                         {/* Department Total Row */}
-                        <TableRow style={{ backgroundColor: "#BFF5BF" }}>
-                          <TableCell style={{ fontWeight: "bold" }}>
+                        <tr className="bg-green-100">
+                          <td className="border border-gray-300 p-3 font-bold">
                             Total
-                          </TableCell>
-                          <TableCell
-                            style={{
-                              fontWeight: "bold",
-                              borderRight: "1px solid gray",
-                            }}
-                          ></TableCell>
+                          </td>
+                          <td className="border border-gray-300 p-3"></td>
 
                           {/* Corridor Totals */}
-                          <TableCell style={{ fontWeight: "bold" }}>
+                          <td className="border border-gray-300 p-3 font-bold">
                             {(deptData.totalMinutes / 60).toFixed(2)}
-                          </TableCell>
-                          <TableCell style={{ fontWeight: "bold" }}>
+                          </td>
+                          <td className="border border-gray-300 p-3 font-bold">
                             {(deptData.totalOptimisedMinutes / 60).toFixed(2)}
-                          </TableCell>
-                          <TableCell style={{ fontWeight: "bold" }}>
+                          </td>
+                          <td className="border border-gray-300 p-3 font-bold">
                             {deptData.totalMinutes > 0
                               ? (
-                                  (deptData.totalOptimisedMinutes /
-                                    deptData.totalMinutes) *
-                                  100
-                                ).toFixed(2)
+                                (deptData.totalOptimisedMinutes /
+                                  deptData.totalMinutes) *
+                                100
+                              ).toFixed(2)
                               : 0}
                             %
-                          </TableCell>
-                          <TableCell
-                            style={{
-                              fontWeight: "bold",
-                              borderRight: "1px solid gray",
-                            }}
-                          >
+                          </td>
+                          <td className="border border-gray-300 p-3 font-bold">
                             {(deptData.totalAvailedMinutes / 60).toFixed(2)}
-                          </TableCell>
+                          </td>
 
                           {/* Non-Corridor Totals */}
-                          <TableCell style={{ fontWeight: "bold" }}>
+                          <td className="border border-gray-300 p-3 font-bold">
                             {(nonCorridorTotals.minutes / 60).toFixed(2)}
-                          </TableCell>
-                          <TableCell style={{ fontWeight: "bold" }}>
-                            {(nonCorridorTotals.optimisedMinutes / 60).toFixed(
-                              2
-                            )}
-                          </TableCell>
-                          <TableCell style={{ fontWeight: "bold" }}>
+                          </td>
+                          <td className="border border-gray-300 p-3 font-bold">
+                            {(
+                              nonCorridorTotals.optimisedMinutes / 60
+                            ).toFixed(2)}
+                          </td>
+                          <td className="border border-gray-300 p-3 font-bold">
                             {nonCorridorTotals.minutes > 0
                               ? (
-                                  (nonCorridorTotals.optimisedMinutes /
-                                    nonCorridorTotals.minutes) *
-                                  100
-                                ).toFixed(2)
+                                (nonCorridorTotals.optimisedMinutes /
+                                  nonCorridorTotals.minutes) *
+                                100
+                              ).toFixed(2)
                               : 0}
                             %
-                          </TableCell>
-                          <TableCell style={{ fontWeight: "bold" }}>
-                            {(nonCorridorTotals.availedMinutes / 60).toFixed(2)}
-                          </TableCell>
-                        </TableRow>
+                          </td>
+                          <td className="border border-gray-300 p-3 font-bold">
+                            {(nonCorridorTotals.availedMinutes / 60).toFixed(
+                              2
+                            )}
+                          </td>
+                        </tr>
                       </React.Fragment>
                     );
                   })}
                 </>
               ) : (
-                <TableRow>
-                  <TableCell colSpan={21} align="center">
+                <tr>
+                  <td
+                    colSpan={10}
+                    className="border border-gray-300 p-5 text-center"
+                  >
                     No requests found for this week
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

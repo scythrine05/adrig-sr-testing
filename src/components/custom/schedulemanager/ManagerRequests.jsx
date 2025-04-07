@@ -22,17 +22,17 @@ import { useSession } from "next-auth/react";
 const getWeekDates = (weekOffset = 0) => {
   const now = new Date();
   const currentDay = now.getDay(); // 0 = Sunday, 6 = Saturday
-  
+
   // Calculate the date of Monday (start of week)
   const monday = new Date(now);
   monday.setDate(now.getDate() - (currentDay === 0 ? 6 : currentDay - 1) + (weekOffset * 7));
   monday.setHours(0, 0, 0, 0);
-  
+
   // Calculate the date of Sunday (end of week)
   const sunday = new Date(monday);
   sunday.setDate(monday.getDate() + 6);
   sunday.setHours(23, 59, 59, 999);
-  
+
   return {
     start: monday,
     end: sunday,
@@ -62,7 +62,7 @@ const RequestList = ({
 }) => {
   // Add console logging to debug requests
   console.log('All Requests:', requests);
-  console.log('Week Date Range:', {start: weekDates.start, end: weekDates.end});
+  console.log('Week Date Range:', { start: weekDates.start, end: weekDates.end });
   console.log('Selected User:', selectedUser);
 
   // Filter requests by user and week, exclude archived requests
@@ -98,11 +98,11 @@ const RequestList = ({
       console.error(`Error parsing date ${request.date}:`, e);
       return false;
     }
-    
+
     const isInSelectedWeek = requestDate >= weekDates.start && requestDate <= weekDates.end;
     const isMatchingUser = !selectedUser || request.userId === selectedUser;
     const isNotArchived = request.archived !== true;
-    
+
     // Debug info for each request
     console.log(`Request ${request.requestId} filtering:`, {
       date: request.date,
@@ -113,45 +113,43 @@ const RequestList = ({
       archived: request.archived,
       result: isInSelectedWeek && isMatchingUser && isNotArchived
     });
-    
+
     return isInSelectedWeek && isMatchingUser && isNotArchived;
   });
 
   console.log('Filtered Requests:', filteredRequests);
 
   // Check if all filtered requests are selected
-  const areAllSelected = filteredRequests.length > 0 && 
-                        selectedRequests.length === filteredRequests.length;
+  const areAllSelected = filteredRequests.length > 0 &&
+    selectedRequests.length === filteredRequests.length;
 
   return (
-    <div className="request-list h-screen p-4 md:p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">
-        Summary of Block Requesitions
-      </h2>
+    <div className="h-screen p-4 md:p-6 bg-gray-100 rounded-lg shadow-lg bg-secondary m-10">
+      <h1 className="mb-10 text-4xl font-bold text-center">Summary of Block Requesitions</h1>
 
       {/* Week Selection */}
       <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
         <div className="flex items-center space-x-2">
-          <button 
+          <button
             onClick={() => setWeekOffset(prev => prev - 1)}
             className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
           >
             &lt; Prev Week
           </button>
-          
+
           <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
             {weekDates.weekLabel}: {formatDate(weekDates.start)} to {formatDate(weekDates.end)}
           </span>
-          
-          <button 
+
+          <button
             onClick={() => setWeekOffset(prev => prev + 1)}
             className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
           >
             Next Week &gt;
           </button>
-          
+
           {weekOffset !== 0 && (
-            <button 
+            <button
               onClick={() => setWeekOffset(0)}
               className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none ml-2"
             >
@@ -182,143 +180,126 @@ const RequestList = ({
       </div>
 
       {/* Request Table */}
-      {filteredRequests.length === 0 ? (
-  <h1 className="p-4 md:p-10 text-center w-full max-w-5xl mx-auto bg-white rounded-lg overflow-hidden shadow">
-    No Requests to Show for This Week
-  </h1>
-) : (
-  <div className="w-full max-w-5xl mx-auto">
-    {/* Desktop Table */}
-    <div className="hidden md:block overflow-x-auto">
-      <table className="table-auto w-full border-collapse bg-white rounded-lg overflow-hidden shadow">
-        <thead>
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal text-center">
-            <th className="px-4 py-3">
-              <div className="flex items-center justify-center">
-                <input
-                  type="checkbox"
-                  checked={areAllSelected}
-                  onChange={() => toggleSelectAll(filteredRequests)}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="ml-2">All</span>
-              </div>
-            </th>
-            <th className="px-4 py-3">Date</th>
-            <th className="px-4 py-3">Depo/SSE</th>
-            <th className="px-4 py-3">Block Section/Yard</th>
-            <th className="px-4 py-3">DemandTime From</th>
-            <th className="px-4 py-3">DemandTime To</th>
-            <th className="px-4 py-3">Action</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-700 text-sm font-medium">
-          {filteredRequests.map((request) => (
-            <tr
-              key={request.requestId}
-              className="border-b hover:bg-gray-100 transition-colors"
-            >
-              <td className="px-4 py-4 text-center align-middle">
-                <input
-                  type="checkbox"
-                  checked={selectedRequests.includes(request.requestId)}
-                  onChange={() => toggleRequestSelection(request.requestId)}
-                />
-              </td>
-              <td className="px-4 py-4 text-center align-middle">
-                {request.date}
-              </td>
-              <td className="px-4 py-4 text-center align-middle">
-                {request.selectedDepo}
-              </td>
-              <td className="px-4 py-4 text-center align-middle">
-                {request.missionBlock}
-              </td>
-              <td className="px-4 py-4 text-center align-middle">
-                {request.demandTimeFrom}
-              </td>
-              <td className="px-4 py-4 text-center align-middle">
-                {request.demandTimeTo}
-              </td>
-              <td className="px-4 py-4 text-center align-middle">
-                <button
-                  onClick={() => onSelectRequest(request)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
-                >
-                  View Request
-                </button>
-              </td>
+      <div className="overflow-x-auto rounded-lg shadow-md">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              {[
+                { id: "select", label: "All" },
+                { id: "date", label: "Date" },
+                { id: "selectedDepo", label: "Depo/SSE" },
+                { id: "missionBlock", label: "Block Section/Yard" },
+                {
+                  id: "demandTime",
+                  label: "Demand Time",
+                  children: [
+                    { id: "demandTimeFrom", label: "From" },
+                    { id: "demandTimeTo", label: "To" },
+                  ],
+                  split: true,
+                },
+                { id: "action", label: "Action" },
+              ].map((column) =>
+                column.split ? (
+                  <th
+                    key={column.id}
+                    colSpan={column.children.length}
+                    className="border border-gray-300 bg-gray-50 text-center p-2 font-medium"
+                  >
+                    {column.label}
+                  </th>
+                ) : (
+                  <th
+                    key={column.id}
+                    rowSpan={2}
+                    className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top font-medium"
+                  >
+
+                    <div className="flex items-center gap-1 justify-center">
+                      {column.id === "select" ? (<input
+                        type="checkbox"
+                        checked={areAllSelected}
+                        onChange={() => toggleSelectAll(filteredRequests)}
+                        className="form-checkbox h-5 w-5 text-blue-600 mx-2"
+                      />) : <></>}
+                      <span>{column.label}</span>
+                    </div>
+                  </th>
+                )
+              )}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-
-    {/* Mobile Layout (Vertical Cards) */}
-    <div className="md:hidden space-y-4">
-      {/* Mobile Select All option */}
-      <div className="bg-white rounded-lg shadow p-4 flex items-center">
-        <input
-          type="checkbox"
-          checked={areAllSelected}
-          onChange={() => toggleSelectAll(filteredRequests)}
-          className="form-checkbox h-5 w-5 text-blue-600 mr-2"
-        />
-        <label className="font-medium">Select All Requests</label>
+            <tr>
+              {[
+                { id: "demandTimeFrom", label: "From" },
+                { id: "demandTimeTo", label: "To" },
+              ].map((child) => (
+                <th
+                  key={child.id}
+                  className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer font-medium"
+                >
+                  {child.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRequests.length > 0 ? (filteredRequests.map((request) => (
+              <tr
+                key={request.requestId}
+                className="border-b hover:bg-white transition-colors"
+              >
+                <td className="px-4 py-4 text-center align-middle">
+                  <input
+                    type="checkbox"
+                    checked={selectedRequests.includes(request.requestId)}
+                    onChange={() => toggleRequestSelection(request.requestId)}
+                    className="form-checkbox h-5 w-5 text-blue-600"
+                  />
+                </td>
+                <td className="px-4 py-4 text-center align-middle border border-gray-300 ">{request.date}</td>
+                <td className="px-4 py-4 text-center align-middle border border-gray-300">
+                  {request.selectedDepo}
+                </td>
+                <td className="px-4 py-4 text-center align-middle border border-gray-300">
+                  {request.missionBlock}
+                </td>
+                <td className="px-4 py-4 text-center align-middle border border-gray-300">
+                  {request.demandTimeFrom}
+                </td>
+                <td className="px-4 py-4 text-center align-middle border border-gray-300">
+                  {request.demandTimeTo}
+                </td>
+                <td className="px-4 py-4 text-center align-middle border border-gray-300">
+                  <button
+                    onClick={() => onSelectRequest(request)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
+                  >
+                    View Request
+                  </button>
+                </td>
+              </tr>
+            ))) : (
+              <tr>
+                <td
+                  colSpan={27}
+                  className="border border-gray-300 p-5"
+                >
+                  No requests found for this week
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-      
-      {filteredRequests.map((request) => (
-        <div
-          key={request.requestId}
-          className="bg-white rounded-lg shadow p-4"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <input
-              type="checkbox"
-              checked={selectedRequests.includes(request.requestId)}
-              onChange={() => toggleRequestSelection(request.requestId)}
-              className="mr-2"
-            />
-            <button
-              onClick={() => onSelectRequest(request)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
-            >
-              View Request
-            </button>
-          </div>
-          <div className="space-y-2">
-            <div>
-              <span className="font-medium">Date:</span> {request.date}
-            </div>
-            <div>
-              <span className="font-medium">Depo/SSE:</span> {request.selectedDepo}
-            </div>
-            <div>
-              <span className="font-medium">Block Section/Yard:</span> {request.missionBlock}
-            </div>
-            <div>
-              <span className="font-medium">DemandTime From:</span> {request.demandTimeFrom}
-            </div>
-            <div>
-              <span className="font-medium">DemandTime To:</span> {request.demandTimeTo}
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
       {/* Submit Selected Requests */}
-      <div className="mt-4 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+      <div className="mt-10 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
         <button
           onClick={handleSubmitSelected}
           disabled={selectedRequests.length === 0}
-          className={`px-6 py-2 rounded-lg shadow ${
-            selectedRequests.length === 0
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-600 text-white hover:bg-green-700 focus:ring focus:ring-green-300"
-          }`}
+          className={`px-6 py-2 rounded-lg shadow ${selectedRequests.length === 0
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-green-600 text-white hover:bg-green-700 focus:ring focus:ring-green-300"
+            }`}
         >
           Submit Selected
         </button>
@@ -326,11 +307,10 @@ const RequestList = ({
         <button
           onClick={handleCancelSelected}
           disabled={selectedRequests.length === 0}
-          className={`px-6 py-2 rounded-lg shadow ${
-            selectedRequests.length === 0
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-red-600 text-white hover:bg-red-700 focus:ring focus:ring-red-300"
-          }`}
+          className={`px-6 py-2 rounded-lg shadow ${selectedRequests.length === 0
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-red-600 text-white hover:bg-red-700 focus:ring focus:ring-red-300"
+            }`}
         >
           Cancel Selected
         </button>
@@ -341,10 +321,10 @@ const RequestList = ({
 
 const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
   // Get status from ManagerResponse if it exists
-  const requestStatus = request.ManagerResponse ? 
-    (request.ManagerResponse === "yes" ? "Approved" : "Rejected") : 
+  const requestStatus = request.ManagerResponse ?
+    (request.ManagerResponse === "yes" ? "Approved" : "Rejected") :
     "Pending";
-  
+
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-6">Request Details</h2>
@@ -355,43 +335,43 @@ const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
           <div className="grid grid-cols-2 gap-2">
             <div className="font-medium">Request ID:</div>
             <div>{request.requestId}</div>
-            
+
             <div className="font-medium">Date of Block Request:</div>
             <div>{request.date}</div>
-            
+
             <div className="font-medium">Department:</div>
             <div>{request.selectedDepartment}</div>
-            
+
             <div className="font-medium">MajorSection:</div>
             <div>{request.selectedSection}</div>
-            
+
             <div className="font-medium">Status:</div>
-            <div className={request.ManagerResponse === "yes" ? "text-green-600 font-semibold" : 
-                              request.ManagerResponse === "no" ? "text-red-600 font-semibold" : 
-                              "text-yellow-600 font-semibold"}>
+            <div className={request.ManagerResponse === "yes" ? "text-green-600 font-semibold" :
+              request.ManagerResponse === "no" ? "text-red-600 font-semibold" :
+                "text-yellow-600 font-semibold"}>
               {requestStatus}
             </div>
           </div>
         </div>
-        
+
         <div>
           <h3 className="font-semibold mb-2">Work Details</h3>
           <div className="grid grid-cols-2 gap-2">
             <div className="font-medium">Work Type:</div>
             <div>{request.workType}</div>
-            
+
             <div className="font-medium">Activity:</div>
             <div>{request.workDescription}</div>
-            
+
             <div className="font-medium">Block:</div>
             <div>{request.missionBlock}</div>
-            
+
             <div className="font-medium">Line:</div>
             <div>{request.selectedLine?.toString() || "N/A"}</div>
-            
+
             <div className="font-medium">Time From:</div>
             <div>{request.demandTimeFrom}</div>
-            
+
             <div className="font-medium">Time To:</div>
             <div>{request.demandTimeTo}</div>
           </div>
@@ -405,7 +385,7 @@ const RequestDetails = ({ request, onBack, onCancel, onConfirm, onEdit }) => {
         >
           Go Back
         </button>
-        
+
         {/* Only show edit/cancel/confirm buttons if the request is pending */}
         {!request.ManagerResponse && (
           <>
@@ -478,17 +458,17 @@ const ManagerRequests = ({ id }) => {
           const isUserUnderManager = request?.userId && userIdUnderManager?.includes(request?.userId);
           const isManagerRequest = request?.managerId === ManagerId;
           const isLegacyRequest = request?.userId == null && request?.managerId == null;
-          
+
           console.log(`Request ${request.requestId} filtering:`, {
             isUserUnderManager,
             isManagerRequest,
             isLegacyRequest,
             result: isUserUnderManager || isManagerRequest || isLegacyRequest
           });
-          
+
           return isUserUnderManager || isManagerRequest || isLegacyRequest;
         });
-        
+
         console.log("Filtered requests:", filteredRequests);
 
         const userResponses = await Promise.all(
@@ -535,10 +515,10 @@ const ManagerRequests = ({ id }) => {
     try {
       for (const requestId of selectedRequests) {
         const request = requests.find((req) => req.requestId === requestId);
-        
+
         // Add ManagerResponse field set to "yes" when submitting/confirming
         request.ManagerResponse = "yes";
-        
+
         if (request.userId == null) {
           await postFormManagerData(request);
         } else {
@@ -550,7 +530,7 @@ const ManagerRequests = ({ id }) => {
       // Refresh requests with proper id from session
       const stagingData = await getStagingFormDataByDepartment(id.toUpperCase());
       setRequests(stagingData);
-      
+
       setSelectedRequests([]);
     } catch (error) {
       console.error("Error submitting selected requests:", error);
@@ -573,13 +553,13 @@ const ManagerRequests = ({ id }) => {
         request.ManagerResponse = "no";
         await updateStagingFormData(request, requestId);
       }
-      
+
       await deleteStagingFormData(requestId);
-      
+
       // Refresh requests with proper id from session
       const stagingData = await getStagingFormDataByDepartment(id.toUpperCase());
       setRequests(stagingData);
-      
+
       setSelectedRequest(null);
     } catch (error) {
       console.error("Error cancelling request:", error);
@@ -594,14 +574,14 @@ const ManagerRequests = ({ id }) => {
           request.ManagerResponse = "no";
           await updateStagingFormData(request, requestId);
         }
-        
+
         await deleteStagingFormData(requestId);
       }
-      
+
       // Refresh requests with proper id from session
       const stagingData = await getStagingFormDataByDepartment(id.toUpperCase());
       setRequests(stagingData);
-      
+
       setSelectedRequests([]);
     } catch (error) {
       console.error("Error canceling selected requests:", error);
@@ -612,18 +592,18 @@ const ManagerRequests = ({ id }) => {
     try {
       // Add ManagerResponse field set to "yes" when confirming
       request.ManagerResponse = "yes";
-      
+
       if (request.userId == null) {
         await postFormManagerData(request);
       } else {
         await postFormData(request);
       }
       await deleteStagingFormData(request.requestId);
-      
+
       // Refresh requests with proper id from session
       const stagingData = await getStagingFormDataByDepartment(id.toUpperCase());
       setRequests(stagingData);
-      
+
       setSelectedRequest(null);
     } catch (error) {
       console.error("Error confirming request:", error);

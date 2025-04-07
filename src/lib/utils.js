@@ -281,3 +281,8 @@ export const generateRequestId = ({
   // Combine the parts into the desired format
   return `${date}/${division}/${departmentCode}/${section}/${formattedSequence}`;
 };
+
+export function capitalizeFirstLetter(word) {
+  if (!word) return "";
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}

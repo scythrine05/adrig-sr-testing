@@ -18,7 +18,7 @@ import currentUser, {
   currentOptimizedValue,
   setOptimised,
 } from "../../app/actions/user";
-import { formatData } from "../../lib/utils";
+import { formatData, capitalizeFirstLetter } from "../../lib/utils";
 import {
   getStagingFormData,
   deleteStagingFormData,
@@ -55,13 +55,12 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Current${
-      weekOffset === 0
-        ? "(Week)"
-        : weekOffset > 0
+    weekLabel: `Current${weekOffset === 0
+      ? "(Week)"
+      : weekOffset > 0
         ? "+" + weekOffset
         : weekOffset
-    }`,
+      }`,
   };
 };
 
@@ -188,12 +187,12 @@ const DisconnectionDetails = ({ request }) => {
                   <div className="text-sm text-gray-600">Status:</div>
                   <div className="text-sm">
                     {String(request.ManagerResponse).toLowerCase() === "yes" ||
-                    request.ManagerResponse === true
+                      request.ManagerResponse === true
                       ? request.sigResponse || "Pending SIG Response"
                       : String(request.ManagerResponse).toLowerCase() ===
-                          "no" || request.ManagerResponse === false
-                      ? "Manager Rejected"
-                      : "Awaiting Manager Approval"}
+                        "no" || request.ManagerResponse === false
+                        ? "Manager Rejected"
+                        : "Awaiting Manager Approval"}
                   </div>
                   <div className="text-sm text-gray-600">Requirements:</div>
                   <div className="text-sm">
@@ -222,12 +221,12 @@ const DisconnectionDetails = ({ request }) => {
                   <div className="text-sm text-gray-600">Status:</div>
                   <div className="text-sm">
                     {String(request.ManagerResponse).toLowerCase() === "yes" ||
-                    request.ManagerResponse === true
+                      request.ManagerResponse === true
                       ? request.oheResponse || "Pending Power Block Response"
                       : String(request.ManagerResponse).toLowerCase() ===
-                          "no" || request.ManagerResponse === false
-                      ? "Manager Rejected"
-                      : "Awaiting Manager Approval"}
+                        "no" || request.ManagerResponse === false
+                        ? "Manager Rejected"
+                        : "Awaiting Manager Approval"}
                   </div>
                   <div className="text-sm text-gray-600">Requirements:</div>
                   <div className="text-sm">
@@ -275,9 +274,8 @@ const EditOptions = ({ request, editRequestHandler, removeRequest }) => {
       if (request.ManagerResponse) {
         toast({
           title: "Deletion not allowed",
-          description: `This request cannot be deleted because it has been ${
-            request.ManagerResponse === "yes" ? "approved" : "rejected"
-          } by a manager.`,
+          description: `This request cannot be deleted because it has been ${request.ManagerResponse === "yes" ? "approved" : "rejected"
+            } by a manager.`,
           variant: "destructive",
         });
         return;
@@ -333,7 +331,7 @@ const EditOptions = ({ request, editRequestHandler, removeRequest }) => {
         variant="contained"
         color="primary"
         onClick={handleClick}
-        size="small"
+        size="medium"
       >
         Edit
       </Button>
@@ -477,62 +475,62 @@ export default function UserRequests({ date }) {
 
   const filteredRequests = date
     ? requests.filter((item) => {
-        const matches = item.date === date && item.archived !== true;
-        console.log(`Request ${item.requestId} date filtering:`, {
-          itemDate: item.date,
-          selectedDate: date,
-          isArchived: item.archived,
-          matches,
-        });
-        return matches;
-      })
+      const matches = item.date === date && item.archived !== true;
+      console.log(`Request ${item.requestId} date filtering:`, {
+        itemDate: item.date,
+        selectedDate: date,
+        isArchived: item.archived,
+        matches,
+      });
+      return matches;
+    })
     : requests.filter((item) => {
-        // Handle various date formats
-        let requestDate;
-        try {
-          // Try to parse the date in various formats
-          if (item.date) {
-            if (item.date.includes("-")) {
-              // Format: YYYY-MM-DD
-              const [year, month, day] = item.date.split("-").map(Number);
-              requestDate = new Date(year, month - 1, day);
-            } else if (item.date.includes("/")) {
-              // Format: MM/DD/YYYY or DD/MM/YYYY
-              const parts = item.date.split("/").map(Number);
-              if (parts[2] > 1000) {
-                // MM/DD/YYYY
-                requestDate = new Date(parts[2], parts[0] - 1, parts[1]);
-              } else {
-                // DD/MM/YYYY
-                requestDate = new Date(parts[2], parts[1] - 1, parts[0]);
-              }
+      // Handle various date formats
+      let requestDate;
+      try {
+        // Try to parse the date in various formats
+        if (item.date) {
+          if (item.date.includes("-")) {
+            // Format: YYYY-MM-DD
+            const [year, month, day] = item.date.split("-").map(Number);
+            requestDate = new Date(year, month - 1, day);
+          } else if (item.date.includes("/")) {
+            // Format: MM/DD/YYYY or DD/MM/YYYY
+            const parts = item.date.split("/").map(Number);
+            if (parts[2] > 1000) {
+              // MM/DD/YYYY
+              requestDate = new Date(parts[2], parts[0] - 1, parts[1]);
             } else {
-              // Try default parsing
-              requestDate = new Date(item.date);
+              // DD/MM/YYYY
+              requestDate = new Date(parts[2], parts[1] - 1, parts[0]);
             }
           } else {
-            // If no date, consider it outside the range
-            return false;
+            // Try default parsing
+            requestDate = new Date(item.date);
           }
-        } catch (e) {
-          console.error(`Error parsing date ${item.date}:`, e);
+        } else {
+          // If no date, consider it outside the range
           return false;
         }
+      } catch (e) {
+        console.error(`Error parsing date ${item.date}:`, e);
+        return false;
+      }
 
-        const isInSelectedWeek =
-          requestDate >= weekDates.start && requestDate <= weekDates.end;
-        const isNotArchived = item.archived !== true;
+      const isInSelectedWeek =
+        requestDate >= weekDates.start && requestDate <= weekDates.end;
+      const isNotArchived = item.archived !== true;
 
-        console.log(`Request ${item.requestId} week filtering:`, {
-          itemDate: item.date,
-          requestDate,
-          isInSelectedWeek,
-          isNotArchived,
-          matches: isInSelectedWeek && isNotArchived,
-        });
-
-        return isInSelectedWeek && isNotArchived;
+      console.log(`Request ${item.requestId} week filtering:`, {
+        itemDate: item.date,
+        requestDate,
+        isInSelectedWeek,
+        isNotArchived,
+        matches: isInSelectedWeek && isNotArchived,
       });
+
+      return isInSelectedWeek && isNotArchived;
+    });
 
   // Debug log for requests with mismatched status
   filteredRequests.forEach((request) => {
@@ -625,558 +623,572 @@ export default function UserRequests({ date }) {
           </div>
         )}
 
-        <TableContainer
-          sx={{ position: "relative", maxHeight: 500 }}
-          component={Paper}
-        >
-          {/* Desktop Table */}
-          <div className="hidden md:block">
-            <Table
-              sx={{ minWidth: 650 }}
-              aria-label="request table"
-              stickyHeader
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <strong>Request ID</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Date of Block Request</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Major Section</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Depot/SSE</strong>
-                  </TableCell>
-                  {/* <TableCell>
-                    <strong>Block Section</strong>
-                  </TableCell> */}
-                  <TableCell>
-                    <strong>Block Section/Yard</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Line Selected</strong>
-                  </TableCell>
-                  <TableCell colSpan={2} align="center">
-                    <div>
-                      <strong>Demand Time</strong>
-                      <div className="flex flex-row justify-between mt-5 font-semibold">
-                        <span>From</span>
-                        <span className="pr-2">To</span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Work Type</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Activity</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Disconnections</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Caution Required</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Caution Speed</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Approximate Caution Location (From)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Approximate Caution Location (To)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Work Location (From)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Work Location (To)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Route (From)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Route (To)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Coaching repercussions</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Other Lines Affected</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Remarks</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Corridor Type</strong>
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      backgroundColor: "#F3E8FF",
-                      position: "sticky",
-                      right: "80px",
-                      top: 0,
-                      zIndex: 1200,
-                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <strong>Manager Response</strong>
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      backgroundColor: "#F3E8FF",
-                      position: "sticky",
-                      right: "80px",
-                      top: 0,
-                      zIndex: 1200,
-                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <strong>Sanctioned Status</strong>
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      backgroundColor: "#E8DEF8",
-                      position: "sticky",
-                      right: 0,
-                      top: 0,
-                      zIndex: 1201,
-                      boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <strong>Edit The Request</strong>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredRequests.length > 0 ? (
-                  filteredRequests.map((request) => (
-                    <TableRow key={request.requestId}>
-                      <TableCell>{request.requestId}</TableCell>
-                      <TableCell>{request.date}</TableCell>
-                      <TableCell>{request.selectedSection}</TableCell>
-                      <TableCell>{request.selectedDepo}</TableCell>
-                      {/* <TableCell>{request.stationID}</TableCell> */}
-                      <TableCell>{request.missionBlock}</TableCell>
-                      <TableCell>
-                        {
-                          typeof request.selectedLine === "string" &&
-                          request.selectedLine.startsWith("{")
-                            ? (() => {
-                                try {
-                                  const lineData = JSON.parse(
-                                    request.selectedLine
-                                  );
-                                  const stationLines = lineData.station || [];
-                                  const yardLines = lineData.yard || [];
+        {/* Desktop Table */}
+        <div className="overflow-x-auto rounded-lg shadow-md relative">
+          <table className="w-full border-collapse border border-gray-300 mb-10 table">
+            <thead className="relative">
+              {/* First Row */}
+              <tr>
+                {[
+                  { id: "requestId", label: "Request ID" },
+                  { id: "date", label: "Date of Block Request" },
+                  { id: "selectedSection", label: "Major Section" },
+                  { id: "selectedDepo", label: "Depot/SSE" },
+                  { id: "missionBlock", label: "Block Section/Yard" },
+                  { id: "selectedLine", label: "Line Selected" },
+                  {
+                    id: "demandTime",
+                    label: "Demand Time",
+                    split: true,
+                    children: [
+                      { id: "demandTimeFrom", label: "From" },
+                      { id: "demandTimeTo", label: "To" },
+                    ],
+                  },
+                  { id: "workType", label: "Work Type" },
+                  { id: "workDescription", label: "Activity" },
+                  { id: "disconnections", label: "Disconnections" },
+                  { id: "cautionRequired", label: "Caution Required" },
+                  { id: "cautionSpeed", label: "Caution Speed" },
+                  {
+                    id: "cautionLocation",
+                    label: "Approximate Caution Location",
+                    split: true,
+                    children: [
+                      { id: "cautionLocationFrom", label: "From" },
+                      { id: "cautionLocationTo", label: "To" },
+                    ],
+                  },
+                  {
+                    id: "workLocation",
+                    label: "Work Location",
+                    split: true,
+                    children: [
+                      { id: "workLocationFrom", label: "From" },
+                      { id: "workLocationTo", label: "To" },
+                    ],
+                  },
+                  {
+                    id: "route",
+                    label: "Route",
+                    split: true,
+                    children: [
+                      { id: "routeFrom", label: "From" },
+                      { id: "routeTo", label: "To" },
+                    ],
+                  },
+                  { id: "coachingRepercussions", label: "Coaching Repercussions" },
+                  { id: "otherLinesAffected", label: "Other Lines Affected" },
+                  { id: "remarks", label: "Remarks" },
+                  { id: "corridorType", label: "Corridor Type" },
+                  { id: "managerResponse", label: "Manager Response" },
+                  {
+                    id: "sanctionedStatus",
+                    label: "Sanctioned Status",
+                    fixed: true,
+                    right: 154,
+                  },
+                  {
+                    id: "editRequest",
+                    label: "Edit The Request",
+                    fixed: true,
+                    right: 0,
+                  },
+                ].map((column) =>
+                  column.split ? (
+                    <th
+                      key={column.id}
+                      colSpan={column.children.length}
+                      className="border border-gray-300 bg-gray-50 text-center p-2 font-medium"
+                    >
+                      {column.label}
+                    </th>
+                  ) : (
+                    <th
+                      key={column.id}
+                      rowSpan={2}
+                      className={`border border-gray-300 p-3 min-w-[150px] whitespace-nowrap align-top font-medium ${column.fixed
+                        ? "sticky bg-slate-200 z-30"
+                        : " bg-gray-50"
+                        }`}
+                      style={{
+                        right: column.fixed ? `${column.right}px` : "auto",
+                        zIndex: column.fixed ? 10 : "auto",
+                      }}
+                    >
+                      {column.label}
+                    </th>
+                  )
+                )}
+              </tr>
 
-                                  return (
+              {/* Second Row - only for split columns */}
+              <tr>
+                {[
+                  {
+                    id: "demandTime",
+                    children: [
+                      { id: "demandTimeFrom", label: "From" },
+                      { id: "demandTimeTo", label: "To" },
+                    ],
+                  },
+                  {
+                    id: "cautionLocation",
+                    children: [
+                      { id: "cautionLocationFrom", label: "From" },
+                      { id: "cautionLocationTo", label: "To" },
+                    ],
+                  },
+                  {
+                    id: "workLocation",
+                    children: [
+                      { id: "workLocationFrom", label: "From" },
+                      { id: "workLocationTo", label: "To" },
+                    ],
+                  },
+                  {
+                    id: "route",
+                    label: "Route",
+                    children: [
+                      { id: "routeFrom", label: "From" },
+                      { id: "routeTo", label: "To" },
+                    ],
+                  },
+                ].flatMap((column) =>
+                  column.children.map((child) => (
+                    <th
+                      key={child.id}
+                      className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 font-medium"
+                    >
+                      {child.label}
+                    </th>
+                  ))
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {filteredRequests.length > 0 ? (
+                filteredRequests.map((request) => (
+                  <tr key={request.requestId} className="hover:bg-gray-50">
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.requestId}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.date}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedSection}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedDepo}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.missionBlock}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {
+                        typeof request.selectedLine === "string" &&
+                          request.selectedLine.startsWith("{")
+                          ? (() => {
+                            try {
+                              const lineData = JSON.parse(
+                                request.selectedLine
+                              );
+                              const stationLines = lineData.station || [];
+                              const yardLines = lineData.yard || [];
+
+                              return (
+                                <div>
+                                  {stationLines.length > 0 && (
                                     <div>
-                                      {stationLines.length > 0 && (
-                                        <div>
-                                          <strong>Station:</strong>{" "}
-                                          {stationLines.join(", ")}
-                                        </div>
-                                      )}
-                                      {yardLines.length > 0 && (
-                                        <div>
-                                          <strong>Yard:</strong>{" "}
-                                          {yardLines.join(", ")}
-                                        </div>
-                                      )}
+                                      <strong>Station:</strong>{" "}
+                                      {stationLines.join(", ")}
                                     </div>
-                                  );
-                                } catch (e) {
-                                  return request.selectedLine; // Fallback to original value if JSON parsing fails
-                                }
-                              })()
-                            : request.selectedLine // Display as is if not JSON
-                        }
-                      </TableCell>
-                      <TableCell>{request.demandTimeFrom}</TableCell>
-                      <TableCell>{request.demandTimeTo}</TableCell>
-                      <TableCell>{request.workType}</TableCell>
-                      <TableCell>{request.workDescription}</TableCell>
-                      <TableCell>
-                        <DisconnectionDetails request={request} />
-                      </TableCell>
-                      <TableCell>{request.cautionRequired}</TableCell>
-                      <TableCell>{request.cautionSpeed}</TableCell>
-                      <TableCell>{request.cautionLocationFrom}</TableCell>
-                      <TableCell>{request.cautionLocationTo}</TableCell>
-                      <TableCell>
-                        {request.selectedDepartment === "ENGG"
-                          ? request.workLocationFrom
-                          : ""}
-                      </TableCell>
-                      <TableCell>
-                        {request.selectedDepartment === "ENGG"
-                          ? request.workLocationTo
-                          : ""}
-                      </TableCell>
-                      <TableCell>
-                        {request.selectedDepartment === "SIG"
-                          ? request.workLocationFrom
-                          : ""}
-                      </TableCell>
-                      <TableCell>
-                        {request.selectedDepartment === "SIG"
-                          ? request.workLocationTo
-                          : ""}
-                      </TableCell>
-                      <TableCell>
-                        {request.selectedDepartment === "TRD"
-                          ? request.repercussions
-                          : ""}
-                      </TableCell>
-                      <TableCell>{request.otherLinesAffected}</TableCell>
-                      <TableCell>{request.requestremarks}</TableCell>
-                      <TableCell>{request.corridorType}</TableCell>
-                      <TableCell
-                        sx={{
-                          backgroundColor: "#F3E8FF",
-                          position: "sticky",
-                          right: "80px",
+                                  )}
+                                  {yardLines.length > 0 && (
+                                    <div>
+                                      <strong>Yard:</strong>{" "}
+                                      {yardLines.join(", ")}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            } catch (e) {
+                              return request.selectedLine; // Fallback to original value if JSON parsing fails
+                            }
+                          })()
+                          : request.selectedLine // Display as is if not JSON
+                      }
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.demandTimeFrom}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.demandTimeTo}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.workType}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.workDescription}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      <DisconnectionDetails request={request} />
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.cautionRequired}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.cautionSpeed}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.cautionLocationFrom}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.cautionLocationTo}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedDepartment === "ENGG"
+                        ? request.workLocationFrom
+                        : ""}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedDepartment === "ENGG"
+                        ? request.workLocationTo
+                        : ""}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedDepartment === "SIG"
+                        ? request.workLocationFrom
+                        : ""}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedDepartment === "SIG"
+                        ? request.workLocationTo
+                        : ""}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.selectedDepartment === "TRD"
+                        ? request.repercussions
+                        : ""}
+                    </td>
+
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.otherLinesAffected}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {request.requestremarks || "No Remarks"}
+                    </td>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {capitalizeFirstLetter(request.corridorType)}
+                    </td>
+
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                      {capitalizeFirstLetter(request.ManagerResponse) ||
+                        "Pending"}
+                    </td>
+                    <Tooltip
+                      title={
+                        request.SanctionedStatus === "Y" ? (
+                          <span className="text-sm">Yes</span>
+                        ) : request.SanctionedStatus === "R" ? (
+                          <span className="text-sm">Rejected</span>
+                        ) : (
+                          <span className="text-sm">Under Progress</span>
+                        )
+                      }
+                      arrow
+                    >
+                      <td
+                        className={`border border-gray-300 p-3 whitespace-nowrap font-bold cursor-pointer ${request.SanctionedStatus === "Y"
+                          ? "bg-green-100 text-green-700"
+                          : request.SanctionedStatus === "R"
+                            ? "bg-red-300 text-red-700"
+                            : "bg-pink-100 text-pink-700"
+                          } sticky`}
+                        style={{
+                          right: "150px",
                           zIndex: 8,
-                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
                         }}
                       >
-                        {request.ManagerResponse || "Pending"}
-                      </TableCell>
-                      {/* Display abbreviation */}
-                      <Tooltip
-                        title={
-                          request.SanctionedStatus === "Y" ? (
-                            <span className="text-sm">Yes</span>
-                          ) : request.SanctionedStatus === "R" ? (
-                            <span className="text-sm">Rejected</span>
-                          ) : (
-                            <span className="text-sm">Under Progress</span>
-                          )
-                        }
-                        arrow
-                      >
-                        <TableCell
-                          sx={{
-                            backgroundColor:
-                              request.SanctionedStatus === "Y"
-                                ? "lightgreen"
-                                : request.SanctionedStatus === "R"
-                                ? "lightcoral"
-                                : "lightpink",
-                            position: "sticky",
-                            right: "80px",
-                            zIndex: 8,
-                            boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                            color:
-                              request.SanctionedStatus === "Y"
-                                ? "green"
-                                : request.SanctionedStatus === "R"
-                                ? "red"
-                                : "darkred",
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <span>
-                            {request.SanctionedStatus === "Y"
-                              ? "Y"
-                              : request.SanctionedStatus === "R"
+                        <span>
+                          {request.SanctionedStatus === "Y"
+                            ? "Y"
+                            : request.SanctionedStatus === "R"
                               ? "R"
                               : "UP"}
-                          </span>
-                        </TableCell>
-                      </Tooltip>
-                      <TableCell
-                        sx={{
-                          backgroundColor: "#FFEFF4",
-                          position: "sticky",
-                          right: 0,
-                          zIndex: 8,
-                          boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
-                        }}
-                      >
-                        {/* <button
-                          className="bg-blue-500 text-white p-2 rounded-lg"
-                          onClick={() => editRequestHandler(request)}
-                        >
-                          Edit
-                        </button> */}
-                        <EditOptions
-                          request={request}
-                          editRequestHandler={editRequestHandler}
-                          removeRequest={removeRequest}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={22} align="center">
-                      No requests found for{" "}
-                      {date ? `date ${date}` : "this week"}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                        </span>
+                      </td>
+                    </Tooltip>
+                    <td className="border border-gray-300 p-3 whitespace-nowrap text-center sticky right-0 z-10 bg-slate-300">
+                      <EditOptions
+                        request={request}
+                        editRequestHandler={editRequestHandler}
+                        removeRequest={removeRequest}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={30} className="border border-gray-300 p-5">
+                    No requests found for this week
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-          {/* Mobile Table */}
-          <div className="block md:hidden">
-            {filteredRequests.length > 0 ? (
-              filteredRequests.map((request) => (
-                <div
-                  key={request.requestId}
-                  className="bg-white border border-gray-300 p-4 mb-4 rounded-lg"
-                >
-                  <div className="space-y-2">
-                    {/* Header-Value Pairs with Vertical Line */}
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Request ID:
-                      </strong>
-                      <span className="pl-2">{request.requestId}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Date of Request:
-                      </strong>
-                      <span className="pl-2">{request.date}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Department:
-                      </strong>
-                      <span className="pl-2">{request.selectedDepartment}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Section:
-                      </strong>
-                      <span className="pl-2">{request.selectedSection}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Depot/SSE:
-                      </strong>
-                      <span className="pl-2">{request.selectedDepo}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Block Section/Yard:
-                      </strong>
-                      <span className="pl-2">{request.stationID}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Selected Block:
-                      </strong>
-                      <span className="pl-2">{request.missionBlock}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Work Description:
-                      </strong>
-                      <span className="pl-2">{request.workType}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Work Type Selected:
-                      </strong>
-                      <span className="pl-2">{request.workDescription}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Line Selected:
-                      </strong>
-                      <span className="pl-2">
-                        {
-                          typeof request.selectedLine === "string" &&
+        {/* Mobile Table */}
+        <div className="block md:hidden">
+          {filteredRequests.length > 0 ? (
+            filteredRequests.map((request) => (
+              <div
+                key={request.requestId}
+                className="bg-white border border-gray-300 p-4 mb-4 rounded-lg"
+              >
+                <div className="space-y-2">
+                  {/* Header-Value Pairs with Vertical Line */}
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Request ID:
+                    </strong>
+                    <span className="pl-2">{request.requestId}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Date of Request:
+                    </strong>
+                    <span className="pl-2">{request.date}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Department:
+                    </strong>
+                    <span className="pl-2">{request.selectedDepartment}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Section:
+                    </strong>
+                    <span className="pl-2">{request.selectedSection}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Depot/SSE:
+                    </strong>
+                    <span className="pl-2">{request.selectedDepo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Block Section/Yard:
+                    </strong>
+                    <span className="pl-2">{request.stationID}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Selected Block:
+                    </strong>
+                    <span className="pl-2">{request.missionBlock}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Work Description:
+                    </strong>
+                    <span className="pl-2">{request.workType}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Work Type Selected:
+                    </strong>
+                    <span className="pl-2">{request.workDescription}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Line Selected:
+                    </strong>
+                    <span className="pl-2">
+                      {
+                        typeof request.selectedLine === "string" &&
                           request.selectedLine.startsWith("{")
-                            ? (() => {
-                                try {
-                                  const lineData = JSON.parse(
-                                    request.selectedLine
-                                  );
-                                  const stationLines = lineData.station || [];
-                                  const yardLines = lineData.yard || [];
+                          ? (() => {
+                            try {
+                              const lineData = JSON.parse(
+                                request.selectedLine
+                              );
+                              const stationLines = lineData.station || [];
+                              const yardLines = lineData.yard || [];
 
-                                  return (
+                              return (
+                                <div>
+                                  {stationLines.length > 0 && (
                                     <div>
-                                      {stationLines.length > 0 && (
-                                        <div>
-                                          <strong>Station:</strong>{" "}
-                                          {stationLines.join(", ")}
-                                        </div>
-                                      )}
-                                      {yardLines.length > 0 && (
-                                        <div>
-                                          <strong>Yard:</strong>{" "}
-                                          {yardLines.join(", ")}
-                                        </div>
-                                      )}
+                                      <strong>Station:</strong>{" "}
+                                      {stationLines.join(", ")}
                                     </div>
-                                  );
-                                } catch (e) {
-                                  return request.selectedLine; // Fallback to original value if JSON parsing fails
-                                }
-                              })()
-                            : request.selectedLine // Display as is if not JSON
-                        }
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Caution Required:
-                      </strong>
-                      <span className="pl-2">{request.cautionRequired}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Caution Speed:
-                      </strong>
-                      <span className="pl-2">{request.cautionSpeed}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Caution Location (From):
-                      </strong>
-                      <span className="pl-2">
-                        {request.cautionLocationFrom}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Caution Location (To):
-                      </strong>
-                      <span className="pl-2">{request.cautionLocationTo}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Work Location (From):
-                      </strong>
-                      <span className="pl-2">
-                        {request.selectedDepartment === "ENGG"
-                          ? request.workLocationFrom
-                          : ""}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Work Location (To):
-                      </strong>
-                      <span className="pl-2">
-                        {request.selectedDepartment === "ENGG"
-                          ? request.workLocationTo
-                          : ""}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Route (From):
-                      </strong>
-                      <span className="pl-2">
-                        {request.selectedDepartment === "SIG"
-                          ? request.workLocationFrom
-                          : ""}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Route (To):
-                      </strong>
-                      <span className="pl-2">
-                        {request.selectedDepartment === "SIG"
-                          ? request.workLocationTo
-                          : ""}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Demand Time (From):
-                      </strong>
-                      <span className="pl-2">{request.demandTimeFrom}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Demand Time (To):
-                      </strong>
-                      <span className="pl-2">{request.demandTimeTo}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Coaching Repercussions:
-                      </strong>
-                      <span className="pl-2">
-                        {request.selectedDepartment === "TRD"
-                          ? request.repercussions
-                          : ""}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Other Lines Affected:
-                      </strong>
-                      <span className="pl-2">{request.otherLinesAffected}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Remarks:
-                      </strong>
-                      <span className="pl-2">{request.requestremarks}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Corridor Type
-                      </strong>
-                      <span className="pl-2">{request.corridorType}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Manager Response
-                      </strong>
-                      <span className="pl-2">
-                        {request.ManagerResponse || "Pending"}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Disconnections
-                      </strong>
-                      <span className="pl-2">
-                        <DisconnectionDetails request={request} />
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                      <strong className="text-right pr-2 border-r border-gray-200">
-                        Edit The Request:
-                      </strong>
-                      <span className="pl-2">
-                        <button
-                          className="bg-blue-500 text-white p-2 rounded-lg"
-                          onClick={() => editRequestHandler(request)}
-                        >
-                          Edit
-                        </button>
-                      </span>
-                    </div>
+                                  )}
+                                  {yardLines.length > 0 && (
+                                    <div>
+                                      <strong>Yard:</strong>{" "}
+                                      {yardLines.join(", ")}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            } catch (e) {
+                              return request.selectedLine; // Fallback to original value if JSON parsing fails
+                            }
+                          })()
+                          : request.selectedLine // Display as is if not JSON
+                      }
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Caution Required:
+                    </strong>
+                    <span className="pl-2">{request.cautionRequired}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Caution Speed:
+                    </strong>
+                    <span className="pl-2">{request.cautionSpeed}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Caution Location (From):
+                    </strong>
+                    <span className="pl-2">{request.cautionLocationFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Caution Location (To):
+                    </strong>
+                    <span className="pl-2">{request.cautionLocationTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Work Location (From):
+                    </strong>
+                    <span className="pl-2">
+                      {request.selectedDepartment === "ENGG"
+                        ? request.workLocationFrom
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Work Location (To):
+                    </strong>
+                    <span className="pl-2">
+                      {request.selectedDepartment === "ENGG"
+                        ? request.workLocationTo
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Route (From):
+                    </strong>
+                    <span className="pl-2">
+                      {request.selectedDepartment === "SIG"
+                        ? request.workLocationFrom
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Route (To):
+                    </strong>
+                    <span className="pl-2">
+                      {request.selectedDepartment === "SIG"
+                        ? request.workLocationTo
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Demand Time (From):
+                    </strong>
+                    <span className="pl-2">{request.demandTimeFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Demand Time (To):
+                    </strong>
+                    <span className="pl-2">{request.demandTimeTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Coaching Repercussions:
+                    </strong>
+                    <span className="pl-2">
+                      {request.selectedDepartment === "TRD"
+                        ? request.repercussions
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Other Lines Affected:
+                    </strong>
+                    <span className="pl-2">{request.otherLinesAffected}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Remarks:
+                    </strong>
+                    <span className="pl-2">{request.requestremarks}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Corridor Type
+                    </strong>
+                    <span className="pl-2">{request.corridorType}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Manager Response
+                    </strong>
+                    <span className="pl-2">
+                      {request.ManagerResponse || "Pending"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Disconnections
+                    </strong>
+                    <span className="pl-2">
+                      <DisconnectionDetails request={request} />
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
+                    <strong className="text-right pr-2 border-r border-gray-200">
+                      Edit The Request:
+                    </strong>
+                    <span className="pl-2">
+                      <button
+                        className="bg-blue-500 text-white p-2 rounded-lg"
+                        onClick={() => editRequestHandler(request)}
+                      >
+                        Edit
+                      </button>
+                    </span>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="text-center p-4">
-                No requests found for {date ? `date ${date}` : "this week"}
               </div>
-            )}
-          </div>
-          <Button onClick={toggleFullscreen}>
-            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-          </Button>
-        </TableContainer>
+            ))
+          ) : (
+            <div className="text-center p-4">
+              No requests found for {date ? `date ${date}` : "this week"}
+            </div>
+          )}
+        </div>
+        <Button onClick={toggleFullscreen}>
+          {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+        </Button>
       </div>
     );
   }
