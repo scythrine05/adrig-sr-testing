@@ -71,6 +71,7 @@ export async function postStagingManagerFormData(formData, userId) {
 
     const res = await prisma.StagingRequests.create({
       data: {
+        requestId: formData.requestId,
         date: formData.date,
         selectedDepartment: formData.selectedDepartment,
         selectedSection: formData.selectedSection,

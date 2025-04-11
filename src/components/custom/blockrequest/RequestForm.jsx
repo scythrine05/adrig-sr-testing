@@ -762,9 +762,9 @@ export default function RequestForm2(props) {
 
   const formConditionalRenderingTRD = () => {
     return formData.selectedDepartment === "TRD" ? (
-      <div className="p-4 rounded-lg mb-4" style={{ color: "#40E0D0" }}>
+      <div className="p-4 rounded-lg mb-4">
         <div className="mb-4">
-          <label className="block text-sm font-medium">
+          <label className="block text-sm font-medium text-black">
             Coaching repercussions
           </label>
           <textarea
@@ -777,7 +777,7 @@ export default function RequestForm2(props) {
         </div>
       </div>
     ) : (
-      <div className="p-4 rounded-lg mb-4" style={{ color: "#40E0D0" }}>
+      <div className="p-4 rounded-lg mb-4">
         <div className="mb-4">
           <label className="block text-sm font-medium text-black">
             Whether Fresh Caution will be imposed after block
