@@ -48,7 +48,6 @@ export async function postDataOptimisedFirst(request) {
 }
 
 export async function postBulkOptimised(requestArray) {
-  
   // Extract request IDs
   const requestIds = requestArray.map((request) => {
     const parts = request.requestId.split("-");
@@ -78,14 +77,17 @@ export async function postBulkOptimised(requestArray) {
     }) => rest
   );
 
-  console.log(filteredData);
-
   const updatedData = filteredData.map((item) => {
     const { optimisedTimeFrom, optimisedTimeTo, ...rest } = item;
+
+    const isNonCorridor = item.corridorType !== "corridor";
+
     return {
       ...rest,
-      Optimisedtimefrom: optimisedTimeFrom,
-      Optimisedtimeto: optimisedTimeTo,
+      Optimisedtimefrom: isNonCorridor
+        ? item.demandTimeFrom
+        : optimisedTimeFrom,
+      Optimisedtimeto: isNonCorridor ? item.demandTimeTo : optimisedTimeTo,
       availed: JSON.stringify({ status: "pending", reason: "" }),
     };
   });

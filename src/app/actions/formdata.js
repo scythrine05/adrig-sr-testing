@@ -169,17 +169,13 @@ export async function updateRequestsSanctionedStatus(requestIds, status) {
     const res = await prisma.requests.updateMany({
       where: {
         requestId: {
-          in: requestIds, // Match all request IDs in the array
+          in: requestIds,
         },
       },
       data: {
-        SanctionedStatus: status, // Update the SanctionedStatus
+        SanctionedStatus: status,
       },
     });
-    console.log(
-      `SanctionedStatus updated to '${status}' for requests:`,
-      requestIds
-    );
     return {
       success: true,
       message: "SanctionedStatus updated successfully",
