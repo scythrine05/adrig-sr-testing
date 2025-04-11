@@ -72,6 +72,7 @@ export async function postFormManagerData(formData) {
 
     const res = await prisma.requests.create({
       data: {
+        requestId: formData.requestId,
         date: formData.date,
         selectedDepartment: formData.selectedDepartment,
         selectedSection: formData.selectedSection,

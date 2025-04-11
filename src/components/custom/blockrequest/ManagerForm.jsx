@@ -219,7 +219,7 @@ export default function ManagerForm({ id }) {
       }
     } else if (
       formData.selectedDepartment === "ENGG" &&
-      (name === "workLocationFrom" || name === "workLocationTo")
+      name === "workLocationFrom"
     ) {
       let rawValue = value;
 
@@ -293,6 +293,8 @@ export default function ManagerForm({ id }) {
       };
       setFormData({ ...formData, [name]: formData.selectedLine });
 
+    } else if (name === "selectedDepo") {
+      setFormData({ ...formData, [name]: value });
     } else {
       setFormData({ ...formData, [name]: value });
     }
