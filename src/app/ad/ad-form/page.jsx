@@ -164,15 +164,12 @@ const SearchForm = () => {
       title: "Optimization In progress",
       description: "Your Request Is Under Process! Please Wait",
     });
-    const filteredRequestsWithoutSanctionedStatus = filteredRequests.map(
-      ({ sanctionedStatus, ...rest }) => rest
-    );
     try {
       if (currentReq != null) {
         const res = await axios.post(
           `https://sr-optimization.vercel.app/backend/optimize`,
           {
-            requestData: filteredRequestsWithoutSanctionedStatus,
+            requestData: filteredRequests,
           }
         );
 
