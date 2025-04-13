@@ -223,7 +223,7 @@ export default function ManagerForm({ id }) {
     ) {
       let rawValue = value;
 
-      rawValue = rawValue.replace(/[^0-9.]/g, "");
+      rawValue = rawValue.replace(/[^a-zA-Z0-9.]/g, "");
 
       const decimalIndex = rawValue.indexOf(".");
 

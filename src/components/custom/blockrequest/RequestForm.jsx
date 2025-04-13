@@ -90,14 +90,16 @@ export default function RequestForm2(props) {
   useEffect(() => {
     const fxn = async () => {
       const UserData = await getUserId(props.user?.user);
-      if (UserData == null || UserData == undefined || UserData.id == null) {
-        return;
-      } else {
-        formData.selectedDepartment = UserData.department;
-      }
+      if (!UserData?.id) return;
+
+      setFormData((prev) => ({
+        ...prev,
+        selectedDepartment: UserData.department,
+      }));
     };
+
     fxn();
-  }, [formData]);
+  }, [props.user]);
 
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
@@ -271,11 +273,11 @@ export default function RequestForm2(props) {
       }
     } else if (
       formData.selectedDepartment === "ENGG" &&
-      name === "workLocation"
+      (name === "workLocationFrom" || name === "workLocationTo")
     ) {
       let rawValue = value;
 
-      rawValue = rawValue.replace(/[^0-9.]/g, "");
+      rawValue = rawValue.replace(/[^a-zA-Z0-9.]/g, "");
 
       const decimalIndex = rawValue.indexOf(".");
 
@@ -612,8 +614,8 @@ export default function RequestForm2(props) {
         formData.selectedStream === "Both"
           ? getRoadData(ele)
           : getRoadData(ele).filter(
-              (e) => e.direction === formData.selectedStream
-            );
+            (e) => e.direction === formData.selectedStream
+          );
       return (
         <div key={index}>
           {ele.split("-")[1] === "YD" && (
@@ -989,7 +991,7 @@ export default function RequestForm2(props) {
             <div>
               <label className="block text-sm font-medium text-black">
                 {formData.selectedDepartment === "SIG" ||
-                formData.selectedDepartment === "ENGG"
+                  formData.selectedDepartment === "ENGG"
                   ? "Line"
                   : "Elementary section"}{" "}
                 <span style={{ color: "red" }}>*</span>

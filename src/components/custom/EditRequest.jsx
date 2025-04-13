@@ -139,7 +139,7 @@ export default function EditRequest(props) {
       }
     };
     fxn();
-  }, [formData]);
+  }, [props.user]);
 
   useEffect(() => {
     // Calculate allowed date range based on current date and time
@@ -387,7 +387,7 @@ export default function EditRequest(props) {
     ) {
       let rawValue = value;
 
-      rawValue = rawValue.replace(/[^0-9.]/g, "");
+      rawValue = rawValue.replace(/[^a-zA-Z0-9.]/g, "");
 
       const decimalIndex = rawValue.indexOf(".");
 
