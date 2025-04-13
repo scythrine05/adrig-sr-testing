@@ -1127,6 +1127,7 @@ export default function RequestForm2(props) {
       "AJJ-RU": ["PUT"],
       "AJJ-CGL": ["CJ"],
       "MSB-VM": ["MS", "TBM", "CGL", "ACK", "TMV"],
+      "MSB-VLCY": ["MSB"],
     },
     SIG: {
       "MAS-GDR": ["MAS", "BBQ", "TVT", "GPD", "SPE", "NYP"],
@@ -1136,6 +1137,7 @@ export default function RequestForm2(props) {
       "KPD-JTJ": ["KPDW", "AB", "JTJ"],
       "MSB-VM": ["MSB", "MS", "TBM", "CGL", "TMV"],
       "CGL-AJJ": ["CGL"],
+      "MSB-VLCY": ["MSB"],
     },
     TRD: {
       "MAS Divn": ["SR DEE/TRD/MAS", "DEE/TRD/MAS", "CTPC/TRD/MAS"],
@@ -1153,6 +1155,7 @@ export default function RequestForm2(props) {
       "KPD-JTJ": ["TRD/KPD", "TRD/AB", "TRD/JTJ"],
       "MSB-VM": ["TRD/MS", "TRD/TBM", "TRD/CGL", "TRD/ACK", "TRD/VM"],
       "AJJ-CGL": ["TRD/AJJ", "TRD/CGL"],
+      "MSB-VLCY": ["MSB"],
     },
   };
 
