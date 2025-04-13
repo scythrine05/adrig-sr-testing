@@ -20,6 +20,24 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Super Admin Functionality
+
+The application includes a Super Admin panel that provides access to monitor all operations:
+
+- **Login:** Access via `/super-admin` with credentials set in environment variables:
+  ```
+  SUPER_ADMIN_EMAIL=super-admin@gmail.com
+  SUPER_ADMIN_PASSWORD=root
+  ```
+
+- **Features:**
+  - Home page - Dashboard overview
+  - Staging Requests - View all staging requests
+  - Request Table - View all requests
+  - Sanctioned Requests - View all sanctioned requests
+
+- **Authentication:** The Super Admin uses a separate authentication flow from regular users and admins.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

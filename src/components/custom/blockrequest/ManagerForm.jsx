@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { postStagingManagerFormData } from "../../../app/actions/stagingform";
+import { postStagingManagerFormData, getRequestCount } from "../../../app/actions/stagingform";
 import { getManager } from "../../../app/actions/user";
 import { data, workData } from "../../../lib/store";
 import MultipleSelect from "./MultipleSelect";
@@ -11,13 +11,16 @@ import { yardData } from "../../../lib/yard";
 import { useSession } from "next-auth/react";
 import { useFormState, handleKeyDown, formValidation, revertCategoryFormat, handleChange } from "../../../lib/utils";
 import FormLayout from "../FormLayout";
+import ConfirmationDialog from "../ConfirmationDialog";
+import { generateRequestId } from "../../../lib/utils";
 
-export default function ManagerForm() {
+export default function ManagerForm({ id }) {
   const maxDate = "2030-12-31";
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
   const [formData, setFormData] = useFormState();
   const { data: session, status } = useSession();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const inputRefs = useRef([]);
 
@@ -27,19 +30,21 @@ export default function ManagerForm() {
         console.log("Session is not available yet");
         return;
       }
-  
+
       const mail = session.user.email;
-      console.log(mail);
-  
+      console.log("Manager email:", mail);
+      console.log("Department ID from prop:", id);
+
       const res = await getManager(mail);
       if (!res) return;
-  
-      formData.selectedDepartment = res.department.toUpperCase();
+
+      console.log("Manager data:", res);
+      formData.selectedDepartment = id ? id.toUpperCase() : res.department.toUpperCase();
     };
-  
+
     fxn();
-  }, [session, formData, status]); // Ensure session is a dependency
-  
+  }, [session, formData, status, id]); // Ensure session and id are dependencies
+
 
   const blockGenerator = () => {
     if (formData.stationID != "" && formData.selectedSection != "") {
@@ -214,11 +219,11 @@ export default function ManagerForm() {
       }
     } else if (
       formData.selectedDepartment === "ENGG" &&
-      (name === "workLocationFrom" || name === "workLocationTo")
+      name === "workLocationFrom"
     ) {
       let rawValue = value;
 
-      rawValue = rawValue.replace(/[^0-9.]/g, "");
+      rawValue = rawValue.replace(/[^a-zA-Z0-9.]/g, "");
 
       const decimalIndex = rawValue.indexOf(".");
 
@@ -287,25 +292,43 @@ export default function ManagerForm() {
         ],
       };
       setFormData({ ...formData, [name]: formData.selectedLine });
-      
+
+    } else if (name === "selectedDepo") {
+      setFormData({ ...formData, [name]: value });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
-  
 
-  const formSubmitHandler = async () => {
-    const UserData = await getManager(session?.user?.email);
-    console.log(UserData);
-    if (UserData == null || UserData == undefined || UserData.id == null) {
+
+  const handleFormSubmit = () => {
+    if (formValidation(formData)) {
+      // Show confirmation dialog if validation passes
+      setShowConfirmation(true);
+    } else {
       toast({
-        title: "Invalid User",
-        description:
-          "Request Cannot Be Made Because Of Insufficent User Details",
+        title: "Submission Failed",
+        description: "Fill All The Details",
         variant: "destructive",
       });
-      return;
-    } else {
+    }
+  };
+
+  const formSubmitHandler = async () => {
+    try {
+      const UserData = await getManager(session?.user?.email);
+      console.log("Manager data:", UserData);
+
+      if (UserData == null || UserData == undefined || UserData.id == null) {
+        toast({
+          title: "Invalid User",
+          description:
+            "Request Cannot Be Made Because Of Insufficient User Details",
+          variant: "destructive",
+        });
+        return;
+      }
+
       if (formValidation(formData) == true) {
         if (formData.workDescription === "others") {
           if (otherData === "") {
@@ -318,9 +341,35 @@ export default function ManagerForm() {
           }
           formData.workDescription = "Other Entry" + ":" + otherData;
         }
-        console.log(formData);
+
+        if (formData.ohDisconnection) {
+          formData.oheDisconnection = formData.ohDisconnection;
+        } else if (formData.oheDisconnection) {
+          formData.ohDisconnection = formData.oheDisconnection;
+        }
+
+        const currentDate = new Date()
+          .toLocaleDateString("en-IN", {
+            month: "2-digit",
+            year: "2-digit",
+          })
+          .replace("/", "-");
+        const requestCount = await getRequestCount();
+        const sequence = requestCount + 1;
+
+        const requestId = generateRequestId({
+          date: currentDate,
+          division: "1",
+          department: formData.selectedDepartment,
+          section: formData.selectedDepo,
+          sequence,
+        });
+        formData.requestId = requestId;
+
+        console.log("Submitting form data:", formData);
         const res = await postStagingManagerFormData(formData, UserData?.id);
-        console.log(res);
+        console.log("Form submission result:", res);
+
         setFormData({
           date: "",
           selectedDepartment: "",
@@ -356,6 +405,7 @@ export default function ManagerForm() {
           requestremarks: "",
           selectedDepo: "",
         });
+
         toast({
           title: "Success",
           description: "Request Submitted",
@@ -367,15 +417,21 @@ export default function ManagerForm() {
           variant: "destructive",
         });
       }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred while submitting the form",
+        variant: "destructive",
+      });
     }
   };
-
 
   const handleInputRefsChange = (idx) => {
     (el) => (inputRefs.current[idx] = el)
   }
 
-  const handleKeyDownChange = (idx) =>{
+  const handleKeyDownChange = (idx) => {
     (e) => handleKeyDown(e, idx)
   }
 
@@ -406,13 +462,13 @@ export default function ManagerForm() {
   const handleSetFormData = () => {
     return setFormData;
   }
-  
+
   const formWorkType = () => {
     return formData.workType;
   }
   const customOption1 = () => {
-    return(
-    formData.selectedDepartment != "" && Object.keys(workData[`${formData.selectedDepartment}`]).map((element) => {
+    return (
+      formData.selectedDepartment != "" && Object.keys(workData[`${formData.selectedDepartment}`]).map((element) => {
         const formattedCategory = element
           .replace(/_/g, " ")
           .split(" ")
@@ -431,454 +487,571 @@ export default function ManagerForm() {
           </option>
         );
       }
-    ))};
+      ))
+  };
 
   const customOption2 = () => {
     return (
-    formData.workType != "" && formData.workType === "others" ? (
-    <input
-      type="text"
-      name="workDescription"
-      className="mt-1 w-full p-2.5 border rounded z-1000"
-      onChange={handleChange}
-      value={formData.workDescription}
-    />
-  ) : (
-    <select
-      ref={(el) => (inputRefs.current[6] = el)}
-      onKeyDown={(e) => handleKeyDownChange(e, 6)}
-      name="workDescription"
-      className="mt-1 w-full p-2.5 border rounded z-1000"
-      onChange={handleChange}
-      value={formData.workDescription}
-    >
-      <option>Select work description </option>
-      {formData.workType != "" &&
-        workData[`${formData.selectedDepartment}`][
-          `${revertCategoryFormat(formData.workType)}`
-        ].map((e) => {
-          return (
-            <option
-              className="block text-sm font-medium"
-              value={e}
-              key={e}
-            >
-              {e}
-            </option>
-          );
-        })}
-      <option className="block text-sm font-medium " value={"others"}>
-        Others
-      </option>
-    </select>
-  ))}
+      formData.workType != "" && formData.workType === "others" ? (
+        <input
+          type="text"
+          name="workDescription"
+          className="mt-1 w-full p-2.5 border rounded z-1000"
+          onChange={handleChange}
+          value={formData.workDescription}
+        />
+      ) : (
+        <select
+          ref={(el) => (inputRefs.current[6] = el)}
+          onKeyDown={(e) => handleKeyDownChange(e, 6)}
+          name="workDescription"
+          className="mt-1 w-full p-2.5 border rounded z-1000"
+          onChange={handleChange}
+          value={formData.workDescription}
+        >
+          <option>Activity</option>
+          {formData.workType != "" &&
+            workData[`${formData.selectedDepartment}`][
+              `${revertCategoryFormat(formData.workType)}`
+            ].map((e) => {
+              return (
+                <option
+                  className="block text-sm font-medium"
+                  value={e}
+                  key={e}
+                >
+                  {e}
+                </option>
+              );
+            })}
+          <option className="block text-sm font-medium " value={"others"}>
+            Others
+          </option>
+        </select>
+      ))
+  }
 
   const customOption3 = () => {
-    return(
-    formData.workDescription === "others" && (
-    <div className="ml-[555px] ">
-      <input
-        type="text"
-        name="otherData"
-        placeholder="Enter The Other Task Here"
-        className="border border-slate-900 rounded-lg p-2 w-[400px]"
-        value={otherData}
-        onChange={(e) => {
-          setOtherData(e.target.value);
-        }}
-      />
-    </div>
-  ))}
+    return (
+      formData.workDescription === "others" && (
+        <div className="ml-[555px] ">
+          <input
+            type="text"
+            name="otherData"
+            placeholder="Enter The Other Task Here"
+            className="border border-slate-900 rounded-lg p-2 w-[400px]"
+            value={otherData}
+            onChange={(e) => {
+              setOtherData(e.target.value);
+            }}
+          />
+        </div>
+      ))
+  }
 
   const handleGetMissionBlock1 = () => {
-    return(
-    getMissionBlock().map((ele) => {
-    const arr = ele?.split("-").map((name) => name.trim());
-    const value = getLineSectionValue(ele, arr);
-    const filteredData =
-      formData.selectedStream === "Both"
-        ? getRoadData(ele)
-        : getRoadData(ele).filter(
-            (e) => e.direction === formData.selectedStream
-          );
     return (
-      <div>
-        {ele.split("-")[1] === "YD" && (
-          <div>
-            <label className="block text-sm font-medium">
-              Stream for {ele}
+      getMissionBlock().map((ele, index) => {
+        const arr = ele?.split("-").map((name) => name.trim());
+        const value = getLineSectionValue(ele, arr);
+        const filteredData =
+          formData.selectedStream === "Both"
+            ? getRoadData(ele)
+            : getRoadData(ele).filter(
+              (e) => e.direction === formData.selectedStream
+            );
+        return (
+          <div key={index}>
+            {ele.split("-")[1] === "YD" && (
+              <div>
+                <label className="block text-sm font-medium">
+                  Stream for {ele}
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+                <select
+                  name="selectedStream"
+                  value={formData.selectedStream}
+                  className="mt-1 w-full p-2 border rounded"
+                  onChange={handleChange}
+                >
+                  <option value={""}>Select Stream</option>
+                  <option value={"Upstream"}>Up Stream</option>
+                  <option value={"Downstream"}>Down Stream</option>
+                  <option value={"Both"}>Both</option>
+                </select>
+              </div>
+            )}
+            <label className="block mt-3 text-sm font-medium">
+              {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
               <span style={{ color: "red" }}>*</span>
             </label>
             <select
-              name="selectedStream"
-              value={formData.selectedStream}
+              name="selectedLine"
+              ref={(el) => (inputRefs.current[5] = el)}
+              onKeyDown={(e) => handleKeyDownChange(e, 5)}
+              value={value}
               className="mt-1 w-full p-2 border rounded"
               onChange={handleChange}
+              required
             >
-              <option value={""}>Select Stream</option>
-              <option value={"Upstream"}>Up Stream</option>
-              <option value={"Downstream"}>Down Stream</option>
-              <option value={"Both"}>Both</option>
+              <option value="">Select {arr?.includes("YD") ? `Road` : `Line`}</option>
+              {arr?.includes("YD") ? (
+                filteredData.length > 0 ? (
+                  filteredData.map((e) => (
+                    <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                      {e.road_no}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>No data available for the selected stream</option>
+                )
+              ) : (
+                getTheList(ele).map((e) => (
+                  <option value={`${ele}:${e}`} key={e}>
+                    {e}
+                  </option>
+                ))
+              )}
             </select>
+
+
+
           </div>
-        )}
-        <label className="block mt-3 text-sm font-medium">
-          {arr?.includes("YD") ? `Road ${ele}` : `Line ${ele}`}
-          <span style={{ color: "red" }}>*</span>
-        </label>
-        <select
-          name="selectedLine"
-          ref={(el) => (inputRefs.current[5] = el)}
-          onKeyDown={(e) => handleKeyDownChange(e, 5)}
-          value={value}
-          className="mt-1 w-full p-2 border rounded"
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select {arr?.includes("YD") ? `Road` : `Line`}</option>
-          {arr?.includes("YD") ? (
-            filteredData.length > 0 ? (
-              filteredData.map((e) => (
-                <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                  {e.road_no}
-                </option>
-              ))
-            ) : (
-              <option disabled>No data available for the selected stream</option>
-            )
-          ) : (
-            getTheList(ele).map((e) => (
-              <option value={`${ele}:${e}`} key={e}>
-                {e}
-              </option>
-            ))
-          )}
-        </select>
-
-
-
-      </div>
-    );
-  }))}
+        );
+      }))
+  }
 
   const formConditionalRendering1 = () => {
-    return(
+    return (
       <div>
-      {formData.selectedDepartment === "ENGG" && (
-        <label className="block text-sm font-medium">Work location</label>
-      )}
-      {formData.selectedDepartment === "SIG" && (
-        <label className="block text-sm font-medium">Route</label>
-      )}
-      {formData.selectedDepartment === "TRD" && (
-        <label className="block text-sm font-medium">
-          Elementry Section
-        </label>
-      )}
-      {formData.selectedDepartment === "" ||
-        (formData.selectedDepartment === "ENGG" && (
+        {formData.selectedDepartment === "ENGG" && (
+          <label className="block text-sm font-medium">Work location</label>
+        )}
+        {formData.selectedDepartment === "SIG" && (
+          <label className="block text-sm font-medium">Route</label>
+        )}
+        {formData.selectedDepartment === "TRD" && (
+          <label className="block text-sm font-medium">
+            Elementry Section
+          </label>
+        )}
+        {formData.selectedDepartment === "" ||
+          (formData.selectedDepartment === "ENGG" && (
+            <div className="flex space-x-2">
+              <input
+                type="alphanumeric"
+                value={formData.workLocationTo}
+                name="workLocationTo"
+                className="mt-1 w-1/2 p-2 border rounded"
+                placeholder="Work Location"
+                onChange={handleChange}
+              />
+            </div>
+          ))}
+        {formData.selectedDepartment === "SIG" && (
           <div className="flex space-x-2">
             <input
-              type="alphanumeric"
+              type="text"
+              value={formData.workLocationFrom}
+              name="workLocationFrom"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="from"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
               value={formData.workLocationTo}
               name="workLocationTo"
               className="mt-1 w-1/2 p-2 border rounded"
-              placeholder="Work Location"
+              placeholder="to"
               onChange={handleChange}
             />
           </div>
-        ))}
-      {formData.selectedDepartment === "SIG" && (
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={formData.workLocationFrom}
-            name="workLocationFrom"
-            className="mt-1 w-1/2 p-2 border rounded"
-            placeholder="from"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            value={formData.workLocationTo}
-            name="workLocationTo"
-            className="mt-1 w-1/2 p-2 border rounded"
-            placeholder="to"
-            onChange={handleChange}
-          />
-        </div>
-      )}
-      {formData.selectedDepartment === "TRD" && (
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={formData.workLocationFrom}
-            name="workLocationFrom"
-            className="mt-1 w-1/2 p-2 border rounded"
-            placeholder="from"
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            value={formData.workLocationTo}
-            name="workLocationTo"
-            className="mt-1 w-1/2 p-2 border rounded"
-            placeholder="to"
-            onChange={handleChange}
-          />
-        </div>
-      )}
-    </div>
+        )}
+        {formData.selectedDepartment === "TRD" && (
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              value={formData.workLocationFrom}
+              name="workLocationFrom"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="from"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              value={formData.workLocationTo}
+              name="workLocationTo"
+              className="mt-1 w-1/2 p-2 border rounded"
+              placeholder="to"
+              onChange={handleChange}
+            />
+          </div>
+        )}
+      </div>
     )
   }
 
   const formDemandTimeFrom = () => {
-    return(formData.demandTimeFrom);
+    return (formData.demandTimeFrom);
   }
 
   const formDemandTimeTo = () => {
-    return(formData.demandTimeTo);
+    return (formData.demandTimeTo);
   }
 
   const formConditionalRendering2 = () => {
-    return(formData.selectedDepartment === "TRD" ? (
-    <div className="bg-blue-200 p-4 rounded-lg mb-4">
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Coaching repercussions
-        </label>
-        <textarea
-          type="text"
-          name="repercussions"
-          onChange={handleChange}
-          value={formData.repercussions}
-          className="mt-2 p-2 w-1/2 border border-slate-950 rounded"
-        />
-      </div>
-    </div>
-  ) : (
-    <div className="bg-blue-200 p-4 rounded-lg mb-4">
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Caution required <span style={{ color: "red" }}>*</span>
-        </label>
-        <div className="flex space-x-4">
-          <label>
-            <input
-              type="radio"
-              name="cautionRequired"
-              value="Yes"
-              checked={formData.cautionRequired === "Yes"}
-              onChange={handleChange}
-            />
-            Yes
+    return (formData.selectedDepartment === "TRD" ? (
+      <div className="bg-blue-200 p-4 rounded-lg mb-4">
+        <div className="mb-4">
+          <label className="block text-sm font-medium">
+            Coaching repercussions
           </label>
-          <label>
-            <input
-              type="radio"
-              name="cautionRequired"
-              checked={formData.cautionRequired === "No"}
-              value="No"
-              onChange={handleChange}
-            />{" "}
-            No
-          </label>
+          <textarea
+            type="text"
+            name="repercussions"
+            onChange={handleChange}
+            value={formData.repercussions}
+            className="mt-2 p-2 w-1/2 border border-slate-950 rounded"
+          />
         </div>
       </div>
-      {formData.cautionRequired === "Yes" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium">
-              Caution location <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="flex space-x-2">
+    ) : (
+      <div className="bg-blue-200 p-4 rounded-lg mb-4">
+        <div className="mb-4">
+          <label className="block text-sm font-medium">
+            Whether Fresh Caution will be imposed after block <span style={{ color: "red" }}>*</span>
+          </label>
+          <div className="flex space-x-4">
+            <label>
               <input
-                type="text"
-                value={formData.cautionLocationFrom}
-                name="cautionLocationFrom"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="from"
+                type="radio"
+                name="cautionRequired"
+                value="Yes"
+                checked={formData.cautionRequired === "Yes"}
                 onChange={handleChange}
               />
-              <input
-                type="text"
-                value={formData.cautionLocationTo}
-                name="cautionLocationTo"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="to"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium">
-              Caution speed <span style={{ color: "red" }}>*</span>
+              Yes
             </label>
-            <input
-              type="text"
-              value={formData.cautionSpeed}
-              name="cautionSpeed"
-              className="mt-1 w-full p-2 border rounded"
-              placeholder="In format km/h"
-              onChange={handleChange}
-            />
+            <label>
+              <input
+                type="radio"
+                name="cautionRequired"
+                checked={formData.cautionRequired === "No"}
+                value="No"
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
           </div>
         </div>
-      )}
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          OHE Disconnection <span style={{ color: "red" }}>*</span>
-        </label>
-        <div className="flex space-x-4">
-          <label>
-            <input
-              type="radio"
-              name="ohDisconnection"
-              value="Yes"
-              checked={formData.ohDisconnection === "Yes"}
-              onChange={handleChange}
-            />{" "}
-            Yes
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="ohDisconnection"
-              checked={formData.ohDisconnection === "No"}
-              value="No"
-              onChange={handleChange}
-            />{" "}
-            No
-          </label>
-        </div>
-      </div>
-      {formData.ohDisconnection === "Yes" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium">
-              Elementary section <span style={{ color: "red" }}>*</span>
-            </label>
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={formData.elementarySectionFrom}
-                name="elementarySectionFrom"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="from"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                value={formData.elementarySectionTo}
-                name="elementarySectionTo"
-                className="mt-1 w-1/2 p-2 border rounded"
-                placeholder="to"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          SIG Disconnection <span style={{ color: "red" }}>*</span>
-        </label>
-        <div className="flex space-x-4">
-          <label>
-            <input
-              type="radio"
-              name="sigDisconnection"
-              value="Yes"
-              checked={formData.sigDisconnection === "Yes"}
-              onChange={handleChange}
-            />{" "}
-            Yes
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="sigDisconnection"
-              value="No"
-              checked={formData.sigDisconnection === "No"}
-              onChange={handleChange}
-            />{" "}
-            No
-          </label>
-        </div>
-      </div>
-      {formData.sigDisconnection === "Yes" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium">
-              {formData.selectedDepartment === "SIG" ||
-              formData.selectedDepartment === "ENGG"
-                ? "Line"
-                : "Elementary section"}{" "}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            {formData.selectedDepartment === "SIG" ? (
-              <input
-                type="text"
-                value={formData.sigElementarySectionFrom}
-                name="sigElementarySectionFrom"
-                className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
-                onChange={handleChange}
-              />
-            ) : (
+        {formData.cautionRequired === "Yes" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium">
+                Caution location <span style={{ color: "red" }}>*</span>
+              </label>
               <div className="flex space-x-2">
                 <input
                   type="text"
-                  value={formData.sigElementarySectionFrom}
-                  name="sigElementarySectionFrom"
+                  value={formData.cautionLocationFrom}
+                  name="cautionLocationFrom"
                   className="mt-1 w-1/2 p-2 border rounded"
                   placeholder="from"
                   onChange={handleChange}
                 />
                 <input
                   type="text"
-                  value={formData.sigElementarySectionTo}
-                  name="sigElementarySectionTo"
+                  value={formData.cautionLocationTo}
+                  name="cautionLocationTo"
                   className="mt-1 w-1/2 p-2 border rounded"
                   placeholder="to"
                   onChange={handleChange}
                 />
               </div>
-            )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium">
+                Caution speed <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.cautionSpeed}
+                name="cautionSpeed"
+                className="mt-1 w-full p-2 border rounded"
+                placeholder="In format km/h"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium">
+            Whether Power Block Needed <span style={{ color: "red" }}>*</span>
+          </label>
+          <div className="flex space-x-4">
+            <label>
+              <input
+                type="radio"
+                name="ohDisconnection"
+                value="Yes"
+                checked={formData.ohDisconnection === "Yes"}
+                onChange={handleChange}
+              />{" "}
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="ohDisconnection"
+                checked={formData.ohDisconnection === "No"}
+                value="No"
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
           </div>
         </div>
-      )}
-    </div>
-  ))};
+        {formData.ohDisconnection === "Yes" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium">
+                Elementary section <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={formData.elementarySectionFrom}
+                  name="elementarySectionFrom"
+                  className="mt-1 w-1/2 p-2 border rounded"
+                  placeholder="from"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  value={formData.elementarySectionTo}
+                  name="elementarySectionTo"
+                  className="mt-1 w-1/2 p-2 border rounded"
+                  placeholder="to"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium">
+                Power Block Requirements <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className="flex space-x-4 mt-1">
+                <label className="text-black">
+                  <input
+                    type="checkbox"
+                    name="trdDisconnectionRequirements"
+                    value="Gear"
+                    checked={formData.trdDisconnectionRequirements?.includes(
+                      "Gear"
+                    )}
+                    onChange={(e) => {
+                      const currentValue =
+                        formData.trdDisconnectionRequirements || "";
+                      const newValue = e.target.checked
+                        ? currentValue + (currentValue ? ",Gear" : "Gear")
+                        : currentValue.replace(/,?Gear/, "");
+                      handleChange({
+                        target: {
+                          name: "trdDisconnectionRequirements",
+                          value: newValue,
+                        },
+                      });
+                    }}
+                  />{" "}
+                  Gears Required
+                </label>
+                <label className="text-black">
+                  <input
+                    type="checkbox"
+                    name="trdDisconnectionRequirements"
+                    value="People"
+                    checked={formData.trdDisconnectionRequirements?.includes(
+                      "People"
+                    )}
+                    onChange={(e) => {
+                      const currentValue =
+                        formData.trdDisconnectionRequirements || "";
+                      const newValue = e.target.checked
+                        ? currentValue + (currentValue ? ",People" : "People")
+                        : currentValue.replace(/,?People/, "");
+                      handleChange({
+                        target: {
+                          name: "trdDisconnectionRequirements",
+                          value: newValue,
+                        },
+                      });
+                    }}
+                  />{" "}
+                  Staff Required
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="mb-4">
+          <label className="block text-sm font-medium">
+            Whether S&T Disconnection Required{" "} <span style={{ color: "red" }}>*</span>
+          </label>
+          <div className="flex space-x-4">
+            <label>
+              <input
+                type="radio"
+                name="sigDisconnection"
+                value="Yes"
+                checked={formData.sigDisconnection === "Yes"}
+                onChange={handleChange}
+              />{" "}
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="sigDisconnection"
+                value="No"
+                checked={formData.sigDisconnection === "No"}
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
+          </div>
+        </div>
+        {formData.sigDisconnection === "Yes" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium">
+                {formData.selectedDepartment === "SIG" ||
+                  formData.selectedDepartment === "ENGG"
+                  ? "Line"
+                  : "Elementary section"}{" "}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              {formData.selectedDepartment === "SIG" ? (
+                <input
+                  type="text"
+                  value={formData.sigElementarySectionFrom}
+                  name="sigElementarySectionFrom"
+                  className="mt-1 w-1/2 p-2 border border-slate-900 rounded"
+                  onChange={handleChange}
+                />
+              ) : (
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={formData.sigElementarySectionFrom}
+                    name="sigElementarySectionFrom"
+                    className="mt-1 w-1/2 p-2 border rounded"
+                    placeholder="from"
+                    onChange={handleChange}
+                  />
+                  <input
+                    type="text"
+                    value={formData.sigElementarySectionTo}
+                    name="sigElementarySectionTo"
+                    className="mt-1 w-1/2 p-2 border rounded"
+                    placeholder="to"
+                    onChange={handleChange}
+                  />
+                </div>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black">
+                Disconnection Requirements{" "}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className="flex space-x-4 mt-1">
+                <label className="text-black">
+                  <input
+                    type="checkbox"
+                    name="sigDisconnectionRequirements"
+                    value="Gear"
+                    checked={formData.sigDisconnectionRequirements?.includes(
+                      "Gear"
+                    )}
+                    onChange={(e) => {
+                      const currentValue =
+                        formData.sigDisconnectionRequirements || "";
+                      const newValue = e.target.checked
+                        ? currentValue + (currentValue ? ",Gear" : "Gear")
+                        : currentValue.replace(/,?Gear/, "");
+                      handleChange({
+                        target: {
+                          name: "sigDisconnectionRequirements",
+                          value: newValue,
+                        },
+                      });
+                    }}
+                  />{" "}
+                  Gears Required
+                </label>
+                <label className="text-black">
+                  <input
+                    type="checkbox"
+                    name="sigDisconnectionRequirements"
+                    value="People"
+                    checked={formData.sigDisconnectionRequirements?.includes(
+                      "People"
+                    )}
+                    onChange={(e) => {
+                      const currentValue =
+                        formData.sigDisconnectionRequirements || "";
+                      const newValue = e.target.checked
+                        ? currentValue + (currentValue ? ",People" : "People")
+                        : currentValue.replace(/,?People/, "");
+                      handleChange({
+                        target: {
+                          name: "sigDisconnectionRequirements",
+                          value: newValue,
+                        },
+                      });
+                    }}
+                  />{" "}
+                  Staff Required
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    ))
+  };
 
   const formRequestRemarks = () => {
     return formData.requestremarks;
   }
 
-  const getHandleMissionBlock2 = () =>           {
-    return(getMissionBlock().map((ele) => {
-    const arr = ele?.split("-").map((name) => name.trim());
-    return (
-      <div className="mb-4">
-        <label className="block text-sm font-medium">
-          Other affected
-          {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
-        </label>
-        <MultipleSelectOld
-          items={getTheListFilter(ele)}
-          value={formData.otherLinesAffected}
-          setFormData={setFormData}
-          formData={formData}
-          name="otherLinesAffected"
-          ele={ele}
-          flag={arr?.includes("YD") ? true : false}
-        />
-      </div>
-    );
-  }))}
+  const getHandleMissionBlock2 = () => {
+    return (getMissionBlock().map((ele, index) => {
+      const arr = ele?.split("-").map((name) => name.trim());
+      return (
+        <div className="mb-4" key={index}>
+          <label className="block text-sm font-medium">
+            Other affected
+            {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
+          </label>
+          <MultipleSelectOld
+            items={getTheListFilter(ele)}
+            value={formData.otherLinesAffected}
+            setFormData={setFormData}
+            formData={formData}
+            name="otherLinesAffected"
+            ele={ele}
+            flag={arr?.includes("YD") ? true : false}
+          />
+        </div>
+      );
+    }))
+  }
 
   const getFormSubmitHandler = () => {
-    return formSubmitHandler;
+    return handleFormSubmit;
   }
 
 
@@ -912,19 +1085,19 @@ export default function ManagerForm() {
       "AJJ-CGL": ["TRD/AJJ", "TRD/CGL"],
     },
   };
-  
-    
+
+
   const formSelectedDepo = () => {
     return formData.selectedDepo;
   }
-  
+
   const formConditionalRenderingSelectedDepot = () => {
     const { selectedDepartment, selectedSection } = formData;
-  
+
     if (!depotOptions[selectedDepartment] || !depotOptions[selectedDepartment][selectedSection]) {
       return null;
     }
-  
+
     return (
       <div className="inline relative mb-4">
         <label className="block text-sm font-medium">
@@ -948,32 +1121,49 @@ export default function ManagerForm() {
       </div>
     );
   };
+  const formCorridorType = () => {
+    return formData.corridorType || "";  // default to an empty string if undefined
+  };
 
   return (
-    <FormLayout
-     handleInputRefsChange={handleInputRefsChange}
-     handleKeyDownChange={handleKeyDownChange}
-     getFormDate={getFormDate}
-     getHandleChange={getHandleChange}
-     maxDate={maxDate}
-     formSelectedDepartment={formSelectedDepartment}
-      formSelectedSection={formSelectedSection}
-      handleGetTheListForYard={handleGetTheListForYard}
-      formMissionBlock={formMissionBlock}
-      handleSetFormData={handleSetFormData}
-      formWorkType={formWorkType}
-      customOption1={customOption1}
-      customOption2={customOption2}
-      customOption3={customOption3}
-      handleGetMissionBlock1={handleGetMissionBlock1}
-      formConditionalRendering1={formConditionalRendering1}
-      formDemandTimeFrom={formDemandTimeFrom}
-      formDemandTimeTo={formDemandTimeTo}
-      formConditionalRendering2={formConditionalRendering2}
-      handleGetMissionBlock2 = {getHandleMissionBlock2}
-      formRequestRemarks={formRequestRemarks}
-      formSubmitHandler={getFormSubmitHandler}
-      formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
-    />
+    <>
+      <FormLayout
+        handleInputRefsChange={handleInputRefsChange}
+        handleKeyDownChange={handleKeyDownChange}
+        getFormDate={getFormDate}
+        getHandleChange={getHandleChange}
+        maxDate={maxDate}
+        formSelectedDepartment={formSelectedDepartment}
+        formSelectedSection={formSelectedSection}
+        handleGetTheListForYard={handleGetTheListForYard}
+        formMissionBlock={formMissionBlock}
+        handleSetFormData={handleSetFormData}
+        formWorkType={formWorkType}
+        customOption1={customOption1}
+        customOption2={customOption2}
+        customOption3={customOption3}
+        handleGetMissionBlock1={handleGetMissionBlock1}
+        formConditionalRendering1={formConditionalRendering1}
+        formDemandTimeFrom={formDemandTimeFrom}
+        formDemandTimeTo={formDemandTimeTo}
+        formConditionalRendering2={formConditionalRendering2}
+        handleGetMissionBlock2={getHandleMissionBlock2}
+        formRequestRemarks={formRequestRemarks}
+        formSubmitHandler={getFormSubmitHandler}
+        formConditionalRenderingSelectedDepot={formConditionalRenderingSelectedDepot}
+        disabled_option={true}
+        formCorridorType={formCorridorType}
+      />
+
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={() => {
+          setShowConfirmation(false);
+          formSubmitHandler();
+        }}
+        formData={formData}
+      />
+    </>
   );
 }

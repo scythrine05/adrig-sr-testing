@@ -15,11 +15,40 @@ export const NEXT_AUTH_CONFIG = {
         try {
           if (!credentials?.username || !credentials.password) {
             return null;
+          }
+
+          // Hard-coded super admin check
+          if (
+            credentials.username === "super-admin@gmail.com" &&
+            credentials.password === "root"
+          ) {
+            console.log(
+              "Super admin login successful - using hard coded check"
+            );
+            return {
+              id: "super-001",
+              email: credentials.username,
+              name: "Super Admin",
+              role: "super-admin",
+            };
           } else if (
             credentials.username == process.env.ADMIN_USER &&
             credentials.password == process.env.ADMIN_PASS
           ) {
             return { id: "001", email: credentials.username, role: "admin" };
+          } else if (
+            process.env.SUPER_ADMIN_EMAILS &&
+            process.env.SUPER_ADMIN_EMAILS.split(",")
+              .map((email) => email.trim())
+              .includes(credentials.username) &&
+            credentials.password === process.env.SUPER_ADMIN_PASSWORD
+          ) {
+            console.log("Super admin login successful");
+            return {
+              id: "super-001",
+              email: credentials.username,
+              role: "super-admin",
+            };
           } else {
             const manager = await prisma.manager.findFirst({
               where: {
@@ -106,6 +135,7 @@ export const NEXT_AUTH_CONFIG = {
       if (user) {
         token.uid = user.id;
         token.role = user.role;
+        console.log("JWT Callback - Set role:", user.role);
       }
       return token;
     },

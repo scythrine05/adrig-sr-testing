@@ -12,9 +12,10 @@ import {
   CalendarCheck,
   Menu,
   SidebarClose,
+  FileWarning,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import currentUser, { getUserId } from "../../app/actions/user";
+import currentUser, { getUserId, getUserByEmail } from "../../app/actions/user";
 import { currentOptimizedValue } from "../../app/actions/user";
 import { signOut } from "next-auth/react";
 import { useToast } from "../ui/use-toast";
@@ -22,20 +23,23 @@ import { useToast } from "../ui/use-toast";
 export function SidebarMenu() {
   const { toast } = useToast();
   const [optimizedCheck, setOptimizedCheck] = useState(null);
+  const [userDepartment, setUserDepartment] = useState(null);
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    const fetchOptimizedCheck = async () => {
+    const fetchUserData = async () => {
       try {
         const user = await currentUser();
         const response = await currentOptimizedValue(user.user);
         setOptimizedCheck(response);
+        const userData = await getUserByEmail(user.user);
+        setUserDepartment(userData?.department);
       } catch (err) {
         console.log(err);
       }
     };
-    fetchOptimizedCheck();
+    fetchUserData();
   }, []);
 
   return (
@@ -102,6 +106,17 @@ export function SidebarMenu() {
               >
                 <CalendarCog className="w-4 h-4 mr-2" />
                 <span>Request Table</span>
+              </Link>
+
+              {/* Other Requests Link */}
+              <Link
+                href="/other-requests"
+                className={`flex items-center hover:bg-secondary-foreground rounded-full p-2 font-semibold ease-in-out duration-300 w-full ${
+                  pathname === "/other-requests" && "bg-primary"
+                }`}
+              >
+                <FileWarning className="w-4 h-4 mr-2" />
+                <span>Other Requests</span>
               </Link>
 
               {/* Optimised Table Link (Conditional) */}

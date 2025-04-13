@@ -105,12 +105,7 @@ export function AdminSidebarMenu() {
                 <span>Optimised Table</span>
               </Link>
 
-              {/* Sanction Table Link (Conditional) */}
-              {sanctionTableVisible &&
-                filteredRequests &&
-                filteredRequests[0] &&
-                filteredRequests[0].final &&
-                filteredRequests[0].final === "set" && (
+             
                   <Link
                     href="/ad/ad-sanction"
                     className={`flex items-center hover:bg-secondary-foreground rounded-full p-2 font-semibold ease-in-out duration-300 w-full ${
@@ -120,7 +115,15 @@ export function AdminSidebarMenu() {
                     <CalendarCheck className="w-4 h-4 mr-2" />
                     <span>Sanction Table</span>
                   </Link>
-                )}
+                <Link
+                href="/ad/ad-ftcb"
+                className={`flex items-center hover:bg-secondary-foreground rounded-full p-2 font-semibold ease-in-out duration-300 w-full ${
+                  pathname === "/ad/ad-ftcb" && "bg-primary"
+                }`}
+              >
+                <CalendarCheck className="w-4 h-4 mr-2" />
+                <span>FTCB Request</span>
+              </Link>
             </nav>
           </div>
 

@@ -16,70 +16,81 @@ export function formatDate(dateString) {
   return `${day} ${month} ${year} (${weekday})`;
 }
 
-export const formatData = (requestData) => {
+export const formatData = async (requestData) => {
   const newRequests = [];
-
-  // Iterate over the existing data array
-  requestData.forEach((request) => {
+  for (const request of requestData) {
     const selectedLineData = request.selectedLine;
+
+    // If selectedLine is not in the expected format, create a single request
+    if (
+      !selectedLineData ||
+      (!selectedLineData.station && !selectedLineData.yard)
+    ) {
+      newRequests.push({
+        ...request,
+        selectedLine: request.selectedLine || "Not Specified",
+        selectedStream: "Not Applicable",
+        missionBlock: request.missionBlock || "Not Specified",
+        otherLinesAffected: request.otherLinesAffected || "None",
+      });
+      continue;
+    }
 
     let subRequestCounter = 0;
 
-    selectedLineData.station.forEach((station) => {
-      const subRequest = { ...request };
+    // Process station data if it exists
+    if (selectedLineData.station && Array.isArray(selectedLineData.station)) {
+      for (const station of selectedLineData.station) {
+        const subRequest = { ...request };
 
-      subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
-      subRequest.selectedLine = station && station.split(":")[1];
-      subRequest.selectedStream = "Not Applicable";
-      subRequest.missionBlock = station && station.split(":")[0];
+        subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
+        subRequest.selectedLine = station && station.split(":")[1];
+        subRequest.selectedStream = "Not Applicable";
+        subRequest.missionBlock = station && station.split(":")[0];
 
-      const otherLines = request.otherLinesAffected?.station?.map((e) => {
-        const key = e?.split(":")[0];
-        if (key == subRequest.missionBlock) {
-          return e?.split(":")[1];
-        }
-      });
+        const otherLines = request.otherLinesAffected?.station?.map((e) => {
+          const key = e?.split(":")[0];
+          if (key == subRequest.missionBlock) {
+            return e?.split(":")[1];
+          }
+        });
 
-      subRequest.otherLinesAffected =
-        otherLines != undefined ? otherLines.join(", ") : otherLines;
+        subRequest.otherLinesAffected =
+          otherLines != undefined ? otherLines.join(", ") : otherLines;
+        newRequests.push(subRequest);
+      }
+    }
 
-      newRequests.push(subRequest);
-    });
+    // Process yard data if it exists
+    if (selectedLineData.yard && Array.isArray(selectedLineData.yard)) {
+      for (const yard of selectedLineData.yard) {
+        const subRequest = { ...request };
+        subRequest.missionBlock = yard.split(":")[0];
+        subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
+        subRequest.selectedLine = yard;
 
-    selectedLineData.yard.forEach((yard) => {
-      const subRequest = { ...request };
-      subRequest.missionBlock = yard.split(":")[0];
-      subRequest.requestId = `${request.requestId}-${subRequestCounter++}`;
-      subRequest.selectedLine = yard;
+        const otherLines = request.otherLinesAffected?.yard?.map((e) => {
+          const key = e?.split(":")[0];
+          if (key == subRequest.missionBlock) {
+            return e?.split(":")[1];
+          }
+        });
 
-      const otherLines = request.otherLinesAffected?.yard?.map((e) => {
-        const key = e?.split(":")[0];
-        if (key == subRequest.missionBlock) {
-          return e?.split(":")[1];
-        }
-      });
-
-      subRequest.otherLinesAffected =
-        otherLines != undefined ? otherLines.join(", ") : otherLines;
-
-      newRequests.push(subRequest);
-    });
-  });
+        subRequest.otherLinesAffected =
+          otherLines != undefined ? otherLines.join(", ") : otherLines;
+        newRequests.push(subRequest);
+      }
+    }
+  }
 
   const updatedData = [...newRequests];
   return updatedData;
 };
 
-// to be reviewed ---------------------------------------------------------------------------------------------------------
-
-
-// For RequestForm and ManagerForm---------------------------------------------------------
-
 import validateForm from "../components/custom/blockrequest/formValidation";
 import { useState } from "react";
 
-
-export const useFormState = () =>{
+export const useFormState = () => {
   const [formData, setFormData] = useState({
     date: "",
     selectedDepartment: "",
@@ -91,7 +102,7 @@ export const useFormState = () =>{
       station: [],
       yard: [],
     },
-    selectedStream: "", 
+    selectedStream: "",
     missionBlock: "",
     cautionRequired: "",
     cautionSpeed: "",
@@ -116,8 +127,7 @@ export const useFormState = () =>{
     selectedDepo: "",
   });
   return [formData, setFormData];
-}
-
+};
 
 export const handleKeyDown = (e, index) => {
   const { key, target } = e;
@@ -125,11 +135,10 @@ export const handleKeyDown = (e, index) => {
 
   if (isDropdown) {
     if (key === "ArrowUp" || key === "ArrowDown") {
-      return; // Let dropdown navigation work normally
+      return;
     }
   }
 
-  // Move focus between input fields & dropdowns
   if (key === "ArrowRight" || key === "ArrowLeft") {
     e.preventDefault();
     const nextIndex = index + (key === "ArrowRight" ? 1 : -1);
@@ -139,12 +148,8 @@ export const handleKeyDown = (e, index) => {
   }
 };
 
-
-
-
 export const formValidation = (value) => {
   let res = validateForm(value);
-  console.log(validateForm(value));
   if (
     res.date ||
     res.selectedDepartment ||
@@ -176,14 +181,11 @@ export const formValidation = (value) => {
 };
 
 export function revertCategoryFormat(formattedCategory) {
-if (formattedCategory === "Gear") {
-  return formattedCategory;
+  if (formattedCategory === "Gear") {
+    return formattedCategory;
+  }
+  return formattedCategory.split(" ").join("_");
 }
-return formattedCategory.split(" ").join("_");
-}
-
-
-
 
 export const handleMoveToNext = (index) => (e) => {
   if (e.target.value.length > 0 && inputRefs.current[index + 1]) {
@@ -191,32 +193,96 @@ export const handleMoveToNext = (index) => (e) => {
   }
 };
 
-
-
 //------------------------------------------------------------------------------------------
 
 // SignIn and SignUp
 // fn list -> handleVerifyOtp, formatTime
 
-
 export const handleVerifyOtp = async () => {
-    const res = await verifyHandler(formValues.username, otp, code);
-    if (res.success != true) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-
+  const res = await verifyHandler(formValues.username, otp, code);
+  if (res.success != true) {
+    return false;
+  } else {
+    return true;
+  }
+};
 
 export const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
-      .toString()
-      .padStart(2, "0")}`;
-  };
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+    .toString()
+    .padStart(2, "0")}`;
+};
 
 // ----------------------------------------------------------------------------------------------------------
 
+export const formatVisualizationData = (data) => {
+  if (!Array.isArray(data)) return [];
+
+  return data.map((item) => {
+    // Ensure date is in correct format
+    const date = new Date(item.date).toISOString().split("T")[0];
+
+    // Format time strings to ensure they are in HH:mm format
+    const formatTime = (timeStr) => {
+      if (!timeStr) return "00:00";
+      // If time is in 12-hour format, convert to 24-hour
+      const [time, modifier] = timeStr.split(" ");
+      let [hours, minutes] = time.split(":");
+
+      if (modifier) {
+        if (modifier.toLowerCase() === "pm" && hours < 12) {
+          hours = parseInt(hours) + 12;
+        }
+        if (modifier.toLowerCase() === "am" && hours === "12") {
+          hours = "00";
+        }
+      }
+
+      return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+    };
+
+    return {
+      ...item,
+      date,
+      demandTimeFrom: formatTime(item.demandTimeFrom),
+      demandTimeTo: formatTime(item.demandTimeTo),
+    };
+  });
+};
+
+//RequestId Generator
+
+export const generateRequestId = ({
+  date,
+  division,
+  department,
+  section,
+  sequence,
+}) => {
+  if (!date || !division || !department || !section || sequence == null) {
+    throw new Error(
+      "All parameters (date, division, department, section, sequence) are required."
+    );
+  }
+
+  const departmentAbbreviation = {
+    ENGG: "C",
+    TRD: "E",
+    SIG: "S",
+  };
+
+  const departmentCode = departmentAbbreviation[department] || department;
+
+  // Format the sequence to always be 4 digits (e.g., 0001, 0002)
+  const formattedSequence = sequence.toString().padStart(4, "0");
+
+  // Combine the parts into the desired format
+  return `${date}/${division}/${departmentCode}/${section}/${formattedSequence}`;
+};
+
+export function capitalizeFirstLetter(word) {
+  if (!word) return "";
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}

@@ -208,7 +208,7 @@ const ScheduleManager = () => {
 
   return (
     <div className="w-full  flex flex-col items-center space-y-6 mt-10">
-      <h1 className="mt-3 text-4xl font-bold ">User Created Request</h1>
+      <h1 className="mt-3 text-4xl font-bold ">Summary of my Upcoming Block Requisitions</h1>
       {viewState === 0 && (
         <RequestTable viewState={viewState} setViewState={setViewState} />
       )}

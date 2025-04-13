@@ -122,7 +122,7 @@ const MultipleSelect = (props) => {
                       <input
                         placeholder={
                           props.placeholder
-                            ? "Search and Select Your Value"
+                            ? "Select"
                             : ""
                         }
                         className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-slate-900"

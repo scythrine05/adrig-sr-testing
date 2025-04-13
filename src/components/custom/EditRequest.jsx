@@ -5,6 +5,7 @@ import {
   getStagingFormDataByRequestId,
   postStagingFormData,
   updateStagingFormData,
+  deleteStagingFormData,
 } from "../../app/actions/stagingform";
 import { getUserId } from "../../app/actions/user";
 import { sectionData, machine, work, data, workData } from "../../lib/store";
@@ -15,13 +16,19 @@ import { useRouter } from "next/navigation";
 import validateForm from "./blockrequest/formValidation";
 import { yardData } from "../../lib/yard";
 
-import { getFormDataByRequestId } from "../../app/actions/formdata";
+import {
+  getFormDataByRequestId,
+  deleteFormData,
+} from "../../app/actions/formdata";
 
 export default function EditRequest(props) {
-  const maxDate = "2030-12-31";
   const router = useRouter();
   const { toast } = useToast();
   const [otherData, setOtherData] = useState("");
+  const [dateRange, setDateRange] = useState({ minDate: "", maxDate: "" });
+  const [hasManagerResponse, setHasManagerResponse] = useState(false);
+  const [managerResponseValue, setManagerResponseValue] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const [formData, setFormData] = useState({
     date: "",
@@ -81,15 +88,41 @@ export default function EditRequest(props) {
   useEffect(() => {
     if (props.flag) {
       setFormData(props.request);
+      // Check if the request has a manager response
+      if (
+        props.request.ManagerResponse === "yes" ||
+        props.request.ManagerResponse === "no"
+      ) {
+        setHasManagerResponse(true);
+        setManagerResponseValue(props.request.ManagerResponse);
+      }
     } else {
       const res = removeAfterLastDash(props.request.requestId);
       const fxn = async () => {
         const data = await getStagingFormDataByRequestId(res);
         if (data.requestData.length == 0) {
           const oldRequestResult = await getFormDataByRequestId(res);
-          setFormData(oldRequestResult.requestData[0]);
+          const request = oldRequestResult.requestData[0];
+          setFormData(request);
+          // Check if the request has a manager response
+          if (
+            request.ManagerResponse === "yes" ||
+            request.ManagerResponse === "no"
+          ) {
+            setHasManagerResponse(true);
+            setManagerResponseValue(request.ManagerResponse);
+          }
         } else {
-          setFormData(data.requestData[0]);
+          const request = data.requestData[0];
+          setFormData(request);
+          // Check if the request has a manager response
+          if (
+            request.ManagerResponse === "yes" ||
+            request.ManagerResponse === "no"
+          ) {
+            setHasManagerResponse(true);
+            setManagerResponseValue(request.ManagerResponse);
+          }
         }
       };
       fxn();
@@ -106,7 +139,60 @@ export default function EditRequest(props) {
       }
     };
     fxn();
-  }, [formData]);
+  }, [props.user]);
+
+  useEffect(() => {
+    // Calculate allowed date range based on current date and time
+    const calculateDateRange = () => {
+      const now = new Date();
+      const currentDay = now.getDay(); // 0 = Sunday, 4 = Thursday
+      const currentHour = now.getHours();
+
+      // Get the current week's Monday (for reference)
+      const currentWeekMonday = new Date(now);
+      const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
+      currentWeekMonday.setDate(now.getDate() - daysFromMonday);
+      currentWeekMonday.setHours(0, 0, 0, 0);
+
+      // Calculate next week's Monday (week 2)
+      const nextWeekMonday = new Date(currentWeekMonday);
+      nextWeekMonday.setDate(currentWeekMonday.getDate() + 7);
+
+      // Calculate week 3's Monday
+      const week3Monday = new Date(currentWeekMonday);
+      week3Monday.setDate(currentWeekMonday.getDate() + 14);
+
+      // Set minimum date based on cutoff
+      let minDate;
+
+      // Check if it's before Thursday 16:00 of the current week
+      // For Sunday, we need to check if it's before Thursday 16:00 of the PREVIOUS week
+      const isBeforeThursdayCutoff =
+        currentDay !== 0
+          ? currentDay < 4 || (currentDay === 4 && currentHour < 16)
+          : false; // If it's Sunday, always consider it after Thursday 16:00
+
+      if (isBeforeThursdayCutoff) {
+        // If before Thursday 16:00, allow requests from week 2 onwards
+        minDate = nextWeekMonday;
+      } else {
+        // If after Thursday 16:00, allow requests from week 3 onwards
+        minDate = week3Monday;
+      }
+
+      // Format dates as YYYY-MM-DD for input[type="date"]
+      const formatDate = (date) => {
+        return date.toISOString().split("T")[0];
+      };
+
+      setDateRange({
+        minDate: formatDate(minDate),
+        maxDate: "", // No maximum date limit
+      });
+    };
+
+    calculateDateRange();
+  }, []);
 
   const formValidation = (value) => {
     let res = validateForm(value);
@@ -301,7 +387,7 @@ export default function EditRequest(props) {
     ) {
       let rawValue = value;
 
-      rawValue = rawValue.replace(/[^0-9.]/g, "");
+      rawValue = rawValue.replace(/[^a-zA-Z0-9.]/g, "");
 
       const decimalIndex = rawValue.indexOf(".");
 
@@ -325,9 +411,13 @@ export default function EditRequest(props) {
       formData.otherLinesAffected = "";
       setFormData({ ...formData, [name]: value });
     } else if (name === "date") {
-      if (value > maxDate) {
-        event.target.value = maxDate; // Reset the input value to maxDate
-        alert(`Date cannot be later than ${maxDate}`);
+      if (value < dateRange.minDate) {
+        event.target.value = dateRange.minDate;
+        toast({
+          title: "Invalid Date Selection",
+          description: `Date cannot be earlier than ${dateRange.minDate}. You can only request for dates starting from ${dateRange.minDate} onwards.`,
+          variant: "destructive",
+        });
         return;
       }
       setFormData({ ...formData, [name]: value });
@@ -387,6 +477,18 @@ export default function EditRequest(props) {
 
   const formSubmitHandler = async () => {
     try {
+      // Prevent submission if there's a manager response
+      if (hasManagerResponse) {
+        toast({
+          title: "Editing not allowed",
+          description: `This request cannot be edited because it has been ${
+            managerResponseValue === "yes" ? "approved" : "rejected"
+          } by a manager.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
       if (formValidation(formData) == true) {
         if (formData.workDescription === "others") {
           if (otherData === "") {
@@ -453,6 +555,138 @@ export default function EditRequest(props) {
     }
   };
 
+  const deleteRequest = async (overrideDelete = false) => {
+    try {
+      if (hasManagerResponse && !overrideDelete) {
+        toast({
+          title: "Deletion not allowed",
+          description: `This request cannot be deleted because it has been ${
+            managerResponseValue === "yes" ? "approved" : "rejected"
+          } by a manager.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (confirmDelete) {
+        const res = overrideDelete
+          ? await deleteFormData(formData.requestId) // Use deleteFormData when overrideDelete is true
+          : await deleteStagingFormData(formData.requestId); // Default to deleteStagingFormData
+        toast({
+          title: "Success",
+          description: "Request deleted successfully",
+        });
+        props.setShowPopup(false);
+        // Refresh the page or navigate back to the request list
+        router.refresh();
+      } else {
+        setConfirmDelete(true);
+        toast({
+          title: "Confirm deletion",
+          description: "Click the delete button again to confirm deletion",
+        });
+
+        // Reset confirmation after 5 seconds
+        setTimeout(() => {
+          setConfirmDelete(false);
+        }, 5000);
+      }
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: "Error",
+        description: "Failed to delete request",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Add a manager response message if applicable
+  if (hasManagerResponse) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg
+                className="h-5 w-5 text-yellow-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                This request cannot be edited because it has been{" "}
+                {managerResponseValue === "yes" ? "approved" : "rejected"} by a
+                manager.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <h2 className="text-2xl font-bold mb-4">Request Details</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-3 bg-gray-50 rounded">
+            <p className="font-semibold">Request ID:</p>
+            <p>{formData.requestId}</p>
+          </div>
+          <div className="p-3 bg-gray-50 rounded">
+            <p className="font-semibold">Date:</p>
+            <p>{formData.date}</p>
+          </div>
+          <div className="p-3 bg-gray-50 rounded">
+            <p className="font-semibold">Department:</p>
+            <p>{formData.selectedDepartment}</p>
+          </div>
+          <div className="p-3 bg-gray-50 rounded">
+            <p className="font-semibold">Section:</p>
+            <p>{formData.selectedSection}</p>
+          </div>
+          <div className="p-3 bg-gray-50 rounded">
+            <p className="font-semibold">Work Type:</p>
+            <p>{formData.workType}</p>
+          </div>
+          <div className="p-3 bg-gray-50 rounded">
+            <p className="font-semibold">Status:</p>
+            <p
+              className={
+                managerResponseValue === "yes"
+                  ? "text-green-600 font-bold"
+                  : "text-red-600 font-bold"
+              }
+            >
+              {managerResponseValue === "yes" ? "Approved" : "Rejected"}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 flex justify-end">
+          {/* Override Delete Button */}
+          <button
+            className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300 mr-6"
+            style={{ backgroundColor: confirmDelete ? "#ff3333" : "#ff5555" }}
+            onClick={() => deleteRequest(true)}
+          >
+            {confirmDelete ? "Confirm Delete" : "Delete"}
+          </button>
+
+          <button
+            onClick={() => props.setShowPopup(false)}
+            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="custom-main-w mx-auto p-4 mt-10 bg-blue-100 rounded-lg shadow-lg">
       <h1 className="text-center text-xl font-bold mb-4">Request Form</h1>
@@ -470,8 +704,14 @@ export default function EditRequest(props) {
             name="date"
             className="mt-1 w-full p-2 border rounded"
             onChange={handleChange}
-            max={maxDate}
+            min={dateRange.minDate}
+            max={dateRange.maxDate}
           />
+          {dateRange.minDate && (
+            <p className="text-xs text-gray-600 mt-1">
+              Select a date from {dateRange.minDate} onwards
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium">
@@ -603,6 +843,10 @@ export default function EditRequest(props) {
           >
             <option>Select work description </option>
             {formData.workType != "" &&
+              workData[`${formData.selectedDepartment}`] &&
+              workData[`${formData.selectedDepartment}`][
+                `${revertCategoryFormat(formData.workType)}`
+              ] &&
               workData[`${formData.selectedDepartment}`][
                 `${revertCategoryFormat(formData.workType)}`
               ].map((e) => {
@@ -638,12 +882,12 @@ export default function EditRequest(props) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
-        {getMissionBlock().map((ele) => {
+        {getMissionBlock().map((ele, index) => {
           const arr = ele?.split("-").map((name) => name.trim());
           const value = getLineSectionValue(ele, arr);
 
           return (
-            <div>
+            <div key={index}>
               {ele.split("-")[1] === "YD" && (
                 <div>
                   <label className="block text-sm font-medium">
@@ -682,20 +926,16 @@ export default function EditRequest(props) {
                   if (e.road_no) {
                     if (e.direction === formData.selectedStream) {
                       return (
-                        <>
-                          <option value={`${ele}:${e.road_no}`} key={e.road_no}>
-                            {e.road_no}
-                          </option>
-                        </>
+                        <option value={`${ele}:${e.road_no}`} key={e.road_no}>
+                          {e.road_no}
+                        </option>
                       );
                     }
                   } else {
                     return (
-                      <>
-                        <option value={`${ele}:${e}`} key={e}>
-                          {e}
-                        </option>
-                      </>
+                      <option value={`${ele}:${e}`} key={e}>
+                        {e}
+                      </option>
                     );
                   }
                 })}
@@ -1021,10 +1261,10 @@ export default function EditRequest(props) {
         </div>
       )}
       {/* Other Affected Lines */}
-      {getMissionBlock().map((ele) => {
+      {getMissionBlock().map((ele, index) => {
         const arr = ele?.split("-").map((name) => name.trim());
         return (
-          <div className="mb-4">
+          <div className="mb-4" key={index}>
             <label className="block text-sm font-medium">
               Other affected
               {arr?.includes("YD") ? ` Road for ${ele}` : ` Line for ${ele}`}
@@ -1055,7 +1295,7 @@ export default function EditRequest(props) {
       {/* Submit Button */}
       <div className="flex justify-center">
         <button
-          className=" text-black px-4 py-2 rounded border border-slate-900 mr-20 "
+          className="text-black px-4 py-2 rounded border border-slate-900 mr-6"
           onClick={() => {
             props.setShowPopup(false);
           }}
@@ -1063,7 +1303,15 @@ export default function EditRequest(props) {
           Cancel
         </button>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded mr-4"
+          className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300 mr-6"
+          style={{ backgroundColor: confirmDelete ? "#ff3333" : "#ff5555" }}
+          onClick={deleteRequest}
+        >
+          {confirmDelete ? "Confirm Delete" : "Delete"}
+        </button>
+        <button
+          className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300"
+          style={{ backgroundColor: "#3b82f6" }}
           onClick={formSubmitHandler}
         >
           Update

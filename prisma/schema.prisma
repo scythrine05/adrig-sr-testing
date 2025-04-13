@@ -16,6 +16,7 @@ model User {
   department      String?           @default("")
   manager         String?           @default("")
   phone           String?           @unique
+  depot           String?           @default("")
   requests        Requests[]
   StagingRequests StagingRequests[]
 }
@@ -41,115 +42,150 @@ model Manager {
 }
 
 model StagingRequests {
-  requestId                String   @id @default(dbgenerated("((to_char(CURRENT_TIMESTAMP, 'YYYYMMDD'::text) || '-'::text) || lpad((nextval('request_id_seq'::regclass))::text, 6, '0'::text))"))
-  date                     String
-  selectedDepartment       String
-  selectedSection          String
-  stationID                String
-  missionBlock             String
-  workType                 String
-  workDescription          String
-  selectedLine             Json
-  selectedStream           String?
-  cautionRequired          String
-  cautionSpeed             String
-  cautionLocationFrom      String
-  cautionLocationTo        String
-  workLocationFrom         String
-  workLocationTo           String
-  demandTimeFrom           String
-  demandTimeTo             String
-  sigDisconnection         String
-  oheDisconnection         String?
-  elementarySectionFrom    String
-  elementarySectionTo      String
-  sigElementarySectionFrom String
-  sigElementarySectionTo   String
-  repercussions            String
-  otherLinesAffected       Json
-  requestremarks           String
-  createdAt                DateTime @default(now())
-  userId                   String?
-  managerId                String?
-  status                   String?
-  selectedDepo             String?
-  Manager                  Manager? @relation(fields: [managerId], references: [id])
-  User                     User?    @relation(fields: [userId], references: [id])
+  requestId                    String   @id
+  date                         String
+  selectedDepartment           String
+  selectedSection              String
+  stationID                    String
+  missionBlock                 String
+  workType                     String
+  workDescription              String
+  selectedLine                 Json
+  selectedStream               String?
+  cautionRequired              String
+  cautionSpeed                 String
+  cautionLocationFrom          String
+  cautionLocationTo            String
+  workLocationFrom             String
+  workLocationTo               String
+  demandTimeFrom               String
+  demandTimeTo                 String
+  sigDisconnection             String
+  ohDisconnection              String?
+  oheDisconnection             String?
+  elementarySectionFrom        String
+  elementarySectionTo          String
+  sigElementarySectionFrom     String
+  sigElementarySectionTo       String
+  repercussions                String
+  otherLinesAffected           Json
+  requestremarks               String
+  createdAt                    DateTime @default(now())
+  userId                       String?
+  managerId                    String?
+  status                       String?
+  selectedDepo                 String?
+  sigResponse                  String?  @default("yes")
+  oheResponse                  String?  @default("yes")
+  corridorType                 String?
+  sigActionsNeeded             String?  @default("yes")
+  trdActionsNeeded             String?  @default("yes")
+  sigDisconnectionRequirements String?
+  trdDisconnectionRequirements String?
+  ManagerResponse              String?
+  Manager                      Manager? @relation(fields: [managerId], references: [id])
+  User                         User?    @relation(fields: [userId], references: [id])
+  archived                     Boolean  @default(false)
 }
 
 model Requests {
-  requestId                String   @id @default(dbgenerated("((to_char(CURRENT_TIMESTAMP, 'YYYYMMDD'::text) || '-'::text) || lpad((nextval('request_id_seq'::regclass))::text, 6, '0'::text))"))
-  date                     String
-  selectedDepartment       String
-  selectedSection          String
-  stationID                String
-  missionBlock             String
-  workType                 String
-  workDescription          String
-  cautionRequired          String
-  cautionSpeed             String
-  cautionLocationFrom      String
-  cautionLocationTo        String
-  workLocationFrom         String
-  workLocationTo           String
-  demandTimeFrom           String
-  demandTimeTo             String
-  sigDisconnection         String
-  oheDisconnection         String?
-  elementarySectionFrom    String
-  elementarySectionTo      String
-  userId                   String?
-  sigElementarySectionFrom String
-  sigElementarySectionTo   String
-  repercussions            String
-  requestremarks           String
-  createdAt                DateTime @default(now())
-  selectedStream           String?
-  selectedLine             Json
-  otherLinesAffected       Json
-  managerId                String?
-  selectedDepo             String?
-  Manager                  Manager? @relation(fields: [managerId], references: [id])
-  User                     User?    @relation(fields: [userId], references: [id])
+  requestId                    String   @id
+  date                         String
+  selectedDepartment           String
+  selectedSection              String
+  stationID                    String
+  missionBlock                 String
+  workType                     String
+  workDescription              String
+  cautionRequired              String
+  cautionSpeed                 String
+  cautionLocationFrom          String
+  cautionLocationTo            String
+  workLocationFrom             String
+  workLocationTo               String
+  demandTimeFrom               String
+  demandTimeTo                 String
+  sigDisconnection             String
+  ohDisconnection              String?
+  oheDisconnection             String?
+  elementarySectionFrom        String
+  elementarySectionTo          String
+  userId                       String?
+  sigElementarySectionFrom     String
+  sigElementarySectionTo       String
+  repercussions                String
+  requestremarks               String
+  createdAt                    DateTime @default(now())
+  selectedStream               String?
+  selectedLine                 Json
+  otherLinesAffected           Json
+  managerId                    String?
+  selectedDepo                 String?
+  sigResponse                  String?  @default("yes")
+  oheResponse                  String?  @default("yes")
+  corridorType                 String?
+  sigActionsNeeded             String?  @default("yes")
+  trdActionsNeeded             String?  @default("yes")
+  sigDisconnectionRequirements String?
+  trdDisconnectionRequirements String?
+  ManagerResponse              String?
+  Manager                      Manager? @relation(fields: [managerId], references: [id])
+  User                         User?    @relation(fields: [userId], references: [id])
+  SanctionedStatus             String   @default("UP") // Y for Yes and R for Reject (UP for Under Process)
 }
 
 model Sanctiontable {
-  id                       String  @id @default(cuid())
-  requestId                String  @unique
-  date                     String
-  selectedDepartment       String
-  selectedSection          String
-  stationID                String
-  missionBlock             String
-  workType                 String
-  workDescription          String
-  selectedLine             String
-  cautionRequired          String
-  cautionSpeed             String
-  cautionLocationFrom      String
-  cautionLocationTo        String
-  workLocationFrom         String
-  workLocationTo           String
-  demandTimeFrom           String
-  demandTimeTo             String
-  sigDisconnection         String
-  oheDisconnection         String?
-  elementarySectionFrom    String
-  elementarySectionTo      String
-  userId                   String?
-  action                   String  @default("none")
-  remarks                  String?
-  sigElementarySectionFrom String
-  sigElementarySectionTo   String
-  repercussions            String
-  requestremarks           String
-  final                    String?
-  Optimisedtimefrom        String?
-  Optimisedtimeto          String?
-  optimization_details     String?
-  selectedStream           String?
-  otherLinesAffected       Json?
-  managerId                String?
-  selectedDepo             String?
-  status                   String   @default("in progress")
+  id                           String  @id @default(cuid())
+  requestId                    String  @unique
+  date                         String
+  selectedDepartment           String
+  selectedSection              String
+  stationID                    String
+  missionBlock                 String
+  workType                     String
+  workDescription              String
+  selectedLine                 String
+  cautionRequired              String
+  cautionSpeed                 String
+  cautionLocationFrom          String
+  cautionLocationTo            String
+  workLocationFrom             String
+  workLocationTo               String
+  demandTimeFrom               String
+  demandTimeTo                 String
+  sigDisconnection             String
+  ohDisconnection              String?
+  oheDisconnection             String?
+  elementarySectionFrom        String
+  elementarySectionTo          String
+  userId                       String?
+  action                       String  @default("none")
+  remarks                      String?
+  sigElementarySectionFrom     String
+  sigElementarySectionTo       String
+  repercussions                String
+  requestremarks               String
+  final                        String?
+  Optimisedtimefrom            String?
+  Optimisedtimeto              String?
+  optimization_details         String?
+  selectedStream               String?
+  otherLinesAffected           Json?
+  managerId                    String?
+  selectedDepo                 String?
+  sigResponse                  String?
+  oheResponse                  String?
+  status                       String  @default("in progress")
+  corridorType                 String?
+  ManagerResponse              String?
+  sigDisconnectionRequirements String?
+  trdDisconnectionRequirements String?
+  availed                      Json?   @default("{\"status\":\"pending\",\"reason\":\"\"}")
+  adSaved                      String?
+}
+
+model SuperAdmin {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
 }

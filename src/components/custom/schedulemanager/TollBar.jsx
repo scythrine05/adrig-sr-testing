@@ -62,11 +62,11 @@ const ToolBar = ({ setScheduleDataByStation, setSection, setDate }) => {
   }
 
   return (
-    <section className="w-full flex items-center justify-center py-8 px-6 bg-secondary rounded-xl">
-      <div className="w-full flex items-center space-x-8">
+    <section className="w-full flex items-center justify-start bg-secondary rounded-lg py-2 px-4">
+      <div className="flex items-center space-x-4 flex-wrap">
         {stationsList.length > 0 && (
           <Select value={selectedStation} onValueChange={handleSelectChange}>
-            <SelectTrigger className="w-96">
+            <SelectTrigger className="w-64 h-9">
               <SelectValue>
                 {
                   stationsList.find(
@@ -92,10 +92,10 @@ const ToolBar = ({ setScheduleDataByStation, setSection, setDate }) => {
             </SelectContent>
           </Select>
         )}
-        <div className="relative max-w-sm">
+        <div className="relative">
           <input
             type="date"
-            className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-9 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             onChange={dateChangeHandler}
           />
         </div>
