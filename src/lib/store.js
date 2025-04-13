@@ -697,6 +697,7 @@ export let data = {
           lines: ["UP line", "Down line"],
         },
       ],
+      station_blocks: [],
       lines: ["UP line", "Down line"],
     },
   ],
@@ -999,5 +1000,6 @@ export let sectionData = {
       "MCPK-MTMY",
       "MTMY-VLCY",
     ],
+    station:[]
   },
 };

@@ -115,6 +115,7 @@ const FormLayout = ({
             <option value={"KPD-JTJ"}>KPD-JTJ</option>
             <option value={"AJJ-CGL"}>AJJ-CGL</option>
             <option value={"MAS-GDR"}>MAS-GDR</option>
+            <option value={"MSB-VLCY"}>MSB-VLCY</option>
           </select>
         </div>
       </div>
