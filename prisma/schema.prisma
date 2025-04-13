@@ -27,7 +27,6 @@ model Otp {
   code      String
   createdAt DateTime @default(now())
   validTill DateTime
-  phone     String?  @unique
 }
 
 model Manager {
@@ -38,7 +37,6 @@ model Manager {
   name       String?
   Requests   Requests[]
   requests   StagingRequests[]
-  phone      String?           @unique
 }
 
 model StagingRequests {
@@ -61,8 +59,6 @@ model StagingRequests {
   demandTimeFrom               String
   demandTimeTo                 String
   sigDisconnection             String
-  ohDisconnection              String?
-  oheDisconnection             String?
   elementarySectionFrom        String
   elementarySectionTo          String
   sigElementarySectionFrom     String
@@ -76,16 +72,18 @@ model StagingRequests {
   status                       String?
   selectedDepo                 String?
   sigResponse                  String?  @default("yes")
+  ohDisconnection              String?
+  oheDisconnection             String?
   oheResponse                  String?  @default("yes")
   corridorType                 String?
   sigActionsNeeded             String?  @default("yes")
   trdActionsNeeded             String?  @default("yes")
+  ManagerResponse              String?
+  archived                     Boolean  @default(false)
   sigDisconnectionRequirements String?
   trdDisconnectionRequirements String?
-  ManagerResponse              String?
   Manager                      Manager? @relation(fields: [managerId], references: [id])
   User                         User?    @relation(fields: [userId], references: [id])
-  archived                     Boolean  @default(false)
 }
 
 model Requests {
@@ -106,8 +104,6 @@ model Requests {
   demandTimeFrom               String
   demandTimeTo                 String
   sigDisconnection             String
-  ohDisconnection              String?
-  oheDisconnection             String?
   elementarySectionFrom        String
   elementarySectionTo          String
   userId                       String?
@@ -122,16 +118,18 @@ model Requests {
   managerId                    String?
   selectedDepo                 String?
   sigResponse                  String?  @default("yes")
+  ohDisconnection              String?
+  oheDisconnection             String?
   oheResponse                  String?  @default("yes")
   corridorType                 String?
   sigActionsNeeded             String?  @default("yes")
   trdActionsNeeded             String?  @default("yes")
+  ManagerResponse              String?
   sigDisconnectionRequirements String?
   trdDisconnectionRequirements String?
-  ManagerResponse              String?
+  SanctionedStatus             String   @default("UP")
   Manager                      Manager? @relation(fields: [managerId], references: [id])
   User                         User?    @relation(fields: [userId], references: [id])
-  SanctionedStatus             String   @default("UP") // Y for Yes and R for Reject (UP for Under Process)
 }
 
 model Sanctiontable {
@@ -154,8 +152,6 @@ model Sanctiontable {
   demandTimeFrom               String
   demandTimeTo                 String
   sigDisconnection             String
-  ohDisconnection              String?
-  oheDisconnection             String?
   elementarySectionFrom        String
   elementarySectionTo          String
   userId                       String?
@@ -173,14 +169,16 @@ model Sanctiontable {
   otherLinesAffected           Json?
   managerId                    String?
   selectedDepo                 String?
-  sigResponse                  String?
-  oheResponse                  String?
   status                       String  @default("in progress")
+  sigResponse                  String?
+  ohDisconnection              String?
+  oheDisconnection             String?
+  oheResponse                  String?
   corridorType                 String?
   ManagerResponse              String?
+  availed                      Json?   @default("{\"reason\": \"\", \"status\": \"pending\"}")
   sigDisconnectionRequirements String?
   trdDisconnectionRequirements String?
-  availed                      Json?   @default("{\"status\":\"pending\",\"reason\":\"\"}")
   adSaved                      String?
 }
 
