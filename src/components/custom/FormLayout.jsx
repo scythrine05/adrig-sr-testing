@@ -88,7 +88,7 @@ const FormLayout = ({
           >
             <option value={""}>Select</option>
             <option value={"ENGG"}>ENGG</option>
-            <option value={"SIG"}>SIG</option>
+            <option value={"SIG"}>S&T</option>
             <option value={"TRD"}>TRD</option>
           </select>
         </div>

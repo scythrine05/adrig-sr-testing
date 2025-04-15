@@ -178,6 +178,7 @@ const ManagerOptmisedTable = ({ id }) => {
                 { id: "date", label: "Date of Block Request" },
                 { id: "selectedDepartment", label: "Department" },
                 { id: "selectedSection", label: "Major Section" },
+                { id: "selectedDepo", label: "Depot/SSE" },
                 { id: "missionBlock", label: "Block Section/Yard" },
                 { id: "selectedBlock", label: "Selected Block" },
                 { id: "workType", label: "Work Type" },
@@ -245,7 +246,6 @@ const ManagerOptmisedTable = ({ id }) => {
                   ],
                 },
                 { id: "otherLinesAffected", label: "Other Lines Affected" },
-                { id: "selectedDepo", label: "Depot/SSE" },
                 { id: "action", label: "Action" },
                 { id: "availed", label: "Availed" },
               ].map((column) =>
@@ -345,6 +345,9 @@ const ManagerOptmisedTable = ({ id }) => {
                   {request.selectedSection}
                 </td>
                 <td className="border border-gray-300 p-3 whitespace-nowrap">
+                  {request.selectedDepo}
+                </td>
+                <td className="border border-gray-300 p-3 whitespace-nowrap">
                   {request.stationID}
                 </td>
                 <td className="border border-gray-300 p-3 whitespace-nowrap">
@@ -412,9 +415,6 @@ const ManagerOptmisedTable = ({ id }) => {
                 </td>
                 <td className="border border-gray-300 p-3 whitespace-nowrap">
                   {request.otherLinesAffected}
-                </td>
-                <td className="border border-gray-300 p-3 whitespace-nowrap">
-                  {request.selectedDepo}
                 </td>
                 <td className="border border-gray-300 p-3 whitespace-nowrap">
 
