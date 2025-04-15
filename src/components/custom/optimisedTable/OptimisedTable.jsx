@@ -361,6 +361,7 @@ export default function OptimisedTable() {
                   label: "Major Section",
                   filterable: true,
                 },
+                { id: "selectedDepo", label: "Depot/SSE", filterable: true },
                 {
                   id: "missionBlock",
                   label: "Block Section/Yard",
@@ -387,7 +388,6 @@ export default function OptimisedTable() {
                     { id: "Optimisedtimeto", label: "To" },
                   ],
                 },
-                { id: "selectedDepo", label: "Depot/SSE", filterable: true },
                 { id: "cautionRequired", label: "Caution Required" },
                 { id: "cautionSpeed", label: "Caution Speed" },
                 {
@@ -532,6 +532,11 @@ export default function OptimisedTable() {
                     {request.selectedSection}
                   </td>
 
+                    {/* Depot/SSE */}
+                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+                    {request.selectedDepo}
+                  </td>
+
                   {/* Block Section/Yard */}
                   <td className="border border-gray-300 p-3 whitespace-nowrap">
                     {request.missionBlock}
@@ -566,11 +571,6 @@ export default function OptimisedTable() {
                   </td>
                   <td className="border border-gray-300 p-3 whitespace-nowrap">
                     {request.Optimisedtimeto}
-                  </td>
-
-                  {/* Depot/SSE */}
-                  <td className="border border-gray-300 p-3 whitespace-nowrap">
-                    {request.selectedDepo}
                   </td>
 
                   {/* Caution Required */}

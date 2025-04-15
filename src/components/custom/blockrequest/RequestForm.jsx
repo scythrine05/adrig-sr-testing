@@ -1122,9 +1122,9 @@ export default function RequestForm2(props) {
     ENGG: {
       "MAS-GDR": ["TVT", "PON", "SPE", "GDR"],
       "MAS-AJJ": ["WSTA", "WSTB", "AVD", "TRLA", "TRLB", "TRT"],
-      "AJJ-KPD": ["AJJ", "WJR"],
+      "AJJ-KPD": ["AJJ", "WJR", "KPD"],
       "KPD-JTJ": ["KPD", "AB", "JTJ"],
-      "AJJ-RU": ["PUT"],
+      "AJJ-RU": ["TRT", "AJJ", "PUT"],
       "AJJ-CGL": ["CJ"],
       "MSB-VM": ["MS", "TBM", "CGL", "ACK", "TMV"],
       "MSB-VLCY": ["MSB"],
@@ -1132,8 +1132,8 @@ export default function RequestForm2(props) {
     SIG: {
       "MAS-GDR": ["MAS", "BBQ", "TVT", "GPD", "SPE", "NYP"],
       "MAS-AJJ": ["BBQ", "TRL", "AJJE"],
-      "AJJ-RU": ["TRT"],
-      "AJJ-KPD": ["AJJW", "KPDE"],
+      "AJJ-RU": ["TRT", "AJJ", "PUT"],
+      "AJJ-KPD": ["AJJ", "WJR", "KPD"],
       "KPD-JTJ": ["KPDW", "AB", "JTJ"],
       "MSB-VM": ["MSB", "MS", "TBM", "CGL", "TMV"],
       "CGL-AJJ": ["CGL"],
