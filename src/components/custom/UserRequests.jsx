@@ -131,7 +131,7 @@ const DisconnectionDetails = ({ request }) => {
 
   return (
     <div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 flex-col md:flex-row">
         {hasAnyDisconnection && (
           <Button
             variant="outlined"
@@ -145,22 +145,26 @@ const DisconnectionDetails = ({ request }) => {
             Disconnections
           </Button>
         )}
-        {hasSigDisconnection && (
-          <Chip
-            label="S&T"
-            size="small"
-            color={getSigChipColor()}
-            variant="outlined"
-          />
-        )}
-        {hasPowerBlockDisconnection && (
-          <Chip
-            label="Power Block"
-            size="small"
-            color={getPowerChipColor()}
-            variant="outlined"
-          />
-        )}
+        <div className="my-2 md:my-0">
+          {hasSigDisconnection && (
+            <Chip
+              label="S&T"
+              size="small"
+              color={getSigChipColor()}
+              variant="outlined"
+            />
+          )}
+        </div>
+        <div className="my-2 md:my-0">
+          {hasPowerBlockDisconnection && (
+            <Chip
+              label="Power Block"
+              size="small"
+              color={getPowerChipColor()}
+              variant="outlined"
+            />
+          )}
+        </div>
       </div>
 
       <Popover
@@ -576,55 +580,46 @@ export default function UserRequests({ date }) {
       >
         {/* Week Selection - Only show if no specific date is selected */}
         {!date && (
-          <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="contained"
-                onClick={() => setWeekOffset((prev) => prev - 1)}
-                style={{ minWidth: "auto", padding: "4px 8px" }}
-              >
-                &lt; Prev Week
-              </Button>
+          <div className="mb-6 flex flex-wrap items-center justify-center space-x-2">
+            <button
+              variant="contained"
+              onClick={() => setWeekOffset((prev) => prev - 1)}
+              className="px-3 py-1 my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            >
+              &lt; Prev Week
+            </button>
 
-              <span
+            <span className="px-2 py-2 my-2 lg:my-0 text-sm md:text-base bg-white border border-gray-300 rounded shadow">
+              {weekDates.weekLabel}: {formatDateToString(weekDates.start)} to{" "}
+              {formatDateToString(weekDates.end)}
+            </span>
+
+            <button
+              variant="contained"
+              onClick={() => setWeekOffset((prev) => prev + 1)}
+              className="px-3 py-1 my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            >
+              Next Week &gt;
+            </button>
+
+            {weekOffset !== 0 && (
+              <Button
+                variant="outlined"
+                onClick={() => setWeekOffset(0)}
                 style={{
-                  padding: "8px 16px",
-                  backgroundColor: "#f5f5f5",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
+                  minWidth: "auto",
+                  padding: "4px 8px",
+                  marginLeft: "8px",
                 }}
               >
-                {weekDates.weekLabel}: {formatDateToString(weekDates.start)} to{" "}
-                {formatDateToString(weekDates.end)}
-              </span>
-
-              <Button
-                variant="contained"
-                onClick={() => setWeekOffset((prev) => prev + 1)}
-                style={{ minWidth: "auto", padding: "4px 8px" }}
-              >
-                Next Week &gt;
+                Current Week
               </Button>
-
-              {weekOffset !== 0 && (
-                <Button
-                  variant="outlined"
-                  onClick={() => setWeekOffset(0)}
-                  style={{
-                    minWidth: "auto",
-                    padding: "4px 8px",
-                    marginLeft: "8px",
-                  }}
-                >
-                  Current Week
-                </Button>
-              )}
-            </div>
+            )}
           </div>
         )}
 
         {/* Desktop Table */}
-        <div className="overflow-x-auto rounded-lg shadow-md relative">
+        <div className="overflow-x-auto rounded-lg shadow-md hidden md:block">
           <table className="w-full border-collapse border border-gray-300 mb-10 table">
             <thead className="relative">
               {/* First Row */}
@@ -946,69 +941,45 @@ export default function UserRequests({ date }) {
             filteredRequests.map((request) => (
               <div
                 key={request.requestId}
-                className="bg-white border border-gray-300 p-4 mb-4 rounded-lg"
+                className="bg-white mb-5 border border-gray-400 text-sm p-1"
               >
                 <div className="space-y-2">
                   {/* Header-Value Pairs with Vertical Line */}
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Request ID:
                     </strong>
-                    <span className="pl-2">{request.requestId}</span>
+                    <span className="border border-gray-300 p-2">{request.requestId}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Date of Request:
                     </strong>
-                    <span className="pl-2">{request.date}</span>
+                    <span className="border border-gray-300 p-2">{request.date}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Department:
-                    </strong>
-                    <span className="pl-2">{request.selectedDepartment}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Section:
                     </strong>
-                    <span className="pl-2">{request.selectedSection}</span>
+                    <span className="border border-gray-300 p-2">{request.selectedSection}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Depot/SSE:
                     </strong>
-                    <span className="pl-2">{request.selectedDepo}</span>
+                    <span className="border border-gray-300 p-2">{request.selectedDepo}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Block Section/Yard:
                     </strong>
-                    <span className="pl-2">{request.stationID}</span>
+                    <span className="border border-gray-300 p-2">{request.missionBlock}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Selected Block:
-                    </strong>
-                    <span className="pl-2">{request.missionBlock}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Work Description:
-                    </strong>
-                    <span className="pl-2">{request.workType}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Work Type Selected:
-                    </strong>
-                    <span className="pl-2">{request.workDescription}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Line Selected:
                     </strong>
-                    <span className="pl-2">
+                    <span className="border border-gray-300 p-2">
                       {
                         typeof request.selectedLine === "string" &&
                           request.selectedLine.startsWith("{")
@@ -1044,131 +1015,162 @@ export default function UserRequests({ date }) {
                       }
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Caution Required:
-                    </strong>
-                    <span className="pl-2">{request.cautionRequired}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Caution Speed:
-                    </strong>
-                    <span className="pl-2">{request.cautionSpeed}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Caution Location (From):
-                    </strong>
-                    <span className="pl-2">{request.cautionLocationFrom}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Caution Location (To):
-                    </strong>
-                    <span className="pl-2">{request.cautionLocationTo}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Work Location (From):
-                    </strong>
-                    <span className="pl-2">
-                      {request.selectedDepartment === "ENGG"
-                        ? request.workLocationFrom
-                        : ""}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Work Location (To):
-                    </strong>
-                    <span className="pl-2">
-                      {request.selectedDepartment === "ENGG"
-                        ? request.workLocationTo
-                        : ""}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Route (From):
-                    </strong>
-                    <span className="pl-2">
-                      {request.selectedDepartment === "SIG"
-                        ? request.workLocationFrom
-                        : ""}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
-                      Route (To):
-                    </strong>
-                    <span className="pl-2">
-                      {request.selectedDepartment === "SIG"
-                        ? request.workLocationTo
-                        : ""}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Demand Time (From):
                     </strong>
-                    <span className="pl-2">{request.demandTimeFrom}</span>
+                    <span className="border border-gray-300 p-2">{request.demandTimeFrom}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Demand Time (To):
                     </strong>
-                    <span className="pl-2">{request.demandTimeTo}</span>
+                    <span className="border border-gray-300 p-2">{request.demandTimeTo}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Work Type:
+                    </strong>
+                    <span className="border border-gray-300 p-2">{request.workType}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Activity:
+                    </strong>
+                    <span className="border border-gray-300 p-2">{request.workDescription}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Caution Required:
+                    </strong>
+                    <span className="border border-gray-300 p-2">{request.cautionRequired}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Caution Speed:
+                    </strong>
+                    <span className="border border-gray-300 p-2">{request.cautionSpeed}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Caution Location (From):
+                    </strong>
+                    <span className="border border-gray-300 p-2">{request.cautionLocationFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Caution Location (To):
+                    </strong>
+                    <span className="border border-gray-300 p-2">{request.cautionLocationTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Work Location (From):
+                    </strong>
+                    <span className="border border-gray-300 p-2">
+                      {request.selectedDepartment === "ENGG"
+                        ? request.workLocationFrom
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Work Location (To):
+                    </strong>
+                    <span className="border border-gray-300 p-2">
+                      {request.selectedDepartment === "ENGG"
+                        ? request.workLocationTo
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Route (From):
+                    </strong>
+                    <span className="border border-gray-300 p-2">
+                      {request.selectedDepartment === "SIG"
+                        ? request.workLocationFrom
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Route (To):
+                    </strong>
+                    <span className="border border-gray-300 p-2">
+                      {request.selectedDepartment === "SIG"
+                        ? request.workLocationTo
+                        : ""}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Coaching Repercussions:
                     </strong>
-                    <span className="pl-2">
+                    <span className="border border-gray-300 p-2">
                       {request.selectedDepartment === "TRD"
                         ? request.repercussions
                         : ""}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Other Lines Affected:
                     </strong>
-                    <span className="pl-2">{request.otherLinesAffected}</span>
+                    <span className="border border-gray-300 p-2">{request.otherLinesAffected}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Remarks:
                     </strong>
-                    <span className="pl-2">{request.requestremarks}</span>
+                    <span className="border border-gray-300 p-2">{request.requestremarks ? request.requestremarks : "None"}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Corridor Type
                     </strong>
-                    <span className="pl-2">{request.corridorType}</span>
+                    <span className="border border-gray-300 p-2">{capitalizeFirstLetter(request.corridorType)}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Manager Response
                     </strong>
-                    <span className="pl-2">
-                      {request.ManagerResponse || "Pending"}
+                    <span className="border border-gray-300 p-2">
+                      {capitalizeFirstLetter(request.ManagerResponse || "Pending")}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Disconnections
                     </strong>
-                    <span className="pl-2">
+                    <span className="border border-gray-300 p-2">
                       <DisconnectionDetails request={request} />
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                    <strong className="text-right pr-2 border-r border-gray-200">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Sanctioned Status
+                    </strong>
+                    <span className={`${request.SanctionedStatus === "Y"
+                      ? "bg-green-100 text-green-700"
+                      : request.SanctionedStatus === "R"
+                        ? "bg-red-300 text-red-700"
+                        : "bg-pink-100 text-pink-700"
+                      } border border-gray-300 p-2`}>
+                      <span>
+                        {request.SanctionedStatus === "Y"
+                          ? "Yes"
+                          : request.SanctionedStatus === "R"
+                            ? "Rejected"
+                            : "Under Process"}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
                       Edit The Request:
                     </strong>
-                    <span className="pl-2">
+                    <span className="border border-gray-300 p-2">
                       <button
                         className="bg-blue-500 text-white p-2 rounded-lg"
                         onClick={() => editRequestHandler(request)}
@@ -1186,9 +1188,9 @@ export default function UserRequests({ date }) {
             </div>
           )}
         </div>
-        <Button onClick={toggleFullscreen}>
+        <button onClick={toggleFullscreen} className="hidden md:block p-px">
           {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-        </Button>
+        </button>
       </div>
     );
   }

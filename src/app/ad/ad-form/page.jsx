@@ -382,9 +382,10 @@ const SearchForm = () => {
   };
 
   return (
-    <div className="bg-secondary m-2 md:m-10 rounded-xl p-3 md:p-5 w-full md:w-[97%]">
-      <div>
-        <div className="flex flex-col md:flex-row justify-between">
+    <div className="bg-white md:bg-secondary m-auto md:m-10 rounded-sm pt-14 lg:pt-0 md:p-5 w-full md:w-[97%]">
+      <div className="p-2">
+        {/* Form Controls */}
+        <div className="flex flex-wrap lg:flex-nowrap md:flex-row gap-4 justify-between">
           <FormControl fullWidth margin="normal" sx={{ margin: 1 }}>
             <InputLabel id="search-Line-label">Department</InputLabel>
             <Select
@@ -404,9 +405,7 @@ const SearchForm = () => {
             label="Date From"
             type="date"
             value={dateRange.from}
-            onChange={(e) =>
-              setDateRange({ ...dateRange, from: e.target.value })
-            }
+            onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
             margin="normal"
             InputLabelProps={{ shrink: true }}
             fullWidth
@@ -422,21 +421,23 @@ const SearchForm = () => {
             fullWidth
           />
         </div>
-        <div className="flex flex-col md:flex-row">
+
+        {/* Buttons */}
+        <div className="flex flex-wrap gap-4 mt-4">
           <button
-            className="bg-blue-500 p-2 md:p-3 md:mt-0 md:ml-4 text-white rounded-lg text-center flex justify-center hover:bg-blue-700 my-2"
+            className="bg-blue-500 p-2 text-white rounded-lg text-center flex justify-center hover:bg-blue-700"
             onClick={handleSearch}
           >
             Search
           </button>
           <button
-            className="border border-slate-950 py-2 md:py-3 px-3 md:px-4 my-2 md:mt-0 md:ml-4 rounded-lg text-center flex justify-center hover:bg-slate-200"
+            className="border border-slate-950 py-2 px-3 rounded-lg text-center flex justify-center hover:bg-slate-200"
             onClick={handleClear}
           >
             Clear
           </button>
           <button
-            className="bg-purple-600 p-2 md:p-3 md:mt-0 md:ml-4 text-white rounded-lg text-center flex justify-center hover:bg-purple-700 my-2"
+            className="bg-purple-600 p-2 text-white rounded-lg text-center flex justify-center hover:bg-purple-700"
             onClick={() => {
               localStorage.setItem("optimizedbuttonnotclicked", "false");
               clearTimeout(timerfirst);
@@ -447,7 +448,7 @@ const SearchForm = () => {
           </button>
           <button
             onClick={() => setIsFullScreen(!isFullScreen)}
-            className="hidden md:flex items-center gap-2 my-2 md:mt-0 md:ml-4 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
+            className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
           >
             {isFullScreen ? (
               <>
@@ -480,7 +481,7 @@ const SearchForm = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"
+                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"
                   />
                 </svg>
                 Full Screen
@@ -491,12 +492,11 @@ const SearchForm = () => {
       </div>
 
       {/* Table Container */}
-      <div className="overflow-x-auto relative">
+      <div className="table-container">
         {/* Desktop Table */}
         <div
-          className={`hidden md:block ${
-            isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
-          }`}
+          className={`hidden md:block ${isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
+            }`}
         >
           {isFullScreen && (
             <div className="flex justify-end mb-4">
@@ -523,9 +523,8 @@ const SearchForm = () => {
             </div>
           )}
           <div
-            className={`${
-              isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
-            }`}
+            className={`${isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
+              }`}
           >
             {/* Corridor Requests Table */}
             <h2 className="text-2xl font-bold text-blue-700 my-5">
@@ -1252,11 +1251,11 @@ const SearchForm = () => {
                         checked={
                           currentTable === "corridor"
                             ? corridorFilters[currentFilterColumn]?.includes(
-                                value
-                              ) || false
+                              value
+                            ) || false
                             : nonCorridorFilters[currentFilterColumn]?.includes(
-                                value
-                              ) || false
+                              value
+                            ) || false
                         }
                         onChange={() => {
                           if (currentTable === "corridor") {
@@ -1282,16 +1281,16 @@ const SearchForm = () => {
         </Popover>
 
         {/* Mobile Table (Vertical Layout) */}
-        <div className="md:hidden">
+        <div className="md:hidden p-px">
           {/* Corridor Requests Mobile View */}
-          <h2 className="text-xl font-bold text-blue-700 my-3">
+          <h2 className="text-xl font-bold text-blue-700 my-3 text-center">
             Corridor Requests
           </h2>
           {corridorRequests.length > 0 ? (
             corridorRequests.map((request) => (
               <div
                 key={request.requestId}
-                className="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300"
+                className="bg-white mb-5 border border-gray-400 text-sm p-1"
               >
                 <div className="grid grid-cols-2 gap-2">
                   <div className="border border-gray-300 p-2">
@@ -1446,14 +1445,14 @@ const SearchForm = () => {
           )}
 
           {/* Non-Corridor Requests Mobile View */}
-          <h2 className="text-xl font-bold text-green-700 my-3">
+          <h2 className="text-xl font-bold text-green-700 my-3 text-center">
             Non-Corridor Requests
           </h2>
           {nonCorridorRequests.length > 0 ? (
             nonCorridorRequests.map((request) => (
               <div
                 key={request.requestId}
-                className="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300"
+                className="bg-white mb-5 border border-gray-400 text-sm p-1"
               >
                 <div className="grid grid-cols-2 gap-2">
                   <div className="border border-gray-300 p-2">
@@ -1612,13 +1611,13 @@ const SearchForm = () => {
           {/* Emergency Requests Mobile View */}
           {emergencyRequests.length > 0 && (
             <>
-              <h2 className="text-xl font-bold text-red-600 my-3">
+              <h2 className="text-xl font-bold text-red-600 my-3 text-center">
                 Emergency Block Requests
               </h2>
               {emergencyRequests.map((request) => (
                 <div
                   key={request.requestId}
-                  className="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300"
+                  className="bg-white mb-5 border border-gray-400 text-sm p-1"
                 >
                   <div className="grid grid-cols-2 gap-2">
                     <div className="border border-gray-300 p-2">
@@ -1776,9 +1775,8 @@ const SearchForm = () => {
       {/* Download CSV section */}
       {filteredRequests.length > 0 && (
         <div
-          className={`flex flex-col md:flex-row justify-around ${
-            isFullScreen ? "fixed bottom-4 left-0 right-0" : ""
-          }`}
+          className={`flex flex-col md:flex-row justify-around ${isFullScreen ? "fixed bottom-4 left-0 right-0" : ""
+            }`}
         >
           <div>
             <Button
