@@ -124,53 +124,52 @@ const RequestList = ({
     selectedRequests.length === filteredRequests.length;
 
   return (
-    <div className="h-screen p-4 md:p-6 bg-gray-100 rounded-lg shadow-lg bg-secondary m-10">
+    <div className="bg-white md:bg-secondary m-auto md:m-10 rounded-sm pt-20 lg:pt-5 md:p-5 w-full md:w-[97%]">
       <h1 className="mb-10 text-4xl font-bold text-center">Summary of Block Requesitions</h1>
 
       {/* Week Selection */}
-      <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-        <div className="flex items-center space-x-2">
+      <div className="mb-6 flex flex-wrap items-center justify-center space-x-2">
+
+        <button
+          onClick={() => setWeekOffset(prev => prev - 1)}
+          className="px-3 py-1 my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+        >
+          &lt; Prev Week
+        </button>
+
+        <span className="px-2 py-2 my-2 lg:my-0 text-sm md:text-base bg-white border border-gray-300 rounded shadow">
+          {weekDates.weekLabel}: {formatDate(weekDates.start)} to {formatDate(weekDates.end)}
+        </span>
+
+        <button
+          onClick={() => setWeekOffset(prev => prev + 1)}
+          className="px-3 py-1  my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+        >
+          Next Week &gt;
+        </button>
+
+        {weekOffset !== 0 && (
           <button
-            onClick={() => setWeekOffset(prev => prev - 1)}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            onClick={() => setWeekOffset(0)}
+            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none ml-2"
           >
-            &lt; Prev Week
+            Current Week
           </button>
-
-          <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
-            {weekDates.weekLabel}: {formatDate(weekDates.start)} to {formatDate(weekDates.end)}
-          </span>
-
-          <button
-            onClick={() => setWeekOffset(prev => prev + 1)}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
-          >
-            Next Week &gt;
-          </button>
-
-          {weekOffset !== 0 && (
-            <button
-              onClick={() => setWeekOffset(0)}
-              className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 focus:outline-none ml-2"
-            >
-              Current Week
-            </button>
-          )}
-        </div>
+        )}
       </div>
 
       {/* User Filter */}
-      <div className="mb-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-        <label htmlFor="userFilter" className="font-medium text-gray-700">
+      <div className="mb-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <label htmlFor="userFilter" className="font-medium text-gray-700 text-center sm:text-left">
           Filter by User:
         </label>
         <select
           id="userFilter"
           value={selectedUser}
           onChange={(e) => setSelectedUser(e.target.value)}
-          className="w-full md:w-2/5 px-4 py-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring focus:ring-blue-300"
+          className="w-4/5 sm:w-2/5 p-2 border border-gray-300 shadow focus:outline-none rounded-sm"
         >
-          <option value="">All Users</option>
+          <option value="" className="shadow-none">All Users</option>
           {users.map((user) => (
             <option key={user.id} value={user.id}>
               {user.name}
@@ -180,7 +179,7 @@ const RequestList = ({
       </div>
 
       {/* Request Table */}
-      <div className="overflow-x-auto rounded-lg shadow-md">
+      <div className="overflow-x-auto rounded-lg shadow-md hidden md:block">
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr>
@@ -291,29 +290,81 @@ const RequestList = ({
           </tbody>
         </table>
       </div>
-      {/* Submit Selected Requests */}
-      <div className="mt-10 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-        <button
-          onClick={handleSubmitSelected}
-          disabled={selectedRequests.length === 0}
-          className={`px-6 py-2 rounded-lg shadow ${selectedRequests.length === 0
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-green-600 text-white hover:bg-green-700 focus:ring focus:ring-green-300"
-            }`}
-        >
-          Submit Selected
-        </button>
 
-        <button
-          onClick={handleCancelSelected}
-          disabled={selectedRequests.length === 0}
-          className={`px-6 py-2 rounded-lg shadow ${selectedRequests.length === 0
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-red-600 text-white hover:bg-red-700 focus:ring focus:ring-red-300"
-            }`}
-        >
-          Cancel Selected
-        </button>
+      {/* Mobile Cards */}
+      <div className="md:hidden p-4">
+        {filteredRequests.length > 0 ? (
+          filteredRequests.map((request) => (
+            <div
+              key={request.requestId}
+              className="bg-white mb-5 border border-gray-400 text-sm p-1"
+            >
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <strong className="border border-gray-300 p-2">Request ID:</strong>
+                  <span className="border border-gray-300 p-2">{request.requestId}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <strong className="border border-gray-300 p-2">Date:</strong>
+                  <span className="border border-gray-300 p-2">{request.date}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <strong className="border border-gray-300 p-2">Depo/SSE:</strong>
+                  <span className="border border-gray-300 p-2">{request.selectedDepo}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <strong className="border border-gray-300 p-2">Block Section/Yard:</strong>
+                  <span className="border border-gray-300 p-2">{request.missionBlock}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <strong className="border border-gray-300 p-2">Demand Time (From):</strong>
+                  <span className="border border-gray-300 p-2">{request.demandTimeFrom}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <strong className="border border-gray-300 p-2">Demand Time (To):</strong>
+                  <span className="border border-gray-300 p-2">{request.demandTimeTo}</span>
+                </div>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => onSelectRequest(request)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
+                  >
+                    View Request
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-600">No requests found</div>
+        )}
+      </div>
+
+      {/* Submit Selected Requests */}
+      <div className=" hidden md:block">
+        <div className="mt-10 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+          <button
+            onClick={handleSubmitSelected}
+            disabled={selectedRequests.length === 0}
+            className={`px-6 py-2 rounded-lg shadow ${selectedRequests.length === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 text-white hover:bg-green-700 focus:ring focus:ring-green-300"
+              }`}
+          >
+            Submit Selected
+          </button>
+
+          <button
+            onClick={handleCancelSelected}
+            disabled={selectedRequests.length === 0}
+            className={`px-6 py-2 rounded-lg shadow ${selectedRequests.length === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-red-600 text-white hover:bg-red-700 focus:ring focus:ring-red-300"
+              }`}
+          >
+            Cancel Selected
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -619,7 +670,7 @@ const ManagerRequests = ({ id }) => {
   };
 
   return (
-    <div className="request-manager max-w-90 mx-auto my-10 p-4 md:p-6 bg-gray-50 rounded-lg shadow">
+    <div className="request-manager mx-auto my-10 p-0 md:p-6">
       {!selectedRequest && !isEditing && (
         <RequestList
           requests={requests}

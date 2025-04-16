@@ -8,7 +8,7 @@ export default async function RootLayout({ children }) {
   return (
     <>
       <main
-        className={`${inter.className} w-full h-screen grid grid-cols-10 gap-6 mt-4 px-6 overflow-hidden`}
+        className={`${inter.className} w-full h-screen grid grid-cols-10 gap-6 overflow-hidden`}
       >
         <div className="absolute right-20 top-12">
           {/* <SignedIn>

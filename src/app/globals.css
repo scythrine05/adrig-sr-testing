@@ -81,6 +81,12 @@
     }
   }
 
+  html,body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   .scrollbar-custom::-webkit-scrollbar {
     width: 12px;
   }
@@ -159,4 +165,9 @@
 #multipleSelect{
   color: #ff0000;
   opacity: 1;
+}
+
+.table-container {
+  overflow-x: auto;
+  display: block;
 }
