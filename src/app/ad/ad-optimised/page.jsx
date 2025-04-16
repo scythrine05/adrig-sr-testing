@@ -49,13 +49,12 @@ const getWeekDates = (weekOffset = 0) => {
   return {
     start: monday,
     end: sunday,
-    weekLabel: `Week ${
-      weekOffset === 0
-        ? "(Current)"
-        : weekOffset > 0
+    weekLabel: `Week ${weekOffset === 0
+      ? "(Current)"
+      : weekOffset > 0
         ? "+" + weekOffset
         : weekOffset
-    }`,
+      }`,
   };
 };
 
@@ -406,7 +405,7 @@ const SearchForm = () => {
         </Popover>
         <div className="min-h-screen bg-gray-50">
           {/* Header Section */}
-          <div className="bg-white shadow-md">
+          <div className="bg-white shadow-md mt-14 md:mt-0">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="text-center sm:text-left">
@@ -472,25 +471,25 @@ const SearchForm = () => {
           </div>
 
           {/* Main Content */}
-          <div className="bg-secondary m-2 md:m-10 rounded-xl p-3 md:p-5 w-full md:w-[97%]">
-            <div className="rounded-xl shadow-sm p-4 sm:p-6">
+          <div className="bg-white md:bg-secondary m-auto md:m-10 rounded-sm pt-14 lg:pt-0 md:p-5 w-full md:w-[97%]">
+            <div className="rounded-xl shadow-sm p-2 sm:p-6">
               {/* Week Selection */}
               <div className="mb-6 flex flex-wrap items-center justify-center space-x-4">
                 <button
                   onClick={() => setWeekOffset((prev) => prev - 1)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+                  className="px-3 py-1 my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
                 >
                   &lt; Prev Week
                 </button>
 
-                <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
+                <span className="px-4 py-2 my-2 lg:my-0 text-sm md:text-base bg-white border border-gray-300 rounded shadow">
                   {weekDates.weekLabel}: {formatDate(weekDates.start)} to{" "}
                   {formatDate(weekDates.end)}
                 </span>
 
                 <button
                   onClick={() => setWeekOffset((prev) => prev + 1)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+                  className="px-3 py-1  my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
                 >
                   Next Week &gt;
                 </button>
@@ -508,9 +507,8 @@ const SearchForm = () => {
               {/* Desktop Table */}
               <div className="overflow-x-auto relative">
                 <div
-                  className={`hidden md:block ${
-                    isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
-                  }`}
+                  className={`hidden md:block ${isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
+                    }`}
                 >
                   {isFullScreen && (
                     <div className="flex justify-end mb-4">
@@ -537,9 +535,8 @@ const SearchForm = () => {
                     </div>
                   )}
                   <div
-                    className={`${
-                      isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
-                    }`}
+                    className={`${isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
+                      }`}
                   >
                     <table className="w-full border-collapse border border-gray-300 mb-10">
                       <thead>
@@ -852,201 +849,202 @@ const SearchForm = () => {
               </div>
 
               {/* Mobile Cards */}
-              <div className="block md:hidden mt-4">
+              <div className="md:hidden p-px">
                 {filteredRequests.length > 0 ? (
                   filteredRequests.map((request) => (
                     <div
                       key={request.requestId}
-                      className="bg-white border border-gray-200 p-4 mb-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                      className="bg-white mb-5 border border-gray-400 text-sm p-1"
                     >
                       <div className="space-y-2">
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Request ID:
                           </strong>
-                          <span className="pl-2">{request.requestId}</span>
+                          <span className="border border-gray-300 p-2">{request.requestId}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Date of Request:
                           </strong>
-                          <span className="pl-2">{request.date}</span>
+                          <span className="border border-gray-300 p-2">{request.date}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Department:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.selectedDepartment}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Section:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.selectedSection}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Block Section/Yard:
                           </strong>
-                          <span className="pl-2">{request.stationID}</span>
+                          <span className="border border-gray-300 p-2">{request.stationID}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Selected Block:
                           </strong>
-                          <span className="pl-2">{request.missionBlock}</span>
+                          <span className="border border-gray-300 p-2">{request.missionBlock}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Work Type:
                           </strong>
-                          <span className="pl-2">{request.workType}</span>
+                          <span className="border border-gray-300 p-2">{request.workType}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Work Description:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.workDescription}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Demand Time (From):
                           </strong>
-                          <span className="pl-2">{request.demandTimeFrom}</span>
+                          <span className="border border-gray-300 p-2">{request.demandTimeFrom}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Demand Time (To):
                           </strong>
-                          <span className="pl-2">{request.demandTimeTo}</span>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Line Selected:
-                            </strong>
-                            <span className="pl-2">{request.selectedLine}</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Caution Required:
-                            </strong>
-                            <span className="pl-2">
-                              {request.cautionRequired}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Caution Speed:
-                            </strong>
-                            <span className="pl-2">{request.cautionSpeed}</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Caution Location (From):
-                            </strong>
-                            <span className="pl-2">
-                              {request.cautionLocationFrom}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Caution Location (To):
-                            </strong>
-                            <span className="pl-2">
-                              {request.cautionLocationTo}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Work Location (From):
-                            </strong>
-                            <span className="pl-2">
-                              {request.workLocationFrom}
-                            </span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                            <strong className="text-right pr-2 border-r border-gray-200">
-                              Work Location (To):
-                            </strong>
-                            <span className="pl-2">
-                              {request.workLocationTo}
-                            </span>
-                          </div>
+                          <span className="border border-gray-300 p-2">{request.demandTimeTo}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Line Selected:
+                          </strong>
+                          <span className="border border-gray-300 p-2">{request.selectedLine}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Caution Required:
+                          </strong>
+                          <span className="border border-gray-300 p-2">
+                            {request.cautionRequired}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Caution Speed:
+                          </strong>
+                          <span className="border border-gray-300 p-2">{request.cautionSpeed}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Caution Location (From):
+                          </strong>
+                          <span className="border border-gray-300 p-2">
+                            {request.cautionLocationFrom}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Caution Location (To):
+                          </strong>
+                          <span className="border border-gray-300 p-2">
+                            {request.cautionLocationTo}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Work Location (From):
+                          </strong>
+                          <span className="border border-gray-300 p-2">
+                            {request.workLocationFrom}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
+                            Work Location (To):
+                          </strong>
+                          <span className="border border-gray-300 p-2">
+                            {request.workLocationTo}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Optimised Time (From):
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.Optimisedtimefrom}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Optimised Time (To):
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.Optimisedtimeto}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Optimization Details:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.optimization_details}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             SIG Disconnection:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.sigDisconnection}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             OHE Disconnection:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.ohDisconnection}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Elementary Section (From):
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.elementarySectionFrom}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Elementary Section (To):
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.elementarySectionTo}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Other Lines Affected:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.otherLinesAffected}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Action:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.action === "none" ? (
                               "No Action Taken"
                             ) : request.action === "Accepted" ? (
@@ -1056,27 +1054,27 @@ const SearchForm = () => {
                             )}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Remarks:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.remarks === null || request.remarks === ""
                               ? "No Remarks"
                               : request.remarks}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Status:
                           </strong>
-                          <span className="pl-2">{request.status}</span>
+                          <span className="border border-gray-300 p-2">{request.status}</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2">
-                          <strong className="text-right pr-2 border-r border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          <strong className="border border-gray-300 p-2">
                             Availed:
                           </strong>
-                          <span className="pl-2">
+                          <span className="border border-gray-300 p-2">
                             {request.availed ? (
                               (() => {
                                 let availedData;
@@ -1101,12 +1099,12 @@ const SearchForm = () => {
                                         </span>
                                         {(availedData.fromTime ||
                                           availedData.toTime) && (
-                                          <p className="text-sm text-gray-600 mt-1">
-                                            From:{" "}
-                                            {availedData.fromTime || "N/A"} -
-                                            To: {availedData.toTime || "N/A"}
-                                          </p>
-                                        )}
+                                            <p className="text-sm text-gray-600 mt-1">
+                                              From:{" "}
+                                              {availedData.fromTime || "N/A"} -
+                                              To: {availedData.toTime || "N/A"}
+                                            </p>
+                                          )}
                                       </div>
                                     );
                                   } else if (availedData.status === "no") {

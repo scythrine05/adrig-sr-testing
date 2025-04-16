@@ -37,10 +37,10 @@ const getWeekDates = (weekOffset = 0) => {
     start: monday,
     end: sunday,
     weekLabel: `Week ${weekOffset === 0
-        ? "(Current)"
-        : weekOffset > 0
-          ? "+" + weekOffset
-          : weekOffset
+      ? "(Current)"
+      : weekOffset > 0
+        ? "+" + weekOffset
+        : weekOffset
       }`,
   };
 };
@@ -245,30 +245,30 @@ const SearchForm = () => {
         </div>
       </Popover>
 
-      <div className="bg-secondary p-4 rounded-xl m-10">
-        <div className="flex justify-between">
-          <h1 className="font-bold text-3xl mt-10">
+      <div className="bg-white md:bg-secondary m-auto md:m-10 rounded-sm pt-20 lg:pt-5 md:p-5 w-full md:w-[97%]">
+        <div className="flex justify-center my-10">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Traffic Admin Sanctioned Table
           </h1>
         </div>
 
         {/* Week Selection */}
-        <div className="mb-6 flex flex-wrap items-center justify-center space-x-4 mt-4">
+        <div className="mb-6 flex flex-wrap items-center justify-center space-x-2">
           <button
             onClick={() => setWeekOffset((prev) => prev - 1)}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            className="px-3 py-1 my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
           >
             &lt; Prev Week
           </button>
 
-          <span className="px-4 py-2 bg-white border border-gray-300 rounded shadow">
+          <span className="px-2 py-2 my-2 lg:my-0 text-sm md:text-base bg-white border border-gray-300 rounded shadow">
             {weekDates.weekLabel}: {formatDate(weekDates.start)} to{" "}
             {formatDate(weekDates.end)}
           </span>
 
           <button
             onClick={() => setWeekOffset((prev) => prev + 1)}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+            className="px-3 py-1  my-2 lg:my-0 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
           >
             Next Week &gt;
           </button>
@@ -285,267 +285,448 @@ const SearchForm = () => {
 
         {/* Table Container */}
         <div className="overflow-x-auto rounded-lg shadow-md">
-          <table className="w-full border-collapse border border-gray-300 mb-10">
-            <thead>
-              {/* First Row */}
-              <tr>
-                {[
-                  { id: "requestId", label: "Request ID", filterable: true },
-                  {
-                    id: "date",
-                    label: "Date of Block Request",
-                    filterable: true,
-                  },
-                  {
-                    id: "selectedDepartment",
-                    label: "Department",
-                    filterable: true,
-                  },
-                  {
-                    id: "selectedSection",
-                    label: "Major Section",
-                    filterable: true,
-                  },
-                  { id: "missionBlock", label: "Block Section/Yard" },
-                  { id: "workType", label: "Work Type", filterable: true },
-                  { id: "workDescription", label: "Activity", filterable: false, },
-                  {
-                    id: "selectedLine",
-                    label: "Line Selected",
-                    filterable: false,
-                  },
-                  {
-                    id: "cautionRequired",
-                    label: "Caution Required",
-                    filterable: false,
-                  },
-                  {
-                    id: "cautionSpeed",
-                    label: "Caution Speed",
-                    filterable: false,
-                  },
-                  {
-                    id: "cautionLocation",
-                    label: "Caution Location",
-                    split: true,
-                    children: [
-                      { id: "cautionLocationFrom", label: "From" },
-                      { id: "cautionLocationTo", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "workLocation",
-                    label: "Work Location",
-                    split: true,
-                    children: [
-                      { id: "workLocationFrom", label: "From" },
-                      { id: "workLocationTo", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "demandTime",
-                    label: "Demand Time",
-                    split: true,
-                    children: [
-                      { id: "demandTimeFrom", label: "From" },
-                      { id: "demandTimeTo", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "optimisedTime",
-                    label: "Optimised Time",
-                    split: true,
-                    children: [
-                      { id: "Optimisedtimefrom", label: "From" },
-                      { id: "Optimisedtimeto", label: "To" },
-                    ],
-                  },
-                  { id: "sigDisconnection", label: "S&T Disconnection" },
-                  { id: "ohDisconnection", label: "Power Block" },
-                  {
-                    id: "elementarySection",
-                    label: "Elementary Section",
-                    split: true,
-                    children: [
-                      { id: "elementarySectionFrom", label: "From" },
-                      { id: "elementarySectionTo", label: "To" },
-                    ],
-                  },
-                  { id: "otherLinesAffected", label: "Other Lines Affected" },
-                  { id: "action", label: "Action", filterable: true },
-                  { id: "remarks", label: "Remarks" },
-                  { id: "availed", label: "Availed" },
-                ].map((column) =>
-                  column.split ? (
-                    <th
-                      key={column.id}
-                      colSpan={column.children.length}
-                      className="border border-gray-300 bg-gray-50 text-center p-2 font-semibold"
-                    >
-                      {column.label}
-                    </th>
-                  ) : (
-                    <th
-                      key={column.id}
-                      rowSpan={2}
-                      className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top font-semibold"
-                    >
-                      <div className="flex items-center gap-1 justify-between">
-                        <span>{column.label}</span>
-                        {column.filterable && (
-                          <IconButton
-                            size="small"
-                            onClick={(e) => handleFilterClick(e, column.id)}
-                            className="p-0.5"
-                          >
-                            <FilterListIcon />
-                          </IconButton>
-                        )}
-                      </div>
-                    </th>
-                  )
-                )}
-              </tr>
+          <div
+            className="hidden md:block"
+          >
+            <table className="w-full border-collapse border border-gray-300 mb-10">
+              <thead>
+                {/* First Row */}
+                <tr>
+                  {[
+                    { id: "requestId", label: "Request ID", filterable: true },
+                    {
+                      id: "date",
+                      label: "Date of Block Request",
+                      filterable: true,
+                    },
+                    {
+                      id: "selectedDepartment",
+                      label: "Department",
+                      filterable: true,
+                    },
+                    {
+                      id: "selectedSection",
+                      label: "Major Section",
+                      filterable: true,
+                    },
+                    { id: "missionBlock", label: "Block Section/Yard" },
+                    { id: "workType", label: "Work Type", filterable: true },
+                    { id: "workDescription", label: "Activity", filterable: false, },
+                    {
+                      id: "selectedLine",
+                      label: "Line Selected",
+                      filterable: false,
+                    },
+                    {
+                      id: "cautionRequired",
+                      label: "Caution Required",
+                      filterable: false,
+                    },
+                    {
+                      id: "cautionSpeed",
+                      label: "Caution Speed",
+                      filterable: false,
+                    },
+                    {
+                      id: "cautionLocation",
+                      label: "Caution Location",
+                      split: true,
+                      children: [
+                        { id: "cautionLocationFrom", label: "From" },
+                        { id: "cautionLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "workLocation",
+                      label: "Work Location",
+                      split: true,
+                      children: [
+                        { id: "workLocationFrom", label: "From" },
+                        { id: "workLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "demandTime",
+                      label: "Demand Time",
+                      split: true,
+                      children: [
+                        { id: "demandTimeFrom", label: "From" },
+                        { id: "demandTimeTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "optimisedTime",
+                      label: "Optimised Time",
+                      split: true,
+                      children: [
+                        { id: "Optimisedtimefrom", label: "From" },
+                        { id: "Optimisedtimeto", label: "To" },
+                      ],
+                    },
+                    { id: "sigDisconnection", label: "S&T Disconnection" },
+                    { id: "ohDisconnection", label: "Power Block" },
+                    {
+                      id: "elementarySection",
+                      label: "Elementary Section",
+                      split: true,
+                      children: [
+                        { id: "elementarySectionFrom", label: "From" },
+                        { id: "elementarySectionTo", label: "To" },
+                      ],
+                    },
+                    { id: "otherLinesAffected", label: "Other Lines Affected" },
+                    { id: "action", label: "Action", filterable: true },
+                    { id: "remarks", label: "Remarks" },
+                    { id: "availed", label: "Availed" },
+                  ].map((column) =>
+                    column.split ? (
+                      <th
+                        key={column.id}
+                        colSpan={column.children.length}
+                        className="border border-gray-300 bg-gray-50 text-center p-2 font-semibold"
+                      >
+                        {column.label}
+                      </th>
+                    ) : (
+                      <th
+                        key={column.id}
+                        rowSpan={2}
+                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top font-semibold"
+                      >
+                        <div className="flex items-center gap-1 justify-between">
+                          <span>{column.label}</span>
+                          {column.filterable && (
+                            <IconButton
+                              size="small"
+                              onClick={(e) => handleFilterClick(e, column.id)}
+                              className="p-0.5"
+                            >
+                              <FilterListIcon />
+                            </IconButton>
+                          )}
+                        </div>
+                      </th>
+                    )
+                  )}
+                </tr>
 
-              {/* Second Row - only for split columns */}
-              <tr>
-                {[
-                  {
-                    id: "cautionLocation",
-                    children: [
-                      { id: "cautionLocationFrom", label: "From" },
-                      { id: "cautionLocationTo", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "workLocation",
-                    children: [
-                      { id: "workLocationFrom", label: "From" },
-                      { id: "workLocationTo", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "demandTime",
-                    children: [
-                      { id: "demandTimeFrom", label: "From" },
-                      { id: "demandTimeTo", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "optimisedTime",
-                    children: [
-                      { id: "Optimisedtimefrom", label: "From" },
-                      { id: "Optimisedtimeto", label: "To" },
-                    ],
-                  },
-                  {
-                    id: "elementarySection",
-                    children: [
-                      { id: "elementarySectionFrom", label: "From" },
-                      { id: "elementarySectionTo", label: "To" },
-                    ],
-                  },
-                ].flatMap((column) =>
-                  column.children.map((child) => (
-                    <th
-                      key={child.id}
-                      className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer font-semibold"
-                    >
-                      {child.label}
-                    </th>
+                {/* Second Row - only for split columns */}
+                <tr>
+                  {[
+                    {
+                      id: "cautionLocation",
+                      children: [
+                        { id: "cautionLocationFrom", label: "From" },
+                        { id: "cautionLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "workLocation",
+                      children: [
+                        { id: "workLocationFrom", label: "From" },
+                        { id: "workLocationTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "demandTime",
+                      children: [
+                        { id: "demandTimeFrom", label: "From" },
+                        { id: "demandTimeTo", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "optimisedTime",
+                      children: [
+                        { id: "Optimisedtimefrom", label: "From" },
+                        { id: "Optimisedtimeto", label: "To" },
+                      ],
+                    },
+                    {
+                      id: "elementarySection",
+                      children: [
+                        { id: "elementarySectionFrom", label: "From" },
+                        { id: "elementarySectionTo", label: "To" },
+                      ],
+                    },
+                  ].flatMap((column) =>
+                    column.children.map((child) => (
+                      <th
+                        key={child.id}
+                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer font-semibold"
+                      >
+                        {child.label}
+                      </th>
+                    ))
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredAndSortedRequests.length > 0 ? (
+                  filteredAndSortedRequests.map((request) => (
+                    <tr key={request.requestId} className="hover:bg-gray-50">
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.requestId}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.date}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.selectedDepartment}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.selectedSection}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.missionBlock}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.workType}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.workDescription}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.selectedLine}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.cautionRequired}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.cautionSpeed}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.cautionLocationFrom}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.cautionLocationTo}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.workLocationFrom}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.workLocationTo}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.demandTimeFrom}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.demandTimeTo}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.Optimisedtimefrom}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.Optimisedtimeto}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.sigDisconnection}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.ohDisconnection}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.elementarySectionFrom}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.elementarySectionTo}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.otherLinesAffected}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.action === "none" ? (
+                          "No Action Taken"
+                        ) : request.action === "Accepted" ? (
+                          <span>Accepted ✅</span>
+                        ) : (
+                          <span>Rejected❌</span>
+                        )}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.remarks === null || request.remarks === ""
+                          ? "No Remarks"
+                          : request.remarks}
+                      </td>
+                      <td className="border border-gray-300 p-3 whitespace-nowrap">
+                        {request.availed ? (
+                          (() => {
+                            let availedData;
+                            try {
+                              availedData =
+                                typeof request.availed === "string"
+                                  ? JSON.parse(request.availed)
+                                  : request.availed;
+                            } catch (e) {
+                              availedData = { status: "pending", reason: "" };
+                            }
+
+                            if (availedData.status === "yes") {
+                              return (
+                                <div>
+                                  <span className="text-green-600 font-medium">
+                                    Availed ✅
+                                  </span>
+                                  {(availedData.fromTime ||
+                                    availedData.toTime) && (
+                                      <p className="text-sm text-gray-600 mt-1">
+                                        From: {availedData.fromTime || "N/A"} - To:{" "}
+                                        {availedData.toTime || "N/A"}
+                                      </p>
+                                    )}
+                                </div>
+                              );
+                            } else if (availedData.status === "no") {
+                              return (
+                                <div>
+                                  <span className="text-red-600 font-medium">
+                                    Not Availed
+                                  </span>
+                                  <p className="text-sm text-gray-600 mt-1">
+                                    Reason: {availedData.reason}
+                                  </p>
+                                </div>
+                              );
+                            } else {
+                              return (
+                                <span className="text-gray-600">Pending</span>
+                              );
+                            }
+                          })()
+                        ) : (
+                          <span className="text-gray-600">Pending</span>
+                        )}
+                      </td>
+                    </tr>
                   ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={27}
+                      className="border border-gray-300 p-3"
+                    >
+                      No requests found for this week
+                    </td>
+                  </tr>
                 )}
-              </tr>
-            </thead>
-            <tbody>
-              {/* Table body remains unchanged */}
-              {filteredAndSortedRequests.length > 0 ? (
-                filteredAndSortedRequests.map((request) => (
-                  <tr key={request.requestId} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.requestId}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.date}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.selectedDepartment}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.selectedSection}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.missionBlock}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.workType}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.workDescription}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.selectedLine}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.cautionRequired}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.cautionSpeed}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.cautionLocationFrom}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.cautionLocationTo}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.workLocationFrom}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.workLocationTo}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.demandTimeFrom}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.demandTimeTo}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.Optimisedtimefrom}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.Optimisedtimeto}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.sigDisconnection}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.ohDisconnection}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.elementarySectionFrom}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.elementarySectionTo}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.otherLinesAffected}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.action === "none" ? (
-                        "No Action Taken"
-                      ) : request.action === "Accepted" ? (
-                        <span>Accepted ✅</span>
-                      ) : (
-                        <span>Rejected❌</span>
-                      )}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
-                      {request.remarks === null || request.remarks === ""
-                        ? "No Remarks"
-                        : request.remarks}
-                    </td>
-                    <td className="border border-gray-300 p-3 whitespace-nowrap">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden p-px">
+          {filteredAndSortedRequests.length > 0 ? (
+            filteredAndSortedRequests.map((request) => (
+              <div
+                key={request.requestId}
+                className="bg-white mb-5 border border-gray-400 text-sm p-1"
+              >
+                <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Request ID:</strong>
+                    <span className="border border-gray-300 p-2">{request.requestId}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Date of Request:</strong>
+                    <span className="border border-gray-300 p-2">{request.date}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Department:</strong>
+                    <span className="border border-gray-300 p-2">{request.selectedDepartment}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Major Section:</strong>
+                    <span className="border border-gray-300 p-2">{request.selectedSection}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Block Section/Yard:</strong>
+                    <span className="border border-gray-300 p-2">{request.missionBlock}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Work Type:</strong>
+                    <span className="border border-gray-300 p-2">{request.workType}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Activity:</strong>
+                    <span className="border border-gray-300 p-2">{request.workDescription}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Line Selected:</strong>
+                    <span className="border border-gray-300 p-2">{request.selectedLine}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Caution Required:</strong>
+                    <span className="border border-gray-300 p-2">{request.cautionRequired}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Caution Speed:</strong>
+                    <span className="border border-gray-300 p-2">{request.cautionSpeed}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Caution Location (From):</strong>
+                    <span className="border border-gray-300 p-2">{request.cautionLocationFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Caution Location (To):</strong>
+                    <span className="border border-gray-300 p-2">{request.cautionLocationTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Work Location (From):</strong>
+                    <span className="border border-gray-300 p-2">{request.workLocationFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Work Location (To):</strong>
+                    <span className="border border-gray-300 p-2">{request.workLocationTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Demand Time (From):</strong>
+                    <span className="border border-gray-300 p-2">{request.demandTimeFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Demand Time (To):</strong>
+                    <span className="border border-gray-300 p-2">{request.demandTimeTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Optimised Time (From):</strong>
+                    <span className="border border-gray-300 p-2">{request.Optimisedtimefrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Optimised Time (To):</strong>
+                    <span className="border border-gray-300 p-2">{request.Optimisedtimeto}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">S&T Disconnection:</strong>
+                    <span className="border border-gray-300 p-2">{request.sigDisconnection}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Power Block:</strong>
+                    <span className="border border-gray-300 p-2">{request.ohDisconnection}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Elementary Section (From):</strong>
+                    <span className="border border-gray-300 p-2">{request.elementarySectionFrom}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Elementary Section (To):</strong>
+                    <span className="border border-gray-300 p-2">{request.elementarySectionTo}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Other Lines Affected:</strong>
+                    <span className="border border-gray-300 p-2">{request.otherLinesAffected}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Action:</strong>
+                    <span className="border border-gray-300 p-2">{request.action}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">Remarks:</strong>
+                    <span className="border border-gray-300 p-2">{request.remarks}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <strong className="border border-gray-300 p-2">
+                      Availed:
+                    </strong>
+                    <span className="border border-gray-300 p-2">
                       {request.availed ? (
                         (() => {
                           let availedData;
@@ -555,59 +736,72 @@ const SearchForm = () => {
                                 ? JSON.parse(request.availed)
                                 : request.availed;
                           } catch (e) {
-                            availedData = { status: "pending", reason: "" };
+                            availedData = {
+                              status: "pending",
+                              reason: "",
+                            };
                           }
 
-                          if (availedData.status === "yes") {
-                            return (
-                              <div>
-                                <span className="text-green-600 font-medium">
-                                  Availed ✅
+                          if (request.adSaved === "yes") {
+                            if (availedData.status === "yes") {
+                              return (
+                                <div>
+                                  <span className="text-green-600 font-medium">
+                                    Availed ✅
+                                  </span>
+                                  {(availedData.fromTime ||
+                                    availedData.toTime) && (
+                                      <p className="text-sm text-gray-600 mt-1">
+                                        From:{" "}
+                                        {availedData.fromTime || "N/A"} -
+                                        To: {availedData.toTime || "N/A"}
+                                      </p>
+                                    )}
+                                </div>
+                              );
+                            } else if (availedData.status === "no") {
+                              return (
+                                <div>
+                                  <span className="text-red-600 font-medium">
+                                    Not Availed ❌
+                                  </span>
+                                  <p className="text-sm text-gray-600 mt-1">
+                                    Reason: {availedData.reason}
+                                  </p>
+                                </div>
+                              );
+                            } else {
+                              return (
+                                <span className="text-gray-600">
+                                  Pending User Response
                                 </span>
-                                {(availedData.fromTime ||
-                                  availedData.toTime) && (
-                                    <p className="text-sm text-gray-600 mt-1">
-                                      From: {availedData.fromTime || "N/A"} - To:{" "}
-                                      {availedData.toTime || "N/A"}
-                                    </p>
-                                  )}
-                              </div>
-                            );
-                          } else if (availedData.status === "no") {
-                            return (
-                              <div>
-                                <span className="text-red-600 font-medium">
-                                  Not Availed
-                                </span>
-                                <p className="text-sm text-gray-600 mt-1">
-                                  Reason: {availedData.reason}
-                                </p>
-                              </div>
-                            );
+                              );
+                            }
                           } else {
                             return (
-                              <span className="text-gray-600">Pending</span>
+                              <span className="italic text-gray-600">
+                                Awaiting Finalization
+                              </span>
                             );
                           }
                         })()
+                      ) : request.adSaved === "yes" ? (
+                        <span className="text-gray-600">
+                          Pending User Response
+                        </span>
                       ) : (
-                        <span className="text-gray-600">Pending</span>
+                        <span className="italic text-gray-600">
+                          Awaiting Finalization
+                        </span>
                       )}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={27}
-                    className="border border-gray-300 p-3"
-                  >
-                    No requests found for this week
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-600">No requests found</div>
+          )}
         </div>
       </div>
     </>

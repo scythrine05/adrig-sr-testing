@@ -37,17 +37,18 @@ export let workData = {
       "BCM ",
       "DTE ",
       "CSM ",
-      "DUOMAT ",
-      "UNIMAT 4S ",
+      "DUOMAT",
+      "UNIMAT",
       "MFI",
-      "MPT ",
+      "MPT",
       "MDU",
-      "BRM R",
+      "BRM",
       "FRM ",
       "TRT ",
       "UTV",
       "DTS",
       "T28",
+      "SQRS",
       "RGM working",
     ],
     Non_Machine: [
@@ -331,7 +332,13 @@ export let data = {
           lines: ["Up slow", "Down slow", "Up fast", "Down fast"],
         },
       ],
-      lines: ["Up slow", "Down slow", "Up fast", "Down fast", "Up NE, Dowm NE, Up SW, Down SW"],
+      lines: [
+        "Up slow",
+        "Down slow",
+        "Up fast",
+        "Down fast",
+        "Up NE, Dowm NE, Up SW, Down SW",
+      ],
     },
     {
       name: "MSB-VM",
@@ -982,11 +989,7 @@ export let sectionData = {
     ],
   },
   "MSB-VLCY": {
-    section: [
-      "MSB-MCPK",
-      "MCPK-MTMY",
-      "MTMY-VLCY",
-    ],
-    station:[]
+    section: ["MSB-MCPK", "MCPK-MTMY", "MTMY-VLCY"],
+    station: [],
   },
 };
