@@ -81,13 +81,21 @@ export async function postBulkOptimised(requestArray) {
     const { optimisedTimeFrom, optimisedTimeTo, ...rest } = item;
 
     const isNonCorridor = item.corridorType !== "corridor";
+    const isMSBVlcy = item.selectedSection === "MSB-VLCY";
 
     return {
       ...rest,
       Optimisedtimefrom: isNonCorridor
         ? item.demandTimeFrom
+        : isMSBVlcy
+        ? item.demandTimeFrom // Use demandTimeFrom for MSB-VLCY
         : optimisedTimeFrom,
-      Optimisedtimeto: isNonCorridor ? item.demandTimeTo : optimisedTimeTo,
+      Optimisedtimeto: isNonCorridor
+        ? item.demandTimeTo
+        : isMSBVlcy
+        ? item.demandTimeTo // Use demandTimeTo for MSB-VLCY
+        : optimisedTimeTo,
+      selectedLine: isMSBVlcy ? "UP Line/Down Line" : item.selectedLine, // Add selectedLine for MSB-VLCY
       availed: JSON.stringify({ status: "pending", reason: "" }),
     };
   });
