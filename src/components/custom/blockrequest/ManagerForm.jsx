@@ -1058,7 +1058,7 @@ export default function ManagerForm({ id }) {
   const depotOptions = {
     ENGG: {
       "MAS-GDR": ["TVT", "PON", "SPE", "GDR"],
-      "MAS-AJJ": ["WSTA", "WSTB", "AVD", "TRLA", "TRLB", "TRT"],
+      "MAS-AJJ": ["WSTA", "WSTB", "AVD", "TRLA", "TRLB", "AJJ"],
       "AJJ-KPD": ["AJJ", "WJR", "KPD"],
       "KPD-JTJ": ["KPD", "AB", "JTJ"],
       "AJJ-RU": ["TRT", "AJJ", "PUT"],

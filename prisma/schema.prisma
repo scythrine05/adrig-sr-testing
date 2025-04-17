@@ -75,7 +75,7 @@ model StagingRequests {
   ohDisconnection              String?
   oheDisconnection             String?
   oheResponse                  String?  @default("yes")
-  corridorType                 String?
+  corridorType                 String?  @default("corridor")
   sigActionsNeeded             String?  @default("yes")
   trdActionsNeeded             String?  @default("yes")
   ManagerResponse              String?
