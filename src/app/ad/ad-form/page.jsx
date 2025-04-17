@@ -164,18 +164,31 @@ const SearchForm = () => {
       title: "Optimization In progress",
       description: "Your Request Is Under Process! Please Wait",
     });
+
+    //Test Code Start
+    const filteredBySection = filteredRequests.filter(
+      (request) => request.selectedSection !== "MSB-VLCY"
+    );
+    const msbVlcyRequests = filteredRequests.filter(
+      (request) => request.selectedSection === "MSB-VLCY"
+    );
+    //Test Code End
+
     try {
       if (currentReq != null) {
         const res = await axios.post(
           `https://sr-optimization.vercel.app/backend/optimize`,
           {
-            requestData: filteredRequests,
+            requestData: filteredBySection, //Test Code
           }
         );
 
         const data = filteredRequests;
         const res1 = await deleteOptimizedData();
         const res2 = await postBulkOptimised(res.data.optimizedData);
+        //Test Code Start
+        if (msbVlcyRequests.length > 0) await postBulkOptimised(msbVlcyRequests);
+        //Test Code End
       } else {
         throw Error("the admin data didnt came");
       }
@@ -1446,7 +1459,7 @@ const SearchForm = () => {
 
           {/* Non-Corridor Requests Mobile View */}
           <h2 className="text-xl font-bold text-green-700 my-3 text-center">
-            Non-Corridor Requests
+            Outside Corridor Requests
           </h2>
           {nonCorridorRequests.length > 0 ? (
             nonCorridorRequests.map((request) => (
@@ -1604,7 +1617,7 @@ const SearchForm = () => {
             ))
           ) : (
             <div className="text-center mb-5">
-              No non-corridor requests found
+              No outside corridor requests found
             </div>
           )}
 
