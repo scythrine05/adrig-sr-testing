@@ -23,7 +23,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
   // Format selected lines/roads
   const formatSelectedLines = () => {
     const lines = [];
-    
+
     try {
       // Add station lines
       if (formData.selectedLine && formData.selectedLine.station) {
@@ -44,7 +44,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
           }
         });
       }
-      
+
       // Add yard roads
       if (formData.selectedLine && formData.selectedLine.yard) {
         formData.selectedLine.yard.forEach(item => {
@@ -68,14 +68,14 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
       console.error("Error in formatSelectedLines:", error);
       return "Error processing lines/roads";
     }
-    
+
     return lines.length > 0 ? lines.join(', ') : 'None';
   };
 
   // Format other affected lines/roads
   const formatOtherAffectedLines = () => {
     const lines = [];
-    
+
     // Add station lines
     if (formData.otherLinesAffected && formData.otherLinesAffected.station) {
       Object.entries(formData.otherLinesAffected.station).forEach(([block, lineArray]) => {
@@ -86,7 +86,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
         }
       });
     }
-    
+
     // Add yard roads
     if (formData.otherLinesAffected && formData.otherLinesAffected.yard) {
       Object.entries(formData.otherLinesAffected.yard).forEach(([block, roadArray]) => {
@@ -97,7 +97,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
         }
       });
     }
-    
+
     return lines.length > 0 ? lines.join(', ') : 'None';
   };
 
@@ -115,12 +115,12 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
     try {
       const parts = path.split('.');
       let value = formData;
-      
+
       for (const part of parts) {
         if (value === undefined || value === null) return '';
         value = value[part];
       }
-      
+
       return value || '';
     } catch (error) {
       console.error(`Error getting ${path} from formData:`, error);
@@ -133,7 +133,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
           <h2 className="text-xl font-bold mb-4 text-center">Confirm Your Request</h2>
-          
+
           <div className="bg-blue-50 p-4 rounded-lg mb-4">
             <p className="text-lg font-semibold mb-2">
               Your request for traffic block in {safeGet('missionBlock')} Block Section on {formatDate(safeGet('date'))} from {formatTime(safeGet('demandTimeFrom'))} hrs to {formatTime(safeGet('demandTimeTo'))} hrs and is ready to be submitted.
@@ -142,7 +142,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
               Please review all details below before final submission.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <h3 className="font-semibold">Basic Information</h3>
@@ -185,41 +185,46 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                 </tbody>
               </table>
             </div>
-            
+
             <div>
               <h3 className="font-semibold">Selected Lines/Roads</h3>
               <p className="text-sm">{formatSelectedLines()}</p>
-              
+
               {safeGet('selectedStream') && (
                 <div className="mt-2">
                   <h4 className="font-medium">Selected Stream:</h4>
                   <p className="text-sm">{safeGet('selectedStream')}</p>
                 </div>
               )}
-              
+
               <div className="mt-2">
                 <h4 className="font-medium">Other Affected Lines/Roads:</h4>
                 <p className="text-sm">{formatOtherAffectedLines()}</p>
               </div>
             </div>
           </div>
-          
+
           {/* Work Location */}
           {(safeGet('workLocationFrom') || safeGet('workLocationTo')) && (
             <div className="mb-4">
               <h3 className="font-semibold">
-                {safeGet('selectedDepartment') === "ENGG" ? "Work Location" : 
-                 safeGet('selectedDepartment') === "SIG" ? "Route" : 
-                 "Elementary Section"}
+                {safeGet('selectedDepartment') === "ENGG" || safeGet('selectedDepartment') === "TRD" ? "Work Location" :
+                  safeGet('selectedDepartment') === "SIG" ? "Route" :
+                    "Elementary Section"}
               </h3>
               <p className="text-sm">
-                {safeGet('workLocationFrom') && safeGet('workLocationTo') 
+                {safeGet('workLocationFrom') && safeGet('workLocationTo')
                   ? `From ${safeGet('workLocationFrom')} to ${safeGet('workLocationTo')}`
                   : safeGet('workLocationTo') || "Not specified"}
               </p>
             </div>
           )}
-          
+
+          { safeGet('selectedDepartment') === "TRD"  && (safeGet('elementarySectionTo')) && (<div className="my-2">
+            <h4 className="font-semibold">Elementart Section</h4>
+            <p className="text-sm">{safeGet('elementarySectionTo')}</p>
+          </div>)}
+
           {/* Department-specific information */}
           {safeGet('selectedDepartment') === "TRD" ? (
             <div className="mb-4">
@@ -243,7 +248,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                       <tr>
                         <td className="font-medium w-40">Caution Location:</td>
                         <td>
-                          {safeGet('cautionLocationFrom') && safeGet('cautionLocationTo') 
+                          {safeGet('cautionLocationFrom') && safeGet('cautionLocationTo')
                             ? `From ${safeGet('cautionLocationFrom')} to ${safeGet('cautionLocationTo')}`
                             : "Not specified"}
                         </td>
@@ -262,7 +267,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                     <tr>
                       <td className="font-medium w-40">Elementary Section:</td>
                       <td>
-                        {safeGet('elementarySectionFrom') && safeGet('elementarySectionTo') 
+                        {safeGet('elementarySectionFrom') && safeGet('elementarySectionTo')
                           ? `From ${safeGet('elementarySectionFrom')} to ${safeGet('elementarySectionTo')}`
                           : "Not specified"}
                       </td>
@@ -281,9 +286,9 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                             : "Elementary Section:"}
                         </td>
                         <td>
-                          {safeGet('selectedDepartment') === "SIG" 
+                          {safeGet('selectedDepartment') === "SIG"
                             ? safeGet('sigElementarySectionFrom')
-                            : safeGet('sigElementarySectionFrom') && safeGet('sigElementarySectionTo') 
+                            : safeGet('sigElementarySectionFrom') && safeGet('sigElementarySectionTo')
                               ? `From ${safeGet('sigElementarySectionFrom')} to ${safeGet('sigElementarySectionTo')}`
                               : "Not specified"}
                         </td>
@@ -308,7 +313,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
               </table>
             </div>
           )}
-          
+
           {/* Remarks */}
           {safeGet('requestremarks') && (
             <div className="mb-4">
@@ -316,7 +321,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
               <p className="text-sm">{safeGet('requestremarks')}</p>
             </div>
           )}
-          
+
           <div className="flex justify-center space-x-4 mt-6">
             <button
               onClick={onClose}
@@ -336,19 +341,19 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
     );
   } catch (error) {
     console.error("Error rendering confirmation dialog:", error);
-    
+
     // Fallback simple dialog in case of errors
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 max-w-xl w-full">
           <h2 className="text-xl font-bold mb-4 text-center">Confirm Your Request</h2>
-          
+
           <div className="bg-yellow-50 p-4 rounded-lg mb-4">
             <p className="text-md mb-2">
               Your request is ready to be submitted. There was an issue displaying all details.
             </p>
           </div>
-          
+
           <div className="flex justify-center space-x-4 mt-6">
             <button
               onClick={onClose}
