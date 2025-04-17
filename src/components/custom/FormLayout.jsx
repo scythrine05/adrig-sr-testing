@@ -32,7 +32,7 @@ const FormLayout = ({
 }) => {
   return (
     <div className="p-4 mt-10 rounded-lg shadow-lg min-w-full overflow-hidden" style={{ backgroundColor: '#39C3EA' }}>
-      <h1 className="text-center text-xl font-bold mb-4">
+      <h1 className="text-center text-2xl md:text-4xl font-bold my-10">
         Block Requestion Form
       </h1>
 

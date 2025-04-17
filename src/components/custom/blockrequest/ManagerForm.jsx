@@ -223,8 +223,6 @@ export default function ManagerForm({ id }) {
     ) {
       let rawValue = value;
 
-      rawValue = rawValue.replace(/[^a-zA-Z0-9.]/g, "");
-
       const decimalIndex = rawValue.indexOf(".");
 
       if (decimalIndex !== -1) {
@@ -631,10 +629,34 @@ export default function ManagerForm({ id }) {
           <label className="block text-sm font-medium">Route</label>
         )}
         {formData.selectedDepartment === "TRD" && (
-          <label className="block text-sm font-medium">
-            Elementry Section
-          </label>
+          <div className="flex justify-evenly">
+            <div className="flex-1 mr-2">
+              <label className="block text-sm font-medium">
+                Elementary Section
+              </label>
+              <input
+                type="text"
+                value={formData.elementarySectionTo}
+                name="elementarySectionTo"
+                className="mt-1 w-full p-2 border rounded"
+                placeholder="Elementary Section To"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex-1 space-x-2">
+              <label className="block text-sm font-medium">Work Location</label>
+              <input
+                type="text"
+                value={formData.workLocationTo}
+                name="workLocationTo"
+                className="mt-1 w-full p-2 border rounded"
+                placeholder="Work Location To"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         )}
+
         {formData.selectedDepartment === "" ||
           (formData.selectedDepartment === "ENGG" && (
             <div className="flex space-x-2">
@@ -649,26 +671,6 @@ export default function ManagerForm({ id }) {
             </div>
           ))}
         {formData.selectedDepartment === "SIG" && (
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={formData.workLocationFrom}
-              name="workLocationFrom"
-              className="mt-1 w-1/2 p-2 border rounded"
-              placeholder="from"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              value={formData.workLocationTo}
-              name="workLocationTo"
-              className="mt-1 w-1/2 p-2 border rounded"
-              placeholder="to"
-              onChange={handleChange}
-            />
-          </div>
-        )}
-        {formData.selectedDepartment === "TRD" && (
           <div className="flex space-x-2">
             <input
               type="text"
