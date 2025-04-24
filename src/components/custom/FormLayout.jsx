@@ -127,11 +127,11 @@ const FormLayout = ({
       <div className="mb-4 flex justify-center flex-col items-center">
         <div className="flex space-x-8 mt-1">
           {(() => {
-            const today = new Date();
-            const startDate = new Date(today.getFullYear(), 3, 27); // 27th April
-            const endDate = new Date(today.getFullYear(), 4, 3); // 3rd May
+           const selectedDate = new Date(getFormDate());
+           const urgentStartDate = new Date(2025, 3, 27); // 27th April
+           const urgentEndDate = new Date(2025, 4, 4); // 4th May
 
-            if (today >= startDate && today <= endDate) {
+            if (selectedDate >= urgentStartDate && selectedDate <= urgentEndDate) {
               // "Urgent Block" on the given week
               return (
                 <label className="inline-flex items-center text-2xl cursor-pointer">
