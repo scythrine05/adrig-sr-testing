@@ -16,7 +16,7 @@ export async function middleware(request) {
     "/admin",
     "/super-admin-login", // Updated super admin login page
     "/unauthorized",
-    "/check-auth",  // Authentication check page
+    "/check-auth", // Authentication check page
     "/debug-session", // Session debug page
     "/favicon.ico",
   ];
@@ -32,8 +32,10 @@ export async function middleware(request) {
   }
 
   // Check for authentication
-  const sessionToken = request.cookies.get("__Secure-next-auth.session-token");
-  //const sessionToken = request.cookies.get("next-auth.session-token");
+  const sessionToken =
+    process.env.NODE_ENV === "development"
+      ? request.cookies.get("next-auth.session-token")
+      : request.cookies.get("__Secure-next-auth.session-token");
   if (!sessionToken) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
@@ -51,7 +53,9 @@ export async function middleware(request) {
     } else if (userRole === "super-admin") {
       return NextResponse.redirect(new URL("/super-admin", request.url));
     } else if (["engg", "sig", "trd"].includes(userRole)) {
-      return NextResponse.redirect(new URL(`/manager/${userRole}`, request.url));
+      return NextResponse.redirect(
+        new URL(`/manager/${userRole}`, request.url)
+      );
     } else {
       return NextResponse.redirect(new URL("/signin", request.url));
     }
@@ -63,13 +67,13 @@ export async function middleware(request) {
     if (pathname === "/super-admin-login") {
       return NextResponse.next();
     }
-    
+
     // Temporarily allow any authenticated user to access super admin routes
     if (sessionToken) {
       return NextResponse.next();
     }
   }
-  
+
   // Admin routes protection
   if (pathname.startsWith("/ad/")) {
     if (userRole !== "admin") {

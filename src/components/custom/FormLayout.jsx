@@ -52,14 +52,14 @@ const FormLayout = ({
             className="mt-1 w-full p-2 border rounded"
             style={{ borderColor: '#40E0D0' }}
             onChange={getHandleChange()}
-            min = {(() => {
+            min={(() => {
               // Temporary solution to allow selection only from tomorrow
               const tomorrow = new Date();
               tomorrow.setDate(tomorrow.getDate() + 1);
               return tomorrow.toISOString().split('T')[0]; // Format as YYYY-MM-DD
             })()}
-            // min={minDate}
-            // max={maxDate}
+          // min={minDate}
+          // max={maxDate}
           />
           <p className="text-xs mt-1 text-black">
             Temporarily, you can only select dates from tomorrow onwards.
@@ -126,51 +126,83 @@ const FormLayout = ({
       {/* Corridor Type Radio Button Group */}
       <div className="mb-4 flex justify-center flex-col items-center">
         <div className="flex space-x-8 mt-1">
-          <label className="inline-flex items-center text-2xl cursor-pointer">
-            <input
-              type="radio"
-              name="corridorType"
-              value="corridor"
-              checked={formCorridorType() === "corridor"}
-              onChange={getHandleChange()}
-              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{ 
-                backgroundColor: formCorridorType() === "corridor" ? '#40E0D0' : 'white',
-                borderColor: '#40E0D0'
-              }}
-            />
-            Corridor
-          </label>
-          <label className="inline-flex items-center text-2xl cursor-pointer">
-            <input
-              type="radio"
-              name="corridorType"
-              value="non-corridor"
-              checked={formCorridorType() === "non-corridor"}
-              onChange={getHandleChange()}
-              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{ 
-                backgroundColor: formCorridorType() === "non-corridor" ? '#40E0D0' : 'white',
-                borderColor: '#40E0D0'
-              }}
-            />
-            Outside Corridor
-          </label>
-          <label className="inline-flex items-center text-2xl cursor-pointer">
-            <input
-              type="radio"
-              name="corridorType"
-              value="emergency"
-              checked={formCorridorType() === "emergency"}
-              onChange={getHandleChange()}
-              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{ 
-                backgroundColor: formCorridorType() === "emergency" ? '#40E0D0' : 'white',
-                borderColor: '#40E0D0'
-              }}
-            />
-            Urgent Block
-          </label>
+          {(() => {
+            const today = new Date();
+            const startDate = new Date(today.getFullYear(), 3, 27); // 27th April
+            const endDate = new Date(today.getFullYear(), 4, 3); // 3rd May
+
+            if (today >= startDate && today <= endDate) {
+              // "Urgent Block" on the given week
+              return (
+                <label className="inline-flex items-center text-2xl cursor-pointer">
+                  <input
+                    type="radio"
+                    name="corridorType"
+                    value="emergency"
+                    checked={formCorridorType() === "emergency"}
+                    onChange={getHandleChange()}
+                    className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    style={{
+                      backgroundColor: '#40E0D0',
+                      borderColor: '#40E0D0',
+                    }}
+                  />
+                  Urgent Block
+                </label>
+              );
+            } else {
+              // Show all radio buttons outside the specified week
+              return (
+                <>
+                  <label className="inline-flex items-center text-2xl cursor-pointer">
+                    <input
+                      type="radio"
+                      name="corridorType"
+                      value="corridor"
+                      checked={formCorridorType() === "corridor"}
+                      onChange={getHandleChange()}
+                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        backgroundColor: formCorridorType() === "corridor" ? '#40E0D0' : 'white',
+                        borderColor: '#40E0D0',
+                      }}
+                    />
+                    Corridor
+                  </label>
+                  <label className="inline-flex items-center text-2xl cursor-pointer">
+                    <input
+                      type="radio"
+                      name="corridorType"
+                      value="non-corridor"
+                      checked={formCorridorType() === "non-corridor"}
+                      onChange={getHandleChange()}
+                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        backgroundColor: formCorridorType() === "non-corridor" ? '#40E0D0' : 'white',
+                        borderColor: '#40E0D0',
+                      }}
+                    />
+                    Outside Corridor
+                  </label>
+                  <label className="inline-flex items-center text-2xl cursor-pointer">
+                    <input
+                      type="radio"
+                      name="corridorType"
+                      value="emergency"
+                      checked={formCorridorType() === "emergency"}
+                      onChange={getHandleChange()}
+                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        backgroundColor: formCorridorType() === "emergency" ? '#40E0D0' : 'white',
+                        borderColor: '#40E0D0',
+                      }}
+                    />
+                    Urgent Block
+                  </label>
+                </>
+              );
+            }
+          })()}
         </div>
       </div>
 
