@@ -191,7 +191,7 @@ const FormLayout = ({
 
       {/* Grid for Work Type and Custom Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        {/* Work Type Dropdown */}
+        {/* Work Type */}
         <select
           ref={handleInputRefsChange(5)}
           onKeyDown={handleKeyDownChange(5)}
