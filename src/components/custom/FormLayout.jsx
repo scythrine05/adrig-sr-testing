@@ -126,51 +126,82 @@ const FormLayout = ({
       {/* Corridor Type Radio Button Group */}
       <div className="mb-4 flex justify-center flex-col items-center">
         <div className="flex space-x-8 mt-1">
-          <label className="inline-flex items-center text-2xl cursor-pointer">
-            <input
-              type="radio"
-              name="corridorType"
-              value="corridor"
-              checked={formCorridorType() === "corridor"}
-              onChange={getHandleChange()}
-              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{
-                backgroundColor: formCorridorType() === "corridor" ? '#40E0D0' : 'white',
-                borderColor: '#40E0D0'
-              }}
-            />
-            Corridor
-          </label>
-          <label className="inline-flex items-center text-2xl cursor-pointer">
-            <input
-              type="radio"
-              name="corridorType"
-              value="non-corridor"
-              checked={formCorridorType() === "non-corridor"}
-              onChange={getHandleChange()}
-              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{
-                backgroundColor: formCorridorType() === "non-corridor" ? '#40E0D0' : 'white',
-                borderColor: '#40E0D0'
-              }}
-            />
-            Outside Corridor
-          </label>
-          <label className="inline-flex items-center text-2xl cursor-pointer">
-            <input
-              type="radio"
-              name="corridorType"
-              value="emergency"
-              checked={formCorridorType() === "emergency"}
-              onChange={getHandleChange()}
-              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{
-                backgroundColor: formCorridorType() === "emergency" ? '#40E0D0' : 'white',
-                borderColor: '#40E0D0'
-              }}
-            />
-            Urgent Block
-          </label>
+          {(() => {
+            const selectedDate = new Date(getFormDate());
+            const urgentStartDate = new Date(2025, 3, 27); // 27th April
+            const urgentEndDate = new Date(2025, 4, 4); // 4th May
+
+            if (selectedDate >= urgentStartDate && selectedDate <= urgentEndDate) {
+              return (
+                <label className="inline-flex items-center text-2xl cursor-pointer">
+                  <input
+                    type="radio"
+                    name="corridorType"
+                    value="emergency"
+                    checked={formCorridorType() === "emergency"}
+                    onChange={getHandleChange()}
+                    className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    style={{
+                      backgroundColor: '#40E0D0',
+                      borderColor: '#40E0D0',
+                    }}
+                  />
+                  Urgent Block
+                </label>
+              );
+            } else {
+              // Show all radio buttons outside the specified week
+              return (
+                <>
+                  <label className="inline-flex items-center text-2xl cursor-pointer">
+                    <input
+                      type="radio"
+                      name="corridorType"
+                      value="corridor"
+                      checked={formCorridorType() === "corridor"}
+                      onChange={getHandleChange()}
+                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        backgroundColor: formCorridorType() === "corridor" ? '#40E0D0' : 'white',
+                        borderColor: '#40E0D0',
+                      }}
+                    />
+                    Corridor
+                  </label>
+                  <label className="inline-flex items-center text-2xl cursor-pointer">
+                    <input
+                      type="radio"
+                      name="corridorType"
+                      value="non-corridor"
+                      checked={formCorridorType() === "non-corridor"}
+                      onChange={getHandleChange()}
+                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        backgroundColor: formCorridorType() === "non-corridor" ? '#40E0D0' : 'white',
+                        borderColor: '#40E0D0',
+                      }}
+                    />
+                    Outside Corridor
+                  </label>
+                  <label className="inline-flex items-center text-2xl cursor-pointer">
+                    <input
+                      type="radio"
+                      name="corridorType"
+                      value="emergency"
+                      checked={formCorridorType() === "emergency"}
+                      onChange={getHandleChange()}
+                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        backgroundColor: formCorridorType() === "emergency" ? '#40E0D0' : 'white',
+                        borderColor: '#40E0D0',
+                      }}
+                    />
+                    Urgent Block
+                  </label>
+                </>
+              );
+            }
+          })()}
         </div>
       </div>
 
@@ -191,7 +222,7 @@ const FormLayout = ({
 
       {/* Grid for Work Type and Custom Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        {/* Work Type Dropdown */}
+        {/* Work Type */}
         <select
           ref={handleInputRefsChange(5)}
           onKeyDown={handleKeyDownChange(5)}
