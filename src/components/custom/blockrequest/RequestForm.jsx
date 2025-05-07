@@ -619,7 +619,7 @@ export default function RequestForm2(props) {
           {ele.split("-")[1] === "YD" && (
             <div key={index}>
               <label className="block text-sm font-medium">
-                Stream for {ele}
+              Direction of traffic affected for {ele}
                 <span style={{ color: "red" }}>*</span>
               </label>
               <select
@@ -628,11 +628,10 @@ export default function RequestForm2(props) {
                 className="mt-1 w-full p-2 border rounded"
                 onChange={handleChange}
               >
-                <option value={""}>Direction of traffic affected</option>
                 <option value={"Upstream"}>Up direction</option>
-                <option value={"Downstream"}>Down direction</option>
-                <option value={"Both"}>Both directions affected</option>
-                <option value={"Both Movement"}>Both directions movement affected</option>
+                    <option value={"Downstream"}>Down direction</option>
+                    <option value={"Both"}>Both directions affected</option>
+                    <option value={"Both movement"}>Both directions movement affected</option>
               </select>
             </div>
           )}

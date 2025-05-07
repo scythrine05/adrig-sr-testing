@@ -481,9 +481,8 @@ export default function EditRequest(props) {
       if (hasManagerResponse) {
         toast({
           title: "Editing not allowed",
-          description: `This request cannot be edited because it has been ${
-            managerResponseValue === "yes" ? "approved" : "rejected"
-          } by a manager.`,
+          description: `This request cannot be edited because it has been ${managerResponseValue === "yes" ? "approved" : "rejected"
+            } by a manager.`,
           variant: "destructive",
         });
         return;
@@ -560,9 +559,8 @@ export default function EditRequest(props) {
       if (hasManagerResponse && !overrideDelete) {
         toast({
           title: "Deletion not allowed",
-          description: `This request cannot be deleted because it has been ${
-            managerResponseValue === "yes" ? "approved" : "rejected"
-          } by a manager.`,
+          description: `This request cannot be deleted because it has been ${managerResponseValue === "yes" ? "approved" : "rejected"
+            } by a manager.`,
           variant: "destructive",
         });
         return;
@@ -845,7 +843,7 @@ export default function EditRequest(props) {
             {formData.workType != "" &&
               workData[`${formData.selectedDepartment}`] &&
               workData[`${formData.selectedDepartment}`][
-                `${revertCategoryFormat(formData.workType)}`
+              `${revertCategoryFormat(formData.workType)}`
               ] &&
               workData[`${formData.selectedDepartment}`][
                 `${revertCategoryFormat(formData.workType)}`
@@ -891,7 +889,7 @@ export default function EditRequest(props) {
               {ele.split("-")[1] === "YD" && (
                 <div>
                   <label className="block text-sm font-medium">
-                    Stream for {ele}
+                    Direction of traffic affected for {ele}
                     <span style={{ color: "red" }}>*</span>
                   </label>
                   <select
@@ -900,11 +898,10 @@ export default function EditRequest(props) {
                     className="mt-1 w-full p-2 border rounded"
                     onChange={handleChange}
                   >
-                    <option value={""}>Direction of traffic affected</option>
                     <option value={"Upstream"}>Up direction</option>
                     <option value={"Downstream"}>Down direction</option>
                     <option value={"Both"}>Both directions affected</option>
-                    <option value={"Both Movement"}>Both directions movement affected</option>
+                    <option value={"Both movement"}>Both directions movement affected</option>
                   </select>
                 </div>
               )}
@@ -1223,7 +1220,7 @@ export default function EditRequest(props) {
               <div>
                 <label className="block text-sm font-medium">
                   {formData.selectedDepartment === "SIG" ||
-                  formData.selectedDepartment === "ENGG"
+                    formData.selectedDepartment === "ENGG"
                     ? "Line"
                     : "Elementary section"}{" "}
                   <span style={{ color: "red" }}>*</span>
