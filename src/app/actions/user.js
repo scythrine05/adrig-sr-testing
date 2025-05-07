@@ -98,8 +98,6 @@ export async function userCheck(username, password) {
       email: username,
     },
   });
-  console.log("wiudhiwuhds");
-  console.log(manager_data);
 
   if (manager_data != null) {
     if (manager_data.password !== password) {

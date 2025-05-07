@@ -8,10 +8,6 @@ import {
   Menu,
   InputLabel,
   FormControl,
-  Popover,
-  Checkbox,
-  FormControlLabel,
-  IconButton,
 } from "@mui/material";
 import { CSVLink } from "react-csv";
 import { getAdminFormData, getFormDataAll } from "../../actions/formdata";
@@ -27,6 +23,10 @@ import { formatData } from "../../../lib/utils";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+
+import FilterPopover from "../../../components/custom/FilterPopover";
+import { defaultColumns, emergencyColumns } from "../../data/columns/ad/requestData";
+import TableComponent from "../../../templates/table/StandardTable";
 
 const SearchForm = () => {
   let timerfirst;
@@ -242,8 +242,8 @@ const SearchForm = () => {
   // };
 
   // Function to handle filter changes for Corridor Requests
-  const handleCorridorFilterChange = (value, columnName) => {
-    const newFilters = { ...corridorFilters };
+  const handleFilterChange = (value, columnName, filters, setFilters) => {
+    const newFilters = { ...filters };
 
     if (!newFilters[columnName]) {
       newFilters[columnName] = [value];
@@ -257,29 +257,10 @@ const SearchForm = () => {
     } else {
       newFilters[columnName].push(value);
     }
-
-    setCorridorFilters(newFilters);
+    console.log("Updated Filters:", newFilters);
+    setFilters(newFilters);
   };
 
-  // Function to handle filter changes for Non-Corridor Requests
-  const handleNonCorridorFilterChange = (value, columnName) => {
-    const newFilters = { ...nonCorridorFilters };
-
-    if (!newFilters[columnName]) {
-      newFilters[columnName] = [value];
-    } else if (newFilters[columnName].includes(value)) {
-      newFilters[columnName] = newFilters[columnName].filter(
-        (item) => item !== value
-      );
-      if (newFilters[columnName].length === 0) {
-        delete newFilters[columnName];
-      }
-    } else {
-      newFilters[columnName].push(value);
-    }
-
-    setNonCorridorFilters(newFilters);
-  };
 
   const handleSelectAllFilters = (values) => {
     const newFilters = { ...filters };
@@ -376,14 +357,24 @@ const SearchForm = () => {
   }, [nonCorridorRequests, nonCorridorFilters]);
 
   const getFilterIcon = (columnName) => {
+    const isFiltered =
+      currentTable === "corridor"
+        ? corridorFilters[columnName]?.length > 0
+        : nonCorridorFilters[columnName]?.length > 0;
+
     if (sortConfig.key === columnName) {
       return sortConfig.direction === "ascending" ? (
-        <ArrowUpwardIcon fontSize="small" />
+        <ArrowUpwardIcon fontSize="small" color={isFiltered ? "primary" : "inherit"} />
       ) : (
-        <ArrowDownwardIcon fontSize="small" />
+        <ArrowDownwardIcon fontSize="small" color={isFiltered ? "primary" : "inherit"} />
       );
     }
-    return null;
+
+    if (isFiltered) {
+      return <FilterListIcon fontSize="small" color="primary" />;
+    }
+
+    return <FilterListIcon fontSize="small" color="inherit" />;
   };
 
   const isOpen = Boolean(filterAnchorEl);
@@ -511,787 +502,71 @@ const SearchForm = () => {
           className={`hidden md:block ${isFullScreen ? "fixed inset-0 z-50 bg-white p-4" : ""
             }`}
         >
-          {isFullScreen && (
-            <div className="flex justify-end mb-4">
-              <button
-                onClick={() => setIsFullScreen(false)}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 9L4 4m0 0l5-5M4 4h16m0 0l-5 5m5-5v16m0 0l-5-5m5 5l-5-5"
-                  />
-                </svg>
-                Exit Full Screen
-              </button>
-            </div>
-          )}
-          <div
-            className={`${isFullScreen ? "h-[calc(100vh-120px)] overflow-auto" : ""
-              }`}
-          >
+
+          <div className="table-container">
             {/* Corridor Requests Table */}
-            <h2 className="text-2xl font-bold text-blue-700 my-5">
-              Corridor Requests
-            </h2>
-            <table className="w-full border-collapse border border-gray-300 mb-10">
-              <thead>
-                {/* First Row */}
-                <tr>
-                  {[
-                    {
-                      id: "date",
-                      label: "Date of Block Request",
-                      filterable: true,
-                    },
-                    {
-                      id: "selectedDepartment",
-                      label: "Department",
-                      filterable: true,
-                    },
-                    {
-                      id: "selectedSection",
-                      label: "Major Section",
-                      filterable: true,
-                    },
-                    { id: "selectedDepo", label: "Depo/SSE", filterable: true },
-                    {
-                      id: "missionBlock",
-                      label: "Block Section/Yard",
-                      filterable: true,
-                    },
-                    { id: "workType", label: "Work Type", filterable: true },
-                    { id: "workDescription", label: "Activity" },
-                    {
-                      id: "demandTime",
-                      label: "Demand Time",
-                      split: true,
-                      children: [
-                        { id: "demandTimeFrom", label: "From" },
-                        { id: "demandTimeTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "selectedLine",
-                      label: "Line Selected",
-                    },
-                    { id: "cautionRequired", label: "Caution Required" },
-                    { id: "cautionSpeed", label: "Caution Speed" },
-                    {
-                      id: "cautionLocation",
-                      label: "Caution Location",
-                      split: true,
-                      children: [
-                        { id: "cautionLocationFrom", label: "From" },
-                        { id: "cautionLocationTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "workLocation",
-                      label: "Work Location",
-                      split: true,
-                      children: [
-                        { id: "workLocationFrom", label: "From" },
-                        { id: "workLocationTo", label: "To" },
-                      ],
-                    },
-                    { id: "sigDisconnection", label: "S&T Disconnection" },
-                    {
-                      id: "ohDisconnection",
-                      label: "Power Block",
-                    },
-                    {
-                      id: "elementarySection",
-                      label: "Elementary Section",
-                      split: true,
-                      children: [
-                        { id: "elementarySectionFrom", label: "From" },
-                        { id: "elementarySectionTo", label: "To" },
-                      ],
-                    },
-                    { id: "otherLinesAffected", label: "Other Lines Affected" },
-                  ].map((column) =>
-                    column.split ? (
-                      <th
-                        key={column.id}
-                        colSpan={column.children.length}
-                        className="border border-gray-300 bg-gray-50 text-center p-2"
-                      >
-                        {column.label}
-                      </th>
-                    ) : (
-                      <th
-                        key={column.id}
-                        rowSpan={2}
-                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top"
-                      >
-                        <div className="flex items-center gap-1 justify-between">
-                          <div
-                            className="flex-grow"
-                            onClick={() => handleSort(column.id)}
-                          >
-                            {column.label} {getFilterIcon(column.id)}
-                          </div>
-                          {column.filterable && (
-                            <IconButton
-                              size="small"
-                              onClick={(e) => handleFilterClick(e, column.id)}
-                              className="p-0.5"
-                            >
-                              <FilterListIcon />
-                            </IconButton>
-                          )}
-                        </div>
-                      </th>
-                    )
-                  )}
-                </tr>
-
-                {/* Second Row - only for split columns */}
-                <tr>
-                  {[
-                    {
-                      id: "demandTime",
-                      children: [
-                        { id: "demandTimeFrom", label: "From" },
-                        { id: "demandTimeTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "cautionLocation",
-                      children: [
-                        { id: "cautionLocationFrom", label: "From" },
-                        { id: "cautionLocationTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "workLocation",
-                      children: [
-                        { id: "workLocationFrom", label: "From" },
-                        { id: "workLocationTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "elementarySection",
-                      children: [
-                        { id: "elementarySectionFrom", label: "From" },
-                        { id: "elementarySectionTo", label: "To" },
-                      ],
-                    },
-                  ].flatMap((column) =>
-                    column.children.map((child) => (
-                      <th
-                        key={child.id}
-                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
-                      >
-                        {child.label}
-                      </th>
-                    ))
-                  )}
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredCorridorRequests.length > 0 ? (
-                  filteredCorridorRequests.map((request) => (
-                    <tr key={request.requestId} className="hover:bg-gray-50">
-                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.requestId}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.corridorType}
-                      </td> */}
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.date}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedDepartment}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedSection}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedDepo}
-                      </td>
-                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">{request.stationID}</td> */}
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.missionBlock}
-                      </td>
-
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workType}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workDescription}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.demandTimeFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.demandTimeTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedLine}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionRequired}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionSpeed}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionLocationFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionLocationTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workLocationFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workLocationTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.sigDisconnection}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.ohDisconnection}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.elementarySectionFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.elementarySectionTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.otherLinesAffected}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={23}
-                      className="border border-gray-300 p-3"
-                    >
-                      No corridor requests found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+            <TableComponent
+              title={{ text: "Corridor Requests", color: "text-blue-700" }}
+              columns={defaultColumns}
+              data={filteredCorridorRequests}
+              onFilterClick={(e, columnId) => handleFilterClick(e, columnId, "corridor")}
+              getFilterIcon={getFilterIcon}
+            />
 
             {/* Non-Corridor Requests Table */}
-            <h2 className="text-2xl font-bold text-green-700 my-5">
-              Outside Corridor Requests
-            </h2>
-            <table className="w-full border-collapse border border-gray-300 mb-10">
-              <thead>
-                {/* First Row */}
-                <tr>
-                  {[
-                    {
-                      id: "date",
-                      label: "Date of Block Request",
-                      filterable: true,
-                    },
-                    {
-                      id: "selectedDepartment",
-                      label: "Department",
-                      filterable: true,
-                    },
-                    {
-                      id: "selectedSection",
-                      label: "Major Section",
-                      filterable: true,
-                    },
-                    { id: "selectedDepo", label: "Depo/SSE", filterable: true },
-                    {
-                      id: "missionBlock",
-                      label: "Block Section/Yard",
-                      filterable: true,
-                    },
-                    { id: "workType", label: "Work Type", filterable: true },
-                    { id: "workDescription", label: "Activity" },
-                    {
-                      id: "demandTime",
-                      label: "Demand Time",
-                      split: true,
-                      children: [
-                        { id: "demandTimeFrom", label: "From" },
-                        { id: "demandTimeTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "selectedLine",
-                      label: "Line Selected",
-                      filterable: true,
-                    },
-                    { id: "cautionRequired", label: "Caution Required" },
-                    { id: "cautionSpeed", label: "Caution Speed" },
-                    {
-                      id: "cautionLocation",
-                      label: "Caution Location",
-                      split: true,
-                      children: [
-                        { id: "cautionLocationFrom", label: "From" },
-                        { id: "cautionLocationTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "workLocation",
-                      label: "Work Location",
-                      split: true,
-                      children: [
-                        { id: "workLocationFrom", label: "From" },
-                        { id: "workLocationTo", label: "To" },
-                      ],
-                    },
-                    { id: "sigDisconnection", label: "S&T Disconnection" },
-                    {
-                      id: "ohDisconnection",
-                      label: "Power Block",
-                    },
-                    {
-                      id: "elementarySection",
-                      label: "Elementary Section",
-                      split: true,
-                      children: [
-                        { id: "elementarySectionFrom", label: "From" },
-                        { id: "elementarySectionTo", label: "To" },
-                      ],
-                    },
-                    { id: "otherLinesAffected", label: "Other Lines Affected" },
-                  ].map((column) =>
-                    column.split ? (
-                      <th
-                        key={column.id}
-                        colSpan={column.children.length}
-                        className="border border-gray-300 bg-gray-50 text-center p-2"
-                      >
-                        {column.label}
-                      </th>
-                    ) : (
-                      <th
-                        key={column.id}
-                        rowSpan={2}
-                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top"
-                      >
-                        <div className="flex items-center gap-1 justify-between">
-                          <div
-                            className="flex-grow"
-                            onClick={() => handleSort(column.id)}
-                          >
-                            {column.label} {getFilterIcon(column.id)}
-                          </div>
-                          {column.filterable && (
-                            <IconButton
-                              size="small"
-                              onClick={(e) =>
-                                handleFilterClick(e, column.id, "nonCorridor")
-                              }
-                              className="p-0.5"
-                            >
-                              <FilterListIcon
-                                fontSize="small"
-                                color={
-                                  nonCorridorFilters[column.id]
-                                    ? "primary"
-                                    : "inherit"
-                                }
-                              />
-                            </IconButton>
-                          )}
-                        </div>
-                      </th>
-                    )
-                  )}
-                </tr>
-
-                {/* Second Row - only for split columns */}
-                <tr>
-                  {[
-                    {
-                      id: "demandTime",
-                      children: [
-                        { id: "demandTimeFrom", label: "From" },
-                        { id: "demandTimeTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "cautionLocation",
-                      children: [
-                        { id: "cautionLocationFrom", label: "From" },
-                        { id: "cautionLocationTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "workLocation",
-                      children: [
-                        { id: "workLocationFrom", label: "From" },
-                        { id: "workLocationTo", label: "To" },
-                      ],
-                    },
-                    {
-                      id: "elementarySection",
-                      children: [
-                        { id: "elementarySectionFrom", label: "From" },
-                        { id: "elementarySectionTo", label: "To" },
-                      ],
-                    },
-                  ].flatMap((column) =>
-                    column.children.map((child) => (
-                      <th
-                        key={child.id}
-                        className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
-                      >
-                        {child.label}
-                      </th>
-                    ))
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {filteredNonCorridorRequests.length > 0 ? (
-                  filteredNonCorridorRequests.map((request) => (
-                    <tr key={request.requestId} className="hover:bg-gray-50">
-                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.requestId}
-                      </td> */}
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.date}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedDepartment}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedSection}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedDepo}
-                      </td>
-                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">{request.stationID}</td> */}
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.missionBlock}
-                      </td>
-                      {/* <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.corridorType}
-                      </td> */}
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workType}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workDescription}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.demandTimeFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.demandTimeTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.selectedLine}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionRequired}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionSpeed}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionLocationFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.cautionLocationTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workLocationFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.workLocationTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.sigDisconnection}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.ohDisconnection}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.elementarySectionFrom}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.elementarySectionTo}
-                      </td>
-                      <td className="border border-gray-300 p-3 whitespace-nowrap">
-                        {request.otherLinesAffected}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={23}
-                      className="border border-gray-300 p-3"
-                    >
-                      No non-corridor requests found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+            <TableComponent
+              title={{ text: "Outside Corridor Requests", color: "text-green-700" }}
+              columns={defaultColumns}
+              data={filteredNonCorridorRequests}
+              onFilterClick={(e, columnId) =>
+                handleFilterClick(e, columnId, "nonCorridor")
+              }
+              getFilterIcon={getFilterIcon}
+            />
 
             {/* Emergency Requests Table */}
             {emergencyRequests.length > 0 && (
-              <>
-                <h2 className="text-2xl font-bold text-red-600 my-5">
-                  Emergency Block Requests
-                </h2>
-                <table className="w-full border-collapse border border-gray-300">
-                  <thead>
-                    <tr className="">
-                      {[
-                        { id: "requestId", label: "Request ID" },
-                        { id: "date", label: "Date of Block Request" },
-                        { id: "selectedDepartment", label: "Department" },
-                        { id: "selectedSection", label: "MajorSection" },
-                        { id: "selectedDepo", label: "Depo/SSE" },
-                        // { id: 'stationID', label: 'Block Section' },
-                        { id: "missionBlock", label: "Block Section/Yard" },
-                        { id: "corridorType", label: "Corridor Type" },
-                        { id: "workType", label: "Work Type" },
-                        { id: "workDescription", label: "Activity" },
-                        { id: "demandTimeFrom", label: "Demand Time (From)" },
-                        { id: "demandTimeTo", label: "Demand Time (To)" },
-                        { id: "selectedLine", label: "Line Selected" },
-                        { id: "cautionRequired", label: "Caution Required" },
-                        { id: "cautionSpeed", label: "Caution Speed" },
-                        {
-                          id: "cautionLocationFrom",
-                          label: "Caution Location (From)",
-                        },
-                        {
-                          id: "cautionLocationTo",
-                          label: "Caution Location (To)",
-                        },
-                        {
-                          id: "workLocationFrom",
-                          label: "Work Location (From)",
-                        },
-                        { id: "workLocationTo", label: "Work Location (To)" },
-                        { id: "sigDisconnection", label: "SIG Disconnection" },
-                        {
-                          id: "ohDisconnection",
-                          label: "Power Block Disconnection",
-                        },
-                        {
-                          id: "elementarySectionFrom",
-                          label: "Elementary Section (From)",
-                        },
-                        {
-                          id: "elementarySectionTo",
-                          label: "Elementary Section (To)",
-                        },
-                        {
-                          id: "otherLinesAffected",
-                          label: "Other Lines Affected",
-                        },
-                      ].map((column) => (
-                        <th
-                          key={column.id}
-                          className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer"
-                        >
-                          <div className="flex items-center gap-1 justify-between">
-                            <div
-                              className="flex-grow"
-                              onClick={() => handleSort(column.id)}
-                            >
-                              {column.label} {getFilterIcon(column.id)}
-                            </div>
-                            <IconButton
-                              size="small"
-                              onClick={(e) => handleFilterClick(e, column.id)}
-                              className="p-0.5"
-                            >
-                              <FilterListIcon
-                                fontSize="small"
-                                color={
-                                  filters[column.id] ? "primary" : "inherit"
-                                }
-                              />
-                            </IconButton>
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {emergencyRequests.map((request) => (
-                      <tr key={request.requestId} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.requestId}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.date}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.selectedDepartment}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.selectedSection}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.selectedDepo}
-                        </td>
-                        {/* <td className="border border-gray-300 p-3 whitespace-nowrap">{request.stationID}</td> */}
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.missionBlock}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.corridorType}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.workType}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.workDescription}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.demandTimeFrom}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.demandTimeTo}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.selectedLine}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.cautionRequired}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.cautionSpeed}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.cautionLocationFrom}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.cautionLocationTo}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.workLocationFrom}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.workLocationTo}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.sigDisconnection}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.ohDisconnection}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.elementarySectionFrom}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.elementarySectionTo}
-                        </td>
-                        <td className="border border-gray-300 p-3 whitespace-nowrap">
-                          {request.otherLinesAffected}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>
+              <TableComponent
+                title={{ text: "Emergency Block Requests", color: "text-red-600" }}
+                columns={emergencyColumns}
+                data={emergencyRequests}
+                onFilterClick={(e, columnId) => handleFilterClick(e, columnId, "emergency")}
+                getFilterIcon={getFilterIcon}
+              />
             )}
           </div>
+          );
         </div>
-
         {/* Filter Popover */}
-        <Popover
-          id={filterId}
-          open={isOpen}
+        <FilterPopover
+          isOpen={isOpen}
           anchorEl={filterAnchorEl}
           onClose={handleFilterClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+          currentFilterColumn={currentFilterColumn}
+          currentTable={currentTable}
+          filters={currentTable === "corridor" ? corridorFilters : nonCorridorFilters}
+          onClearFilters={() => {
+            if (currentTable === "corridor") {
+              setCorridorFilters({});
+            } else {
+              setNonCorridorFilters({});
+            }
           }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
+          onFilterChange={(value, columnName) => {
+            if (currentTable === "corridor") {
+              console.log(currentTable)
+              handleFilterChange(value, columnName, corridorFilters, setCorridorFilters);
+            } else {
+              handleFilterChange(value, columnName, nonCorridorFilters, setNonCorridorFilters);
+            }
           }}
-        >
-          <div
-            className="p-3 max-h-[300px] overflow-y-auto"
-            style={{ minWidth: "200px" }}
-          >
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="font-medium">Filter {currentFilterColumn}</h3>
-              <button
-                className="text-blue-600 text-sm"
-                onClick={() => {
-                  if (currentTable === "corridor") {
-                    setCorridorFilters({});
-                  } else if (currentTable === "nonCorridor") {
-                    setNonCorridorFilters({});
-                  }
-                }}
-              >
-                Clear Filter
-              </button>
-            </div>
-
-            {currentFilterColumn &&
-              getUniqueValues(
-                currentTable === "corridor"
-                  ? filteredCorridorRequests
-                  : filteredNonCorridorRequests,
-                currentFilterColumn
-              ).map((value) => (
-                <div key={value} className="my-1">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={
-                          currentTable === "corridor"
-                            ? corridorFilters[currentFilterColumn]?.includes(
-                              value
-                            ) || false
-                            : nonCorridorFilters[currentFilterColumn]?.includes(
-                              value
-                            ) || false
-                        }
-                        onChange={() => {
-                          if (currentTable === "corridor") {
-                            handleCorridorFilterChange(
-                              value,
-                              currentFilterColumn
-                            );
-                          } else if (currentTable === "nonCorridor") {
-                            handleNonCorridorFilterChange(
-                              value,
-                              currentFilterColumn
-                            );
-                          }
-                        }}
-                        size="small"
-                      />
-                    }
-                    label={<span className="text-sm">{value}</span>}
-                  />
-                </div>
-              ))}
-          </div>
-        </Popover>
+          getUniqueValues={getUniqueValues}
+          data={
+            currentTable === "corridor"
+              ? filteredCorridorRequests
+              : filteredNonCorridorRequests
+          }
+        />
 
         {/* Mobile Table (Vertical Layout) */}
         <div className="md:hidden p-px">

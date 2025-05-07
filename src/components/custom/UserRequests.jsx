@@ -10,6 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
+import FilterPopover from "./FilterPopover";
 import Paper from "@mui/material/Paper";
 import { getFormData, deleteFormData } from "../../app/actions/formdata";
 import EditRequest from "../custom/EditRequest";
@@ -24,6 +25,7 @@ import {
   deleteStagingFormData,
 } from "../../app/actions/stagingform";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -380,6 +382,11 @@ export default function UserRequests({ date }) {
   const [weekOffset, setWeekOffset] = useState(0);
   const weekDates = getWeekDates(weekOffset);
 
+  const [filters, setFilters] = useState({});
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [currentFilterColumn, setCurrentFilterColumn] = useState("");
+
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -557,6 +564,40 @@ export default function UserRequests({ date }) {
 
   console.log("Filtered Requests:", filteredRequests);
 
+  const handleFilterClick = (event, columnName) => {
+    setFilterAnchorEl(event.currentTarget);
+    setCurrentFilterColumn(columnName);
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  const handleFilterChange = (value) => {
+    const newFilters = { ...filters };
+
+    if (!newFilters[currentFilterColumn]) {
+      newFilters[currentFilterColumn] = [value];
+    } else if (newFilters[currentFilterColumn].includes(value)) {
+      newFilters[currentFilterColumn] = newFilters[currentFilterColumn].filter(
+        (item) => item !== value
+      );
+      if (newFilters[currentFilterColumn].length === 0) {
+        delete newFilters[currentFilterColumn];
+      }
+    } else {
+      newFilters[currentFilterColumn].push(value);
+    }
+
+    setFilters(newFilters);
+  };
+
+  const getUniqueValues = (data, key) => {
+    return [...new Set(data.map((item) => item[key] || ""))]
+      .filter(Boolean)
+      .sort();
+  };
+
   if (showPopup) {
     return (
       <EditRequest
@@ -626,10 +667,10 @@ export default function UserRequests({ date }) {
               <tr>
                 {[
                   { id: "requestId", label: "Request ID" },
-                  { id: "date", label: "Date of Block Request" },
-                  { id: "selectedSection", label: "Major Section" },
-                  { id: "selectedDepo", label: "Depot/SSE" },
-                  { id: "missionBlock", label: "Block Section/Yard" },
+                  { id: "date", label: "Date of Block Request", filterable: true },
+                  { id: "selectedSection", label: "Major Section", filterable: true },
+                  { id: "selectedDepo", label: "Depot/SSE", filterable: true },
+                  { id: "missionBlock", label: "Block Section/Yard", filterable: true },
                   { id: "selectedLine", label: "Line Selected" },
                   {
                     id: "demandTime",
@@ -712,6 +753,15 @@ export default function UserRequests({ date }) {
                       }}
                     >
                       {column.label}
+                      {column.filterable && (
+                        <IconButton
+                          size="small"
+                          onClick={(e) => handleFilterClick(e, column.id)}
+                          className="p-0.5"
+                        >
+                          <FilterListIcon />
+                        </IconButton>
+                      )}
                     </th>
                   )
                 )}
@@ -933,6 +983,16 @@ export default function UserRequests({ date }) {
               )}
             </tbody>
           </table>
+          <FilterPopover
+            isOpen={Boolean(filterAnchorEl)}
+            anchorEl={filterAnchorEl}
+            onClose={handleFilterClose}
+            currentFilterColumn={currentFilterColumn}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            getUniqueValues={getUniqueValues}
+            data={filteredRequests}
+          />
         </div>
 
         {/* Mobile Table */}
