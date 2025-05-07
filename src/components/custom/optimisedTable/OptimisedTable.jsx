@@ -10,6 +10,11 @@ import {
   updateAvailedStatus,
 } from "../../../app/actions/optimisetable";
 
+import FilterPopover from "../FilterPopover";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { IconButton } from "@mui/material";
+
+
 // Helper function to get week dates
 const getWeekDates = (weekOffset = 0) => {
   const now = new Date();
@@ -65,6 +70,11 @@ export default function OptimisedTable() {
   const [toTime, setToTime] = useState("");
   const [title, setTitle] = useState("");
   const [showAvailedColumn, setShowAvailedColumn] = useState(false);
+
+  const [filters, setFilters] = useState({});
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [currentFilterColumn, setCurrentFilterColumn] = useState("");
+
 
   // Show success message function
   const displaySuccess = (message) => {
@@ -285,6 +295,53 @@ export default function OptimisedTable() {
     }
   };
 
+  // Handle filter icon click
+  const handleFilterClick = (event, columnName) => {
+    setFilterAnchorEl(event.currentTarget);
+    setCurrentFilterColumn(columnName);
+  };
+
+  // Close the filter popover
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  // Handle filter changes
+  const handleFilterChange = (value) => {
+    const newFilters = { ...filters };
+
+    if (!newFilters[currentFilterColumn]) {
+      newFilters[currentFilterColumn] = [value];
+    } else if (newFilters[currentFilterColumn].includes(value)) {
+      newFilters[currentFilterColumn] = newFilters[currentFilterColumn].filter(
+        (item) => item !== value
+      );
+      if (newFilters[currentFilterColumn].length === 0) {
+        delete newFilters[currentFilterColumn];
+      }
+    } else {
+      newFilters[currentFilterColumn].push(value);
+    }
+
+    setFilters(newFilters);
+  };
+
+  // Get unique values for filtering
+  const getUniqueValues = (data, key) => {
+    return [...new Set(data.map((item) => item[key] || ""))]
+      .filter(Boolean)
+      .sort();
+  };
+
+  // Apply filters to requests
+  const filteredRequests = requests.filter((request) => {
+    return Object.keys(filters).every((key) => {
+      if (!filters[key] || filters[key].length === 0) return true;
+      return filters[key].includes(request[key]);
+    });
+  });
+
+
   return (
     <div>
       <div className="flex my-5 md:my-10 justify-center">
@@ -351,7 +408,7 @@ export default function OptimisedTable() {
             {/* First Row */}
             <tr>
               {[
-                { id: "requestId", label: "Request ID", filterable: true },
+                { id: "requestId", label: "Request ID" },
                 {
                   id: "date",
                   label: "Date of Block Request",
@@ -449,7 +506,14 @@ export default function OptimisedTable() {
                     className="border border-gray-300 p-3 min-w-[150px] whitespace-nowrap bg-gray-50 cursor-pointer align-top"
                   >
                     <div className="flex items-center gap-1 justify-between">
-                      <div className="flex-grow">{column.label}</div>
+                      <div className="flex-grow">{column.label} {column.filterable && (
+                        <IconButton
+                          size="small"
+                          onClick={(e) => handleFilterClick(e, column.id)}
+                        >
+                          <FilterListIcon />
+                        </IconButton>
+                      )}</div>
                     </div>
                   </th>
                 )
@@ -760,6 +824,16 @@ export default function OptimisedTable() {
             )}
           </tbody>
         </table>
+        <FilterPopover
+          isOpen={Boolean(filterAnchorEl)}
+          anchorEl={filterAnchorEl}
+          onClose={handleFilterClose}
+          currentFilterColumn={currentFilterColumn}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          getUniqueValues={getUniqueValues}
+          data={filteredRequests}
+        />
       </div>
 
       {/* Table for Mobile */}

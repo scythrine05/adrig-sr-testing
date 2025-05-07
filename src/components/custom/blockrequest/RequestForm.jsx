@@ -628,10 +628,11 @@ export default function RequestForm2(props) {
                 className="mt-1 w-full p-2 border rounded"
                 onChange={handleChange}
               >
-                <option value={""}>Select Stream</option>
-                <option value={"Upstream"}>Up Stream</option>
-                <option value={"Downstream"}>Down Stream</option>
-                <option value={"Both"}>Both</option>
+                <option value={""}>Direction of traffic affected</option>
+                <option value={"Upstream"}>Up direction</option>
+                <option value={"Downstream"}>Down direction</option>
+                <option value={"Both"}>Both directions affected</option>
+                <option value={"Both Movement"}>Both directions movement affected</option>
               </select>
             </div>
           )}
