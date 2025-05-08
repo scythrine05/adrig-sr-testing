@@ -23,6 +23,7 @@ export async function postDataOptimisedFirst(request) {
       cautionSpeed: request.cautionSpeed,
       cautionLocationFrom: request.cautionLocationFrom,
       cautionLocationTo: request.cautionLocationTo,
+      adjacentLinesAffected: request.adjacentLinesAffected,
       workLocationFrom: request.workLocationFrom,
       workLocationTo: request.workLocationTo,
       demandTimeFrom: request.demandTimeFrom,

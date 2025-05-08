@@ -108,6 +108,7 @@ export const useFormState = () => {
     cautionSpeed: "",
     cautionLocationFrom: "",
     cautionLocationTo: "",
+    adjacentLinesAffected: "",
     workLocationFrom: "",
     workLocationTo: "",
     demandTimeFrom: "",

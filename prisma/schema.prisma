@@ -54,6 +54,7 @@ model StagingRequests {
   cautionSpeed                 String
   cautionLocationFrom          String
   cautionLocationTo            String
+  adjacentLinesAffected        String?
   workLocationFrom             String
   workLocationTo               String
   demandTimeFrom               String
@@ -99,6 +100,7 @@ model Requests {
   cautionSpeed                 String
   cautionLocationFrom          String
   cautionLocationTo            String
+  adjacentLinesAffected        String?
   workLocationFrom             String
   workLocationTo               String
   demandTimeFrom               String
@@ -147,6 +149,7 @@ model Sanctiontable {
   cautionSpeed                 String
   cautionLocationFrom          String
   cautionLocationTo            String
+  adjacentLinesAffected        String?
   workLocationFrom             String
   workLocationTo               String
   demandTimeFrom               String

@@ -26,6 +26,7 @@ export async function postAdminFormData(formData, adminId) {
         cautionSpeed: formData.cautionSpeed,
         cautionLocationFrom: formData.cautionLocationFrom,
         cautionLocationTo: formData.cautionLocationTo,
+        adjacentLinesAffected: formData.adjacentLinesAffected,
         workLocationFrom: formData.workLocationFrom,
         workLocationTo: formData.workLocationTo,
         demandTimeFrom: formData.demandTimeFrom,
