@@ -450,6 +450,7 @@ export default function RequestForm2(props) {
             cautionSpeed: "",
             cautionLocationFrom: "",
             cautionLocationTo: "",
+            adjacentLinesAffected: "",
             workLocationFrom: "",
             workLocationTo: "",
             demandTimeFrom: "",
@@ -619,7 +620,7 @@ export default function RequestForm2(props) {
           {ele.split("-")[1] === "YD" && (
             <div key={index}>
               <label className="block text-sm font-medium">
-              Direction of traffic affected for {ele}
+                Direction of traffic affected for {ele}
                 <span style={{ color: "red" }}>*</span>
               </label>
               <select
@@ -629,9 +630,9 @@ export default function RequestForm2(props) {
                 onChange={handleChange}
               >
                 <option value={"Upstream"}>Up direction</option>
-                    <option value={"Downstream"}>Down direction</option>
-                    <option value={"Both"}>Both directions affected</option>
-                    <option value={"Both movement"}>Both directions movement affected</option>
+                <option value={"Downstream"}>Down direction</option>
+                <option value={"Both"}>Both directions affected</option>
+                <option value={"Both movement"}>Both directions movement affected</option>
               </select>
             </div>
           )}
@@ -846,6 +847,19 @@ export default function RequestForm2(props) {
                 name="cautionSpeed"
                 className="mt-1 w-full p-2 border rounded text-black"
                 placeholder="In format km/h"
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-black">
+                Adjacent lines affected
+              </label>
+              <input
+                type="text"
+                value={formData.adjacentLinesAffected}
+                name="adjacentLinesAffected"
+                className="mt-1 w-full p-2 border rounded text-black"
+                placeholder="Lines affected"
                 onChange={handleChange}
               />
             </div>
@@ -1130,7 +1144,7 @@ export default function RequestForm2(props) {
       "AJJ-RU": ["TRT", "AJJ", "PUT"],
       "AJJ-CGL": ["CJ"],
       "MSB-VM": ["MS", "TBM", "CGL", "ACK", "TMV"],
-      "MSB-VLCY": ["MSB"],
+      "MSB-VLCY": ["MSB", "MS"],
     },
     SIG: {
       "MAS-GDR": ["MAS", "BBQ", "TVT", "GPD", "SPE", "NYP"],
@@ -1140,7 +1154,7 @@ export default function RequestForm2(props) {
       "KPD-JTJ": ["KPDW", "AB", "JTJ"],
       "MSB-VM": ["MSB", "MS", "TBM", "CGL", "TMV"],
       "CGL-AJJ": ["CGL"],
-      "MSB-VLCY": ["MSB"],
+      "MSB-VLCY": ["MSB", "MS"],
     },
     TRD: {
       "MAS Divn": ["SR DEE/TRD/MAS", "DEE/TRD/MAS", "CTPC/TRD/MAS"],
@@ -1158,7 +1172,7 @@ export default function RequestForm2(props) {
       "KPD-JTJ": ["TRD/KPD", "TRD/AB", "TRD/JTJ"],
       "MSB-VM": ["TRD/MS", "TRD/TBM", "TRD/CGL", "TRD/ACK", "TRD/VM"],
       "AJJ-CGL": ["TRD/AJJ", "TRD/CGL"],
-      "MSB-VLCY": ["MSB"],
+      "MSB-VLCY": ["MSB", "MS"],
     },
   };
 

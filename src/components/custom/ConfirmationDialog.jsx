@@ -257,6 +257,10 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, formData }) => {
                         <td className="font-medium w-40">Caution Speed:</td>
                         <td>{safeGet('cautionSpeed') || "Not specified"}</td>
                       </tr>
+                      <tr>
+                        <td className="font-medium w-40">Adjacent lines affected:</td>
+                        <td>{safeGet('adjacentLinesAffected') || "Not specified"}</td>
+                      </tr>
                     </>
                   )}
                   <tr>
