@@ -30,6 +30,96 @@ const FormLayout = ({
   disabled_option,
   formCorridorType,
 }) => {
+
+  const urgentStartDate = new Date(2025, 3, 10); // 10th May
+  const urgentEndDate = new Date(2025, 4, 13); // 12th May
+  const restrictedStartDate = new Date(2025, 4, 13); // 13th May
+  const restrictedEndDate = new Date(2025, 4, 17); // 16th May
+
+
+
+  const getCorridorTypeOptions = (selectedDate) => {
+
+    if (selectedDate >= urgentStartDate && selectedDate <= urgentEndDate) {
+      // Only "Urgent Block" allowed
+      return (
+        <label className="inline-flex items-center text-2xl cursor-pointer">
+          <input
+            type="radio"
+            name="corridorType"
+            value="emergency"
+            checked={formCorridorType() === "emergency"}
+            onChange={getHandleChange()}
+            className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+            style={{
+              backgroundColor: '#40E0D0',
+              borderColor: '#40E0D0',
+            }}
+          />
+          Urgent Block
+        </label>
+      );
+    } else if (selectedDate >= restrictedStartDate && selectedDate <= restrictedEndDate) {
+      // No options allowed
+      return <p className="text-red-500 text-xl">Request is being restricted for the date</p>;
+    } else {
+      // Normal options
+      return (
+        <>
+          <label className="inline-flex items-center text-2xl cursor-pointer">
+            <input
+              type="radio"
+              name="corridorType"
+              value="corridor"
+              checked={formCorridorType() === "corridor"}
+              onChange={getHandleChange()}
+              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              style={{
+                backgroundColor: formCorridorType() === "corridor" ? '#40E0D0' : 'white',
+                borderColor: '#40E0D0',
+              }}
+            />
+            Corridor
+          </label>
+          <label className="inline-flex items-center text-2xl cursor-pointer">
+            <input
+              type="radio"
+              name="corridorType"
+              value="non-corridor"
+              checked={formCorridorType() === "non-corridor"}
+              onChange={getHandleChange()}
+              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              style={{
+                backgroundColor: formCorridorType() === "non-corridor" ? '#40E0D0' : 'white',
+                borderColor: '#40E0D0',
+              }}
+            />
+            Outside Corridor
+          </label>
+          <label className="inline-flex items-center text-2xl cursor-pointer">
+            <input
+              type="radio"
+              name="corridorType"
+              value="emergency"
+              checked={formCorridorType() === "emergency"}
+              onChange={getHandleChange()}
+              className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+              style={{
+                backgroundColor: formCorridorType() === "emergency" ? '#40E0D0' : 'white',
+                borderColor: '#40E0D0',
+              }}
+            />
+            Urgent Block
+          </label>
+        </>
+      );
+    }
+  };
+
+  const isRestrictedDate = (selectedDate) => {
+    return selectedDate >= restrictedStartDate && selectedDate <= restrictedEndDate;
+  };
+
   return (
     <div className="p-4 mt-10 rounded-lg shadow-lg min-w-full overflow-hidden" style={{ backgroundColor: '#39C3EA' }}>
       <h1 className="text-center text-2xl md:text-4xl font-bold my-10">
@@ -126,82 +216,7 @@ const FormLayout = ({
       {/* Corridor Type Radio Button Group */}
       <div className="mb-4 flex justify-center flex-col items-center">
         <div className="flex space-x-8 mt-1">
-          {(() => {
-            const selectedDate = new Date(getFormDate());
-            const urgentStartDate = new Date(2025, 3, 2); // 2nd May
-            const urgentEndDate = new Date(2025, 4, 11); // 11th May
-
-            if (selectedDate >= urgentStartDate && selectedDate <= urgentEndDate) {
-              return (
-                <label className="inline-flex items-center text-2xl cursor-pointer">
-                  <input
-                    type="radio"
-                    name="corridorType"
-                    value="emergency"
-                    checked={formCorridorType() === "emergency"}
-                    onChange={getHandleChange()}
-                    className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                    style={{
-                      backgroundColor: '#40E0D0',
-                      borderColor: '#40E0D0',
-                    }}
-                  />
-                  Urgent Block
-                </label>
-              );
-            } else {
-              // Show all radio buttons outside the specified week
-              return (
-                <>
-                  <label className="inline-flex items-center text-2xl cursor-pointer">
-                    <input
-                      type="radio"
-                      name="corridorType"
-                      value="corridor"
-                      checked={formCorridorType() === "corridor"}
-                      onChange={getHandleChange()}
-                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                      style={{
-                        backgroundColor: formCorridorType() === "corridor" ? '#40E0D0' : 'white',
-                        borderColor: '#40E0D0',
-                      }}
-                    />
-                    Corridor
-                  </label>
-                  <label className="inline-flex items-center text-2xl cursor-pointer">
-                    <input
-                      type="radio"
-                      name="corridorType"
-                      value="non-corridor"
-                      checked={formCorridorType() === "non-corridor"}
-                      onChange={getHandleChange()}
-                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                      style={{
-                        backgroundColor: formCorridorType() === "non-corridor" ? '#40E0D0' : 'white',
-                        borderColor: '#40E0D0',
-                      }}
-                    />
-                    Outside Corridor
-                  </label>
-                  <label className="inline-flex items-center text-2xl cursor-pointer">
-                    <input
-                      type="radio"
-                      name="corridorType"
-                      value="emergency"
-                      checked={formCorridorType() === "emergency"}
-                      onChange={getHandleChange()}
-                      className="mr-3 w-6 h-6 appearance-none border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                      style={{
-                        backgroundColor: formCorridorType() === "emergency" ? '#40E0D0' : 'white',
-                        borderColor: '#40E0D0',
-                      }}
-                    />
-                    Urgent Block
-                  </label>
-                </>
-              );
-            }
-          })()}
+          {getCorridorTypeOptions(new Date(getFormDate()))}
         </div>
       </div>
 
@@ -305,9 +320,10 @@ const FormLayout = ({
         <button
           className="text-white px-4 py-2 rounded hover:opacity-90 transition duration-300"
           style={{ backgroundColor: '#8E1402' }}
-          onClick={formSubmitHandler()}
+          onClick={isRestrictedDate(new Date(getFormDate())) ? null : formSubmitHandler()}
+          disabled={isRestrictedDate(new Date(getFormDate()))}
         >
-          Submit
+          {!isRestrictedDate ? "Submit" : "Submit Restricted"}
         </button>
       </div>
     </div>

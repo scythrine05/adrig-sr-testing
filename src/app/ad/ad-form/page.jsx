@@ -535,7 +535,6 @@ const SearchForm = () => {
               />
             )}
           </div>
-          );
         </div>
         {/* Filter Popover */}
         <FilterPopover

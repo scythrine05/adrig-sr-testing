@@ -32,10 +32,7 @@ export async function middleware(request) {
   }
 
   // Check for authentication
-  const sessionToken =
-    process.env.NODE_ENV === "development"
-      ? request.cookies.get("next-auth.session-token")
-      : request.cookies.get("__Secure-next-auth.session-token");
+  const sessionToken = process.env.MIDDLEWARE + "next-auth.session-token";
   if (!sessionToken) {
     const url = request.nextUrl.clone();
     url.pathname = "/signin";
