@@ -323,7 +323,7 @@ const FormLayout = ({
           onClick={isRestrictedDate(new Date(getFormDate())) ? null : formSubmitHandler()}
           disabled={isRestrictedDate(new Date(getFormDate()))}
         >
-          {!isRestrictedDate ? "Submit" : "Submit Restricted"}
+          {!isRestrictedDate(new Date(getFormDate())) ? "Submit" : "Request Restricted"}
         </button>
       </div>
     </div>
