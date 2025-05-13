@@ -47,7 +47,7 @@ export default function EditRequest(props) {
     cautionSpeed: "",
     cautionLocationFrom: "",
     cautionLocationTo: "",
-    adjacentLinesAffected: "", 
+    adjacentLinesAffected: "",
     workLocationFrom: "",
     workLocationTo: "",
     demandTimeFrom: "",
@@ -902,8 +902,8 @@ export default function EditRequest(props) {
                   >
                     <option value={"Upstream"}>Up direction</option>
                     <option value={"Downstream"}>Down direction</option>
-                    <option value={"Both"}>Both directions affected</option>
-                    <option value={"Both movement"}>Both directions movement affected</option>
+                    <option value={"Both affected"}>Both directions affected</option>
+                    <option value={"Both not affected"}>Both directions not affected</option>
                   </select>
                 </div>
               )}
