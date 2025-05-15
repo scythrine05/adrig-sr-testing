@@ -31,10 +31,10 @@ const FormLayout = ({
   formCorridorType,
 }) => {
 
-  const urgentStartDate = new Date(2025, 3, 16); // 16th May 2025
-  const urgentEndDate = new Date(2025, 4, 17); // 16th May 2025
-  const restrictedStartDate = new Date();
-  const restrictedEndDate = new Date();
+  const urgentStartDate = new Date();
+  const urgentEndDate = new Date();
+  const restrictedStartDate = new Date(2025, 5, 16); // 16th May 2025;
+  const restrictedEndDate = new Date(2025, 5, 26); // 25th May 2025
 
 
 
